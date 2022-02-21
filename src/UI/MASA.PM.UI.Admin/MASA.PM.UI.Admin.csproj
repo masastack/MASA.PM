@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Environment\MASA.PM.Contracts.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\i18n\en-US.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

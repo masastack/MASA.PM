@@ -7,11 +7,18 @@ namespace MASA.PM.Service.Admin.Services
     {
         public EnvironmentService(IServiceCollection services) : base(services)
         {
+            App.MapPost("/api/v1/env/init", InitAsync);
             App.MapPost("/api/v1/env", AddAsync);
             App.MapGet("api/v1/env", GetList);
             App.MapGet("api/v1/env/{Id}", GetAsync);
             App.MapPut("/api/v1/env", UpdateAsync);
             App.MapDelete("/api/v1/env/{Id}", DeleteAsync);
+        }
+
+        public async Task InitAsync(IEventBus eventBus, InitModel model)
+        {
+            var command = new InitEnvironmentClusterCommand(model);
+            await eventBus.PublishAsync(command);
         }
 
         public async Task AddAsync(IEventBus eventBus, AddEnvironmentWhitClustersModel model)

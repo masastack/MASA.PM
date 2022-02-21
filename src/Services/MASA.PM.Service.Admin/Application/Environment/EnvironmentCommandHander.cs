@@ -5,10 +5,37 @@ namespace MASA.PM.Service.Admin.Application.Environment
     public class EnvironmentCommandHander
     {
         private readonly IEnvironmentRepository _environmentRepository;
+        private readonly IClusterRepository _clusterRepository;
 
-        public EnvironmentCommandHander(IEnvironmentRepository environmentRepository)
+        public EnvironmentCommandHander(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
         {
             _environmentRepository = environmentRepository;
+            _clusterRepository = clusterRepository;
+        }
+
+        [EventHandler]
+        public async Task AddEnvironmentsAndClusterAsync(InitEnvironmentClusterCommand command)
+        {
+            var envs = command.InitModel.Environments.Select(e => new Infrastructure.Entities.Environment
+            {
+                Name = e.Name,
+                Description = e.Description
+            }).ToList();
+
+            var envIds = await _environmentRepository.AddEnvironmentsAndClusterAsync(envs);
+            var cluster = await _clusterRepository.AddAsync(new Infrastructure.Entities.Cluster
+            {
+                Name = command.InitModel.ClusterName,
+                Description = command.InitModel.ClusterDescription
+            });
+
+            var envClusters = envIds.Select(envId => new EnvironmentCluster
+            {
+                EnvironmentId = envId,
+                ClusterId = cluster.Id,
+            });
+
+            await _environmentRepository.AddEnvironmentClustersAsync(envClusters);
         }
 
         [EventHandler]

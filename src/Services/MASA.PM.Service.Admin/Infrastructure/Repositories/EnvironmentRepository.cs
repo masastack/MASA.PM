@@ -9,6 +9,24 @@
             _dbContext = dbContext;
         }
 
+        public async Task<List<int>> AddEnvironmentsAndClusterAsync(List<Entities.Environment> environments)
+        {
+            List<int> envIds = new();
+
+            if (environments.Any())
+            {
+                environments.ForEach(async env =>
+                {
+                    var newEnv = await _dbContext.Environments.AddAsync(env);
+                    envIds.Add(newEnv.Entity.Id);
+                });
+
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return envIds;
+        }
+
         public async Task<Entities.Environment> AddAsync(Entities.Environment environment)
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == environment.Name.ToLower()))
@@ -22,10 +40,13 @@
             return environment;
         }
 
-        public async Task AddEnvironmentClustersAsync(List<EnvironmentCluster> environmentClusters)
+        public async Task AddEnvironmentClustersAsync(IEnumerable<EnvironmentCluster> environmentClusters)
         {
-            await _dbContext.EnvironmentClusters.AddRangeAsync(environmentClusters);
-            await _dbContext.SaveChangesAsync();
+            if (environmentClusters.Any())
+            {
+                await _dbContext.EnvironmentClusters.AddRangeAsync(environmentClusters);
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<List<EnvironmentsViewModel>> GetListAsync()
