@@ -19,10 +19,21 @@ namespace MASA.PM.Service.Admin.Application.Environment
             var envs = command.InitModel.Environments.Select(e => new Infrastructure.Entities.Environment
             {
                 Name = e.Name,
-                Description = e.Description
+                Description = e.Description,
+                Creator = Guid.NewGuid(),
+                CreationTime = DateTime.Now,
+                ModificationTime = DateTime.Now,
+                Modifier = Guid.NewGuid(),
+                IsDeleted = false
             }).ToList();
 
-            var envIds = await _environmentRepository.AddEnvironmentsAndClusterAsync(envs);
+            var envIds = new List<int>();
+            foreach (var env in envs)
+            {
+                var newEnv = await _environmentRepository.AddAsync(env);
+                envIds.Add(newEnv.Id);
+            }
+
             var cluster = await _clusterRepository.AddAsync(new Infrastructure.Entities.Cluster
             {
                 Name = command.InitModel.ClusterName,

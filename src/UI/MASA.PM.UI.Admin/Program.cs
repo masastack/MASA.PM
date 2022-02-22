@@ -1,9 +1,13 @@
 
+using MASA.Utils.Caller.Core;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddMasaBlazorExperimentalComponents();
 builder.Services.AddMasaBlazor(builder =>
 {
     builder.UseTheme(option =>
@@ -15,6 +19,7 @@ builder.Services.AddMasaBlazor(builder =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
+builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
 
 var app = builder.Build();
 

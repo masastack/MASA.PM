@@ -9,6 +9,15 @@
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Migrations\20220119080712_InitialCreate.cs" />
+	  <Compile Remove="Migrations\20220119080712_InitialCreate.Designer.cs" />
+	  <Compile Remove="Migrations\20220215014556_update_project.cs" />
+	  <Compile Remove="Migrations\20220215014556_update_project.Designer.cs" />
+	  <Compile Remove="Migrations\20220216015258_add_teamId_to_project.cs" />
+	  <Compile Remove="Migrations\20220216015258_add_teamId_to_project.Designer.cs" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.0.1681936502" />

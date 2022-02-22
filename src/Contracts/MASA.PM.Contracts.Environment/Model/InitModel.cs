@@ -8,8 +8,10 @@ namespace MASA.PM.Contracts.Base.Model
 {
     public class InitModel
     {
+        [Required]
         public string ClusterName { get; set; } = "";
 
+        [Required]
         public string ClusterDescription { get; set; } = "";
 
         public List<AddEnvironmentModel> Environments { get; set; } = new();

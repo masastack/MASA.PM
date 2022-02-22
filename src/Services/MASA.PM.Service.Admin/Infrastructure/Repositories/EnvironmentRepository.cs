@@ -11,17 +11,17 @@
 
         public async Task<List<int>> AddEnvironmentsAndClusterAsync(List<Entities.Environment> environments)
         {
+            await Task.Delay(1);
             List<int> envIds = new();
 
             if (environments.Any())
             {
-                environments.ForEach(async env =>
+                environments.ForEach(env =>
                 {
-                    var newEnv = await _dbContext.Environments.AddAsync(env);
+                    var newEnv = _dbContext.Environments.Add(env);
+                    _dbContext.SaveChanges();
                     envIds.Add(newEnv.Entity.Id);
                 });
-
-                await _dbContext.SaveChangesAsync();
             }
 
             return envIds;

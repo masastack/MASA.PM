@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MASA.PM.Contracts.Base.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace MASA.PM.Caller.Environment
 {
     public class EnvironmentCaller : HttpClientCallerBase
     {
-        private readonly string _prefix = "/api/v1/env/";
+        private readonly string _prefix = "/api/v1/env";
 
         public EnvironmentCaller(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -25,5 +26,10 @@ namespace MASA.PM.Caller.Environment
 
             return data;
         }
+
+        public async Task InitProjectAsync(InitModel model)
+        {
+            await CallerProvider.PostAsync($"{_prefix}/init",model);
+        }    
     }
 }

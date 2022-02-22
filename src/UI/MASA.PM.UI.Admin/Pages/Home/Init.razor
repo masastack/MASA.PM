@@ -32,20 +32,33 @@
                     @{
                         if (_envRadio == 3)
                         {
-                            _addEnvironmentWhitClustersModels.RemoveAll(e => e.Name == "PreProduction");
-
-                            foreach (var item in _addEnvironmentWhitClustersModels)
+                            _initModel = new Contracts.Base.Model.InitModel();
+                            _initModel.Environments = new List<Contracts.Base.Model.AddEnvironmentModel>
                             {
-                                <MTextField Readonly @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                                new Contracts.Base.Model.AddEnvironmentModel("Development", "开发环境"),
+                                new Contracts.Base.Model.AddEnvironmentModel("Staging", "测试环境"),
+                                new Contracts.Base.Model.AddEnvironmentModel("Production", "生产环境")
+                            };
+
+                            foreach (var item in _initModel.Environments)
+                            {
+                                <MTextField Disabled @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
                                 <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
                             }
                         }
                         else if (_envRadio == 4)
                         {
-                            _addEnvironmentWhitClustersModels.Insert(2, new Contracts.Base.Model.AddEnvironmentWhitClustersModel("PreProduction", "预发布环境"));
-                            foreach (var item in _addEnvironmentWhitClustersModels)
+                            _initModel = new Contracts.Base.Model.InitModel();
+                            _initModel.Environments = new List<Contracts.Base.Model.AddEnvironmentModel>
                             {
-                                <MTextField Readonly @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                                new Contracts.Base.Model.AddEnvironmentModel("Development", "开发环境"),
+                                new Contracts.Base.Model.AddEnvironmentModel("Staging", "测试环境"),
+                                new Contracts.Base.Model.AddEnvironmentModel("PreProduction", "预发布环境"),
+                                new Contracts.Base.Model.AddEnvironmentModel("Production", "生产环境")
+                            };
+                            foreach (var item in _initModel.Environments)
+                            {
+                                <MTextField Disabled @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
                                 <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
                             }
                         }
@@ -53,9 +66,9 @@
                         {
                             foreach (var item in _customEnv)
                             {
-                                <MTextField @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                                <MTextField Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
                                 <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
-                                <div class="d-flex justify-end mb-6">
+                                <div class="d-flex justify-end mb-6 mr-1">
                                     <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
                                     <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
                                 </div>
@@ -65,10 +78,11 @@
                     <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>_step=2">下一步</MButton>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
-                    <MCard Class="mb-12" Height="200" Color="grey lighten-1"></MCard>
+                    <MTextField Rules=RequiredRules Class="mt-2" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></MTextField>
+                    <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                     <div class="d-flex justify-end">
                         <MButton Width=100 Outlined Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
-                        <MButton Width=100 Class="rounded-pill" Color="primary" OnClick="()=>_step=1">提交</MButton>
+                        <MButton Width=100 Class="rounded-pill" Color="primary" OnClick="InitAsync">提交</MButton>
                     </div>
                 </MStepperContent>
             </MStepperItems>

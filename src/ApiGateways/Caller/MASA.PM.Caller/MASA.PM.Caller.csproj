@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Contracts\MASA.PM.Contracts.Environment\MASA.PM.Contracts.Base.csproj" />
 	  <ProjectReference Include="..\..\..\Contracts\MASA.PM.Contracts.Order\MASA.PM.Contracts.Order.csproj" />
 	</ItemGroup>
 </Project>
