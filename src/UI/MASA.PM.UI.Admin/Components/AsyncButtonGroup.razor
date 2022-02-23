@@ -1,0 +1,49 @@
+﻿@typeparam TItem
+
+<MButtonGroup Rounded @bind-Value="Value" Group Color="@Color" Mandatory Style="@Style">
+    @foreach (var item in Items)
+    {
+        <AsyncButton Value="@ItemKey(item)" Readonly="@_invoking" OnClick="() => HandleClick(item)">
+            @ChildContent(item)
+        </AsyncButton>
+    }
+</MButtonGroup>
+
+@code {
+    private bool _invoking;
+
+    [Parameter]
+    public StringNumber Value { get; set; } = default!;
+
+    [Parameter]
+    public bool Tile { get; set; }
+
+    [Parameter]
+    public string Style { get; set; } = default!;
+
+    [Parameter]
+    public string Color { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public List<TItem> Items { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public Func<TItem, StringNumber> ItemKey { get; set; } = default!;
+
+    [Parameter]
+    public Func<TItem, Task> ItemClick { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment<TItem> ChildContent { get; set; } = default!;
+
+    private async Task HandleClick(TItem item)
+    {
+        _invoking = true;
+
+        await ItemClick(item);
+
+        _invoking = false;
+    }
+}

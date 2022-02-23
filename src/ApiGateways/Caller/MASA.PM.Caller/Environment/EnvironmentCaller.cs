@@ -1,4 +1,5 @@
 ﻿using MASA.PM.Contracts.Base.Model;
+using MASA.PM.Contracts.Base.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,16 @@ namespace MASA.PM.Caller.Environment
             return data;
         }
 
-        public async Task InitProjectAsync(InitModel model)
+        public async Task InitAsync(InitModel model)
         {
-            await CallerProvider.PostAsync($"{_prefix}/init",model);
-        }    
+            await CallerProvider.PostAsync($"{_prefix}/init", model);
+        }
+
+        public async Task<List<EnvironmentsViewModel>> GetListAsync()
+        {
+            var result = await CallerProvider.GetAsync<List<EnvironmentsViewModel>>($"{_prefix}");
+
+            return result;
+        }
     }
 }

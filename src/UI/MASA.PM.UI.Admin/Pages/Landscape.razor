@@ -1,0 +1,87 @@
+﻿@page "/Landscape"
+
+<div>
+    <MRow NoGutters>
+        <MCol Cols="2">
+            <MNavigationDrawer Permanent Class="rounded-4" Width="242" Style="height:calc(100vh - 142px );">
+                <div style="display:flex; flex-direction:column; align-items:center; overflow: auto; height:calc(100vh - 238px );">
+                    <MList Width="194">
+                        <MListItemGroup Class="rounded-2"
+                                        @bind-Value="model"
+                                        Mandatory
+                                        Color="#A3AED0">
+                            @foreach (var item in items)
+                            {
+                                <MListItem Class="rounded-2 env-list" Dense @key="item">
+                                    <MListItemContent>
+                                        <MListItemTitle>@item.text</MListItemTitle>
+                                    </MListItemContent>
+                                    <MListItemIcon>
+                                        <MIcon>@item.icon</MIcon>
+                                    </MListItemIcon>
+                                </MListItem>
+                            }
+                        </MListItemGroup>
+                    </MList>
+                </div>
+                <MButton Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
+                    <MIcon Left>mdi-plus</MIcon>新增 环境
+                </MButton>
+            </MNavigationDrawer>
+        </MCol>
+        <MCol Cols="10">
+            <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:102px;background:#fff;">
+                <MTabs AlignWithTitle
+                       SliderColor="yellow">
+                    <MTab>One</MTab>
+                    <MTab>Two</MTab>
+                    <MTab>Three</MTab>
+                    <MTab>Four</MTab>
+                    <MTab>Five</MTab>
+                    <MTab>Six</MTab>
+                    <MTab>Seven</MTab>
+                    <MTab>Eight</MTab>
+                    <MTab>Nine</MTab>
+                    <MTab>Ten</MTab>
+                    <MTab>Eleven</MTab>
+                    <MTab>Twelve</MTab>
+                    <MTab>Thirteen</MTab>
+                    <MTab>Fourteen</MTab>
+                    <MTab>Fifteen</MTab>
+                    <MTab>Sixteen</MTab>
+                    <MTab>Seventeen</MTab>
+                    <MTab>Eighteen</MTab>
+                    <MTab>Nineteen</MTab>
+                    <MTab>Twenty</MTab>
+                </MTabs>
+            </MRow>
+        </MCol>
+    </MRow>
+</div>
+
+
+@code {
+
+    List<(string icon, string text)> items = new()
+        {
+            ("mdi-wifi", "Wifi"),
+            ("mdi-bluetooth", "Bluetooth1"),
+            ("mdi-bluetooth", "Bluetooth2"),
+            ("mdi-bluetooth", "Bluetooth3"),
+            ("mdi-bluetooth", "Bluetooth4"),
+            ("mdi-bluetooth", "Bluetooth5"),
+            ("mdi-bluetooth", "Bluetooth6"),
+            ("mdi-bluetooth", "Bluetooth7"),
+            ("mdi-bluetooth", "Bluetooth8"),
+            ("mdi-bluetooth", "Bluetooth9"),
+            ("mdi-bluetooth", "Bluetooth10"),
+            ("mdi-bluetooth", "Bluetooth11"),
+            ("mdi-bluetooth", "Bluetooth12"),
+            ("mdi-bluetooth", "Bluetooth"),
+            ("mdi-chart-donut", "Data Usage"),
+        };
+
+    StringNumber model = 1;
+
+}
+

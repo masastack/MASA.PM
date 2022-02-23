@@ -15,7 +15,8 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private int _envRadio = 3;
         private InitModel _initModel = new();
         private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
-        
+        private bool _initLoading;
+
         private IEnumerable<Func<string, StringBoolean>> RequiredRules => new List<Func<string, StringBoolean>>
         {
             _requiredRule
@@ -27,16 +28,33 @@ namespace MASA.PM.UI.Admin.Pages.Home
         [Inject]
         public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; } = default!;
+
         private async Task InitAsync()
         {
+            _initLoading = true;
+
             if (_envRadio == 0)
             {
                 _initModel.Environments = _customEnv.Select(env => new AddEnvironmentModel { Name = env.Name, Description = env.Description }).ToList();
             }
-
-            await EnvironmentCaller.InitProjectAsync(_initModel);
+            try
+            {
+                await EnvironmentCaller.InitAsync(_initModel);
+            }
+            catch (Exception ex)
+            {
+                await PopupService.MessageAsync(ex);
+            }
+            finally
+            {
+                _initLoading = false;
+            }
 
             await PopupService.MessageAsync("初始化完成！", AlertTypes.Success);
+
+            NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
         }
 
         private void AddEnvComponent(int index)

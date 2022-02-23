@@ -1,5 +1,11 @@
 [
   {
+    "Id": 0,
+    "Title": "Landscape",
+    "Icon": "mdi-flag",
+    "Href": "Landscape"
+  },
+  {
     "Id": 1,
     "Title": "Dashboard",
     "Icon": "mdi-trending-up",

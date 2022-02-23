@@ -82,7 +82,7 @@
                     <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                     <div class="d-flex justify-end">
                         <MButton Width=100 Outlined Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
-                        <MButton Width=100 Class="rounded-pill" Color="primary" OnClick="InitAsync">提交</MButton>
+                        <MButton Width=100 Class="rounded-pill" Color="primary" OnClick="InitAsync" Loading="_initLoading">提交</MButton>
                     </div>
                 </MStepperContent>
             </MStepperItems>
