@@ -2,11 +2,11 @@
 
 namespace MASA.PM.Service.Admin.Application.Cluster
 {
-    public class AppCommandHander
+    public class AppCommandHandler
     {
         private readonly IAppRepository _appRepository;
 
-        public AppCommandHander(IAppRepository appRepository)
+        public AppCommandHandler(IAppRepository appRepository)
         {
             _appRepository = appRepository;
         }

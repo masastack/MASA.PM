@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace MASA.PM.Contracts.Base.ViewModel
 {
-    public class AppEnvironmentClusterViewModel
+    public class AppProjectViewModel : AppViewModel
     {
-        public int AppId { get; set; }
-
         public int ProjectId { get; set; }
-
-        public int EnvironmentClusterId { get; set; }
-
-        public string EnvironmentClusterName { get; set; } = "";
     }
 }

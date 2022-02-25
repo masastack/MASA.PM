@@ -1,10 +1,10 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Environment
 {
-    public class EnvironmentQueryHander
+    public class EnvironmentQueryHandler
     {
         private readonly IEnvironmentRepository _environmentRepository;
 
-        public EnvironmentQueryHander(IEnvironmentRepository environmentRepository)
+        public EnvironmentQueryHandler(IEnvironmentRepository environmentRepository)
         {
             _environmentRepository = environmentRepository;
         }

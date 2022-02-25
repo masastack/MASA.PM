@@ -5,7 +5,7 @@
 /*scrollbar*/
 ::-webkit-scrollbar-track {
     border-radius: 15px;
-    margin: 5px 0;
+    margin: 12px 0 0 0;
 }
 
 ::-webkit-scrollbar {
@@ -187,7 +187,7 @@
     font-family: Roboto !important;
     font-style: normal !important;
     font-weight: 500 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.875rem !important;
     line-height: 1.125rem !important;
     /* default color */
     color: #A3AED0;
@@ -1060,14 +1060,14 @@ tr:hover {
     content: none !important;
 }
 
-.m-page-tabs .m-tab:hover {
+/*.m-page-tabs .m-tab:hover {
     background-color: #F6F8FD;
     color: #485585 !important;
-}
+}*/
 
-    .m-page-tabs .m-tab:hover > .m-icon {
-        color: #485585 !important;
-    }
+.m-page-tabs .m-tab:hover > .m-icon {
+    color: #485585 !important;
+}
 
 .m-app-bar.rounded-b-4 > .m-toolbar__content {
     border-bottom-left-radius: 20px !important;
@@ -1149,4 +1149,34 @@ tr:hover {
 
 .env-toolbar .m-toolbar__content {
     border-radius: 20px !important;
+}
+
+.cluster-tabs .m-tab {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem !important;
+    line-height: 28px;
+    margin: 0 4px;
+    text-transform: none;
+}
+
+.cluster-tab-active .m-icon {
+    color: inherit !important;
+}
+
+.cluster-tab-active {
+    color: #fff !important;
+    background: #4318FF !important;
+    border-radius: 8px !important;
+}
+
+.cluster-tab-active i.m-icon.m-icon--right.theme--light.mdi.mdi-pencil {
+    color:#fff !important;
+}
+
+.cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover {
+    background: #F6F8FD !important;
+    border-radius: 8px !important;
+    color: #1B2559 !important;
 }

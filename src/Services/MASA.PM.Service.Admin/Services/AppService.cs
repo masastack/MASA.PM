@@ -1,5 +1,6 @@
 ﻿using MASA.PM.Service.Admin.Application.App.Commands;
 using MASA.PM.Service.Admin.Application.App.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
 {
@@ -8,7 +9,7 @@ namespace MASA.PM.Service.Admin.Services
         public AppService(IServiceCollection services) : base(services)
         {
             App.MapPost("/api/v1/app", AddAsync);
-            App.MapGet("/api/v1/{projectId}/app", GetList);
+            App.MapPost("/api/v1/projects/app", GetList);
             App.MapGet("/api/v1/app/{Id}", GetAsync);
             App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync);
             App.MapPut("/api/v1/app", UpdateAsync);
@@ -21,9 +22,9 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<AppViewModel>> GetList(IEventBus eventBus, int projectId)
+        public async Task<List<AppViewModel>> GetList(IEventBus eventBus, [FromBody] List<int> projectIds)
         {
-            var query = new AppsQuery(projectId);
+            var query = new AppsQuery(projectIds);
             await eventBus.PublishAsync(query);
 
             return query.Result;

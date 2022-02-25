@@ -8,6 +8,8 @@
 
         Task<List<ClustersViewModel>> GetListAsync();
 
+        Task<List<ClustersViewModel>> GetListByEnvIdAsync(int envId);
+
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAsync(int clusterId);
 
         Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByClusterIdAsync(IEnumerable<int> environmentClusterIds);

@@ -2,13 +2,15 @@
 
 namespace MASA.PM.Service.Admin.Application.Project
 {
-    public class ProjectQueryHander
+    public class ProjectQueryHandler
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IAppRepository _appRepository;
 
-        public ProjectQueryHander(IProjectRepository projectRepository)
+        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository)
         {
             _projectRepository = projectRepository;
+            _appRepository = appRepository;
         }
 
         [EventHandler]
@@ -28,12 +30,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
-            query.Result = (await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId)).Select(project => new ProjectViewModel
+            var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId);
+            query.Result = projects.Select(project => new ProjectViewModel
             {
                 Id = project.Id,
-                Name= project.Name,
+                Name = project.Name,
+                Description = project.Description,
                 Modifier = project.Modifier,
-                ModificationTime = project.ModificationTime
+                ModificationTime = project.ModificationTime,
             }).ToList();
         }
     }

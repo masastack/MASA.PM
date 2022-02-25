@@ -2,11 +2,11 @@
 
 namespace MASA.PM.Service.Admin.Application.Cluster
 {
-    public class ClusterCommandHander
+    public class ClusterCommandHandler
     {
         private readonly IClusterRepository _clusterRepository;
 
-        public ClusterCommandHander(IClusterRepository clusterRepository)
+        public ClusterCommandHandler(IClusterRepository clusterRepository)
         {
             _clusterRepository = clusterRepository;
         }

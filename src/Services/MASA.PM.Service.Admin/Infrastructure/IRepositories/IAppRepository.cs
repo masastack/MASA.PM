@@ -10,7 +10,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<App> GetAsync(int Id);
 
-        Task<List<App>> GetListByProjectIdAsync(int projectId);
+        Task<List<App>> GetListByProjectIdAsync(IEnumerable<int> projectIds);
 
         Task<List<AppEnvironmentClusterViewModel>> GetEnvironmentAndClusterNamesByAppIds(IEnumerable<int> appIds);
 

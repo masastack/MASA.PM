@@ -9,6 +9,8 @@ namespace MASA.PM.Contracts.Base.ViewModel
 {
     public class AppViewModel: AuditViewModel
     {
+        public int ProjectId { get; set; }
+
         public int Id { get; set; }
 
         public string Name { get; set; } = "";
@@ -21,6 +23,6 @@ namespace MASA.PM.Contracts.Base.ViewModel
 
         public ServiceTypes ServiceType { get; set; }
 
-        public List<AppEnvironmentClusterViewModel> EnvironmentClusters { get; set; }
+        public List<AppEnvironmentClusterViewModel> EnvironmentClusters { get; set; } = new();
     }
 }

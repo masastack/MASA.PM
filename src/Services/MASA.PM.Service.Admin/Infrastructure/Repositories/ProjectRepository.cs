@@ -78,11 +78,36 @@
             System.Linq.Expressions.Expression<Func<EnvironmentClusterProject, bool>> predicate = environmentClusterProject =>
                                     environmentClusterProject.EnvironmentClusterId == environmentClusterId;
 
-            var projects = await _dbContext.EnvironmentClusterProjects.Where(predicate)
-                .Select(environmentClusterProject => environmentClusterProject.ProjectId)
+            //var projects = await _dbContext.EnvironmentClusterProjects.Where(predicate)
+            //    .Join(
+            //        _dbContext.Projects,
+            //        envClusterProject => envClusterProject.ProjectId,
+            //        project => project.Id,
+            //        (envClusterProject, project) => new { EnvClusterProjectId = envClusterProject.Id, project.Id, project.Name, project.Description, project.Modifier, project.ModificationTime }
+            //    )
+            //    .Join(
+            //        _dbContext.EnvironmentClusterProjectApps,
+            //        envClusterProject => envClusterProject.EnvClusterProjectId,
+            //        envClusterProjectApp => envClusterProjectApp.EnvironmentClusterProjectId,
+            //        (envClusterProject, envClusterProjectApp) => new { envClusterProjectApp.AppId, envClusterProject.Id, envClusterProject.Name, envClusterProject.Description, envClusterProject.ModificationTime, envClusterProject.Modifier }
+            //    )
+            //    .GroupBy(c => new { c.Id, c.Name, c.Description, c.ModificationTime, c.Modifier })
+            //    .Select(project => new ProjectViewModel
+            //    {
+            //        Id = project.Key.Id,
+            //        Name = project.Key.Name,
+            //        Description = project.Key.Description,
+            //        Modifier = project.Key.Modifier,
+            //        ModificationTime = project.Key.ModificationTime,
+            //        AppCount = project.Count(),
+            //    })
+            //    .ToListAsync();
+
+            var projectIds = await _dbContext.EnvironmentClusterProjects.Where(predicate)
+                .Select(project => project.ProjectId)
                 .ToListAsync();
 
-            var result = await _dbContext.Projects.Where(project => projects.Contains(project.Id)).ToListAsync();
+            var result = await _dbContext.Projects.Where(project => projectIds.Contains(project.Id)).ToListAsync();
             return result;
         }
 

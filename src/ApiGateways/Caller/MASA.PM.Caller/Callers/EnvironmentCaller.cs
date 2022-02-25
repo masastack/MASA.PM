@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MASA.PM.Caller.Environment
+namespace MASA.PM.Caller.Callers
 {
     public class EnvironmentCaller : HttpClientCallerBase
     {

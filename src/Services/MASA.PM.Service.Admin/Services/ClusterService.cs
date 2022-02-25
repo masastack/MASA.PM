@@ -9,6 +9,7 @@ namespace MASA.PM.Service.Admin.Services
         {
             App.MapPost("/api/v1/cluster", AddAsync);
             App.MapGet("/api/v1/cluster", GetList);
+            App.MapGet("/api/v1/{envId}/cluster", GetListByEnvId);
             App.MapGet("/api/v1/cluster/{Id}", GetAsync);
             App.MapPut("/api/v1/cluster", UpdateAsync);
             App.MapDelete("/api/v1/cluster/{Id}", DeleteAsync);
@@ -23,6 +24,14 @@ namespace MASA.PM.Service.Admin.Services
         public async Task<List<ClustersViewModel>> GetList(IEventBus eventBus)
         {
             var query = new ClustersQuery();
+            await eventBus.PublishAsync(query);
+
+            return query.Result;
+        }
+
+        public async Task<List<ClustersViewModel>> GetListByEnvId(IEventBus eventBus, int envId)
+        {
+            var query = new EnvironmentClustersQuery(envId);
             await eventBus.PublishAsync(query);
 
             return query.Result;

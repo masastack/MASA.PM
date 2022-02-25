@@ -2,12 +2,12 @@
 
 namespace MASA.PM.Service.Admin.Application.Environment
 {
-    public class EnvironmentCommandHander
+    public class EnvironmentCommandHandler
     {
         private readonly IEnvironmentRepository _environmentRepository;
         private readonly IClusterRepository _clusterRepository;
 
-        public EnvironmentCommandHander(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
+        public EnvironmentCommandHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
         {
             _environmentRepository = environmentRepository;
             _clusterRepository = clusterRepository;

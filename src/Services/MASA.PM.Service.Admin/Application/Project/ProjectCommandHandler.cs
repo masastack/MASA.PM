@@ -2,11 +2,11 @@
 
 namespace MASA.PM.Service.Admin.Application.Project
 {
-    public class ProjectCommandHander
+    public class ProjectCommandHandler
     {
         private readonly IProjectRepository _projectRepository;
 
-        public ProjectCommandHander(IProjectRepository projectRepository)
+        public ProjectCommandHandler(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
         }
