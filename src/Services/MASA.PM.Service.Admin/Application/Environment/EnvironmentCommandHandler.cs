@@ -69,6 +69,8 @@ namespace MASA.PM.Service.Admin.Application.Environment
                 });
             });
             await _environmentRepository.AddEnvironmentClustersAsync(addEnvironmentClusters);
+
+            command.Result = new EnvironmentsViewModel { Id = newEnv.Id, Name = newEnv.Name };
         }
 
         [EventHandler]

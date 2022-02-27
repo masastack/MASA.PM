@@ -1,4 +1,6 @@
 ﻿@page "/Landscape"
+@using MASA.PM.Contracts.Base.ViewModel
+
 
 <div>
     <MRow NoGutters>
@@ -10,14 +12,14 @@
                                     @bind-Value="_selectedEnvId"
                                     Mandatory
                                     Color="#A3AED0">
-                        @foreach (var item in _environments)
+                        @foreach (var env in _environments)
                         {
-                            <MListItem Class="rounded-2 env-list" Value="item.Id" Dense @key="item" OnClick="@(()=>GetClustersByEnvIdAsync(item.Id))">
+                            <MListItem Class="rounded-2 env-list" Value="env.Id" Dense  OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                                 <MListItemContent>
-                                    <MListItemTitle>@item.Name</MListItemTitle>
+                                    <MListItemTitle>@env.Name</MListItemTitle>
                                 </MListItemContent>
                                 <MListItemIcon Class="d-flex align-center pt-1">
-                                    <MButton StopPropagation Icon OnClick="@(()=>PopupService.MessageAsync("nihao"))">
+                                    <MButton StopPropagation Icon OnClick="()=>EditEnvAsync(env.Id)">
                                         <MIcon>mdi-pencil</MIcon>
                                     </MButton>
                                 </MListItemIcon>
@@ -26,7 +28,7 @@
                     </MListItemGroup>
                 </MList>
             </div>
-            <MButton Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
+            <MButton OnClick="ShowEnvModal" Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
                 <MIcon Left>mdi-plus</MIcon>新增环境
             </MButton>
         </MNavigationDrawer>
@@ -229,29 +231,31 @@
     </MRow>
 </div>
 
+<FormModal Visible="_envFormModel.Visible"
+           Title="@(_envFormModel.HasValue ?"编辑环境":"新增环境")"
+           Width="684"
+           Model="_envFormModel.Data"
+           OnCancel="_envFormModel.Hide"
+           OnOk=SubmitEnv>
+    <MTextField Outlined Label="环境名称" @bind-Value="_envFormModel.Data.Name"></MTextField>
+    <MTextField Outlined Label="环境描述" @bind-Value="_envFormModel.Data.Description"></MTextField>
+    <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
+                   Items="_allClusters"
+                   ItemText="r=>r.Name"
+                   ItemValue="r=>r.Id"
+                   Outlined
+                   Label="关联集群"
+                   Multiple>
+        <SelectionContent Context="_context">
+            <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                @_context.Item.Name
+            </MChip>
+        </SelectionContent>
+    </MAutocomplete>
+</FormModal>
+
+
 
 @code {
-
-    List<(string icon, string text)> items = new()
-        {
-            ("mdi-wifi", "Wifi"),
-            ("mdi-bluetooth", "Bluetooth1"),
-            ("mdi-bluetooth", "Bluetooth2"),
-            ("mdi-bluetooth", "Bluetooth3"),
-            ("mdi-bluetooth", "Bluetooth4"),
-            ("mdi-bluetooth", "Bluetooth5"),
-            ("mdi-bluetooth", "Bluetooth6"),
-            ("mdi-bluetooth", "Bluetooth7"),
-            ("mdi-bluetooth", "Bluetooth8"),
-            ("mdi-bluetooth", "Bluetooth9"),
-            ("mdi-bluetooth", "Bluetooth10"),
-            ("mdi-bluetooth", "Bluetooth11"),
-            ("mdi-bluetooth", "Bluetooth12"),
-            ("mdi-bluetooth", "Bluetooth"),
-            ("mdi-chart-donut", "Data Usage"),
-        };
-
-    StringNumber model = 1;
-
 }
 

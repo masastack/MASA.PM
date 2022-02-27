@@ -21,10 +21,12 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task AddAsync(IEventBus eventBus, AddEnvironmentWhitClustersModel model)
+        public async Task<EnvironmentsViewModel> AddAsync(IEventBus eventBus, AddEnvironmentWhitClustersModel model)
         {
             var command = new AddEnvironmentCommand(model);
             await eventBus.PublishAsync(command);
+
+            return command.Result;
         }
 
         public async Task<List<EnvironmentsViewModel>> GetList(IEventBus eventBus)
@@ -52,7 +54,7 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus,int Id)
+        public async Task DeleteAsync(IEventBus eventBus, int Id)
         {
             var command = new DeleteEnvironmentCommand(Id);
             await eventBus.PublishAsync(command);

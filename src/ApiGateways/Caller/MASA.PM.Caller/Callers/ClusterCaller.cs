@@ -24,5 +24,12 @@ namespace MASA.PM.Caller.Callers
 
             return result;
         }
+
+        public async Task<List<ClustersViewModel>> GetList()
+        {
+            var result = await CallerProvider.GetAsync<List<ClustersViewModel>>($"/api/v1/cluster");
+
+            return result;
+        }
     }
 }

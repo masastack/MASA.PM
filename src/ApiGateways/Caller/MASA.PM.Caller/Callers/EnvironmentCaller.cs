@@ -21,9 +21,9 @@ namespace MASA.PM.Caller.Callers
 
         //protected override string AppId { get; set; } = "masa-pm-service-admin";
 
-        public async Task<string> GetAsync(int Id)
+        public async Task<EnvironmentViewModel> GetAsync(int Id)
         {
-            var data = await CallerProvider.GetAsync<string>($"{_prefix}{Id}");
+            var data = await CallerProvider.GetAsync<EnvironmentViewModel>($"{_prefix}{Id}");
 
             return data;
         }
@@ -38,6 +38,11 @@ namespace MASA.PM.Caller.Callers
             var result = await CallerProvider.GetAsync<List<EnvironmentsViewModel>>($"{_prefix}");
 
             return result;
+        }
+
+        public async Task<EnvironmentsViewModel> AddAsync(AddEnvironmentWhitClustersModel model)
+        {
+            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersModel, EnvironmentsViewModel>(_prefix, model);
         }
     }
 }

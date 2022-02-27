@@ -73,7 +73,13 @@
                 ModificationTime = e.ModificationTime
             }).FirstOrDefaultAsync(e => e.Id == Id);
 
-            return result ?? throw new Exception("环境不存在！");
+            if (result == null)
+            {
+                throw new Exception("环境不存在！");
+            }
+
+            result.ClusterIds = await _dbContext.EnvironmentClusters.Where(ec => ec.EnvironmentId == Id).Select(ec => ec.ClusterId).ToListAsync();
+            return result;
         }
 
         public async Task UpdateAsync(UpdateEnvironmentModel model)

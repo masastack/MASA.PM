@@ -1116,17 +1116,21 @@ tr:hover {
     margin: 16px 0 !important;
 }
 
-.m-list-item-group .m-list-item--active {
+.m-list-item-group .env-list.m-list-item--active {
     background: #4318FF !important;
     color: #fff !important;
 }
 
-    .m-list-item-group .m-list-item--active .m-list-item__title {
+    .m-list-item-group .env-list.m-list-item--active .m-icon {
         color: #fff !important;
     }
 
-.env-list.m-list-item:hover .m-icon {
-    color: inherit !important;
+    .m-list-item-group .env-list.m-list-item--active .m-list-item__title {
+        color: #fff !important;
+    }
+
+.env-list.m-list-item:not(.env-list.m-list-item--active):hover .m-icon {
+    color: #1B2559 !important;
 }
 
 .env-list.m-list-item:hover .m-list-item__title {
@@ -1171,9 +1175,9 @@ tr:hover {
     border-radius: 8px !important;
 }
 
-.cluster-tab-active i.m-icon.m-icon--right.theme--light.mdi.mdi-pencil {
-    color:#fff !important;
-}
+    .cluster-tab-active i.m-icon.m-icon--right.theme--light.mdi.mdi-pencil {
+        color: #fff !important;
+    }
 
 .cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover {
     background: #F6F8FD !important;

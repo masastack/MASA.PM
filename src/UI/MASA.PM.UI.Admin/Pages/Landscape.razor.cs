@@ -1,5 +1,6 @@
 ﻿using MASA.Blazor.Experimental.Components;
 using MASA.PM.Caller.Callers;
+using MASA.PM.Contracts.Base.Model;
 using MASA.PM.Contracts.Base.ViewModel;
 
 namespace MASA.PM.UI.Admin.Pages
@@ -13,6 +14,8 @@ namespace MASA.PM.UI.Admin.Pages
         private List<ProjectViewModel> _projects = new();
         private List<AppViewModel> _apps = new();
         private List<AppViewModel> _projectApps = new();
+        private DataModal<UpdateEnvironmentModel> _envFormModel = new();
+        private List<ClustersViewModel> _allClusters = new();
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -47,29 +50,27 @@ namespace MASA.PM.UI.Admin.Pages
         private async Task<List<ClustersViewModel>> GetClustersByEnvIdAsync(int envId)
         {
             _selectedEnvId = envId;
-            var clusters = await ClusterCaller.GetListByEnvIdAsync(envId);
-            if (clusters.Any())
+            _clusters = await ClusterCaller.GetListByEnvIdAsync(envId);
+            if (_clusters.Any())
             {
-                _selectEnvClusterId = clusters[0].EnvironmentClusterId;
-
-                _selectEnvClusterId = clusters[0].EnvironmentClusterId;
-                _projects = await GetProjectByEnvClusterIdAsync(clusters[0].EnvironmentClusterId);
+                _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
             }
 
-            return clusters;
+            return _clusters;
         }
 
         private async Task<List<ProjectViewModel>> GetProjectByEnvClusterIdAsync(int envClusterId)
         {
             _selectEnvClusterId = envClusterId;
-            var projects = await ProjectCaller.GetListByEnvIdAsync(envClusterId);
-            if (projects.Any())
+            _projects = await ProjectCaller.GetListByEnvIdAsync(envClusterId);
+            if (_projects.Any())
             {
-                _apps = await GetAppByProjectIdAsync(projects.Select(project => project.Id));
-                _projectApps = _apps.Where(app =>projects.Select(p=>p.Id).Contains(app.ProjectId)).ToList();
+                _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id));
+                _projectApps = _apps.Where(app => _projects.Select(p => p.Id).Contains(app.ProjectId)).ToList();
             }
 
-            return projects;
+            return _projects;
         }
 
         private async Task<List<AppViewModel>> GetAppByProjectIdAsync(IEnumerable<int> projectIds)
@@ -79,9 +80,37 @@ namespace MASA.PM.UI.Admin.Pages
             return result;
         }
 
-        private async Task ChangeEnv()
+        private async Task EditEnvAsync(int envId)
         {
+            var env = await GetEnvAsync(envId);
+            _envFormModel.Show(new UpdateEnvironmentModel { });
+        }
 
+        private async Task<EnvironmentViewModel> GetEnvAsync(int envId)
+        {
+            var env = await EnvironmentCaller.GetAsync(envId);
+            return env;
+        }
+
+        private async Task ShowEnvModal()
+        {
+            _envFormModel.Show();
+            _allClusters = await ClusterCaller.GetList();
+        }
+
+        private async Task SubmitEnv()
+        {
+            if (!_envFormModel.HasValue)
+            {
+                var newEnv = await EnvironmentCaller.AddAsync(_envFormModel.Data);
+                _environments.Add(newEnv);
+            }
+            else
+            {
+
+            }
+
+            _envFormModel.Hide();
         }
     }
 }

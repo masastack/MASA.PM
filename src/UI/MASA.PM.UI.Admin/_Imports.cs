@@ -25,3 +25,4 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Reflection;
 global using System.Text.Json;
 global using MASA.Blazor;
+global using MASA.PM.UI.Admin.Model;
