@@ -3,5 +3,7 @@
     public record AddClusterCommand(AddClusterWhitEnvironmentsModel ClustersWhitEnvironmentModel) : Command, ITransaction
     {
         public IUnitOfWork? UnitOfWork { get; set; }
+
+        public ClustersViewModel Result { get; set; } = default!;
     }
 }

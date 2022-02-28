@@ -23,7 +23,7 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<EnvironmentViewModel> GetAsync(int Id)
         {
-            var data = await CallerProvider.GetAsync<EnvironmentViewModel>($"{_prefix}{Id}");
+            var data = await CallerProvider.GetAsync<EnvironmentViewModel>($"{_prefix}/{Id}");
 
             return data;
         }
@@ -43,6 +43,11 @@ namespace MASA.PM.Caller.Callers
         public async Task<EnvironmentsViewModel> AddAsync(AddEnvironmentWhitClustersModel model)
         {
             return await CallerProvider.PostAsync<AddEnvironmentWhitClustersModel, EnvironmentsViewModel>(_prefix, model);
+        }
+
+        public async Task UpdateAsync(UpdateEnvironmentModel model)
+        {
+            await CallerProvider.PutAsync(_prefix, model);
         }
     }
 }

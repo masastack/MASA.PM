@@ -16,6 +16,10 @@ namespace MASA.PM.UI.Admin.Pages
         private List<AppViewModel> _projectApps = new();
         private DataModal<UpdateEnvironmentModel> _envFormModel = new();
         private List<ClustersViewModel> _allClusters = new();
+        private List<EnvironmentsViewModel> _allEnvs = new();
+        private EnvironmentViewModel _envDetail = new();
+        private DataModal<UpdateClusterModel> _clusterFormModel = new();
+        private ClusterViewModel _clusterDetail = new();
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -47,11 +51,11 @@ namespace MASA.PM.UI.Admin.Pages
             }
         }
 
-        private async Task<List<ClustersViewModel>> GetClustersByEnvIdAsync(int envId)
+        private async Task<List<ClustersViewModel>> GetClustersByEnvIdAsync(int envId, bool isFetchProjects = true)
         {
             _selectedEnvId = envId;
             _clusters = await ClusterCaller.GetListByEnvIdAsync(envId);
-            if (_clusters.Any())
+            if (_clusters.Any() && isFetchProjects)
             {
                 _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
                 _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
@@ -80,22 +84,36 @@ namespace MASA.PM.UI.Admin.Pages
             return result;
         }
 
+        private async Task<EnvironmentViewModel> GetEnvAsync(int envId)
+        {
+            _envDetail = await EnvironmentCaller.GetAsync(envId);
+            return _envDetail;
+        }
+
         private async Task EditEnvAsync(int envId)
         {
             var env = await GetEnvAsync(envId);
-            _envFormModel.Show(new UpdateEnvironmentModel { });
+            await ShowEnvModalAsync(new UpdateEnvironmentModel
+            {
+                ClusterIds = env.ClusterIds,
+                Name = env.Name,
+                Description = env.Description,
+                EnvironmentId = env.Id
+            });
         }
 
-        private async Task<EnvironmentViewModel> GetEnvAsync(int envId)
+        private async Task ShowEnvModalAsync(UpdateEnvironmentModel? model = null)
         {
-            var env = await EnvironmentCaller.GetAsync(envId);
-            return env;
-        }
+            if (model == null)
+            {
+                _envFormModel.Show();
+            }
+            else
+            {
+                _envFormModel.Show(model);
+            }
 
-        private async Task ShowEnvModal()
-        {
-            _envFormModel.Show();
-            _allClusters = await ClusterCaller.GetList();
+            _allClusters = await ClusterCaller.GetListAsync();
         }
 
         private async Task SubmitEnv()
@@ -107,10 +125,64 @@ namespace MASA.PM.UI.Admin.Pages
             }
             else
             {
-
+                await EnvironmentCaller.UpdateAsync(_envFormModel.Data);
+                var env = _environments.First(env => env.Id == _envFormModel.Data.EnvironmentId);
+                env.Name = _envFormModel.Data.Name;
             }
 
             _envFormModel.Hide();
+        }
+
+        private async Task<ClusterViewModel> GetClusterAsync(int clusterId)
+        {
+            _clusterDetail = await ClusterCaller.GetAsync(clusterId);
+
+            return _clusterDetail;
+        }
+
+        private async Task EditClusterAsync(int clusterId)
+        {
+            var cluster = await GetClusterAsync(clusterId);
+            await ShowClusterModalAsync(new UpdateClusterModel
+            {
+                ClusterId = cluster.Id,
+                Name = cluster.Name,
+                Description = cluster.Description,
+                EnvironmentIds = cluster.EnvironmentIds
+            });
+            
+        }
+
+        private async Task ShowClusterModalAsync(UpdateClusterModel? model = null)
+        {
+            if (model == null)
+            {
+                _clusterFormModel.Show();
+            }
+            else
+            {
+                _clusterFormModel.Show(model);
+            }
+
+            _allEnvs = await EnvironmentCaller.GetListAsync();
+        }
+
+        private async Task SubmitCluster()
+        {
+            int newClusterId;
+            if (!_clusterFormModel.HasValue)
+            {
+                var cluster = await ClusterCaller.AddAsync(_clusterFormModel.Data);
+                newClusterId = cluster.Id;
+            }
+            else
+            {
+                await ClusterCaller.UpdateAsync(_clusterFormModel.Data);
+                newClusterId = _clusterFormModel.Data.ClusterId;
+            }
+
+            await GetClustersByEnvIdAsync(newClusterId);
+            _clusterFormModel.Hide();
         }
     }
 }

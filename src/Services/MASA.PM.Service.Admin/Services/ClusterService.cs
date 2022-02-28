@@ -15,10 +15,12 @@ namespace MASA.PM.Service.Admin.Services
             App.MapDelete("/api/v1/cluster/{Id}", DeleteAsync);
         }
 
-        public async Task AddAsync(IEventBus eventBus, AddClusterWhitEnvironmentsModel model)
+        public async Task<ClustersViewModel> AddAsync(IEventBus eventBus, AddClusterWhitEnvironmentsModel model)
         {
             var command = new AddClusterCommand(model);
             await eventBus.PublishAsync(command);
+
+            return command.Result;
         }
 
         public async Task<List<ClustersViewModel>> GetList(IEventBus eventBus)

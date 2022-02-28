@@ -14,7 +14,7 @@
                                     Color="#A3AED0">
                         @foreach (var env in _environments)
                         {
-                            <MListItem Class="rounded-2 env-list" Value="env.Id" Dense  OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
+                            <MListItem Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                                 <MListItemContent>
                                     <MListItemTitle>@env.Name</MListItemTitle>
                                 </MListItemContent>
@@ -28,7 +28,7 @@
                     </MListItemGroup>
                 </MList>
             </div>
-            <MButton OnClick="ShowEnvModal" Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
+            <MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
                 <MIcon Left>mdi-plus</MIcon>新增环境
             </MButton>
         </MNavigationDrawer>
@@ -42,12 +42,14 @@
                             StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
                             <MTab Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
                                 @cluster.Name
-                                <MIcon Right>mdi-pencil</MIcon>
+                                <MButton StopPropagation Icon OnClick="()=>EditClusterAsync(cluster.Id)">
+                                    <MIcon>mdi-pencil</MIcon>
+                                </MButton>
                             </MTab>
                         }
                     </MTabs>
                 </MCard>
-                <MButton Width="120" Tile Text Style="position:fixed; right:48px; height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12);">
+                <MButton OnClick="()=>ShowClusterModalAsync()" Width="120" Tile Text Style="position:fixed; right:48px; height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12);">
                     <MIcon Left>mdi-plus</MIcon>新增集群
                 </MButton>
             </MRow>
@@ -222,7 +224,7 @@
                 </div>
                 <MCard Outlined Class="mb-4 mx-6" Style="padding:0 6px; border-radius:0 !important; display: flex; justify-content: center; align-items: center; border-style: dashed;" Height=54>
                     <MButton Ripple=false Plain XLarge>
-                        <MIcon Left>mdi-plus</MIcon>系统
+                        <MIcon Left>mdi-plus</MIcon>新增项目
                     </MButton>
                 </MCard>
             </div>
@@ -252,8 +254,50 @@
             </MChip>
         </SelectionContent>
     </MAutocomplete>
+    @if (_envFormModel.HasValue)
+    {
+        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+            <MCol Cols=6>创建人: @_envDetail.Creator</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_envDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>修改人: @_envDetail.Modifier</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_envDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>集群数量：3</MCol>
+        </MRow>
+    }
 </FormModal>
 
+<FormModal Visible="_clusterFormModel.Visible"
+           Title="@(_clusterFormModel.HasValue ?"编辑集群":"新增集群")"
+           Width="684"
+           Model="_clusterFormModel.Data"
+           OnCancel="_clusterFormModel.Hide"
+           OnOk=SubmitCluster>
+    <MTextField Outlined Label="集群名称" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
+    <MTextField Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextField>
+    <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
+                   Items="_allEnvs"
+                   ItemText="r=>r.Name"
+                   ItemValue="r=>r.Id"
+                   Outlined
+                   Label="关联环境"
+                   Multiple>
+        <SelectionContent Context="_context">
+            <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                @_context.Item.Name
+            </MChip>
+        </SelectionContent>
+    </MAutocomplete>
+    @if (_clusterFormModel.HasValue)
+    {
+        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+            <MCol Cols=6>创建人: @_clusterDetail.Creator</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_clusterDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>修改人: @_clusterDetail.Modifier</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_clusterDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>项目数量：3</MCol>
+        </MRow>
+    }
+</FormModal>
 
 
 @code {

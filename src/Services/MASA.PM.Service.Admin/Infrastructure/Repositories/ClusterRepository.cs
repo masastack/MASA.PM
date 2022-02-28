@@ -44,7 +44,13 @@
                 ModificationTime = e.ModificationTime
             }).FirstOrDefaultAsync(e => e.Id == Id);
 
-            return result ?? throw new Exception("集群不存在！");
+            if (result == null)
+            {
+                throw new Exception("集群不存在！");
+            }
+            result.EnvironmentIds = await _dbContext.EnvironmentClusters.Where(ec => ec.ClusterId == Id).Select(ec => ec.EnvironmentId).ToListAsync();
+
+            return result;
         }
 
         public async Task<List<ClustersViewModel>> GetListAsync()

@@ -31,6 +31,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 });
             });
             await _clusterRepository.AddEnvironmentClusters(addEnvironmentClusters);
+
+            command.Result = new ClustersViewModel { Id = newCluster.Id, Name = newCluster.Name };
         }
 
         [EventHandler]
