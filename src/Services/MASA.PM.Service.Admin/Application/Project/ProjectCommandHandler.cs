@@ -37,6 +37,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var project = new Infrastructure.Entities.Project
             {
+                Id = command.ProjectModel.ProjectId,
                 Name = command.ProjectModel.Name,
                 Description = command.ProjectModel.Description,
                 TeamId = command.ProjectModel.TeamId,

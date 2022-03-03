@@ -22,7 +22,7 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<ProjectViewModel>> GetList(IEventBus eventBus, int environmentClusterId)
+        public async Task<List<ProjectsViewModel>> GetList(IEventBus eventBus, int environmentClusterId)
         {
             var query = new ProjectsQuery(environmentClusterId);
             await eventBus.PublishAsync(query);

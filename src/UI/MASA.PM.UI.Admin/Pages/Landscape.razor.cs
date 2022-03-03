@@ -11,7 +11,7 @@ namespace MASA.PM.UI.Admin.Pages
         private StringNumber _selectEnvClusterId = 0;
         private List<EnvironmentsViewModel> _environments = new();
         private List<ClustersViewModel> _clusters = new();
-        private List<ProjectViewModel> _projects = new();
+        private List<ProjectsViewModel> _projects = new();
         private List<AppViewModel> _apps = new();
         private List<AppViewModel> _projectApps = new();
         private DataModal<UpdateEnvironmentModel> _envFormModel = new();
@@ -20,6 +20,8 @@ namespace MASA.PM.UI.Admin.Pages
         private EnvironmentViewModel _envDetail = new();
         private DataModal<UpdateClusterModel> _clusterFormModel = new();
         private ClusterViewModel _clusterDetail = new();
+        private DataModal<UpdateProjectModel> _projectFormModel = new();
+        private ProjectViewModel _projectDetail = new();
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -64,7 +66,7 @@ namespace MASA.PM.UI.Admin.Pages
             return _clusters;
         }
 
-        private async Task<List<ProjectViewModel>> GetProjectByEnvClusterIdAsync(int envClusterId)
+        private async Task<List<ProjectsViewModel>> GetProjectByEnvClusterIdAsync(int envClusterId)
         {
             _selectEnvClusterId = envClusterId;
             _projects = await ProjectCaller.GetListByEnvIdAsync(envClusterId);
@@ -88,6 +90,13 @@ namespace MASA.PM.UI.Admin.Pages
         {
             _envDetail = await EnvironmentCaller.GetAsync(envId);
             return _envDetail;
+        }
+
+        private async Task<ProjectViewModel> GetProjectAsync(int projectId)
+        {
+            _projectDetail = await ProjectCaller.GetAsync(projectId);
+
+            return _projectDetail;
         }
 
         private async Task EditEnvAsync(int envId)
@@ -150,7 +159,7 @@ namespace MASA.PM.UI.Admin.Pages
                 Description = cluster.Description,
                 EnvironmentIds = cluster.EnvironmentIds
             });
-            
+
         }
 
         private async Task ShowClusterModalAsync(UpdateClusterModel? model = null)
@@ -183,6 +192,49 @@ namespace MASA.PM.UI.Admin.Pages
 
             await GetClustersByEnvIdAsync(newClusterId);
             _clusterFormModel.Hide();
+        }
+
+        private async Task EditProjectAsync(int projectId)
+        {
+            var project = await GetProjectAsync(projectId);
+            await ShowProjectModalAsync(new UpdateProjectModel
+            {
+                ProjectId = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                EnvironmentClusterIds = project.EnvironmentClusterIds
+            });
+        }
+
+        private async Task ShowProjectModalAsync(UpdateProjectModel? model = null)
+        {
+            _projectFormModel.Data.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
+            if (model == null)
+            {
+                _projectFormModel.Show();
+            }
+            else
+            {
+                _projectFormModel.Show(model);
+            }
+
+            //TODO: get team by auth sdk;
+            await Task.Delay(0);
+        }
+
+        private async Task SubmitProject()
+        {
+            if (!_projectFormModel.HasValue)
+            {
+                await ProjectCaller.AddAsync(_projectFormModel.Data);
+            }
+            else
+            {
+                await ProjectCaller.UpdateAsync(_projectFormModel.Data);
+            }
+
+            _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);
+            _projectFormModel.Hide();
         }
     }
 }

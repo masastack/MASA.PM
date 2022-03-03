@@ -10,9 +10,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         public string Name { get; set; } = "";
 
         [Comment("TeamId")]
-        [Range(1, int.MaxValue, ErrorMessage = "TeamId is required")]
-        [Column(TypeName = "tinyint")]
-        public int TeamId { get; set; }
+        [RegularExpression("^((?!00000000-0000-0000-0000-000000000000).)*$", ErrorMessage = "TeamId is required")]
+        public Guid TeamId { get; set; }
 
         [Comment("Description")]
         [Column(TypeName = "nvarchar(250)")]

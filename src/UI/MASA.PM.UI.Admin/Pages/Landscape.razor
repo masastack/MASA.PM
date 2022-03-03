@@ -177,7 +177,7 @@
                                         </div>
                                         <MSpacer />
                                         <div style="display:flex;align-items:center;">
-                                            <MButton Icon StopPropagation Class="mr-1"><MIcon>mdi-pencil</MIcon></MButton>
+                                            <MButton Icon StopPropagation Class="mr-1" OnClick="()=>EditProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
                                             <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                         </div>
                                     </span>
@@ -208,7 +208,11 @@
                                                 </MCard>
                                             </MCol>
                                         }
-
+                                        <MCol Lg="4" Md="6" Sm="1">
+                                            <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
+                                                <MButton Ripple=false Plain XLarge><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                            </MCard>
+                                        </MCol>
                                     </MRow>
                                     <div class="d-flex justify-space-between mt-3">
                                         <div>
@@ -223,7 +227,7 @@
                     </MExpansionPanels>
                 </div>
                 <MCard Outlined Class="mb-4 mx-6" Style="padding:0 6px; border-radius:0 !important; display: flex; justify-content: center; align-items: center; border-style: dashed;" Height=54>
-                    <MButton Ripple=false Plain XLarge>
+                    <MButton Ripple=false Plain XLarge OnClick="()=>ShowProjectModalAsync()">
                         <MIcon Left>mdi-plus</MIcon>新增项目
                     </MButton>
                 </MCard>
@@ -240,7 +244,6 @@
            OnCancel="_envFormModel.Hide"
            OnOk=SubmitEnv>
     <MTextField Outlined Label="环境名称" @bind-Value="_envFormModel.Data.Name"></MTextField>
-    <MTextField Outlined Label="环境描述" @bind-Value="_envFormModel.Data.Description"></MTextField>
     <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
                    Items="_allClusters"
                    ItemText="r=>r.Name"
@@ -254,6 +257,7 @@
             </MChip>
         </SelectionContent>
     </MAutocomplete>
+    <MTextarea Outlined Label="环境描述" @bind-Value="_envFormModel.Data.Description"></MTextarea>
     @if (_envFormModel.HasValue)
     {
         <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
@@ -273,7 +277,6 @@
            OnCancel="_clusterFormModel.Hide"
            OnOk=SubmitCluster>
     <MTextField Outlined Label="集群名称" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
-    <MTextField Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextField>
     <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
                    Items="_allEnvs"
                    ItemText="r=>r.Name"
@@ -287,6 +290,7 @@
             </MChip>
         </SelectionContent>
     </MAutocomplete>
+    <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
     @if (_clusterFormModel.HasValue)
     {
         <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
@@ -299,7 +303,150 @@
     }
 </FormModal>
 
+<FormModal Visible="_projectFormModel.Visible"
+           Title="@(_clusterFormModel.HasValue ?"编辑项目":"新增项目")"
+           Width="684"
+           Model="_projectFormModel.Data"
+           OnCancel="_projectFormModel.Hide"
+           OnOk=SubmitProject>
+    <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
+    <MAutocomplete @bind-Value="_friends"
+                   Disabled="IsUpdating"
+                   Items="_people"
+                   Chips
+                   SmallChips
+                   Outlined
+                   Color="blue-grey lighten-2"
+                   Label="所属项目团队"
+                   ItemText="r=>r.Name"
+                   ItemValue="r=>r.Name"
+                   Multiple>
+        <SelectionContent Context="data">
+            <MChip Small Close
+                   OnCloseClick="()=>Remove(data.Item)">
+                <MAvatar Left>
+                    <MImage Src="@data.Item.Avatar"></MImage>
+                </MAvatar>
+                @data.Item.Name
+            </MChip>
+        </SelectionContent>
+        <ItemContent Context="data">
+            @if (data.Item is not object)
+            {
+                <MListItemContent>@data.Item</MListItemContent>
+            }
+            else
+            {
+                <MListItemAvatar>
+                    <img src="@data.Item.Avatar">
+                </MListItemAvatar>
+                <MListItemContent>
+                    <MListItemTitle>
+                        @((MarkupString)data.Item.Name)
+                    </MListItemTitle>
+                    <MListItemSubtitle>
+                        @((MarkupString)data.Item.Group)
+                    </MListItemSubtitle>
+                </MListItemContent>
+            }
+        </ItemContent>
+    </MAutocomplete>
+    <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+    @if (_projectFormModel.HasValue)
+    {
+        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+            <MCol Cols=6>创建人: @_projectDetail.Creator</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>修改人: @_projectDetail.Modifier</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+        </MRow>
+    }
+</FormModal>
 
 @code {
-}
 
+    private bool _autoUpdate = true;
+    private List<string> _friends = new()
+        {
+            "Sandra Adams",
+            "Britta Holt"
+        };
+    private bool _isUpdating;
+    private string _name = "Midnight Crew";
+
+    public class Person
+    {
+        public Guid Id => Guid.NewGuid();
+
+        public string Header { get; set; }
+
+        public string Name { get; set; }
+
+        public string Group { get; set; }
+
+        public string Avatar { get; set; }
+
+        public bool Divider { get; set; }
+    }
+
+    private List<Person> _people = new List<Person>
+        {
+            new Person
+            {
+                Name="Sandra Adams",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
+            },
+            new Person
+            {
+                Name="Ali Connors",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+            },
+            new Person
+            {
+                Name="Trevor Hansen",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
+            },
+            new Person
+            {
+                Name="Tucker Smith",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+            },
+            new Person
+            {
+                Divider=true,
+                Name="Group 1"
+            }
+        };
+    private string _title = "The summer breeze";
+
+    protected bool IsUpdating
+    {
+        get
+        {
+            return _isUpdating;
+        }
+        set
+        {
+            _isUpdating = value;
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                _isUpdating = false;
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+    }
+
+    public void Remove(Person item)
+    {
+        var index = _friends.IndexOf(item.Name);
+        if (index >= 0)
+        {
+            _friends.RemoveAt(index);
+        }
+    }
+}

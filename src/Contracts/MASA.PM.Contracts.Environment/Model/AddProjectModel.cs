@@ -18,11 +18,11 @@ namespace MASA.PM.Contracts.Base.Model
             set => _name = value.Trim();
         }
 
-        [Required(ErrorMessage = "EnvironmentClusterIds is required")]
+        [MinCount(1, ErrorMessage = "EnvironmentClusterIds is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();
 
         [Required(ErrorMessage = "TeamId is required")]
-        public int TeamId { get; set; }
+        public Guid TeamId { get; set; }
 
         [StringLength(250, ErrorMessage = "Project description length must be less than 250")]
         public string Description { get; set; } = "";

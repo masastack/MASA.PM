@@ -17,11 +17,16 @@ namespace MASA.PM.Service.Admin.Application.Project
         public async Task GetProject(ProjectQuery query)
         {
             var projectEntity = await _projectRepository.GetAsync(query.ProjectId);
-
+            var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
             query.Result = new ProjectViewModel
             {
                 Id = projectEntity.Id,
                 Name = projectEntity.Name,
+                Description = projectEntity.Description,
+                TeamId = projectEntity.TeamId,
+                EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
+                CreationTime = projectEntity.CreationTime,
+                Creator = projectEntity.Creator,
                 Modifier = projectEntity.Modifier,
                 ModificationTime = projectEntity.ModificationTime
             };
@@ -31,7 +36,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         public async Task GetProjects(ProjectsQuery query)
         {
             var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId);
-            query.Result = projects.Select(project => new ProjectViewModel
+            query.Result = projects.Select(project => new ProjectsViewModel
             {
                 Id = project.Id,
                 Name = project.Name,
