@@ -1,5 +1,6 @@
 ﻿using MASA.Blazor.Experimental.Components;
 using MASA.PM.Caller.Callers;
+using MASA.PM.Contracts.Base.Enum;
 using MASA.PM.Contracts.Base.Model;
 using MASA.PM.Contracts.Base.ViewModel;
 
@@ -22,6 +23,10 @@ namespace MASA.PM.UI.Admin.Pages
         private ClusterViewModel _clusterDetail = new();
         private DataModal<UpdateProjectModel> _projectFormModel = new();
         private ProjectViewModel _projectDetail = new();
+        private DataModal<UpdateAppModel> _appFormModel = new();
+        private AppViewModel _appDetail = new();
+        private int _selectAppType;
+        private int _selectAppServiceType;
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -231,6 +236,51 @@ namespace MASA.PM.UI.Admin.Pages
             else
             {
                 await ProjectCaller.UpdateAsync(_projectFormModel.Data);
+            }
+
+            _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);
+            _projectFormModel.Hide();
+        }
+
+
+        private void EditAppAsync(int appId)
+        {
+            _appDetail = _apps.First(app => app.Id == appId);
+
+            ShowAppModal(new UpdateAppModel
+            {
+                Id = _appDetail.Id,
+                Name = _appDetail.Name,
+                Description = _appDetail.Description,
+                SwaggerUrl = _appDetail.SwaggerUrl,
+                Url = _appDetail.Url
+            });
+        }
+
+        private void ShowAppModal(UpdateAppModel? model = null)
+        {
+            if (model == null)
+            {
+                _appFormModel.Data.Type = (AppTypes)_selectAppType;
+                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
+
+                _appFormModel.Show();
+            }
+            else
+            {
+                _appFormModel.Show(model);
+            }
+        }
+
+        private async Task SubmitApp()
+        {
+            if (!_appFormModel.HasValue)
+            {
+                await AppCaller.AddAsync(_appFormModel.Data);
+            }
+            else
+            {
+                await AppCaller.UpdateAsync(_appFormModel.Data);
             }
 
             _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);

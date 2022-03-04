@@ -8,8 +8,6 @@ namespace MASA.PM.Contracts.Base.Model
 {
     public class UpdateProjectModel : AddProjectModel
     {
-        public int ProjectId { get; set; }
-
-        public Guid ActionUserId { get; set; }
+        public int ProjectId { get; set; }        
     }
 }

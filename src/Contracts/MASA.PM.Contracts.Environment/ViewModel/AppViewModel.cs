@@ -23,6 +23,10 @@ namespace MASA.PM.Contracts.Base.ViewModel
 
         public ServiceTypes ServiceType { get; set; }
 
+        public string Url { get; set; } = "";
+
+        public string SwaggerUrl { get; set; } = "";
+
         public List<AppEnvironmentClusterViewModel> EnvironmentClusters { get; set; } = new();
     }
 }

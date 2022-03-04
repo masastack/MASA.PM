@@ -1,4 +1,5 @@
 ﻿@page "/Landscape"
+@using MASA.PM.Contracts.Base.Enum
 @using MASA.PM.Contracts.Base.ViewModel
 
 
@@ -210,7 +211,7 @@
                                         }
                                         <MCol Lg="4" Md="6" Sm="1">
                                             <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                <MButton Ripple=false Plain XLarge><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal()"><MIcon Left>mdi-plus</MIcon>APP</MButton>
                                             </MCard>
                                         </MCol>
                                     </MRow>
@@ -359,6 +360,53 @@
             <MCol Class="d-flex justify-end" Cols=6>创建时间: @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
             <MCol Cols=6>修改人: @_projectDetail.Modifier</MCol>
             <MCol Class="d-flex justify-end" Cols=6>修改时间: @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+        </MRow>
+    }
+</FormModal>
+
+<FormModal Visible="_appFormModel.Visible"
+           Title="@(_appFormModel.HasValue ?"编辑应用":"新增应用")"
+           Width="684"
+           Model="_appFormModel.Data"
+           OnCancel="_appFormModel.Hide"
+           OnOk=SubmitApp>
+    <MTextField Outlined Label="应用名称" @bind-Value="_appFormModel.Data.Name"></MTextField>
+    <MSelect @bind-Value="_selectAppType"
+             Disabled="@(_appFormModel.HasValue)"
+             Items="Enum<AppTypes>.GetEnumObjectList()"
+             ItemText="r=>r.Name"
+             ItemValue="r=>r.Value"
+             Outlined
+             Label="应用类型">
+    </MSelect>
+    <FadeTransition>
+        <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <MSelect @bind-Value="_selectAppServiceType"
+                     Disabled="@(_appFormModel.HasValue)"
+                     Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                     ItemText="r=>r.Name"
+                     ItemValue="r=>r.Value"
+                     Outlined
+                     Label="服务类型">
+            </MSelect>
+        </Element>
+    </FadeTransition>
+    <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
+    <FadeTransition>
+        <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
+        </Element>
+    </FadeTransition>
+    <MTextField Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appFormModel.Data.Name"></MTextField>
+    <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
+    @if (_clusterFormModel.HasValue)
+    {
+        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+            <MCol Cols=6>创建人: @_clusterDetail.Creator</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_clusterDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>修改人: @_clusterDetail.Modifier</MCol>
+            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_clusterDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            <MCol Cols=6>项目数量：3</MCol>
         </MRow>
     }
 </FormModal>

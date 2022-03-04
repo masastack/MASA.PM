@@ -9,7 +9,5 @@ namespace MASA.PM.Contracts.Base.Model
     public class UpdateEnvironmentModel: AddEnvironmentWhitClustersModel
     {
         public int EnvironmentId { get; set; }
-
-        public Guid ActionUserId { get; set; }
     }
 }

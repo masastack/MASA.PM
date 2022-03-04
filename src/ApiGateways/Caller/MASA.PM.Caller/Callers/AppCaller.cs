@@ -1,4 +1,5 @@
-﻿using MASA.PM.Contracts.Base.ViewModel;
+﻿using MASA.PM.Contracts.Base.Model;
+using MASA.PM.Contracts.Base.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,19 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<List<AppViewModel>> GetListByProjectIdAsync(List<int> projectIds)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, BaseAddress);
             var result = await CallerProvider.PostAsync<List<int>, List<AppViewModel>>($"/api/v1/projects/app", projectIds);
 
             return result;
+        }
+
+        public async Task AddAsync(AddAppModel model)
+        {
+            await CallerProvider.PostAsync($"{_prefix}", model);
+        }
+
+        public async Task UpdateAsync(UpdateAppModel model)
+        {
+            await CallerProvider.PutAsync($"{_prefix}", model);
         }
     }
 }
