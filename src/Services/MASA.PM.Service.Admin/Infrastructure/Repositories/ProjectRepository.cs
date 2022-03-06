@@ -73,16 +73,29 @@
             return result;
         }
 
-        public async Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId)
+        public async Task<List<ProjectsViewModel>> GetListByEnvironmentClusterIdAsync(int environmentClusterId)
         {
             System.Linq.Expressions.Expression<Func<EnvironmentClusterProject, bool>> predicate = environmentClusterProject =>
                                     environmentClusterProject.EnvironmentClusterId == environmentClusterId;
 
-            var projectIds = await _dbContext.EnvironmentClusterProjects.Where(predicate)
-                .Select(project => project.ProjectId)
+            var result = await _dbContext.EnvironmentClusterProjects.Where(predicate)
+                .Join(
+                    _dbContext.Projects,
+                    environmentClusterProject => environmentClusterProject.ProjectId,
+                    project => project.Id,
+                    (environmentClusterProject, project) => new { EnvironmentClusterProjectId = environmentClusterProject.Id, project }
+                )
+                .Select(projectGroup => new ProjectsViewModel
+                {
+                    Id = projectGroup.project.Id,
+                    Name = projectGroup.project.Name,
+                    Description = projectGroup.project.Description,
+                    EnvironmentClusterProjectId = projectGroup.EnvironmentClusterProjectId,
+                    Modifier = projectGroup.project.Modifier,
+                    ModificationTime = projectGroup.project.ModificationTime,
+                })
                 .ToListAsync();
 
-            var result = await _dbContext.Projects.Where(project => projectIds.Contains(project.Id)).ToListAsync();
             return result;
         }
 

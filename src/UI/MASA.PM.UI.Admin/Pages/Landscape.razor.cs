@@ -77,8 +77,9 @@ namespace MASA.PM.UI.Admin.Pages
             _projects = await ProjectCaller.GetListByEnvIdAsync(envClusterId);
             if (_projects.Any())
             {
-                _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id));
-                _projectApps = _apps.Where(app => _projects.Select(p => p.Id).Contains(app.ProjectId)).ToList();
+                var projectIds = _projects.Select(project => project.Id);
+                _apps = await GetAppByProjectIdAsync(projectIds);
+                _projectApps = _apps.Where(app => projectIds.Contains(app.ProjectId)).ToList();
             }
 
             return _projects;
@@ -243,11 +244,11 @@ namespace MASA.PM.UI.Admin.Pages
         }
 
 
-        private void EditAppAsync(int appId)
+        private void EditAppAsync(int appId, int environmentClusterProjectId)
         {
             _appDetail = _apps.First(app => app.Id == appId);
 
-            ShowAppModal(new UpdateAppModel
+            ShowAppModal(environmentClusterProjectId, new UpdateAppModel
             {
                 Id = _appDetail.Id,
                 Name = _appDetail.Name,
@@ -257,13 +258,11 @@ namespace MASA.PM.UI.Admin.Pages
             });
         }
 
-        private void ShowAppModal(UpdateAppModel? model = null)
+        private void ShowAppModal(int environmentClusterProjectId, UpdateAppModel? model = null)
         {
+            _appFormModel.Data.EnvironmentClusterProjectIds = new List<int> { environmentClusterProjectId };
             if (model == null)
             {
-                _appFormModel.Data.Type = (AppTypes)_selectAppType;
-                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
-
                 _appFormModel.Show();
             }
             else
@@ -276,6 +275,8 @@ namespace MASA.PM.UI.Admin.Pages
         {
             if (!_appFormModel.HasValue)
             {
+                _appFormModel.Data.Type = (AppTypes)_selectAppType;
+                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
                 await AppCaller.AddAsync(_appFormModel.Data);
             }
             else
@@ -283,7 +284,7 @@ namespace MASA.PM.UI.Admin.Pages
                 await AppCaller.UpdateAsync(_appFormModel.Data);
             }
 
-            _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);
+            _apps = await GetAppByProjectIdAsync(new List<int> { });
             _projectFormModel.Hide();
         }
     }

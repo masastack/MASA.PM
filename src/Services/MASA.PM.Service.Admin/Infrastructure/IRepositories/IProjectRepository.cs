@@ -8,7 +8,7 @@
 
         Task<Project> GetAsync(int Id);
 
-        Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId);
+        Task<List<ProjectsViewModel>> GetListByEnvironmentClusterIdAsync(int environmentClusterId);
 
         Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAsync(int projectId);
 

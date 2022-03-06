@@ -14,7 +14,7 @@ namespace MASA.PM.Contracts.Base.ViewModel
 
         public string Description { get; set; } = "";
 
-        public int AppCount { get; set; }
+        public int EnvironmentClusterProjectId { get; set; }
 
         public Guid Modifier { get; set; }
 

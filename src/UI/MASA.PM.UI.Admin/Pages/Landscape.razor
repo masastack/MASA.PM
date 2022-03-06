@@ -211,7 +211,7 @@
                                         }
                                         <MCol Lg="4" Md="6" Sm="1">
                                             <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal()"><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal(project.EnvironmentClusterProjectId)"><MIcon Left>mdi-plus</MIcon>APP</MButton>
                                             </MCard>
                                         </MCol>
                                     </MRow>
@@ -397,7 +397,7 @@
             <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
         </Element>
     </FadeTransition>
-    <MTextField Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appFormModel.Data.Name"></MTextField>
+    <MTextField Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appFormModel.Data.Identity"></MTextField>
     <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
     @if (_clusterFormModel.HasValue)
     {

@@ -9,7 +9,6 @@ namespace MASA.PM.Contracts.Base.Model
 {
     public class UpdateAppModel : AddAppModel
     {
-        [Required]
         public int Id { get; set; }
     }
 }
