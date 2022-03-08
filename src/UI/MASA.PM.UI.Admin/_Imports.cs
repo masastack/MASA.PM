@@ -26,3 +26,4 @@ global using System.Reflection;
 global using System.Text.Json;
 global using Masa.Blazor;
 global using MASA.PM.UI.Admin.Model;
+global using Masa.Blazor.Experimental.Components;

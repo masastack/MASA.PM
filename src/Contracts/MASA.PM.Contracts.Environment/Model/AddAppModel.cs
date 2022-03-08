@@ -19,8 +19,10 @@ namespace MASA.PM.Contracts.Base.Model
             set => _name = value.Trim();
         }
 
-        [MinCount(1, ErrorMessage = "EnvironmentClusterProjectId is required")]
-        public List<int> EnvironmentClusterProjectIds { get; set; } = new();
+        //[MinCount(1, ErrorMessage = "EnvironmentClusterId is required")]
+        public List<int> EnvironmentClusterIds { get; set; } = new();
+
+        public int ProjectId { get; set; }
 
         //[EnumDataType(typeof(AppTypes), ErrorMessage = "App type error")]
         public AppTypes Type { get; set; }

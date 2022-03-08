@@ -109,6 +109,13 @@
             return result;
         }
 
+        public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds)
+        {
+            var result = await _dbContext.EnvironmentClusters.Where(envCluster => environmentClusterIds.Contains(envCluster.Id)).ToListAsync();
+
+            return result;
+        }
+
         public async Task UpdateAsync(Cluster cluster)
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower() && e.Id != cluster.Id))

@@ -11,11 +11,6 @@
 
         public async Task<Project> AddAsync(Project project)
         {
-            if (_dbContext.Projects.Any(p => p.Name.ToLower() == project.Name.ToLower()))
-            {
-                throw new Exception("项目名称已存在！");
-            }
-
             await _dbContext.Projects.AddAsync(project);
             await _dbContext.SaveChangesAsync();
 
@@ -66,48 +61,58 @@
             return result;
         }
 
-        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentIds)
+        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentClusterIds)
         {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => ecp.ProjectId == projectId && environmentIds.Contains(ecp.EnvironmentClusterId)).ToListAsync();
+            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => ecp.ProjectId == projectId && environmentClusterIds.Contains(ecp.EnvironmentClusterId)).ToListAsync();
 
             return result;
         }
 
-        public async Task<List<ProjectsViewModel>> GetListByEnvironmentClusterIdAsync(int environmentClusterId)
+        public async Task<List<int>> GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId)
         {
-            System.Linq.Expressions.Expression<Func<EnvironmentClusterProject, bool>> predicate = environmentClusterProject =>
-                                    environmentClusterProject.EnvironmentClusterId == environmentClusterId;
-
-            var result = await _dbContext.EnvironmentClusterProjects.Where(predicate)
-                .Join(
-                    _dbContext.Projects,
-                    environmentClusterProject => environmentClusterProject.ProjectId,
-                    project => project.Id,
-                    (environmentClusterProject, project) => new { EnvironmentClusterProjectId = environmentClusterProject.Id, project }
-                )
-                .Select(projectGroup => new ProjectsViewModel
-                {
-                    Id = projectGroup.project.Id,
-                    Name = projectGroup.project.Name,
-                    Description = projectGroup.project.Description,
-                    EnvironmentClusterProjectId = projectGroup.EnvironmentClusterProjectId,
-                    Modifier = projectGroup.project.Modifier,
-                    ModificationTime = projectGroup.project.ModificationTime,
-                })
+            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
+                .Select(ecp => ecp.Id)
                 .ToListAsync();
 
             return result;
         }
 
+        public async Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId)
+        {
+            System.Linq.Expressions.Expression<Func<EnvironmentClusterProject, bool>> predicate = environmentClusterProject =>
+                                    environmentClusterProject.EnvironmentClusterId == environmentClusterId;
+
+            var projectIds = await _dbContext.EnvironmentClusterProjects.Where(predicate)
+                .Select(project => project.ProjectId)
+                .ToListAsync();
+
+            var result = await _dbContext.Projects.Where(project => projectIds.Contains(project.Id)).ToListAsync();
+            return result;
+        }
+
         public async Task UpdateAsync(Project project)
         {
-            if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))
-            {
-                throw new Exception("项目名称已存在！");
-            }
-
             _dbContext.Projects.Update(project);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task IsExistedProjectName(string name, List<int> environmentClusterIds, params int[] excludeProjectIds)
+        {
+            var result = await (from project in _dbContext.Projects.Where(project => project.Name.ToLower() == name.ToLower() && !excludeProjectIds.Contains(project.Id))
+                                join ecp in _dbContext.EnvironmentClusterProjects on project.Id equals ecp.ProjectId
+                                join ec in _dbContext.EnvironmentClusters.Where(envCluster => environmentClusterIds.Contains(envCluster.Id)) on ecp.EnvironmentClusterId equals ec.Id
+                                join e in _dbContext.Environments on ec.EnvironmentId equals e.Id
+                                join c in _dbContext.Clusters on ec.ClusterId equals c.Id
+                                select new
+                                {
+                                    EnvironmentName = e.Name,
+                                    ClusterName = c.Name
+                                }).FirstOrDefaultAsync();
+
+            if (result != null)
+            {
+                throw new Exception($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+            }
         }
     }
 }

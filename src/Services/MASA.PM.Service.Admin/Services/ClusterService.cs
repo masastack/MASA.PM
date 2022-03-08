@@ -1,5 +1,6 @@
 ﻿using MASA.PM.Service.Admin.Application.Cluster.Commands;
 using MASA.PM.Service.Admin.Application.Cluster.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
 {
@@ -12,7 +13,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{envId}/cluster", GetListByEnvId);
             App.MapGet("/api/v1/cluster/{Id}", GetAsync);
             App.MapPut("/api/v1/cluster", UpdateAsync);
-            App.MapDelete("/api/v1/cluster/{Id}", DeleteAsync);
+            App.MapDelete("/api/v1/cluster", DeleteEnvClusterAsync);
         }
 
         public async Task<ClustersViewModel> AddAsync(IEventBus eventBus, AddClusterWhitEnvironmentsModel model)
@@ -56,9 +57,9 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus, int Id)
+        public async Task DeleteEnvClusterAsync(IEventBus eventBus, [FromBody] int envClusterId)
         {
-            var command = new DeleteClusterCommand(Id);
+            var command = new DeleteClusterCommand(envClusterId);
             await eventBus.PublishAsync(command);
         }
     }

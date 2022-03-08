@@ -8,6 +8,13 @@
 
         public int Index { get; set; }
 
+        public EnvClusterModel(int index, string name, string description)
+        {
+            Index = index;
+            Name = name;
+            Description = description;
+        }
+
         public EnvClusterModel(int index)
         {
             Index = index;

@@ -10,11 +10,12 @@ namespace MASA.PM.UI.Admin.Pages
     {
         private StringNumber _selectedEnvId = 0;
         private StringNumber _selectEnvClusterId = 0;
+        private int _selectProjectId;
+        private int _selectAppId;
         private List<EnvironmentsViewModel> _environments = new();
         private List<ClustersViewModel> _clusters = new();
         private List<ProjectsViewModel> _projects = new();
         private List<AppViewModel> _apps = new();
-        private List<AppViewModel> _projectApps = new();
         private DataModal<UpdateEnvironmentModel> _envFormModel = new();
         private List<ClustersViewModel> _allClusters = new();
         private List<EnvironmentsViewModel> _allEnvs = new();
@@ -79,7 +80,6 @@ namespace MASA.PM.UI.Admin.Pages
             {
                 var projectIds = _projects.Select(project => project.Id);
                 _apps = await GetAppByProjectIdAsync(projectIds);
-                _projectApps = _apps.Where(app => projectIds.Contains(app.ProjectId)).ToList();
             }
 
             return _projects;
@@ -148,6 +148,30 @@ namespace MASA.PM.UI.Admin.Pages
             _envFormModel.Hide();
         }
 
+        private async Task DeleteEnv()
+        {
+            if (_environments.Count <= 1)
+            {
+                await PopupService.MessageAsync("环境不能为空", AlertTypes.Error);
+            }
+            else
+            {
+                var envId = _selectedEnvId.AsT1;
+                var deleteEnv = _environments.First(c => c.Id == envId);
+
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteEnv.Name}]环境吗？", async (c) =>
+                {
+                    await EnvironmentCaller.DeleteAsync(envId);
+
+                    _environments.Remove(deleteEnv);
+                    _selectedEnvId = _environments[0].Id;
+                    await GetClustersByEnvIdAsync(_environments[0].Id);
+
+                    _envFormModel.Hide();
+                });
+            }
+        }
+
         private async Task<ClusterViewModel> GetClusterAsync(int clusterId)
         {
             _clusterDetail = await ClusterCaller.GetAsync(clusterId);
@@ -200,8 +224,32 @@ namespace MASA.PM.UI.Admin.Pages
             _clusterFormModel.Hide();
         }
 
+        private async Task DeleteCluster()
+        {
+            if (_clusters.Count <= 1)
+            {
+                await PopupService.MessageAsync("集群不能为空", AlertTypes.Error);
+            }
+            else
+            {
+                var envName = _environments.First(env => env.Id == _selectedEnvId.AsT1).Name;
+                var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{envName}]环境下的[{deleteCluster.Name}]集群吗？", async (c) =>
+                {
+                    await ClusterCaller.DeleteAsync(_selectEnvClusterId.AsT1);
+
+                    _clusters.Remove(deleteCluster);
+                    _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                    await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
+
+                    _clusterFormModel.Hide();
+                });
+            }
+        }
+
         private async Task EditProjectAsync(int projectId)
         {
+            _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
             await ShowProjectModalAsync(new UpdateProjectModel
             {
@@ -243,14 +291,31 @@ namespace MASA.PM.UI.Admin.Pages
             _projectFormModel.Hide();
         }
 
-
-        private void EditAppAsync(int appId, int environmentClusterProjectId)
+        private async Task DeleteProject()
         {
-            _appDetail = _apps.First(app => app.Id == appId);
+            var deleteProject = _projects.First(project => project.Id == _selectProjectId);
+            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+            {
+                await ProjectCaller.DeleteAsync(_selectProjectId);
 
-            ShowAppModal(environmentClusterProjectId, new UpdateAppModel
+                _projects.Remove(deleteProject);
+
+                _projectFormModel.Hide();
+            });
+        }
+
+        private void EditAppAsync(int appId, int projectId)
+        {
+            _selectAppId = appId;
+            _appDetail = _apps.First(app => app.Id == appId);
+            _selectAppType = (int)_appDetail.Type;
+            _selectAppServiceType = (int)_appDetail.ServiceType;
+            ShowAppModal(projectId, new UpdateAppModel
             {
                 Id = _appDetail.Id,
+                Type = _appDetail.Type,
+                ServiceType = _appDetail.ServiceType,
+                Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
@@ -258,9 +323,11 @@ namespace MASA.PM.UI.Admin.Pages
             });
         }
 
-        private void ShowAppModal(int environmentClusterProjectId, UpdateAppModel? model = null)
+        private void ShowAppModal(int projectId, UpdateAppModel? model = null)
         {
-            _appFormModel.Data.EnvironmentClusterProjectIds = new List<int> { environmentClusterProjectId };
+            _selectProjectId = projectId;
+            _appFormModel.Data.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
+            _appFormModel.Data.ProjectId = projectId;
             if (model == null)
             {
                 _appFormModel.Show();
@@ -269,6 +336,13 @@ namespace MASA.PM.UI.Admin.Pages
             {
                 _appFormModel.Show(model);
             }
+        }
+
+        private void AppHide()
+        {
+            _selectAppType = 0;
+            _selectAppServiceType = 0;
+            _appFormModel.Hide();
         }
 
         private async Task SubmitApp()
@@ -284,8 +358,21 @@ namespace MASA.PM.UI.Admin.Pages
                 await AppCaller.UpdateAsync(_appFormModel.Data);
             }
 
-            _apps = await GetAppByProjectIdAsync(new List<int> { });
-            _projectFormModel.Hide();
+            _apps = await GetAppByProjectIdAsync(new List<int> { _selectProjectId });
+            AppHide();
+        }
+
+        private async Task DeleteApp()
+        {
+            var deleteApp = _apps.First(app => app.Id == _selectAppId);
+            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
+            {
+                await AppCaller.DeleteAsync(_selectAppId);
+
+                _apps.Remove(deleteApp);
+
+                AppHide();
+            });
         }
     }
 }

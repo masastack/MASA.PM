@@ -102,5 +102,27 @@
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds)
+        {
+            var result = await (from project in _dbContext.Projects.Where(project => project.Name.ToLower() == name.ToLower())
+                                join ecp in _dbContext.EnvironmentClusterProjects on project.Id equals ecp.ProjectId
+                                join ec in _dbContext.EnvironmentClusters on ecp.EnvironmentClusterId equals ec.Id
+                                join e in _dbContext.Environments on ec.EnvironmentId equals e.Id
+                                join c in _dbContext.Clusters on ec.ClusterId equals c.Id
+                                join ecpa in _dbContext.EnvironmentClusterProjectApps on ecp.Id equals ecpa.EnvironmentClusterProjectId
+                                join app in _dbContext.Apps.Where(a => !excludeAppIds.Contains(a.Id)) on ecpa.AppId equals app.Id
+                                select new
+                                {
+                                    EnvironmentName = e.Name,
+                                    ClusterName = c.Name,
+                                    ProjedctName = project.Name
+                                }).FirstOrDefaultAsync();
+
+            if (result != null)
+            {
+                throw new Exception($"应用名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+            }
+        }
     }
 }

@@ -78,13 +78,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task DeleteClusterAsync(DeleteClusterCommand command)
         {
-            await _clusterRepository.DeleteAsync(command.ClusterId);
-
-            var environmentClusters = await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(command.ClusterId);
+            var environmentClusters = await _clusterRepository.GetEnvironmentClustersByIds(new List<int> { command.EnvClusterId });
             await _clusterRepository.DeleteEnvironmentClusters(environmentClusters);
-
-            var environmentClusterProjects = await _clusterRepository.GetEnvironmentClusterProjectsByClusterIdAsync(environmentClusters.Select(ec => ec.Id));
-            await _clusterRepository.DeleteEnvironmentClusterProjects(environmentClusterProjects);
         }
     }
 }

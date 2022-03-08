@@ -9,10 +9,11 @@ namespace MASA.PM.UI.Admin.Pages.Home
     {
         private readonly List<EnvClusterModel> _customEnv = new()
         {
-            new EnvClusterModel(0)
+            new EnvClusterModel(0, "Development", "开发环境"),
+            new EnvClusterModel(1, "Staging", "模拟环境"),
+            new EnvClusterModel(2, "Production", "生产环境")
         };
         private int _step = 1;
-        private int _envRadio = 3;
         private InitModel _initModel = new();
         private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
         private bool _initLoading;
@@ -31,14 +32,22 @@ namespace MASA.PM.UI.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                var envs = await EnvironmentCaller.GetListAsync();
+                if (envs.Count > 0)
+                {
+                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                }
+            }
+        }
+
         private async Task InitAsync()
         {
             _initLoading = true;
 
-            if (_envRadio == 0)
-            {
-                _initModel.Environments = _customEnv.Select(env => new AddEnvironmentModel { Name = env.Name, Description = env.Description }).ToList();
-            }
             try
             {
                 await EnvironmentCaller.InitAsync(_initModel);

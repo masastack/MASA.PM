@@ -21,58 +21,15 @@
 
             <MStepperItems>
                 <MStepperContent Style="padding-top:12px !important;" Step="1">
-                    <MRadioGroup Style="margin:9px 0 24px 9px !important;" @bind-Value="_envRadio" Row>
-                        <MRadio Label="3个环境" Value="3">
-                        </MRadio>
-                        <MRadio Class="ml-13" Label="4个环境" Value="4">
-                        </MRadio>
-                        <MRadio Class="ml-13" Label="自定义环境" Value="0">
-                        </MRadio>
-                    </MRadioGroup>
                     @{
-                        if (_envRadio == 3)
+                        foreach (var item in _customEnv)
                         {
-                            _initModel = new Contracts.Base.Model.InitModel();
-                            _initModel.Environments = new List<Contracts.Base.Model.AddEnvironmentModel>
-                            {
-                                new Contracts.Base.Model.AddEnvironmentModel("Development", "开发环境"),
-                                new Contracts.Base.Model.AddEnvironmentModel("Staging", "测试环境"),
-                                new Contracts.Base.Model.AddEnvironmentModel("Production", "生产环境")
-                            };
-
-                            foreach (var item in _initModel.Environments)
-                            {
-                                <MTextField Disabled @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
-                                <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
-                            }
-                        }
-                        else if (_envRadio == 4)
-                        {
-                            _initModel = new Contracts.Base.Model.InitModel();
-                            _initModel.Environments = new List<Contracts.Base.Model.AddEnvironmentModel>
-                            {
-                                new Contracts.Base.Model.AddEnvironmentModel("Development", "开发环境"),
-                                new Contracts.Base.Model.AddEnvironmentModel("Staging", "测试环境"),
-                                new Contracts.Base.Model.AddEnvironmentModel("PreProduction", "预发布环境"),
-                                new Contracts.Base.Model.AddEnvironmentModel("Production", "生产环境")
-                            };
-                            foreach (var item in _initModel.Environments)
-                            {
-                                <MTextField Disabled @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
-                                <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
-                            }
-                        }
-                        else if (_envRadio == 0)
-                        {
-                            foreach (var item in _customEnv)
-                            {
-                                <MTextField Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
-                                <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
-                                <div class="d-flex justify-end mb-6 mr-1">
-                                    <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
-                                    <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
-                                </div>
-                            }
+                            <MTextField Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                            <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
+                            <div class="d-flex justify-end mb-6 mr-1">
+                                <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
+                                <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
+                            </div>
                         }
                     }
                     <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>_step=2">下一步</MButton>

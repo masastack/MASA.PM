@@ -18,6 +18,8 @@
 
         Task<ClusterViewModel> GetAsync(int Id);
 
+        Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds);
+
         Task UpdateAsync(Cluster cluster);
 
         Task DeleteAsync(int Id);

@@ -130,13 +130,13 @@
             {
                 throw new Exception("环境不存在！");
             }
-            var environmentClusters = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == environment.Id).ToListAsync();
-            var environmentClusterIds = environmentClusters.Select(e => e.Id);
-            var environmentClusterProjects = await _dbContext.EnvironmentClusterProjects.Where(e => environmentClusterIds.Contains(e.EnvironmentClusterId)).ToListAsync();
+            //var environmentClusters = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == environment.Id).ToListAsync();
+            //var environmentClusterIds = environmentClusters.Select(e => e.Id);
+            //var environmentClusterProjects = await _dbContext.EnvironmentClusterProjects.Where(e => environmentClusterIds.Contains(e.EnvironmentClusterId)).ToListAsync();
 
             _dbContext.Environments.Remove(environment);
-            _dbContext.EnvironmentClusters.RemoveRange(_dbContext.EnvironmentClusters);
-            _dbContext.EnvironmentClusterProjects.RemoveRange(environmentClusterProjects);
+            //_dbContext.EnvironmentClusters.RemoveRange(environmentClusters);
+            //_dbContext.EnvironmentClusterProjects.RemoveRange(environmentClusterProjects);
 
             await _dbContext.SaveChangesAsync();
         }

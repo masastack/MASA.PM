@@ -2,6 +2,7 @@
 using MASA.PM.Service.Admin.Application.Cluster.Queries;
 using MASA.PM.Service.Admin.Application.Project.Commands;
 using MASA.PM.Service.Admin.Application.Project.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
 {
@@ -13,7 +14,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{environmentClusterId}/project/", GetList);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapPut("/api/v1/project", UpdateAsync);
-            App.MapDelete("/api/v1/project/{Id}", DeleteAsync);
+            App.MapDelete("/api/v1/project", DeleteAsync);
         }
 
         public async Task AddAsync(IEventBus eventBus, AddProjectModel model)
@@ -47,7 +48,7 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus, int Id)
+        public async Task DeleteAsync(IEventBus eventBus, [FromBody] int Id)
         {
             var command = new DeleteProjectCommand(Id);
             await eventBus.PublishAsync(command);

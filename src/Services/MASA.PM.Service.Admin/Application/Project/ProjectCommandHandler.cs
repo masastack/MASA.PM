@@ -14,13 +14,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task AddProjectAsync(AddProjectCommand command)
         {
+            await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds);
+
             var project = new Infrastructure.Entities.Project
             {
                 Name = command.ProjectModel.Name,
                 Description = command.ProjectModel.Description,
                 TeamId = command.ProjectModel.TeamId,
             };
-
             var newPeoject = await _projectRepository.AddAsync(project);
 
             var environmentClusterProjects = command.ProjectModel.EnvironmentClusterIds.Select(environmentClusterId => new EnvironmentClusterProject
@@ -35,6 +36,8 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task UpdateProjectAsync(UpdateProjectCommand command)
         {
+            await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds, command.ProjectModel.ProjectId);
+
             var project = new Infrastructure.Entities.Project
             {
                 Id = command.ProjectModel.ProjectId,
@@ -64,6 +67,8 @@ namespace MASA.PM.Service.Admin.Application.Project
             var addEnvironmentClusterIds = command.ProjectModel.EnvironmentClusterIds.Except(oldEnvironmentClusterIds);
             if (addEnvironmentClusterIds.Any())
             {
+                await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds);
+
                 await _projectRepository.AddEnvironmentClusterProjectsAsync(addEnvironmentClusterIds.Select(environmentClusterId => new EnvironmentClusterProject
                 {
                     EnvironmentClusterId = environmentClusterId,

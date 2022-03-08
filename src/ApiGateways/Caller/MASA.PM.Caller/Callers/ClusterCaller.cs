@@ -49,5 +49,10 @@ namespace MASA.PM.Caller.Callers
         {
             await CallerProvider.PutAsync(_prefix, model);
         }
+
+        public async Task DeleteAsync(int envClusterId)
+        {
+            await CallerProvider.DeleteAsync(_prefix, envClusterId);
+        }
     }
 }

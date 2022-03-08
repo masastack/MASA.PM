@@ -16,14 +16,19 @@
                         @foreach (var env in _environments)
                         {
                             <MListItem Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
-                                <MListItemContent>
+                                 <ItemContent>
+                                     <MListItemContent>
                                     <MListItemTitle>@env.Name</MListItemTitle>
-                                </MListItemContent>
-                                <MListItemIcon Class="d-flex align-center pt-1">
-                                    <MButton StopPropagation Icon OnClick="()=>EditEnvAsync(env.Id)">
-                                        <MIcon>mdi-pencil</MIcon>
-                                    </MButton>
-                                </MListItemIcon>
+                                    </MListItemContent>
+                                    @if(context.Active)
+                                    {
+                                        <MListItemIcon Class="d-flex align-center pt-1">
+                                            <MButton StopPropagation Icon OnClick="()=>EditEnvAsync(env.Id)">
+                                                <MIcon>mdi-pencil</MIcon>
+                                            </MButton>
+                                        </MListItemIcon>
+                                    }
+                                </ItemContent>
                             </MListItem>
                         }
                     </MListItemGroup>
@@ -43,9 +48,12 @@
                             StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
                             <MTab Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
                                 @cluster.Name
-                                <MButton StopPropagation Icon OnClick="()=>EditClusterAsync(cluster.Id)">
-                                    <MIcon>mdi-pencil</MIcon>
-                                </MButton>
+                                @if (cluster.EnvironmentClusterId==_selectEnvClusterId.AsT1)
+                                {
+                                    <MButton StopPropagation Icon OnClick="()=>EditClusterAsync(cluster.Id)">
+                                        <MIcon>mdi-pencil</MIcon>
+                                    </MButton>
+                                }
                             </MTab>
                         }
                     </MTabs>
@@ -173,7 +181,7 @@
                                         <div class="text-h6">
                                             @project.Name
                                             <span class="ml-2 text-caption">|</span>
-                                            <sapn class="ml-1 text-caption">应用数量: @_projectApps.Count</sapn>
+                                            <sapn class="ml-1 text-caption">应用数量:未实现</sapn>
                                             <div class="text-caption" style="padding:0">@project.Description</div>
                                         </div>
                                         <MSpacer />
@@ -185,33 +193,36 @@
                                 </MExpansionPanelHeader>
                                 <MExpansionPanelContent>
                                     <MRow>
-                                        @foreach (var app in _projectApps)
+                                        @foreach (var app in _apps)
                                         {
-                                            <MCol Lg="4" Md="6" Sm="1">
-                                                <MCard Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
-                                                    <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
-                                                        <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
-                                                        <MSpacer />
-                                                        <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
-                                                    </MCardTitle>
-                                                    <MCardSubtitle>
-                                                        @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
-                                                        <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
-                                                    </MCardSubtitle>
-                                                    <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
-                                                        <MChipGroup Class="mx-2">
-                                                            @foreach (var item in app.EnvironmentClusters)
-                                                            {
-                                                                <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
-                                                            }
-                                                        </MChipGroup>
-                                                    </MCardActions>
-                                                </MCard>
-                                            </MCol>
+                                            @if(app.ProjectId == project.Id)
+                                            {
+                                                <MCol Lg="4" Md="6" Sm="1">
+                                                    <MCard Class="hover-pointer" OnClick="()=>EditAppAsync(app.Id,project.Id)" Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                                        <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
+                                                            <MSpacer />
+                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
+                                                        </MCardTitle>
+                                                        <MCardSubtitle>
+                                                            @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                            <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
+                                                        </MCardSubtitle>
+                                                        <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                            <MChipGroup Class="mx-2">
+                                                                @foreach (var item in app.EnvironmentClusters)
+                                                                {
+                                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
+                                                                }
+                                                            </MChipGroup>
+                                                        </MCardActions>
+                                                    </MCard>
+                                                </MCol>
+                                            }
                                         }
                                         <MCol Lg="4" Md="6" Sm="1">
                                             <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal(project.EnvironmentClusterProjectId)"><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal(project.Id)"><MIcon Left>mdi-plus</MIcon>APP</MButton>
                                             </MCard>
                                         </MCol>
                                     </MRow>
@@ -242,173 +253,212 @@
            Title="@(_envFormModel.HasValue ?"编辑环境":"新增环境")"
            Width="684"
            Model="_envFormModel.Data"
-           OnCancel="_envFormModel.Hide"
-           OnOk=SubmitEnv>
-    <MTextField Outlined Label="环境名称" @bind-Value="_envFormModel.Data.Name"></MTextField>
-    <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
-                   Items="_allClusters"
-                   ItemText="r=>r.Name"
-                   ItemValue="r=>r.Id"
-                   Outlined
-                   Label="关联集群"
-                   Multiple>
-        <SelectionContent Context="_context">
-            <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                @_context.Item.Name
-            </MChip>
-        </SelectionContent>
-    </MAutocomplete>
-    <MTextarea Outlined Label="环境描述" @bind-Value="_envFormModel.Data.Description"></MTextarea>
-    @if (_envFormModel.HasValue)
-    {
-        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-            <MCol Cols=6>创建人: @_envDetail.Creator</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_envDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>修改人: @_envDetail.Modifier</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_envDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>集群数量：3</MCol>
-        </MRow>
-    }
+           OnCancel="_envFormModel.Hide">
+    <ChildContent>
+        <MTextField Outlined Label="环境名称" @bind-Value="_envFormModel.Data.Name"></MTextField>
+        <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
+                       Items="_allClusters"
+                       ItemText="r=>r.Name"
+                       ItemValue="r=>r.Id"
+                       Outlined
+                       Label="关联集群"
+                       Multiple>
+            <SelectionContent Context="_context">
+                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                    @_context.Item.Name
+                </MChip>
+            </SelectionContent>
+        </MAutocomplete>
+        <MTextarea Outlined Label="环境描述" @bind-Value="_envFormModel.Data.Description"></MTextarea>
+        @if (_envFormModel.HasValue)
+        {
+            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                <MCol Cols=6>创建人: @_envDetail.Creator</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>创建时间: @_envDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>修改人: @_envDetail.Modifier</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>修改时间: @_envDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>集群数量：3</MCol>
+            </MRow>
+        }
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            @if (_envFormModel.HasValue)
+            {
+                <MButton OnClick="DeleteEnv" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+            }
+            <MButton OnClick="SubmitEnv" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
 </FormModal>
 
 <FormModal Visible="_clusterFormModel.Visible"
            Title="@(_clusterFormModel.HasValue ?"编辑集群":"新增集群")"
            Width="684"
            Model="_clusterFormModel.Data"
-           OnCancel="_clusterFormModel.Hide"
-           OnOk=SubmitCluster>
-    <MTextField Outlined Label="集群名称" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
-    <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
-                   Items="_allEnvs"
-                   ItemText="r=>r.Name"
-                   ItemValue="r=>r.Id"
-                   Outlined
-                   Label="关联环境"
-                   Multiple>
-        <SelectionContent Context="_context">
-            <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                @_context.Item.Name
-            </MChip>
-        </SelectionContent>
-    </MAutocomplete>
-    <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-    @if (_clusterFormModel.HasValue)
-    {
-        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-            <MCol Cols=6>创建人: @_clusterDetail.Creator</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_clusterDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>修改人: @_clusterDetail.Modifier</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_clusterDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>项目数量：3</MCol>
-        </MRow>
-    }
+           OnCancel="_clusterFormModel.Hide">
+    <ChildContent>
+        <MTextField Outlined Label="集群名称" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
+        <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
+                       Items="_allEnvs"
+                       ItemText="r=>r.Name"
+                       ItemValue="r=>r.Id"
+                       Outlined
+                       Label="关联环境"
+                       Multiple>
+            <SelectionContent Context="_context">
+                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                    @_context.Item.Name
+                </MChip>
+            </SelectionContent>
+        </MAutocomplete>
+        <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
+        @if (_clusterFormModel.HasValue)
+        {
+            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                <MCol Cols=6>创建人: @_clusterDetail.Creator</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>创建时间: @_clusterDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>修改人: @_clusterDetail.Modifier</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>修改时间: @_clusterDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>项目数量：3</MCol>
+            </MRow>
+        }
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            @if (_clusterFormModel.HasValue)
+            {
+                <MButton OnClick="DeleteCluster" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+            }
+            <MButton OnClick="SubmitCluster" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
 </FormModal>
 
 <FormModal Visible="_projectFormModel.Visible"
-           Title="@(_clusterFormModel.HasValue ?"编辑项目":"新增项目")"
+           Title="@(_projectFormModel.HasValue ?"编辑项目":"新增项目")"
            Width="684"
            Model="_projectFormModel.Data"
-           OnCancel="_projectFormModel.Hide"
-           OnOk=SubmitProject>
-    <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
-    <MAutocomplete @bind-Value="_friends"
-                   Disabled="IsUpdating"
-                   Items="_people"
-                   Chips
-                   SmallChips
-                   Outlined
-                   Color="blue-grey lighten-2"
-                   Label="所属项目团队"
-                   ItemText="r=>r.Name"
-                   ItemValue="r=>r.Name"
-                   Multiple>
-        <SelectionContent Context="data">
-            <MChip Small Close
-                   OnCloseClick="()=>Remove(data.Item)">
-                <MAvatar Left>
-                    <MImage Src="@data.Item.Avatar"></MImage>
-                </MAvatar>
-                @data.Item.Name
-            </MChip>
-        </SelectionContent>
-        <ItemContent Context="data">
-            @if (data.Item is not object)
+           OnCancel="_projectFormModel.Hide">
+    <ChildContent>
+        <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
+        <MAutocomplete @bind-Value="_friends"
+                       Disabled="IsUpdating"
+                       Items="_people"
+                       Chips
+                       SmallChips
+                       Outlined
+                       Color="blue-grey lighten-2"
+                       Label="所属项目团队"
+                       ItemText="r=>r.Name"
+                       ItemValue="r=>r.Name"
+                       Multiple>
+            <SelectionContent Context="data">
+                <MChip Small Close
+                       OnCloseClick="()=>Remove(data.Item)">
+                    <MAvatar Left>
+                        <MImage Src="@data.Item.Avatar"></MImage>
+                    </MAvatar>
+                    @data.Item.Name
+                </MChip>
+            </SelectionContent>
+            <ItemContent Context="data">
+                @if (data.Item is not object)
+                {
+                    <MListItemContent>@data.Item</MListItemContent>
+                }
+                else
+                {
+                    <MListItemAvatar>
+                        <img src="@data.Item.Avatar">
+                    </MListItemAvatar>
+                    <MListItemContent>
+                        <MListItemTitle>
+                            @((MarkupString)data.Item.Name)
+                        </MListItemTitle>
+                        <MListItemSubtitle>
+                            @((MarkupString)data.Item.Group)
+                        </MListItemSubtitle>
+                    </MListItemContent>
+                }
+            </ItemContent>
+        </MAutocomplete>
+        <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+        @if (_projectFormModel.HasValue)
+        {
+            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                <MCol Cols=6>创建人: @_projectDetail.Creator</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>创建时间: @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>修改人: @_projectDetail.Modifier</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>修改时间: @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            </MRow>
+        }
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            @if (_projectFormModel.HasValue)
             {
-                <MListItemContent>@data.Item</MListItemContent>
+                <MButton OnClick="DeleteProject" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            else
-            {
-                <MListItemAvatar>
-                    <img src="@data.Item.Avatar">
-                </MListItemAvatar>
-                <MListItemContent>
-                    <MListItemTitle>
-                        @((MarkupString)data.Item.Name)
-                    </MListItemTitle>
-                    <MListItemSubtitle>
-                        @((MarkupString)data.Item.Group)
-                    </MListItemSubtitle>
-                </MListItemContent>
-            }
-        </ItemContent>
-    </MAutocomplete>
-    <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
-    @if (_projectFormModel.HasValue)
-    {
-        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-            <MCol Cols=6>创建人: @_projectDetail.Creator</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>修改人: @_projectDetail.Modifier</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-        </MRow>
-    }
+            <MButton OnClick="SubmitProject" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
 </FormModal>
 
 <FormModal Visible="_appFormModel.Visible"
            Title="@(_appFormModel.HasValue ?"编辑应用":"新增应用")"
            Width="684"
            Model="_appFormModel.Data"
-           OnCancel="_appFormModel.Hide"
-           OnOk=SubmitApp>
-    <MTextField Outlined Label="应用名称" @bind-Value="_appFormModel.Data.Name"></MTextField>
-    <MSelect @bind-Value="_selectAppType"
-             Disabled="@(_appFormModel.HasValue)"
-             Items="Enum<AppTypes>.GetEnumObjectList()"
-             ItemText="r=>r.Name"
-             ItemValue="r=>r.Value"
-             Outlined
-             Label="应用类型">
-    </MSelect>
-    <FadeTransition>
-        <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-            <MSelect @bind-Value="_selectAppServiceType"
-                     Disabled="@(_appFormModel.HasValue)"
-                     Items="Enum<ServiceTypes>.GetEnumObjectList()"
-                     ItemText="r=>r.Name"
-                     ItemValue="r=>r.Value"
-                     Outlined
-                     Label="服务类型">
-            </MSelect>
-        </Element>
-    </FadeTransition>
-    <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
-    <FadeTransition>
-        <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-            <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
-        </Element>
-    </FadeTransition>
-    <MTextField Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appFormModel.Data.Identity"></MTextField>
-    <MTextarea Outlined Label="集群描述" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-    @if (_clusterFormModel.HasValue)
-    {
-        <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-            <MCol Cols=6>创建人: @_clusterDetail.Creator</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>创建时间: @_clusterDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>修改人: @_clusterDetail.Modifier</MCol>
-            <MCol Class="d-flex justify-end" Cols=6>修改时间: @_clusterDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
-            <MCol Cols=6>项目数量：3</MCol>
-        </MRow>
-    }
+           OnCancel="AppHide">
+    <ChildContent>
+        <MTextField Outlined Label="应用名称" @bind-Value="_appFormModel.Data.Name"></MTextField>
+        <MSelect @bind-Value="_selectAppType"
+                 Disabled="@(_appFormModel.HasValue)"
+                 Items="Enum<AppTypes>.GetEnumObjectList()"
+                 ItemText="r=>r.Name"
+                 ItemValue="r=>r.Value"
+                 Outlined
+                 Label="应用类型">
+        </MSelect>
+        <FadeTransition>
+            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                <MSelect @bind-Value="_selectAppServiceType"
+                         Disabled="@(_appFormModel.HasValue)"
+                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                         ItemText="r=>r.Name"
+                         ItemValue="r=>r.Value"
+                         Outlined
+                         Label="服务类型">
+                </MSelect>
+            </Element>
+        </FadeTransition>
+        <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
+        <FadeTransition>
+            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
+            </Element>
+        </FadeTransition>
+        <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appFormModel.Data.Identity"></MTextField>
+        <MTextarea Outlined Label="集群描述" @bind-Value="_appFormModel.Data.Description"></MTextarea>
+        @if (_appFormModel.HasValue)
+        {
+            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                <MCol Cols=6>创建人: @_appDetail.Creator</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>创建时间: @_appDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>修改人: @_appDetail.Modifier</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>修改时间: @_appDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            </MRow>
+        }
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            @if (_appFormModel.HasValue)
+            {
+                <MButton OnClick="DeleteApp" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+            }
+            <MButton OnClick="SubmitApp" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
 </FormModal>
 
 @code {
