@@ -4,22 +4,6 @@
 @inject GlobalConfig GlobalConfig;
 @implements IDisposable
 
-@*<div>
-    <MRow NoGutters>
-
-    <div class="pr-6" style="width: calc(100% - 300px); overflow: hidden; display:block;">
-    <div class="rounded-5" style="height:100%;background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
-    </div>
-    </div>
-
-    <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height:calc(100vh - 142px );">
-    <div style="min-width:300px; display:flex; flex-direction:column; align-items:center; overflow: auto; height:calc(100vh - 238px );">
-    </div>
-    </MNavigationDrawer>
-
-    </MRow>
-    </div>*@
-
 <MTabs @bind-Value="_curTab" SliderColor="transparent" class="pro-nav remover-ripple">
     <MTab class="text-capitalize pa-0">
         <ChildContent>
@@ -37,9 +21,9 @@
     </MTab>
 </MTabs>
 
-<MTabsItems Value="_curTab" class="pt-6 ml-n6">
+<MTabsItems Value="_curTab" class="pt-6">
     <MTabItem>
-        <p>123</p>
+        <Project></Project>
     </MTabItem>
     <MTabItem class="pl-6">
         <p>456</p>
