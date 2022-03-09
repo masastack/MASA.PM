@@ -1,7 +1,7 @@
 ﻿
 namespace MASA.PM.UI.Admin.Pages.Dashboard
 {
-    public partial class ECommerce : ProCompontentBase
+    public partial class Team : ProCompontentBase
     {
         private object? _orderChart;
         private object? _profitChart;

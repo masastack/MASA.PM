@@ -7,14 +7,14 @@
   },
   {
     "Id": 1,
-    "Title": "Dashboard",
+    "Title": "Team",
     "Icon": "mdi-trending-up",
     "Children": [
       {
         "Id": 2,
-        "Title": "eCommerce",
+        "Title": "team1",
         "Icon": "mdi-circle",
-        "Href": "dashboard/ecommerce"
+        "Href": "team"
       },
       {
         "Id": 3,
