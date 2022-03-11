@@ -11,7 +11,8 @@ namespace MASA.PM.Service.Admin.Services
         public ProjectService(IServiceCollection services) : base(services)
         {
             App.MapPost("/api/v1/project", AddAsync);
-            App.MapGet("/api/v1/{environmentClusterId}/project/", GetList);
+            App.MapGet("/api/v1/project", GetList);
+            App.MapGet("/api/v1/{environmentClusterId}/project/", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapPut("/api/v1/project", UpdateAsync);
             App.MapDelete("/api/v1/project", DeleteAsync);
@@ -23,9 +24,17 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<ProjectsViewModel>> GetList(IEventBus eventBus, int environmentClusterId)
+        public async Task<List<ProjectsViewModel>> GetListByEnvironmentClusterId(IEventBus eventBus, int environmentClusterId)
         {
             var query = new ProjectsQuery(environmentClusterId);
+            await eventBus.PublishAsync(query);
+
+            return query.Result;
+        }
+
+        public async Task<List<ProjectsViewModel>> GetList(IEventBus eventBus)
+        {
+            var query = new ProjectsQuery(null);
             await eventBus.PublishAsync(query);
 
             return query.Result;

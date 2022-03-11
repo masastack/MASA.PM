@@ -16,11 +16,11 @@
                         @foreach (var env in _environments)
                         {
                             <MListItem Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
-                                 <ItemContent>
-                                     <MListItemContent>
-                                    <MListItemTitle>@env.Name</MListItemTitle>
+                                <ItemContent>
+                                    <MListItemContent>
+                                        <MListItemTitle>@env.Name</MListItemTitle>
                                     </MListItemContent>
-                                    @if(context.Active)
+                                    @if (context.Active)
                                     {
                                         <MListItemIcon Class="d-flex align-center pt-1">
                                             <MButton StopPropagation Icon OnClick="()=>EditEnvAsync(env.Id)">
@@ -48,7 +48,7 @@
                             StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
                             <MTab Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
                                 @cluster.Name
-                                @if (cluster.EnvironmentClusterId==_selectEnvClusterId.AsT1)
+                                @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                                 {
                                     <MButton StopPropagation Icon OnClick="()=>EditClusterAsync(cluster.Id)">
                                         <MIcon>mdi-pencil</MIcon>
@@ -92,15 +92,21 @@
                                                 <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
                                             </MCardTitle>
                                             <MCardSubtitle>
-                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
-                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
+                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>
+                                                <div class="text-body3" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
                                             </MCardSubtitle>
                                             <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
-                                                <MChipGroup Class="mx-2">
-                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
-                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
-                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
-                                                </MChipGroup>
+                                                <div class="d-flex flex-column" style="width:376px">
+                                                    <div class="mx-2" style="white-space: nowrap;overflow: hidden;">
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                    </div>
+                                                    <div class="mx-2 d-flex justify-end">叶子编辑于1小时前</div>
+                                                </div>
                                             </MCardActions>
                                         </MCard>
                                     </MCol>
@@ -175,13 +181,14 @@
 
                         @foreach (var project in _projects)
                         {
+                            var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
                             <MExpansionPanel Style="margin-bottom: 12px; border-radius: 20px;">
                                 <MExpansionPanelHeader>
                                     <span style="display:flex;align-items:center;margin-right:10px;">
                                         <div class="text-h6">
                                             @project.Name
                                             <span class="ml-2 text-caption">|</span>
-                                            <sapn class="ml-1 text-caption">应用数量:未实现</sapn>
+                                            <sapn class="ml-1 text-caption">应用数量:@apps.Count</sapn>
                                             <div class="text-caption" style="padding:0">@project.Description</div>
                                         </div>
                                         <MSpacer />
@@ -193,28 +200,28 @@
                                 </MExpansionPanelHeader>
                                 <MExpansionPanelContent>
                                     <MRow>
-                                        @foreach (var app in _apps)
+                                        @foreach (var app in apps)
                                         {
-                                            @if(app.ProjectId == project.Id)
+                                            @if (app.ProjectId == project.Id)
                                             {
                                                 <MCol Lg="4" Md="6" Sm="1">
-                                                    <MCard Class="hover-pointer" OnClick="()=>EditAppAsync(app.Id,project.Id)" Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                                    <MCard Class="hover-pointer" OnClick="()=>EditAppAsync(app.Id,project.Id)" Outlined MinHeight="242" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
                                                         <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
                                                             <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
                                                             <MSpacer />
                                                             <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
                                                         </MCardTitle>
                                                         <MCardSubtitle>
-                                                            @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
-                                                            <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
+                                                            <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Identity</div>
+                                                            <div class="text-body3" style="display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
                                                         </MCardSubtitle>
                                                         <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
-                                                            <MChipGroup Class="mx-2">
+                                                            <div class="mx-2">
                                                                 @foreach (var item in app.EnvironmentClusters)
                                                                 {
                                                                     <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
                                                                 }
-                                                            </MChipGroup>
+                                                            </div>
                                                         </MCardActions>
                                                     </MCard>
                                                 </MCol>

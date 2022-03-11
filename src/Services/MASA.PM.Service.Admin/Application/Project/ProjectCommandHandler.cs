@@ -14,8 +14,6 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task AddProjectAsync(AddProjectCommand command)
         {
-            await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds);
-
             var project = new Infrastructure.Entities.Project
             {
                 Name = command.ProjectModel.Name,
@@ -36,8 +34,6 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task UpdateProjectAsync(UpdateProjectCommand command)
         {
-            await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds, command.ProjectModel.ProjectId);
-
             var project = new Infrastructure.Entities.Project
             {
                 Id = command.ProjectModel.ProjectId,

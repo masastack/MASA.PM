@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MASA.PM.Contracts.Base.ViewModel
 {
-    public class ProjectsViewModel
+    public class ProjectAppViewModel
     {
         public int Id { get; set; }
 
@@ -14,8 +14,12 @@ namespace MASA.PM.Contracts.Base.ViewModel
 
         public string Description { get; set; } = "";
 
+        public int EnvironmentClusterProjectId { get; set; }
+
         public Guid Modifier { get; set; }
 
         public DateTime ModificationTime { get; set; }
+
+        public List<AppViewModel> Apps { get; set; } = new();
     }
 }

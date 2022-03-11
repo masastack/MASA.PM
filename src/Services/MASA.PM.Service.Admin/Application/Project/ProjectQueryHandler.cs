@@ -35,15 +35,30 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
-            var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId);
-            query.Result = projects.Select(project => new ProjectsViewModel
+            if (query.EnvironmentClusterId.HasValue)
             {
-                Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                Modifier = project.Modifier,
-                ModificationTime = project.ModificationTime,
-            }).ToList();
+                var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
+                query.Result = projects.Select(project => new ProjectsViewModel
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    Modifier = project.Modifier,
+                    ModificationTime = project.ModificationTime,
+                }).ToList();
+            }
+            else
+            {
+                var projects = await _projectRepository.GetListAsync();
+                query.Result = projects.Select(project => new ProjectsViewModel
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    Modifier = project.Modifier,
+                    ModificationTime = project.ModificationTime,
+                }).ToList();
+            }
         }
     }
 }

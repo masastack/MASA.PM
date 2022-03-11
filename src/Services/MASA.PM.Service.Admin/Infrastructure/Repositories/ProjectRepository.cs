@@ -11,6 +11,11 @@
 
         public async Task<Project> AddAsync(Project project)
         {
+            if (_dbContext.Projects.Any(p => p.Name.ToLower() == project.Name.ToLower()))
+            {
+                throw new Exception("项目名称已存在！");
+            }
+
             await _dbContext.Projects.AddAsync(project);
             await _dbContext.SaveChangesAsync();
 
@@ -24,6 +29,13 @@
                 await _dbContext.EnvironmentClusterProjects.AddRangeAsync(environmentClusterProjects);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<Project>> GetListAsync()
+        {
+            var result = await _dbContext.Projects.ToListAsync();
+
+            return result;
         }
 
         public async Task DeleteAsync(int Id)
@@ -92,6 +104,11 @@
 
         public async Task UpdateAsync(Project project)
         {
+            if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))
+            {
+                throw new Exception("项目名称已存在！");
+            }
+             
             _dbContext.Projects.Update(project);
             await _dbContext.SaveChangesAsync();
         }

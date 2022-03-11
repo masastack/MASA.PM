@@ -1,8 +1,192 @@
 ﻿<div>
     <MRow NoGutters>
 
-        <div class="pr-6" style="width: calc(100% - 300px); overflow: hidden; display:block;">
-            <div class="rounded-5" style="height: calc(100vh - 218px);background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
+        <div class="pr-6" style="width: calc(100% - 300px); display:block;">
+            <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
+                <div class="d-flex mb-6">
+                    <MTextField @bind-Value="_search" OnKeyDown="OnKeyDownHandle" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="Search">
+                        <PrependInnerContent>
+                            <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                        </PrependInnerContent>
+                    </MTextField>
+                    <MButton Class="rounded-pill" Color="primary"><MIcon Small>mdi-plus </MIcon>添加项目</MButton>
+                </div>
+                <div style="margin:0 -24px; height: calc(100vh - 330px); overflow:auto;">
+                    <MExpansionPanels Flat Accordion>
+
+                        <MExpansionPanel Style="margin-bottom: 12px;">
+                            <MExpansionPanelHeader>
+                                <span style="display:flex;align-items:center;margin-right:10px;">
+                                    <div class="text-h6">
+                                        sys.Name
+                                        <span class="ml-2 text-caption">|</span>
+                                        <sapn class="ml-1 text-caption">应用数量: 8</sapn>
+                                        <div class="text-caption" style="padding:0">sys.Description</div>
+                                    </div>
+                                    <MSpacer />
+                                    <div style="display:flex;align-items:center;">
+                                        <MButton Icon StopPropagation Class="mr-1"><MIcon>mdi-pencil</MIcon></MButton>
+                                        <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
+                                    </div>
+                                </span>
+                            </MExpansionPanelHeader>
+                            <MExpansionPanelContent>
+                                <MRow>
+                                    <MCol Lg="4" Md="6" Sm="1">
+                                        <MCard Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                            <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                                <MSpacer />
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                            </MCardTitle>
+                                            <MCardSubtitle>
+                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
+                                            </MCardSubtitle>
+                                            <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                <MChipGroup Class="mx-2">
+                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                                </MChipGroup>
+                                            </MCardActions>
+                                        </MCard>
+                                    </MCol>
+                                    <MCol Lg="4" Md="6" Sm="1">
+                                        <MCard Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                            <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                                <MSpacer />
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                            </MCardTitle>
+                                            <MCardSubtitle>
+                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
+                                            </MCardSubtitle>
+                                            <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                <MChip Class="mx-1 text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
+                                            </MCardActions>
+                                        </MCard>
+                                    </MCol>
+                                    <MCol Lg="4" Md="6" Sm="1">
+                                        <MCard Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                            <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                                <MSpacer />
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                            </MCardTitle>
+                                            <MCardSubtitle>
+                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
+                                            </MCardSubtitle>
+                                            <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                <MButton Icon Color="primary"><MIcon>mdi-square-edit-outline</MIcon></MButton>
+                                                <MButton Icon Color="error"><MIcon>mdi-delete-outline</MIcon></MButton>
+                                                <MSpacer />
+                                                <MButton Icon Color="primary"><MIcon>mdi-eye</MIcon></MButton>
+                                            </MCardActions>
+                                        </MCard>
+                                    </MCol>
+                                    <MCol Lg="4" Md="6" Sm="1">
+                                        <MCard Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                            <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                                <MSpacer />
+                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">app.Name</div>
+                                            </MCardTitle>
+                                            <MCardSubtitle>
+                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">Description</div>
+                                            </MCardSubtitle>
+                                            <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                <MButton Icon Color="primary"><MIcon>mdi-square-edit-outline</MIcon></MButton>
+                                                <MButton Icon Color="error"><MIcon>mdi-delete-outline</MIcon></MButton>
+                                                <MSpacer />
+                                                <MButton Icon Color="primary"><MIcon>mdi-eye</MIcon></MButton>
+                                            </MCardActions>
+                                        </MCard>
+                                    </MCol>
+                                    <MCol Lg="4" Md="6" Sm="1">
+                                        <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
+                                            <MButton Ripple=false Plain XLarge><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                        </MCard>
+                                    </MCol>
+                                </MRow>
+                                <div class="d-flex justify-space-between mt-3">
+                                    <div>
+                                        <img style="height:24px;width:24px" src="/img/avatar/9.svg">
+                                    </div>
+                                    <div class="text-caption">编辑于一小时前</div>
+                                </div>
+                            </MExpansionPanelContent>
+                        </MExpansionPanel>
+
+                        @foreach (var project in Projects)
+                        {
+                            var apps = Apps.Where(app => app.ProjectId == project.Id).ToList();
+                            <MExpansionPanel Style="margin-bottom: 12px;">
+                                <MExpansionPanelHeader>
+                                    <span style="display:flex;align-items:center;margin-right:10px;">
+                                        <div class="text-h6" @onclick:stopPropagation>
+                                            @project.Name
+                                            <span class="ml-2 text-caption">|</span>
+                                            <sapn class="ml-1 text-caption">应用数量:@apps.Count</sapn>
+                                            <div class="text-caption" style="padding:0">@project.Description</div>
+                                        </div>
+                                        <MSpacer />
+                                        <div style="display:flex;align-items:center;">
+                                            <MButton Icon StopPropagation Class="mr-1"><MIcon>mdi-pencil</MIcon></MButton>
+                                            <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
+                                        </div>
+                                    </span>
+                                </MExpansionPanelHeader>
+                                <MExpansionPanelContent>
+                                    <MRow>
+                                        @foreach (var app in apps)
+                                        {
+                                            @if (app.ProjectId == project.Id)
+                                            {
+                                                <MCol Lg="4" Md="6" Sm="1">
+                                                    <MCard Class="hover-pointer" Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+                                                        <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
+                                                            <MSpacer />
+                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
+                                                        </MCardTitle>
+                                                        <MCardSubtitle>
+                                                            @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
+                                                            <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
+                                                        </MCardSubtitle>
+                                                        <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
+                                                            <MChipGroup Class="mx-2">
+                                                                @foreach (var item in app.EnvironmentClusters)
+                                                                {
+                                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
+                                                                }
+                                                            </MChipGroup>
+                                                        </MCardActions>
+                                                    </MCard>
+                                                </MCol>
+                                            }
+                                        }
+                                        <MCol Lg="4" Md="6" Sm="1">
+                                            <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
+                                                <MButton Ripple=false Plain XLarge><MIcon Left>mdi-plus</MIcon>APP</MButton>
+                                            </MCard>
+                                        </MCol>
+                                    </MRow>
+                                    <div class="d-flex justify-space-between mt-3">
+                                        <div>
+                                            <img style="height:24px;width:24px" src="/img/avatar/9.svg">
+                                        </div>
+                                        <div class="text-caption">编辑于一小时前</div>
+                                    </div>
+                                </MExpansionPanelContent>
+                            </MExpansionPanel>
+                        }
+
+                    </MExpansionPanels>
+                </div>
             </div>
         </div>
 

@@ -6,6 +6,8 @@
 
         Task AddEnvironmentClusterProjectsAsync(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
 
+        Task<List<Project>> GetListAsync();
+
         Task<Project> GetAsync(int Id);
 
         Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId);
