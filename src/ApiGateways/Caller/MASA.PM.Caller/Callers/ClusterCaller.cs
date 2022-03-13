@@ -40,6 +40,13 @@ namespace MASA.PM.Caller.Callers
             return result;
         }
 
+        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters()
+        {
+            var result = await CallerProvider.GetAsync<List<EnvironmentClusterViewModel>>($"/api/v1/envClusters");
+
+            return result;
+        }
+
         public async Task<ClustersViewModel> AddAsync(AddClusterWhitEnvironmentsModel model)
         {
             return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsModel, ClustersViewModel>(_prefix, model);

@@ -116,6 +116,21 @@
             return result;
         }
 
+        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters()
+        {
+            var result = await (from envCluster in _dbContext.EnvironmentClusters
+                                join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
+                                join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
+                                select new EnvironmentClusterViewModel
+                                {
+                                    Id = envCluster.Id,
+                                    EnvironmentName = env.Name,
+                                    ClusterName = cluster.Name
+                                }).ToListAsync();
+
+            return result;
+        }
+
         public async Task UpdateAsync(Cluster cluster)
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower() && e.Id != cluster.Id))

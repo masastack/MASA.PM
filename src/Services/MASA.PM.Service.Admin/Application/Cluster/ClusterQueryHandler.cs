@@ -26,7 +26,14 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task EnvironmentClustersQueryHandle(EnvironmentClustersQuery query)
         {
-            query.Result = await _clusterRepository.GetListByEnvIdAsync(query.EnvId);
+            if (query.EnvId.HasValue)
+            {
+                query.Result = await _clusterRepository.GetListByEnvIdAsync(query.EnvId.Value);
+            }
+            else
+            {
+                query.EnvironmentClusters = await _clusterRepository.GetEnvironmentClusters();
+            }
         }
     }
 }

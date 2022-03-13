@@ -105,7 +105,6 @@
                                                         <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
                                                         <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">环境/集群</MChip>
                                                     </div>
-                                                    <div class="mx-2 d-flex justify-end">叶子编辑于1小时前</div>
                                                 </div>
                                             </MCardActions>
                                         </MCard>
@@ -205,25 +204,7 @@
                                             @if (app.ProjectId == project.Id)
                                             {
                                                 <MCol Lg="4" Md="6" Sm="1">
-                                                    <MCard Class="hover-pointer" OnClick="()=>EditAppAsync(app.Id,project.Id)" Outlined MinHeight="242" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
-                                                        <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
-                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
-                                                            <MSpacer />
-                                                            <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
-                                                        </MCardTitle>
-                                                        <MCardSubtitle>
-                                                            <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Identity</div>
-                                                            <div class="text-body3" style="display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
-                                                        </MCardSubtitle>
-                                                        <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
-                                                            <div class="mx-2">
-                                                                @foreach (var item in app.EnvironmentClusters)
-                                                                {
-                                                                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
-                                                                }
-                                                            </div>
-                                                        </MCardActions>
-                                                    </MCard>
+                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>EditAppAsync(app.Id,project.Id)"></AppCard>
                                                 </MCol>
                                             }
                                         }

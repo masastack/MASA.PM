@@ -12,6 +12,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/cluster", GetList);
             App.MapGet("/api/v1/{envId}/cluster", GetListByEnvId);
             App.MapGet("/api/v1/cluster/{Id}", GetAsync);
+            App.MapGet("/api/v1/envClusters", GetEnvironmentClusters);
             App.MapPut("/api/v1/cluster", UpdateAsync);
             App.MapDelete("/api/v1/cluster", DeleteEnvClusterAsync);
         }
@@ -49,6 +50,14 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(query);
 
             return query.Result;
+        }
+
+        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters(IEventBus eventBus)
+        {
+            var query = new EnvironmentClustersQuery(null);
+            await eventBus.PublishAsync(query);
+
+            return query.EnvironmentClusters;
         }
 
         public async Task UpdateAsync(IEventBus eventBus, UpdateClusterModel model)

@@ -33,7 +33,7 @@
                                     <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                                 </PrependInnerContent>
                             </MTextField>
-                            <MButton Class="rounded-pill" Color="primary"><MIcon Small>mdi-plus </MIcon>添加项目</MButton>
+                            <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>添加项目</MButton>
                         </div>
                         <div style="margin:0 -24px; height: calc(100vh - 330px); overflow:auto;">
                             <MExpansionPanels Flat Accordion>
@@ -51,7 +51,7 @@
                                                 </div>
                                                 <MSpacer />
                                                 <div style="display:flex;align-items:center;">
-                                                    <MButton Icon StopPropagation Class="mr-1"><MIcon>mdi-pencil</MIcon></MButton>
+                                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>EditProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
                                                     <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                                 </div>
                                             </span>
@@ -61,25 +61,7 @@
                                                 @foreach (var app in apps)
                                                 {
                                                     <MCol Lg="4" Md="6" Sm="1">
-                                                        <MCard Class="hover-pointer" Outlined MinHeight="162" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
-                                                            <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
-                                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Name</div>
-                                                                <MSpacer />
-                                                                <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Type</div>
-                                                            </MCardTitle>
-                                                            <MCardSubtitle>
-                                                                @*<div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">AppId:Identity</div>*@
-                                                                <div class="text-caption" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@app.Description</div>
-                                                            </MCardSubtitle>
-                                                            <MCardActions Style="position:absolute;bottom:0;left:0;right:0;">
-                                                                <MChipGroup Class="mx-2">
-                                                                    @foreach (var item in app.EnvironmentClusters)
-                                                                    {
-                                                                        <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
-                                                                    }
-                                                                </MChipGroup>
-                                                            </MCardActions>
-                                                        </MCard>
+                                                        <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                                     </MCol>
                                                 }
                                                 <MCol Lg="4" Md="6" Sm="1">
@@ -116,8 +98,176 @@
     </MTabItem>
 </MTabsItems>
 
+<FormModal Visible="_projectFormModel.Visible"
+           Title="@(_projectFormModel.HasValue ?"编辑项目":"新增项目")"
+           Width="684"
+           Model="_projectFormModel.Data"
+           OnCancel="_projectFormModel.Hide">
+    <ChildContent>
+        <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
+        <MAutocomplete @bind-Value="_friends"
+                       Disabled="IsUpdating"
+                       Items="_people"
+                       Chips
+                       SmallChips
+                       Outlined
+                       Color="blue-grey lighten-2"
+                       Label="所属项目团队"
+                       ItemText="r=>r.Name"
+                       ItemValue="r=>r.Name"
+                       Multiple>
+            <SelectionContent Context="data">
+                <MChip Small Close
+                       OnCloseClick="()=>Remove(data.Item)">
+                    <MAvatar Left>
+                        <MImage Src="@data.Item.Avatar"></MImage>
+                    </MAvatar>
+                    @data.Item.Name
+                </MChip>
+            </SelectionContent>
+            <ItemContent Context="data">
+                @if (data.Item is not object)
+                {
+                    <MListItemContent>@data.Item</MListItemContent>
+                }
+                else
+                {
+                    <MListItemAvatar>
+                        <img src="@data.Item.Avatar">
+                    </MListItemAvatar>
+                    <MListItemContent>
+                        <MListItemTitle>
+                            @((MarkupString)data.Item.Name)
+                        </MListItemTitle>
+                        <MListItemSubtitle>
+                            @((MarkupString)data.Item.Group)
+                        </MListItemSubtitle>
+                    </MListItemContent>
+                }
+            </ItemContent>
+        </MAutocomplete>
+        <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
+                       Items="allEnvClusters"
+                       ItemText="@(r=>$"{r.EnvironmentName} / {r.ClusterName}")"
+                       ItemValue="r=>r.Id"
+                       Outlined
+                       Label="环境/集群"
+                       Multiple>
+            <SelectionContent Context="_context">
+                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                    @($"{_context.Item.EnvironmentName}/{_context.Item.ClusterName}")
+                </MChip>
+            </SelectionContent>
+        </MAutocomplete>
+        <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+        @if (_projectFormModel.HasValue)
+        {
+            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                <MCol Cols=6>创建人: @_projectDetail.Creator</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>创建时间: @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Cols=6>修改人: @_projectDetail.Modifier</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>修改时间: @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+            </MRow>
+        }
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            @if (_projectFormModel.HasValue)
+            {
+                <MButton OnClick="DeleteProject" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+            }
+            <MButton OnClick="SubmitProject" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
+</FormModal>
+
 
 @code {
     private StringNumber _curTab = 0;
     private bool _addressDisabled = true;
+    //team
+    private bool _autoUpdate = true;
+    private List<string> _friends = new()
+        {
+            "Sandra Adams",
+            "Britta Holt"
+        };
+    private bool _isUpdating;
+    private string _name = "Midnight Crew";
+
+    public class Person
+    {
+        public Guid Id => Guid.NewGuid();
+
+        public string Header { get; set; }
+
+        public string Name { get; set; }
+
+        public string Group { get; set; }
+
+        public string Avatar { get; set; }
+
+        public bool Divider { get; set; }
+    }
+
+    private List<Person> _people = new List<Person>
+        {
+            new Person
+            {
+                Name="Sandra Adams",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
+            },
+            new Person
+            {
+                Name="Ali Connors",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+            },
+            new Person
+            {
+                Name="Trevor Hansen",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
+            },
+            new Person
+            {
+                Name="Tucker Smith",
+                Group="Group 1",
+                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+            },
+            new Person
+            {
+                Divider=true,
+                Name="Group 1"
+            }
+        };
+    private string _title = "The summer breeze";
+
+    protected bool IsUpdating
+    {
+        get
+        {
+            return _isUpdating;
+        }
+        set
+        {
+            _isUpdating = value;
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                _isUpdating = false;
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+    }
+
+    public void Remove(Person item)
+    {
+        var index = _friends.IndexOf(item.Name);
+        if (index >= 0)
+        {
+            _friends.RemoveAt(index);
+        }
+    }
 }

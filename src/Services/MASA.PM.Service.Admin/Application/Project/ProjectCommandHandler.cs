@@ -60,10 +60,10 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
 
             //need to add EnvironmentClusterProject
-            var addEnvironmentClusterIds = command.ProjectModel.EnvironmentClusterIds.Except(oldEnvironmentClusterIds);
+            var addEnvironmentClusterIds = command.ProjectModel.EnvironmentClusterIds.Except(oldEnvironmentClusterIds).ToList();
             if (addEnvironmentClusterIds.Any())
             {
-                await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, command.ProjectModel.EnvironmentClusterIds);
+                await _projectRepository.IsExistedProjectName(command.ProjectModel.Name, addEnvironmentClusterIds);
 
                 await _projectRepository.AddEnvironmentClusterProjectsAsync(addEnvironmentClusterIds.Select(environmentClusterId => new EnvironmentClusterProject
                 {
