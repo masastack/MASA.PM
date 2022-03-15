@@ -65,6 +65,13 @@
             return app ?? throw new Exception("应用信息不存在！");
         }
 
+        public async Task<List<App>> GetListAsync()
+        {
+            var apps = await _dbContext.Apps.ToListAsync();
+
+            return apps;
+        }
+
         public async Task<List<App>> GetListByProjectIdAsync(IEnumerable<int> projectIds)
         {
             var result = await (from environmentClusterProject in _dbContext.EnvironmentClusterProjects.Where(project => projectIds.Contains(project.ProjectId))
@@ -90,18 +97,14 @@
                                     EnvironmentClusterId = environmentCluster.Id,
                                     EnvironmentClusterName = $"{environment.Name}/{cluster.Name}"
                                 })
-
                          .ToListAsync();
 
             return result;
         }
 
-        public async Task<List<App>> GetListByEnvironmentClusterProjectIdAsync(int environmentClusterProjectId)
+        public async Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsAsync(int environmentClusterProjectId, int appId)
         {
-            var result = await (from projectApp in _dbContext.EnvironmentClusterProjectApps.Where(ap => ap.EnvironmentClusterProjectId == environmentClusterProjectId)
-                                join app in _dbContext.Apps on projectApp.AppId equals app.Id
-                                select app)
-                                .ToListAsync();
+            var result = await _dbContext.EnvironmentClusterProjectApps.Where(app => app.EnvironmentClusterProjectId == environmentClusterProjectId && app.AppId == appId).ToListAsync();
 
             return result;
         }

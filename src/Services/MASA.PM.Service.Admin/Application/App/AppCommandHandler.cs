@@ -46,6 +46,25 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
         }
 
+        public async Task AddRelationAppAsync(AddRelationAppCommand command)
+        {
+            var relationApp = command.RelationAppModel;
+
+            var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(new List<int> { relationApp.EnvironmentClusterId }, relationApp.ProjectId);
+            var envClusterProjectApp = new EnvironmentClusterProjectApp
+            {
+                EnvironmentClusterProjectId = envClusterProjectIds[0],
+                AppId = relationApp.AppId
+            };
+
+            var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsAsync(envClusterProjectIds[0], relationApp.AppId);
+            if (envClusterProjectApps.Any())
+            {
+                throw new Exception("该应用已存在");
+            }
+            await _appRepository.AddEnvironmentClusterProjectAppsAsync(new List<EnvironmentClusterProjectApp> { envClusterProjectApp });
+        }
+
         [EventHandler]
         public async Task UpdateAppAsync(UpdateAppCommand command)
         {

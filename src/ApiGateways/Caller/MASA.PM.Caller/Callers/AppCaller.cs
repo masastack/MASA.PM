@@ -19,6 +19,13 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = "http://localhost:6030";
 
+        public async Task<List<AppViewModel>> GetListAsync()
+        {
+            var result = await CallerProvider.GetAsync<List<AppViewModel>>("/api/v1/app");
+
+            return result;
+        }
+
         public async Task<List<AppViewModel>> GetListByProjectIdAsync(List<int> projectIds)
         {
             var result = await CallerProvider.PostAsync<List<int>, List<AppViewModel>>($"/api/v1/projects/app", projectIds);
@@ -29,6 +36,11 @@ namespace MASA.PM.Caller.Callers
         public async Task AddAsync(AddAppModel model)
         {
             await CallerProvider.PostAsync($"{_prefix}", model);
+        }
+
+        public async Task AddRelationAppAsync(AddRelationAppModel model)
+        {
+            await CallerProvider.PostAsync($"{_prefix}/envClusterprojectApp", model);
         }
 
         public async Task UpdateAsync(UpdateAppModel model)

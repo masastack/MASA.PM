@@ -41,33 +41,55 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task AppListQueryHandle(AppsQuery query)
         {
-            var apps = await _appRepository.GetListByProjectIdAsync(query.ProjectIds);
-            var environmentClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
-            var environmentClusterGroup = environmentClusters.GroupBy(c => new { c.ProjectId, c.AppId }).ToList();
-
-            var result = apps.Join(
-                    environmentClusterGroup,
-                    app => app.Id,
-                    environmentCluster => environmentCluster.Key.AppId,
-                    (app, environmentClusters) => new { app, environmentClusters });
-
-            query.Result = result.Select(appEnvironmentCluster => new AppViewModel
+            if (query.ProjectIds.Any())
             {
-                ProjectId = appEnvironmentCluster.environmentClusters.Key.ProjectId,
-                Name = appEnvironmentCluster.app.Name,
-                Description = appEnvironmentCluster.app.Description,
-                Id = appEnvironmentCluster.app.Id,
-                Identity = appEnvironmentCluster.app.Identity,
-                Type = appEnvironmentCluster.app.Type,
-                ServiceType = appEnvironmentCluster.app.ServiceType,
-                Url = appEnvironmentCluster.app.Url,
-                SwaggerUrl = appEnvironmentCluster.app.SwaggerUrl,
-                Creator = appEnvironmentCluster.app.Creator,
-                CreationTime = appEnvironmentCluster.app.CreationTime,
-                ModificationTime = appEnvironmentCluster.app.ModificationTime,
-                Modifier = appEnvironmentCluster.app.Modifier,
-                EnvironmentClusters = appEnvironmentCluster.environmentClusters.ToList()
-            }).ToList();
+                var apps = await _appRepository.GetListByProjectIdAsync(query.ProjectIds);
+                var environmentClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
+                var environmentClusterGroup = environmentClusters.GroupBy(c => new { c.ProjectId, c.AppId }).ToList();
+
+                var result = apps.Join(
+                        environmentClusterGroup,
+                        app => app.Id,
+                        environmentCluster => environmentCluster.Key.AppId,
+                        (app, environmentClusters) => new { app, environmentClusters });
+
+                query.Result = result.Select(appEnvironmentCluster => new AppViewModel
+                {
+                    ProjectId = appEnvironmentCluster.environmentClusters.Key.ProjectId,
+                    Name = appEnvironmentCluster.app.Name,
+                    Description = appEnvironmentCluster.app.Description,
+                    Id = appEnvironmentCluster.app.Id,
+                    Identity = appEnvironmentCluster.app.Identity,
+                    Type = appEnvironmentCluster.app.Type,
+                    ServiceType = appEnvironmentCluster.app.ServiceType,
+                    Url = appEnvironmentCluster.app.Url,
+                    SwaggerUrl = appEnvironmentCluster.app.SwaggerUrl,
+                    Creator = appEnvironmentCluster.app.Creator,
+                    CreationTime = appEnvironmentCluster.app.CreationTime,
+                    ModificationTime = appEnvironmentCluster.app.ModificationTime,
+                    Modifier = appEnvironmentCluster.app.Modifier,
+                    EnvironmentClusters = appEnvironmentCluster.environmentClusters.ToList()
+                }).ToList();
+            }
+            else
+            {
+                var apps = await _appRepository.GetListAsync();
+                query.Result = apps.Select(app => new AppViewModel
+                {
+                    Name = app.Name,
+                    Description = app.Description,
+                    Id = app.Id,
+                    Identity = app.Identity,
+                    Type = app.Type,
+                    ServiceType = app.ServiceType,
+                    Url = app.Url,
+                    SwaggerUrl = app.SwaggerUrl,
+                    Creator = app.Creator,
+                    CreationTime = app.CreationTime,
+                    ModificationTime = app.ModificationTime,
+                    Modifier = app.Modifier
+                }).ToList();
+            }
         }
     }
 }

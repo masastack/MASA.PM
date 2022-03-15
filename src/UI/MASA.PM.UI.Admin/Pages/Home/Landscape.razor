@@ -204,14 +204,23 @@
                                             @if (app.ProjectId == project.Id)
                                             {
                                                 <MCol Lg="4" Md="6" Sm="1">
-                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>EditAppAsync(app.Id,project.Id)"></AppCard>
+                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>UpdateAppAsync(app.Id,project.Id)"></AppCard>
                                                 </MCol>
                                             }
                                         }
                                         <MCol Lg="4" Md="6" Sm="1">
-                                            <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                <MButton Ripple=false Plain XLarge OnClick="()=>ShowAppModal(project.Id)"><MIcon Left>mdi-plus</MIcon>APP</MButton>
-                                            </MCard>
+                                            <MRow NoGutters>
+                                                <MCol Class="pr-2">
+                                                    <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
+                                                        <MButton Ripple=false Plain OnClick="()=>ShowAppModal(project.Id)"><MIcon Left>mdi-plus</MIcon>新增应用</MButton>
+                                                    </MCard>
+                                                </MCol>
+                                                <MCol Class="pr-2">
+                                                    <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
+                                                        <MButton Ripple=false Plain OnClick="()=>ShowRelationAppModalAsync(project.Id)"><MIcon Left>mdi-plus</MIcon>选择已有应用</MButton>
+                                                    </MCard>
+                                                </MCol>
+                                            </MRow>
                                         </MCol>
                                     </MRow>
                                     <div class="d-flex justify-space-between mt-3">
@@ -227,7 +236,7 @@
                     </MExpansionPanels>
                 </div>
                 <MCard Outlined Class="mb-4 mx-6" Style="padding:0 6px; border-radius:0 !important; display: flex; justify-content: center; align-items: center; border-style: dashed;" Height=54>
-                    <MButton Ripple=false Plain XLarge OnClick="()=>ShowProjectModalAsync()">
+                    <MButton Ripple=false Plain OnClick="()=>ShowProjectModalAsync()">
                         <MIcon Left>mdi-plus</MIcon>新增项目
                     </MButton>
                 </MCard>
@@ -442,9 +451,66 @@
         <div style="width:100%; margin:10px;">
             @if (_appFormModel.HasValue)
             {
-                <MButton OnClick="DeleteApp" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitApp" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue?"保存":"提交")</MButton>
+        </div>
+    </ActionsContent>
+</FormModal>
+
+<FormModal Visible="_appFormModel.Visible"
+           Title="新增应用"
+           Width="684"
+           Model="_appFormModel.Data"
+           OnCancel="AppHide">
+    <ChildContent>
+        <MAutocomplete TItem="AppViewModel"
+                       TValue="int"
+                       TItemValue="int"
+                       Items="_allApps"
+                       ItemText="r=>r.Name"
+                       ItemValue="r=>r.Id"
+                       Outlined
+                       OnSelectedItemUpdate="RelationAppSelectChange"
+                       Label="选择已有应用">
+            <SelectionContent Context="_context">
+                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                    @_context.Item.Name
+                </MChip>
+            </SelectionContent>
+        </MAutocomplete>
+        <MSelect @bind-Value="_selectAppType"
+                 Disabled
+                 Items="Enum<AppTypes>.GetEnumObjectList()"
+                 ItemText="r=>r.Name"
+                 ItemValue="r=>r.Value"
+                 Outlined
+                 Label="应用类型">
+        </MSelect>
+        <FadeTransition>
+            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                <MSelect @bind-Value="_selectAppServiceType"
+                         Disabled
+                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                         ItemText="r=>r.Name"
+                         ItemValue="r=>r.Value"
+                         Outlined
+                         Label="服务类型">
+                </MSelect>
+            </Element>
+        </FadeTransition>
+        <MTextField Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></MTextField>
+        <FadeTransition>
+            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                <MTextField Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></MTextField>
+            </Element>
+        </FadeTransition>
+        <MTextField Disabled Outlined Label="应用标识" Placeholder="若选择Dapr，应用标识格式建议：app-id，用 - 来划分" @bind-Value="_appDetail.Identity"></MTextField>
+        <MTextarea Disabled Outlined Label="集群描述" @bind-Value="_appDetail.Description"></MTextarea>
+    </ChildContent>
+    <ActionsContent>
+        <div style="width:100%; margin:10px;">
+            <MButton OnClick="SubmitRelationAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">提交</MButton>
         </div>
     </ActionsContent>
 </FormModal>

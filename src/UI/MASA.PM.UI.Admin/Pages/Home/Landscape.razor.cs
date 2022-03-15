@@ -15,6 +15,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private List<EnvironmentsViewModel> _environments = new();
         private List<ClustersViewModel> _clusters = new();
         private List<ProjectsViewModel> _projects = new();
+        private List<AppViewModel> _allApps = new();
         private List<AppViewModel> _apps = new();
         private DataModal<UpdateEnvironmentModel> _envFormModel = new();
         private List<ClustersViewModel> _allClusters = new();
@@ -28,6 +29,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private AppViewModel _appDetail = new();
         private int _selectAppType;
         private int _selectAppServiceType;
+        private AddRelationAppModel _addRelationAppModel = new();
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -304,7 +306,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             });
         }
 
-        private void EditAppAsync(int appId, int projectId)
+        private void UpdateAppAsync(int appId, int projectId)
         {
             _selectAppId = appId;
             _appDetail = _apps.First(app => app.Id == appId);
@@ -345,7 +347,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _appFormModel.Hide();
         }
 
-        private async Task SubmitApp()
+        private async Task SubmitAppAsync()
         {
             if (!_appFormModel.HasValue)
             {
@@ -362,7 +364,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             AppHide();
         }
 
-        private async Task DeleteApp()
+        private async Task RemoveAppAsync()
         {
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
@@ -373,6 +375,29 @@ namespace MASA.PM.UI.Admin.Pages.Home
 
                 AppHide();
             });
+        }
+
+        private async Task ShowRelationAppModalAsync(int projectId)
+        {
+            _selectProjectId = projectId;
+            _allApps = await AppCaller.GetListAsync();
+            _appFormModel.Visible = true;
+        }
+
+        private void RelationAppSelectChange(AppViewModel model)
+        {
+            _selectAppType = (int)model.Type;
+            _selectAppServiceType = (int)model.ServiceType;
+            _appDetail = model;
+            _addRelationAppModel.AppId = model.Id;
+
+            _addRelationAppModel.EnvironmentClusterId = _selectEnvClusterId.AsT1;
+            _addRelationAppModel.ProjectId = _selectProjectId;
+        }
+
+        private async Task SubmitRelationAppAsync()
+        {
+            await AppCaller.AddRelationAppAsync(_addRelationAppModel);
         }
     }
 }

@@ -9,7 +9,9 @@ namespace MASA.PM.Service.Admin.Services
         public AppService(IServiceCollection services) : base(services)
         {
             App.MapPost("/api/v1/app", AddAsync);
-            App.MapPost("/api/v1/projects/app", GetList);
+            App.MapPost("/api/v1/app/envClusterprojectApp", AddEnvClusterProjectApp);
+            App.MapGet("/api/v1/app", GetListAsync);
+            App.MapPost("/api/v1/projects/app", GetListByProjectIdsAsync);
             App.MapGet("/api/v1/app/{Id}", GetAsync);
             App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync);
             App.MapPut("/api/v1/app", UpdateAsync);
@@ -22,7 +24,21 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<AppViewModel>> GetList(IEventBus eventBus, [FromBody] List<int> projectIds)
+        public async Task AddEnvClusterProjectApp(IEventBus eventBus, AddRelationAppModel model)
+        {
+            var command = new AddRelationAppCommand(model);
+            await eventBus.PublishAsync(command);
+        }
+
+        public async Task<List<AppViewModel>> GetListAsync(IEventBus eventBus)
+        {
+            var query = new AppsQuery(new List<int>());
+            await eventBus.PublishAsync(query);
+
+            return query.Result;
+        }
+
+        public async Task<List<AppViewModel>> GetListByProjectIdsAsync(IEventBus eventBus, [FromBody] List<int> projectIds)
         {
             var query = new AppsQuery(projectIds);
             await eventBus.PublishAsync(query);
