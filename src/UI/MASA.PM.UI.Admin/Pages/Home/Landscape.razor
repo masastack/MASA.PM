@@ -458,11 +458,10 @@
     </ActionsContent>
 </FormModal>
 
-<FormModal Visible="_appFormModel.Visible"
+<FormModal Visible="_relationAppVisible"
            Title="新增应用"
            Width="684"
-           Model="_appFormModel.Data"
-           OnCancel="AppHide">
+           OnCancel="RelationAppHide">
     <ChildContent>
         <MAutocomplete TItem="AppViewModel"
                        TValue="int"

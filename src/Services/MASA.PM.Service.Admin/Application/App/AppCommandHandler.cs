@@ -46,6 +46,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
         }
 
+        [EventHandler]
         public async Task AddRelationAppAsync(AddRelationAppCommand command)
         {
             var relationApp = command.RelationAppModel;

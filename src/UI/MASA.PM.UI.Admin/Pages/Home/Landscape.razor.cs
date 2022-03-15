@@ -30,6 +30,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private int _selectAppType;
         private int _selectAppServiceType;
         private AddRelationAppModel _addRelationAppModel = new();
+        private bool _relationAppVisible;
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -381,7 +382,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         {
             _selectProjectId = projectId;
             _allApps = await AppCaller.GetListAsync();
-            _appFormModel.Visible = true;
+            _relationAppVisible = true;
         }
 
         private void RelationAppSelectChange(AppViewModel model)
@@ -398,6 +399,15 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private async Task SubmitRelationAppAsync()
         {
             await AppCaller.AddRelationAppAsync(_addRelationAppModel);
+            _apps = await GetAppByProjectIdAsync(new List<int> { _selectProjectId });
+            RelationAppHide();
+        }
+
+        private void RelationAppHide()
+        {
+            _selectAppType = 0;
+            _selectAppServiceType = 0;
+            _relationAppVisible = false;
         }
     }
 }
