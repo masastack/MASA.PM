@@ -6,7 +6,7 @@
 
         Task AddEnvironmentClusterProjectsAsync(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
 
-        Task<List<Project>> GetListAsync();
+        Task<List<Project>> GetListByTeamIdAsync(Guid teamId);
 
         Task<Project> GetAsync(int Id);
 

@@ -6,8 +6,8 @@
 <div>
     <MRow NoGutters>
 
-        <MNavigationDrawer Permanent Class="rounded-4" Width="242" Style="height:calc(100vh - 142px );">
-            <div style="min-width:242px; display:flex; flex-direction:column; align-items:center; overflow: auto; height:calc(100vh - 238px );">
+        <MNavigationDrawer Permanent Class="rounded-4" Width="242" Style="height:calc(100vh - 110px );">
+            <div style="min-width:242px; display:flex; flex-direction:column; align-items:center; overflow: auto; height:calc(100vh - 206px );">
                 <MList Width="194">
                     <MListItemGroup Class="rounded-2"
                                     @bind-Value="_selectedEnvId"
@@ -62,7 +62,7 @@
                     <MIcon Left>mdi-plus</MIcon>新增集群
                 </MButton>
             </MRow>
-            <div class="rounded-5 mt-6 py-2" style="height:calc(100vh - 266px );background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
+            <div class="rounded-5 mt-6 py-2" style="height:calc(100vh - 234px );background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
                 <div>
                     <MExpansionPanels Flat Accordion>
 
@@ -444,7 +444,7 @@
             {
                 <MButton OnClick="DeleteApp" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitApp" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitApp" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>

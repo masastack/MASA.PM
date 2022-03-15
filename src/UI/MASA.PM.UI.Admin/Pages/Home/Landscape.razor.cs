@@ -4,7 +4,7 @@ using MASA.PM.Contracts.Base.Enum;
 using MASA.PM.Contracts.Base.Model;
 using MASA.PM.Contracts.Base.ViewModel;
 
-namespace MASA.PM.UI.Admin.Pages
+namespace MASA.PM.UI.Admin.Pages.Home
 {
     public partial class Landscape
     {

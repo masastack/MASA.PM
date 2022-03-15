@@ -47,9 +47,9 @@ namespace MASA.PM.Service.Admin.Application.Project
                     ModificationTime = project.ModificationTime,
                 }).ToList();
             }
-            else
+            else if (query.TeamId.HasValue)
             {
-                var projects = await _projectRepository.GetListAsync();
+                var projects = await _projectRepository.GetListByTeamIdAsync(query.TeamId.Value);
                 query.Result = projects.Select(project => new ProjectsViewModel
                 {
                     Id = project.Id,

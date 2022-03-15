@@ -19,9 +19,9 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = "http://localhost:6030";
 
-        public async Task<List<ProjectsViewModel>> GetListAsync()
+        public async Task<List<ProjectsViewModel>> GetListByTeamIdAsync(Guid teamId)
         {
-            var result = await CallerProvider.GetAsync<List<ProjectsViewModel>>(_prefix);
+            var result = await CallerProvider.GetAsync<List<ProjectsViewModel>>($"{_prefix}/teamProjects/{teamId}");
 
             return result;
         }

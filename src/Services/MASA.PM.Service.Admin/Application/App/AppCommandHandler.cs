@@ -47,14 +47,14 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task UpdateClusterAsync(UpdateAppCommand command)
+        public async Task UpdateAppAsync(UpdateAppCommand command)
         {
             var appModel = command.UpdateAppModel;
             var appEntity = await _appRepository.GetAsync(appModel.Id);
 
+            var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(appModel.EnvironmentClusterIds, appModel.ProjectId);
             if (appEntity.Name != appModel.Name)
             {
-                var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(appModel.EnvironmentClusterIds, appModel.ProjectId);
                 await _appRepository.IsExistedAppName(appModel.Name, envClusterProjectIds, appModel.Id);
             }
 
@@ -66,10 +66,22 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             appEntity.ModificationTime = DateTime.Now;
 
             await _appRepository.UpdateAsync(appEntity);
+
+            var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsByAppId(appModel.Id);
+            await _appRepository.DeleteEnvironmentClusterProjectApps(envClusterProjectApps);
+            var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
+            {
+                EnvironmentClusterProjectId = environmentClusterProjectId,
+                AppId = appModel.Id,
+                Creator = appModel.ActionUserId,
+                Modifier = appModel.ActionUserId,
+                IsDeleted = false
+            });
+            await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
         }
 
         [EventHandler]
-        public async Task DeleteClusterAsync(DeleteAppCommand command)
+        public async Task DeleteAppAsync(DeleteAppCommand command)
         {
             await _appRepository.DeleteAsync(command.AppId);
             await _appRepository.DeleteEnvironmentClusterProjectAppsByAppIdAsync(command.AppId);

@@ -16,11 +16,15 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<List<App>> GetListByEnvironmentClusterProjectIdAsync(int environmentClusterProjectId);
 
+        Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsByAppId(int appId);
+
         Task UpdateAsync(App app);
 
         Task DeleteAsync(int Id);
 
         Task DeleteEnvironmentClusterProjectAppsByAppIdAsync(int Id);
+
+        Task DeleteEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
 
         Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds);
     }

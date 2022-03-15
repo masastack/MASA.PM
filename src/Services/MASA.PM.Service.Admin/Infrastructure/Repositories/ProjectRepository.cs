@@ -31,9 +31,9 @@
             }
         }
 
-        public async Task<List<Project>> GetListAsync()
+        public async Task<List<Project>> GetListByTeamIdAsync(Guid teamId)
         {
-            var result = await _dbContext.Projects.ToListAsync();
+            var result = await _dbContext.Projects.Where(project => project.TeamId == teamId).ToListAsync();
 
             return result;
         }
@@ -108,7 +108,7 @@
             {
                 throw new Exception("项目名称已存在！");
             }
-             
+
             _dbContext.Projects.Update(project);
             await _dbContext.SaveChangesAsync();
         }

@@ -48,6 +48,16 @@
             }
         }
 
+        public async Task DeleteEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps)
+        {
+            if (environmentClusterProjectApps.Any())
+            {
+                _dbContext.EnvironmentClusterProjectApps.RemoveRange(environmentClusterProjectApps);
+
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task<App> GetAsync(int Id)
         {
             var app = await _dbContext.Apps.FindAsync(Id);
@@ -92,6 +102,13 @@
                                 join app in _dbContext.Apps on projectApp.AppId equals app.Id
                                 select app)
                                 .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsByAppId(int appId)
+        {
+            var result = await _dbContext.EnvironmentClusterProjectApps.Where(ecpa => ecpa.AppId == appId).ToListAsync();
 
             return result;
         }

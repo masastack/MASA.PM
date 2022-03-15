@@ -11,8 +11,8 @@
         <div class="text-body3" style="display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;text-overflow: ellipsis;overflow: hidden;">@App.Description</div>
     </MCardSubtitle>
     <MCardActions Style="position:absolute;bottom:0;left:0;right:0; padding-bottom:16px !important;">
-        <div class="d-flex flex-column" style="width:376px">
-            <div class="mx-2" style="white-space: nowrap;overflow: hidden;">
+        <div class="d-flex flex-column" style="overflow:hidden; width:100%;">
+            <div class="mx-2" Style="height:24px;white-space: nowrap;overflow: hidden;">
                 @foreach (var item in EnvironmentClusters)
                 {
                     <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
@@ -44,7 +44,7 @@
     [Parameter]
     public string EditInfo { get; set; } = "";
 
-    public int Height => ShowEditInfo ? 242 : 162;
+    public int Height => ShowEditInfo ? 224 : 162;
 
     private async Task HandleOnClick()
     {
