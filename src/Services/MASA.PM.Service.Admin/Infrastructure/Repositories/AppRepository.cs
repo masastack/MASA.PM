@@ -94,8 +94,12 @@
                                 {
                                     AppId = environmentClusterProjectApp.AppId,
                                     ProjectId = environmentClusterProject.ProjectId,
-                                    EnvironmentClusterId = environmentCluster.Id,
-                                    EnvironmentClusterName = $"{environment.Name}/{cluster.Name}"
+                                    EnvironmentCluster = new EnvironmentClusterViewModel
+                                    {
+                                        Id = environmentCluster.Id,
+                                        EnvironmentName = environment.Name,
+                                        ClusterName = cluster.Name
+                                    }
                                 })
                          .ToListAsync();
 

@@ -12,8 +12,6 @@ namespace MASA.PM.Contracts.Base.ViewModel
 
         public int ProjectId { get; set; }
 
-        public int EnvironmentClusterId { get; set; }
-
-        public string EnvironmentClusterName { get; set; } = "";
+        public EnvironmentClusterViewModel EnvironmentCluster { get; set; } = new();
     }
 }

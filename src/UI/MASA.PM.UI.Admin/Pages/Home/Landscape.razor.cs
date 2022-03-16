@@ -31,6 +31,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private int _selectAppServiceType;
         private AddRelationAppModel _addRelationAppModel = new();
         private bool _relationAppVisible;
+        private int _selectProjectType;
 
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -254,8 +255,11 @@ namespace MASA.PM.UI.Admin.Pages.Home
         {
             _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
+            _selectProjectType = (int)project.Type;
             await ShowProjectModalAsync(new UpdateProjectModel
             {
+                Identity = project.Identity,
+                Type = project.Type,
                 ProjectId = project.Id,
                 Name = project.Name,
                 Description = project.Description,
@@ -283,6 +287,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         {
             if (!_projectFormModel.HasValue)
             {
+                _projectFormModel.Data.Type = (ProjectTypes)_selectProjectType;
                 await ProjectCaller.AddAsync(_projectFormModel.Data);
             }
             else
@@ -305,6 +310,12 @@ namespace MASA.PM.UI.Admin.Pages.Home
 
                 _projectFormModel.Hide();
             });
+        }
+
+        private void ProjectHide()
+        {
+            _selectProjectType = 0;
+            _projectFormModel.Hide();
         }
 
         private void UpdateAppAsync(int appId, int projectId)

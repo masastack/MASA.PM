@@ -21,6 +21,8 @@ namespace MASA.PM.Service.Admin.Application.Project
             query.Result = new ProjectViewModel
             {
                 Id = projectEntity.Id,
+                Identity = projectEntity.Identity,
+                Type = projectEntity.Type,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 TeamId = projectEntity.TeamId,
@@ -41,6 +43,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 query.Result = projects.Select(project => new ProjectsViewModel
                 {
                     Id = project.Id,
+                    Identity = project.Identity,
                     Name = project.Name,
                     Description = project.Description,
                     Modifier = project.Modifier,
@@ -53,6 +56,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 query.Result = projects.Select(project => new ProjectsViewModel
                 {
                     Id = project.Id,
+                    Identity = project.Identity,
                     Name = project.Name,
                     Description = project.Description,
                     Modifier = project.Modifier,

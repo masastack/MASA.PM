@@ -132,9 +132,7 @@
                                     var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                     foreach (var item in envCluster)
                                     {
-                                        <MChip Class="text-btn mt-4" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                                            @($"{item.EnvironmentName}/{item.ClusterName}")
-                                        </MChip>
+                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" ClusterName="@item.ClusterName" /> 
                                     }
                                 }
                             </div>
@@ -178,7 +176,7 @@
            Title="@(_projectFormModel.HasValue ?"编辑项目":"新增项目")"
            Width="684"
            Model="_projectFormModel.Data"
-           OnCancel="_projectFormModel.Hide">
+           OnCancel="ProjectHide">
     <ChildContent>
         <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_friends"
@@ -222,6 +220,15 @@
                 }
             </ItemContent>
         </MAutocomplete>
+        <MTextField Disabled="@(_projectFormModel.HasValue)" Outlined Label="项目标识" @bind-Value="_projectFormModel.Data.Identity"></MTextField>
+        <MSelect @bind-Value="_selectProjectType"
+                 Disabled="@(_projectFormModel.HasValue)"
+                 Items="Enum<ProjectTypes>.GetEnumObjectList()"
+                 ItemText="r=>r.Name"
+                 ItemValue="r=>r.Value"
+                 Outlined
+                 Label="项目类型">
+        </MSelect>
         <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
                        Items="allEnvClusters"
                        ItemText="@(r=>$"{r.EnvironmentName} / {r.ClusterName}")"
@@ -230,9 +237,7 @@
                        Label="环境/集群"
                        Multiple>
             <SelectionContent Context="_context">
-                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                    @($"{_context.Item.EnvironmentName}/{_context.Item.ClusterName}")
-                </MChip>
+                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" /> 
             </SelectionContent>
         </MAutocomplete>
         <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
@@ -299,9 +304,7 @@
                        Label="环境/集群"
                        Multiple>
             <SelectionContent Context="_context">
-                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                    @($"{_context.Item.EnvironmentName}/{_context.Item.ClusterName}")
-                </MChip>
+                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" /> 
             </SelectionContent>
         </MAutocomplete>
         <MTextarea Outlined Label="集群描述" @bind-Value="_appFormModel.Data.Description"></MTextarea>

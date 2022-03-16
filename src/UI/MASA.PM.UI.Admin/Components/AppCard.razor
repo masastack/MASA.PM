@@ -15,7 +15,7 @@
             <div class="mx-2" Style="height:24px;white-space: nowrap;overflow: hidden;">
                 @foreach (var item in EnvironmentClusters)
                 {
-                    <MChip Style="margin:0 2px;" Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">@item.EnvironmentClusterName</MChip>
+                    <EnvClusterChip Style="margin:0 2px 1px 0;" EnvironmentName="@item.EnvironmentCluster.EnvironmentName" ClusterName="@item.EnvironmentCluster.ClusterName" />
                 }
             </div>
             @if (ShowEditInfo)

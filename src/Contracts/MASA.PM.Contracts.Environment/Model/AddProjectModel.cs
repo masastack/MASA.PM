@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MASA.PM.Contracts.Base.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,13 @@ namespace MASA.PM.Contracts.Base.Model
             get => _name;
             set => _name = value.Trim();
         }
+
+        [Required(ErrorMessage = "Project identity is required")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
+        public string Identity { get; set; } = "";
+
+        [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
+        public ProjectTypes Type { get; set; }
 
         [MinCount(1, ErrorMessage = "EnvironmentClusterIds is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();

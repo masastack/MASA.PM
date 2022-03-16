@@ -1,4 +1,6 @@
 ﻿
+using MASA.PM.Contracts.Base.Enum;
+
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Projects")]
@@ -9,6 +11,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Column(TypeName = "nvarchar(100)")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
+
+        [Comment("Type")]
+        [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
+        [Column(TypeName = "tinyint")]
+        public ProjectTypes Type { get; set; }
 
         [Comment("Name")]
         [Required(ErrorMessage = "System name is required")]

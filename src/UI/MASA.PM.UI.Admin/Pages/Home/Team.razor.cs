@@ -25,6 +25,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private int _selectAppType;
         private int _selectAppServiceType;
         private int _selectAppId;
+        private int _selectProjectType;
 
         public Guid TeamId { get; set; } = Guid.Empty;
 
@@ -82,8 +83,11 @@ namespace MASA.PM.UI.Admin.Pages.Home
         {
             _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
+            _selectProjectType = (int)project.Type;
             await ShowProjectModalAsync(new UpdateProjectModel
             {
+                Identity = project.Identity,
+                Type = project.Type,
                 ProjectId = project.Id,
                 Name = project.Name,
                 Description = project.Description,
@@ -111,6 +115,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         {
             if (!_projectFormModel.HasValue)
             {
+                _projectFormModel.Data.Type = (ProjectTypes)_selectProjectType;
                 await ProjectCaller.AddAsync(_projectFormModel.Data);
             }
             else
@@ -147,6 +152,12 @@ namespace MASA.PM.UI.Admin.Pages.Home
             await GetProjectAsync(projectId);
         }
 
+        private void ProjectHide()
+        {
+            _selectProjectType = 0;
+            _projectFormModel.Hide();
+        }
+
         private void SearchApp()
         {
             if (!string.IsNullOrWhiteSpace(_appName))
@@ -175,7 +186,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster=>envCluster.EnvironmentClusterId).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster=>envCluster.EnvironmentCluster.Id).ToList()
             });
         }
 
