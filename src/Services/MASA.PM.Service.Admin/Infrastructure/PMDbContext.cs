@@ -15,41 +15,23 @@
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
 
-            modelBuilder.Entity<EnvironmentCluster>()
-                .Property(t => t.ModificationTime)
-                .HasDefaultValueSql("SYSDATETIME()");
+            modelBuilder.Entity<EnvironmentCluster>();
 
             modelBuilder.Entity<Cluster>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
 
-            modelBuilder.Entity<EnvironmentClusterProject>()
-                .Property(t => t.ModificationTime)
-                .HasDefaultValueSql("SYSDATETIME()");
+            modelBuilder.Entity<EnvironmentClusterProject>();
 
             modelBuilder.Entity<Project>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
 
-            modelBuilder.Entity<EnvironmentClusterProjectApp>()
-                .Property(t => t.ModificationTime)
-                .HasDefaultValueSql("SYSDATETIME()");
+            modelBuilder.Entity<EnvironmentClusterProjectApp>();
 
             modelBuilder.Entity<App>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
-
-            modelBuilder.Entity<Team>()
-               .Property(t => t.ModificationTime)
-               .HasDefaultValueSql("SYSDATETIME()");
-
-            modelBuilder.Entity<TeamProject>()
-               .HasKey(t => new { t.TeamId, t.ProjectId, t.AuthorizationTeamId });
-            modelBuilder.Entity<TeamProject>().Property(t => t.ModificationTime)
-               .HasDefaultValueSql("SYSDATETIME()");
-
-            modelBuilder.Entity<TeamMember>()
-                .HasKey(t => new { t.TeamId, t.UserId });
         }
 
         public DbSet<Entities.Environment> Environments { get; set; } = default!;
@@ -65,11 +47,5 @@
         public DbSet<EnvironmentClusterProjectApp> EnvironmentClusterProjectApps { get; set; } = default!;
 
         public DbSet<App> Apps { get; set; } = default!;
-
-        public DbSet<Team> Teams { get; set; } = default!;
-
-        public DbSet<TeamMember> TeamMembers { get; set; } = default!;
-
-        public DbSet<TeamProject> TeamProjects { get; set; } = default!;
     }
 }

@@ -4,6 +4,12 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
     [Table("Projects")]
     public class Project : AuditAggregateRoot<int, Guid>
     {
+        [Comment("Identity")]
+        [Required(ErrorMessage = "Project identity is required")]
+        [Column(TypeName = "nvarchar(100)")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
+        public string Identity { get; set; } = "";
+
         [Comment("Name")]
         [Required(ErrorMessage = "System name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "System name length range is [2-100]")]
@@ -14,8 +20,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         public Guid TeamId { get; set; }
 
         [Comment("Description")]
-        [Column(TypeName = "nvarchar(250)")]
-        [StringLength(250, MinimumLength = 0, ErrorMessage = "Description length range is [0-250]")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Description length range is [0-255]")]
         public string Description { get; set; } = "";
     }
 }

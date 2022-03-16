@@ -38,10 +38,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
             {
                 EnvironmentClusterProjectId = environmentClusterProjectId,
-                AppId = app.Id,
-                Creator = appModel.ActionUserId,
-                Modifier = appModel.ActionUserId,
-                IsDeleted = false
+                AppId = app.Id
             });
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
         }
@@ -92,10 +89,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
             {
                 EnvironmentClusterProjectId = environmentClusterProjectId,
-                AppId = appModel.Id,
-                Creator = appModel.ActionUserId,
-                Modifier = appModel.ActionUserId,
-                IsDeleted = false
+                AppId = appModel.Id
             });
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
         }

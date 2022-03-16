@@ -69,9 +69,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 await _projectRepository.AddEnvironmentClusterProjectsAsync(addEnvironmentClusterIds.Select(environmentClusterId => new EnvironmentClusterProject
                 {
                     EnvironmentClusterId = environmentClusterId,
-                    ProjectId = command.ProjectModel.ProjectId,
-                    Creator = command.ProjectModel.ActionUserId,
-                    Modifier = command.ProjectModel.ActionUserId
+                    ProjectId = command.ProjectModel.ProjectId
                 }));
             }
         }

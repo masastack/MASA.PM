@@ -114,9 +114,7 @@
                 _dbContext.EnvironmentClusters.AddRange(addClusterIds.Select(clusterId => new EnvironmentCluster
                 {
                     EnvironmentId = model.EnvironmentId,
-                    ClusterId = clusterId,
-                    Creator = model.ActionUserId,
-                    Modifier = model.ActionUserId
+                    ClusterId = clusterId
                 }));
             }
 

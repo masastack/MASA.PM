@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("EnvironmentClusterProjectApps")]
-    [Index(nameof(EnvironmentClusterProjectId), nameof(IsDeleted), Name = "IX_EnvironmentClusterId_IsDeleted")]
-    public class EnvironmentClusterProjectApp : AuditAggregateRoot<int, Guid>
+    [Index(nameof(EnvironmentClusterProjectId), Name = "IX_EnvironmentClusterId")]
+    public class EnvironmentClusterProjectApp : Entity<int>
     {
         [Comment("Environment cluster project Id")]
         [Range(1, int.MaxValue, ErrorMessage = "Environment cluster project is required")]

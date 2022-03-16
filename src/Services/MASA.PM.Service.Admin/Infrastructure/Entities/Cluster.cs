@@ -11,7 +11,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
 
         [Comment("Name")]
         [Required(ErrorMessage = "Cluster description is required")]
-        [StringLength(250, ErrorMessage = "Cluster description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "Cluster description length must be less than 255")]
         public string Description { get; set; } = "";
     }
 }
