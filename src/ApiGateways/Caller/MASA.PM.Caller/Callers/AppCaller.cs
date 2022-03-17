@@ -1,5 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Model;
-using MASA.PM.Contracts.Base.ViewModel;
+﻿using MASA.PM.Contracts.Admin.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,36 +18,36 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = "http://localhost:6030";
 
-        public async Task<List<AppViewModel>> GetListAsync()
+        public async Task<List<AppDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<AppViewModel>>("/api/v1/app");
+            var result = await CallerProvider.GetAsync<List<AppDto>>("/api/v1/app");
 
             return result;
         }
 
-        public async Task<List<AppViewModel>> GetListByProjectIdAsync(List<int> projectIds)
+        public async Task<List<AppDto>> GetListByProjectIdAsync(List<int> projectIds)
         {
-            var result = await CallerProvider.PostAsync<List<int>, List<AppViewModel>>($"/api/v1/projects/app", projectIds);
+            var result = await CallerProvider.PostAsync<List<int>, List<AppDto>>($"/api/v1/projects/app", projectIds);
 
             return result;
         }
 
-        public async Task AddAsync(AddAppModel model)
+        public async Task AddAsync(AddAppDto model)
         {
             await CallerProvider.PostAsync($"{_prefix}", model);
         }
 
-        public async Task AddRelationAppAsync(AddRelationAppModel model)
+        public async Task AddRelationAppAsync(AddRelationAppDto model)
         {
             await CallerProvider.PostAsync($"{_prefix}/envClusterprojectApp", model);
         }
 
-        public async Task UpdateAsync(UpdateAppModel model)
+        public async Task UpdateAsync(UpdateAppDto model)
         {
             await CallerProvider.PutAsync($"{_prefix}", model);
         }
 
-        public async Task DeleteAsync(RemoveAppModel model)
+        public async Task DeleteAsync(RemoveAppDto model)
         {
             await CallerProvider.DeleteAsync(_prefix, model);
         }

@@ -17,7 +17,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var cluster = await _clusterRepository.GetAsync(query.ClusterId);
             var envclusters = await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(query.ClusterId);
 
-            query.Result = new ClusterViewModel
+            query.Result = new ClusterDetailDto
             {
                 Id = cluster.Id,
                 Name = cluster.Name,
@@ -34,7 +34,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         public async Task ClusterListQueryHandle(ClustersQuery query)
         {
             var resule = await (await _clusterRepository.GetListAsync()).ToListAsync();
-            query.Result = resule.Select(cluster => new ClustersViewModel
+            query.Result = resule.Select(cluster => new ClusterDto
             {
                 Id = cluster.Id,
                 Name = cluster.Name,
@@ -58,7 +58,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 
                 var result = from ec in envCluster
                              join c in cluster on ec.ClusterId equals c.Id
-                             select new ClustersViewModel
+                             select new ClusterDto
                              {
                                  Id = c.Id,
                                  Name = c.Name,
@@ -74,7 +74,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     string ClusterName)>
                     result = await _clusterRepository.GetEnvironmentClusters();
 
-                query.EnvironmentClusters = result.Select(envClusterGroup => new EnvironmentClusterViewModel
+                query.EnvironmentClusters = result.Select(envClusterGroup => new EnvironmentClusterDto
                 {
                     Id = envClusterGroup.EnvClusterId,
                     EnvironmentName = envClusterGroup.EnvName,

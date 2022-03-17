@@ -28,7 +28,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             var app = _dbContext.Apps.FirstOrDefault(app => app.Id == Id);
             if (app != null)
@@ -38,7 +38,7 @@
             }
         }
 
-        public async Task DeleteEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds)
+        public async Task RemoveEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds)
         {
             var projectApp = await _dbContext.EnvironmentClusterProjectApps.Where(app => app.AppId == appId && envClusterProjectIds.Contains(app.EnvironmentClusterProjectId)).ToListAsync();
             if (projectApp.Any())
@@ -48,7 +48,7 @@
             }
         }
 
-        public async Task DeleteEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps)
+        public async Task RemoveEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps)
         {
             if (environmentClusterProjectApps.Any())
             {

@@ -1,6 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Model;
-using MASA.PM.Contracts.Base.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,40 +17,40 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = "http://localhost:6030";
 
-        public async Task<List<ClustersViewModel>> GetListByEnvIdAsync(int envId)
+        public async Task<List<ClusterDto>> GetListByEnvIdAsync(int envId)
         {
-            var result = await CallerProvider.GetAsync<List<ClustersViewModel>>($"/api/v1/{envId}/cluster");
+            var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/{envId}/cluster");
 
             return result;
         }
 
-        public async Task<List<ClustersViewModel>> GetListAsync()
+        public async Task<List<ClusterDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<ClustersViewModel>>($"/api/v1/cluster");
+            var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/cluster");
 
             return result;
         }
 
-        public async Task<ClusterViewModel> GetAsync(int Id)
+        public async Task<ClusterDetailDto> GetAsync(int Id)
         {
-            var result = await CallerProvider.GetAsync<ClusterViewModel>($"{_prefix}/{Id}");
+            var result = await CallerProvider.GetAsync<ClusterDetailDto>($"{_prefix}/{Id}");
 
             return result;
         }
 
-        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters()
+        public async Task<List<EnvironmentClusterDto>> GetEnvironmentClusters()
         {
-            var result = await CallerProvider.GetAsync<List<EnvironmentClusterViewModel>>($"/api/v1/envClusters");
+            var result = await CallerProvider.GetAsync<List<EnvironmentClusterDto>>($"/api/v1/envClusters");
 
             return result;
         }
 
-        public async Task<ClustersViewModel> AddAsync(AddClusterWhitEnvironmentsModel model)
+        public async Task<ClusterDto> AddAsync(AddClusterWhitEnvironmentsDto model)
         {
-            return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsModel, ClustersViewModel>(_prefix, model);
+            return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsDto, ClusterDto>(_prefix, model);
         }
 
-        public async Task UpdateAsync(UpdateClusterModel model)
+        public async Task UpdateAsync(UpdateClusterDto model)
         {
             await CallerProvider.PutAsync(_prefix, model);
         }

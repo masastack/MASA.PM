@@ -1,8 +1,8 @@
 ﻿using MASA.Blazor.Experimental.Components;
 using MASA.PM.Caller.Callers;
-using MASA.PM.Contracts.Base.Enum;
-using MASA.PM.Contracts.Base.Model;
-using MASA.PM.Contracts.Base.ViewModel;
+using MASA.PM.Contracts.Admin.Enum;
+using MASA.PM.Contracts.Admin.Dto;
+using MASA.PM.Contracts.Admin.Dto;
 
 namespace MASA.PM.UI.Admin.Pages.Home
 {
@@ -12,24 +12,24 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private StringNumber _selectEnvClusterId = 0;
         private int _selectProjectId;
         private int _selectAppId;
-        private List<EnvironmentsViewModel> _environments = new();
-        private List<ClustersViewModel> _clusters = new();
-        private List<ProjectsViewModel> _projects = new();
-        private List<AppViewModel> _allApps = new();
-        private List<AppViewModel> _apps = new();
-        private DataModal<UpdateEnvironmentModel> _envFormModel = new();
-        private List<ClustersViewModel> _allClusters = new();
-        private List<EnvironmentsViewModel> _allEnvs = new();
-        private EnvironmentViewModel _envDetail = new();
-        private DataModal<UpdateClusterModel> _clusterFormModel = new();
-        private ClusterViewModel _clusterDetail = new();
-        private DataModal<UpdateProjectModel> _projectFormModel = new();
-        private ProjectViewModel _projectDetail = new();
-        private DataModal<UpdateAppModel> _appFormModel = new();
-        private AppViewModel _appDetail = new();
+        private List<EnvironmentDto> _environments = new();
+        private List<ClusterDto> _clusters = new();
+        private List<ProjectDto> _projects = new();
+        private List<AppDto> _allApps = new();
+        private List<AppDto> _apps = new();
+        private DataModal<UpdateEnvironmentDto> _envFormModel = new();
+        private List<ClusterDto> _allClusters = new();
+        private List<EnvironmentDto> _allEnvs = new();
+        private EnvironmentDetailDto _envDetail = new();
+        private DataModal<UpdateClusterDto> _clusterFormModel = new();
+        private ClusterDetailDto _clusterDetail = new();
+        private DataModal<UpdateProjectDto> _projectFormModel = new();
+        private ProjectDetailDto _projectDetail = new();
+        private DataModal<UpdateAppDto> _appFormModel = new();
+        private AppDto _appDetail = new();
         private int _selectAppType;
         private int _selectAppServiceType;
-        private AddRelationAppModel _addRelationAppModel = new();
+        private AddRelationAppDto _addRelationAppModel = new();
         private bool _relationAppVisible;
         private int _selectProjectType;
 
@@ -63,7 +63,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             }
         }
 
-        private async Task<List<ClustersViewModel>> GetClustersByEnvIdAsync(int envId, bool isFetchProjects = true)
+        private async Task<List<ClusterDto>> GetClustersByEnvIdAsync(int envId, bool isFetchProjects = true)
         {
             _selectedEnvId = envId;
             _clusters = await ClusterCaller.GetListByEnvIdAsync(envId);
@@ -76,7 +76,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             return _clusters;
         }
 
-        private async Task<List<ProjectsViewModel>> GetProjectByEnvClusterIdAsync(int envClusterId)
+        private async Task<List<ProjectDto>> GetProjectByEnvClusterIdAsync(int envClusterId)
         {
             _selectEnvClusterId = envClusterId;
             _projects = await ProjectCaller.GetListByEnvIdAsync(envClusterId);
@@ -89,30 +89,30 @@ namespace MASA.PM.UI.Admin.Pages.Home
             return _projects;
         }
 
-        private async Task<List<AppViewModel>> GetAppByProjectIdAsync(IEnumerable<int> projectIds)
+        private async Task<List<AppDto>> GetAppByProjectIdAsync(IEnumerable<int> projectIds)
         {
             var apps = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
 
             return apps;
         }
 
-        private async Task<EnvironmentViewModel> GetEnvAsync(int envId)
+        private async Task<EnvironmentDetailDto> GetEnvAsync(int envId)
         {
             _envDetail = await EnvironmentCaller.GetAsync(envId);
             return _envDetail;
         }
 
-        private async Task<ProjectViewModel> GetProjectAsync(int projectId)
+        private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
 
             return _projectDetail;
         }
 
-        private async Task EditEnvAsync(int envId)
+        private async Task UpdateEnvAsync(int envId)
         {
             var env = await GetEnvAsync(envId);
-            await ShowEnvModalAsync(new UpdateEnvironmentModel
+            await ShowEnvModalAsync(new UpdateEnvironmentDto
             {
                 ClusterIds = env.ClusterIds,
                 Name = env.Name,
@@ -121,7 +121,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             });
         }
 
-        private async Task ShowEnvModalAsync(UpdateEnvironmentModel? model = null)
+        private async Task ShowEnvModalAsync(UpdateEnvironmentDto? model = null)
         {
             if (model == null)
             {
@@ -135,7 +135,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _allClusters = await ClusterCaller.GetListAsync();
         }
 
-        private async Task SubmitEnv()
+        private async Task SubmitEnvAsync()
         {
             if (!_envFormModel.HasValue)
             {
@@ -152,7 +152,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _envFormModel.Hide();
         }
 
-        private async Task DeleteEnv()
+        private async Task RemoveEnvAsync()
         {
             if (_environments.Count <= 1)
             {
@@ -176,17 +176,17 @@ namespace MASA.PM.UI.Admin.Pages.Home
             }
         }
 
-        private async Task<ClusterViewModel> GetClusterAsync(int clusterId)
+        private async Task<ClusterDetailDto> GetClusterAsync(int clusterId)
         {
             _clusterDetail = await ClusterCaller.GetAsync(clusterId);
 
             return _clusterDetail;
         }
 
-        private async Task EditClusterAsync(int clusterId)
+        private async Task UpdateClusterAsync(int clusterId)
         {
             var cluster = await GetClusterAsync(clusterId);
-            await ShowClusterModalAsync(new UpdateClusterModel
+            await ShowClusterModalAsync(new UpdateClusterDto
             {
                 ClusterId = cluster.Id,
                 Name = cluster.Name,
@@ -196,7 +196,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
 
         }
 
-        private async Task ShowClusterModalAsync(UpdateClusterModel? model = null)
+        private async Task ShowClusterModalAsync(UpdateClusterDto? model = null)
         {
             if (model == null)
             {
@@ -210,7 +210,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _allEnvs = await EnvironmentCaller.GetListAsync();
         }
 
-        private async Task SubmitCluster()
+        private async Task SubmitClusterAsync()
         {
             int newClusterId;
             if (!_clusterFormModel.HasValue)
@@ -228,7 +228,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _clusterFormModel.Hide();
         }
 
-        private async Task DeleteCluster()
+        private async Task RemoveClusterAsync()
         {
             if (_clusters.Count <= 1)
             {
@@ -251,12 +251,12 @@ namespace MASA.PM.UI.Admin.Pages.Home
             }
         }
 
-        private async Task EditProjectAsync(int projectId)
+        private async Task UpdateProjectAsync(int projectId)
         {
             _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
             _selectProjectType = (int)project.Type;
-            await ShowProjectModalAsync(new UpdateProjectModel
+            await ShowProjectModalAsync(new UpdateProjectDto
             {
                 Identity = project.Identity,
                 Type = project.Type,
@@ -267,7 +267,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             });
         }
 
-        private async Task ShowProjectModalAsync(UpdateProjectModel? model = null)
+        private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
         {
             _projectFormModel.Data.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
             if (model == null)
@@ -283,7 +283,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             await Task.Delay(0);
         }
 
-        private async Task SubmitProject()
+        private async Task SubmitProjectAsync()
         {
             if (!_projectFormModel.HasValue)
             {
@@ -299,7 +299,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _projectFormModel.Hide();
         }
 
-        private async Task DeleteProject()
+        private async Task RemoveProjectAsync()
         {
             var deleteProject = _projects.First(project => project.Id == _selectProjectId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
@@ -318,13 +318,13 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _projectFormModel.Hide();
         }
 
-        private void UpdateAppAsync(int appId, int projectId)
+        private void UpdateApp(int appId, int projectId)
         {
             _selectAppId = appId;
             _appDetail = _apps.First(app => app.Id == appId);
             _selectAppType = (int)_appDetail.Type;
             _selectAppServiceType = (int)_appDetail.ServiceType;
-            ShowAppModal(projectId, new UpdateAppModel
+            ShowAppModal(projectId, new UpdateAppDto
             {
                 Id = _appDetail.Id,
                 Type = _appDetail.Type,
@@ -337,7 +337,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             });
         }
 
-        private void ShowAppModal(int projectId, UpdateAppModel? model = null)
+        private void ShowAppModal(int projectId, UpdateAppDto? model = null)
         {
             _selectProjectId = projectId;
             _appFormModel.Data.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
@@ -381,7 +381,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(new RemoveAppModel { AppId = _selectAppId, ProjectId = _selectProjectId });
+                await AppCaller.DeleteAsync(new RemoveAppDto { AppId = _selectAppId, ProjectId = _selectProjectId });
 
                 _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
                 AppHide();
@@ -395,7 +395,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             _relationAppVisible = true;
         }
 
-        private void RelationAppSelectChange(AppViewModel model)
+        private void RelationAppSelectChange(AppDto model)
         {
             _selectAppType = (int)model.Type;
             _selectAppServiceType = (int)model.ServiceType;

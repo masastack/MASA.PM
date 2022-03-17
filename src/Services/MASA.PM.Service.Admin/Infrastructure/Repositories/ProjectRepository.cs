@@ -38,7 +38,7 @@
             return result;
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             var project = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
             if (project == null)
@@ -50,7 +50,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects)
+        public async Task RemoveEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects)
         {
             if (environmentClusterProjects.Any())
             {

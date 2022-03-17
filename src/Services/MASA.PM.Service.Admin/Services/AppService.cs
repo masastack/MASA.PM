@@ -1,4 +1,5 @@
-﻿using MASA.PM.Service.Admin.Application.App.Commands;
+﻿using MASA.PM.Contracts.Admin.Dto;
+using MASA.PM.Service.Admin.Application.App.Commands;
 using MASA.PM.Service.Admin.Application.App.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,22 +16,22 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/app/{Id}", GetAsync);
             App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync);
             App.MapPut("/api/v1/app", UpdateAsync);
-            App.MapDelete("/api/v1/app", DeleteAsync);
+            App.MapDelete("/api/v1/app", RemoveAsync);
         }
 
-        public async Task AddAsync(IEventBus eventBus, AddAppModel model)
+        public async Task AddAsync(IEventBus eventBus, AddAppDto model)
         {
             var command = new AddAppCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task AddEnvClusterProjectApp(IEventBus eventBus, AddRelationAppModel model)
+        public async Task AddEnvClusterProjectApp(IEventBus eventBus, AddRelationAppDto model)
         {
             var command = new AddRelationAppCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<AppViewModel>> GetListAsync(IEventBus eventBus)
+        public async Task<List<AppDto>> GetListAsync(IEventBus eventBus)
         {
             var query = new AppsQuery(new List<int>());
             await eventBus.PublishAsync(query);
@@ -38,7 +39,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<AppViewModel>> GetListByProjectIdsAsync(IEventBus eventBus, [FromBody] List<int> projectIds)
+        public async Task<List<AppDto>> GetListByProjectIdsAsync(IEventBus eventBus, [FromBody] List<int> projectIds)
         {
             var query = new AppsQuery(projectIds);
             await eventBus.PublishAsync(query);
@@ -46,7 +47,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<AppViewModel> GetWithEnvironmentClusterAsync(IEventBus eventBus, int Id)
+        public async Task<AppDto> GetWithEnvironmentClusterAsync(IEventBus eventBus, int Id)
         {
             var query = new AppQuery(true, Id);
 
@@ -55,7 +56,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<AppViewModel> GetAsync(IEventBus eventBus, int Id)
+        public async Task<AppDto> GetAsync(IEventBus eventBus, int Id)
         {
             var query = new AppQuery(false, Id);
 
@@ -64,13 +65,13 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task UpdateAsync(IEventBus eventBus, UpdateAppModel model)
+        public async Task UpdateAsync(IEventBus eventBus, UpdateAppDto model)
         {
             var command = new UpdateAppCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus, [FromBody] RemoveAppModel model)
+        public async Task RemoveAsync(IEventBus eventBus, [FromBody] RemoveAppDto model)
         {
             var command = new DeleteAppCommand(model.AppId, model.ProjectId);
             await eventBus.PublishAsync(command);

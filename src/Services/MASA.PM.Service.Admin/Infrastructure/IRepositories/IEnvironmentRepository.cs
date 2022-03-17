@@ -10,10 +10,10 @@
 
         Task<IQueryable<Entities.Environment>> GetListAsync();
 
-        Task UpdateAsync(UpdateEnvironmentModel model);
+        Task UpdateAsync(UpdateEnvironmentDto model);
 
         Task<Entities.Environment> GetAsync(int Id);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
     }
 }

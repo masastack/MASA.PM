@@ -15,7 +15,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         public async Task AppQueryHandle(AppQuery query)
         {
             var app = await _appRepository.GetAsync(query.AppId);
-            query.Result = new AppViewModel
+            query.Result = new AppDto
             {
                 Name = app.Name,
                 Description = app.Description,
@@ -40,11 +40,11 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(new List<int>() { app.Id });
 
-                query.Result.EnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterViewModel
+                query.Result.EnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterDto
                 {
                     AppId = appProjectEnvCluster.AppId,
                     ProjectId = appProjectEnvCluster.ProjectId,
-                    EnvironmentCluster = new EnvironmentClusterViewModel
+                    EnvironmentCluster = new EnvironmentClusterDto
                     {
                         Id = appProjectEnvCluster.EnvCluster.Id,
                         EnvironmentName = appProjectEnvCluster.EnvName,
@@ -66,11 +66,11 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     string EnvName,
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
-                var appEnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterViewModel
+                var appEnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterDto
                 {
                     AppId = appProjectEnvCluster.AppId,
                     ProjectId = appProjectEnvCluster.ProjectId,
-                    EnvironmentCluster = new EnvironmentClusterViewModel
+                    EnvironmentCluster = new EnvironmentClusterDto
                     {
                         Id = appProjectEnvCluster.EnvCluster.Id,
                         EnvironmentName = appProjectEnvCluster.EnvName,
@@ -85,7 +85,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                         environmentCluster => environmentCluster.Key.AppId,
                         (app, environmentClusters) => new { app, environmentClusters });
 
-                query.Result = result.Select(appEnvironmentCluster => new AppViewModel
+                query.Result = result.Select(appEnvironmentCluster => new AppDto
                 {
                     ProjectId = appEnvironmentCluster.environmentClusters.Key.ProjectId,
                     Name = appEnvironmentCluster.app.Name,
@@ -106,7 +106,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             else
             {
                 var apps = await _appRepository.GetListAsync();
-                query.Result = apps.Select(app => new AppViewModel
+                query.Result = apps.Select(app => new AppDto
                 {
                     Name = app.Name,
                     Description = app.Description,

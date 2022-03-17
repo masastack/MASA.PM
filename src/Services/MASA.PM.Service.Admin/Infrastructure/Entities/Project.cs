@@ -1,5 +1,4 @@
-﻿
-using MASA.PM.Contracts.Base.Enum;
+﻿using MASA.PM.Contracts.Admin.Enum;
 
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {

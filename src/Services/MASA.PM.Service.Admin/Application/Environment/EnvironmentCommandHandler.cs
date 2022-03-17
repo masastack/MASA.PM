@@ -70,7 +70,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             });
             await _environmentRepository.AddEnvironmentClustersAsync(addEnvironmentClusters);
 
-            command.Result = new EnvironmentsViewModel { Id = newEnv.Id, Name = newEnv.Name };
+            command.Result = new EnvironmentDto { Id = newEnv.Id, Name = newEnv.Name };
         }
 
         [EventHandler]
@@ -82,7 +82,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
         [EventHandler]
         public async Task DeleteEnvironmentAsync(DeleteEnvironmentCommand command)
         {
-            await _environmentRepository.DeleteAsync(command.EnvironmentId);
+            await _environmentRepository.RemoveAsync(command.EnvironmentId);
         }
     }
 }

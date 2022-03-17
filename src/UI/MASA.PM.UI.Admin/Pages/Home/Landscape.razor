@@ -1,7 +1,4 @@
 ﻿@page "/Landscape"
-@using MASA.PM.Contracts.Base.Enum
-@using MASA.PM.Contracts.Base.ViewModel
-
 
 <div>
     <MRow NoGutters>
@@ -23,7 +20,7 @@
                                     @if (context.Active)
                                     {
                                         <MListItemIcon Class="d-flex align-center pt-1">
-                                            <MButton StopPropagation Icon OnClick="()=>EditEnvAsync(env.Id)">
+                                            <MButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
                                                 <MIcon>mdi-pencil</MIcon>
                                             </MButton>
                                         </MListItemIcon>
@@ -50,7 +47,7 @@
                                 @cluster.Name
                                 @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                                 {
-                                    <MButton StopPropagation Icon OnClick="()=>EditClusterAsync(cluster.Id)">
+                                    <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
                                         <MIcon>mdi-pencil</MIcon>
                                     </MButton>
                                 }
@@ -79,7 +76,7 @@
                                         </div>
                                         <MSpacer />
                                         <div style="display:flex;align-items:center;">
-                                            <MButton Icon StopPropagation Class="mr-1" OnClick="()=>EditProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
+                                            <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
                                             <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                         </div>
                                     </span>
@@ -91,7 +88,7 @@
                                             @if (app.ProjectId == project.Id)
                                             {
                                                 <MCol Lg="4" Md="6" Sm="1">
-                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>UpdateAppAsync(app.Id,project.Id)"></AppCard>
+                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>UpdateApp(app.Id,project.Id)"></AppCard>
                                                 </MCol>
                                             }
                                         }
@@ -168,9 +165,9 @@
         <div style="width:100%; margin:10px;">
             @if (_envFormModel.HasValue)
             {
-                <MButton OnClick="DeleteEnv" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitEnv" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitEnvAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -211,9 +208,9 @@
         <div style="width:100%; margin:10px;">
             @if (_clusterFormModel.HasValue)
             {
-                <MButton OnClick="DeleteCluster" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitCluster" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitClusterAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -226,7 +223,6 @@
     <ChildContent>
         <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_friends"
-                       Disabled="IsUpdating"
                        Items="_people"
                        Chips
                        SmallChips
@@ -290,9 +286,9 @@
         <div style="width:100%; margin:10px;">
             @if (_projectFormModel.HasValue)
             {
-                <MButton OnClick="DeleteProject" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitProject" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -358,7 +354,7 @@
            Width="684"
            OnCancel="RelationAppHide">
     <ChildContent>
-        <MAutocomplete TItem="AppViewModel"
+        <MAutocomplete TItem="AppDto"
                        TValue="int"
                        TItemValue="int"
                        Items="_allApps"
@@ -410,27 +406,23 @@
 </FormModal>
 
 @code {
-
-    private bool _autoUpdate = true;
     private List<string> _friends = new()
         {
             "Sandra Adams",
             "Britta Holt"
         };
-    private bool _isUpdating;
-    private string _name = "Midnight Crew";
 
     public class Person
     {
         public Guid Id => Guid.NewGuid();
 
-        public string Header { get; set; }
+        public string Header { get; set; } = "";
 
-        public string Name { get; set; }
+        public string Name { get; set; }= "";
 
-        public string Group { get; set; }
+        public string Group { get; set; }= "";
 
-        public string Avatar { get; set; }
+        public string Avatar { get; set; }= "";
 
         public bool Divider { get; set; }
     }
@@ -467,25 +459,6 @@
                 Name="Group 1"
             }
         };
-    private string _title = "The summer breeze";
-
-    protected bool IsUpdating
-    {
-        get
-        {
-            return _isUpdating;
-        }
-        set
-        {
-            _isUpdating = value;
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(3000);
-                _isUpdating = false;
-                await InvokeAsync(StateHasChanged);
-            });
-        }
-    }
 
     public void Remove(Person item)
     {

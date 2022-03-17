@@ -68,7 +68,7 @@
             return result;
         }
 
-        public async Task UpdateAsync(UpdateEnvironmentModel model)
+        public async Task UpdateAsync(UpdateEnvironmentDto model)
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == model.Name.ToLower() && e.Id != model.EnvironmentId))
             {
@@ -107,7 +107,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             var environment = await _dbContext.Environments.FirstOrDefaultAsync(env => env.Id == Id);
             if (environment == null)

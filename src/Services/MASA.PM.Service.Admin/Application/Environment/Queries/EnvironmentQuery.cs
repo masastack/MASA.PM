@@ -1,9 +1,9 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Environment.Queries
 {
-    public record EnvironmentQuery : Query<EnvironmentViewModel>
+    public record EnvironmentQuery : Query<EnvironmentDetailDto>
     {
         public int EnvironmentId { get; set; }
 
-        public override EnvironmentViewModel Result { get; set; } = default!;
+        public override EnvironmentDetailDto Result { get; set; } = default!;
     }
 }

@@ -85,7 +85,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             await _appRepository.UpdateAsync(appEntity);
 
             var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsByAppId(appModel.Id);
-            await _appRepository.DeleteEnvironmentClusterProjectApps(envClusterProjectApps);
+            await _appRepository.RemoveEnvironmentClusterProjectApps(envClusterProjectApps);
             var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
             {
                 EnvironmentClusterProjectId = environmentClusterProjectId,
@@ -99,7 +99,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         {
             var envClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             //await _appRepository.DeleteAsync(command.AppId);
-            await _appRepository.DeleteEnvironmentClusterProjectApps(command.AppId, envClusterProjects.Select(ecp => ecp.Id));
+            await _appRepository.RemoveEnvironmentClusterProjectApps(command.AppId, envClusterProjects.Select(ecp => ecp.Id));
         }
     }
 }

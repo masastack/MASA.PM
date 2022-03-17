@@ -15,16 +15,16 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapPut("/api/v1/project", UpdateAsync);
-            App.MapDelete("/api/v1/project", DeleteAsync);
+            App.MapDelete("/api/v1/project", RemoveAsync);
         }
 
-        public async Task AddAsync(IEventBus eventBus, AddProjectModel model)
+        public async Task AddAsync(IEventBus eventBus, AddProjectDto model)
         {
             var command = new AddProjectCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<ProjectsViewModel>> GetListByEnvironmentClusterId(IEventBus eventBus, int environmentClusterId)
+        public async Task<List<ProjectDto>> GetListByEnvironmentClusterId(IEventBus eventBus, int environmentClusterId)
         {
             var query = new ProjectsQuery(environmentClusterId, null);
             await eventBus.PublishAsync(query);
@@ -32,7 +32,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<ProjectsViewModel>> GetListByTeamId(IEventBus eventBus, Guid teamId)
+        public async Task<List<ProjectDto>> GetListByTeamId(IEventBus eventBus, Guid teamId)
         {
             var query = new ProjectsQuery(null, teamId);
             await eventBus.PublishAsync(query);
@@ -40,7 +40,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<ProjectViewModel> GetAsync(IEventBus eventBus, int Id)
+        public async Task<ProjectDetailDto> GetAsync(IEventBus eventBus, int Id)
         {
             var query = new ProjectQuery
             {
@@ -51,13 +51,13 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task UpdateAsync(IEventBus eventBus, UpdateProjectModel model)
+        public async Task UpdateAsync(IEventBus eventBus, UpdateProjectDto model)
         {
             var command = new UpdateProjectCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus, [FromBody] int Id)
+        public async Task RemoveAsync(IEventBus eventBus, [FromBody] int Id)
         {
             var command = new DeleteProjectCommand(Id);
             await eventBus.PublishAsync(command);

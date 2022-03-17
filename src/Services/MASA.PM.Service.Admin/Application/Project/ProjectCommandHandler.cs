@@ -59,7 +59,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 var deleteEnvironmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(command.ProjectModel.ProjectId, deleteEnvironmentClusterIds);
                 
-                await _projectRepository.DeleteEnvironmentClusterProjects(deleteEnvironmentClusterProjects);
+                await _projectRepository.RemoveEnvironmentClusterProjects(deleteEnvironmentClusterProjects);
             }
 
             //need to add EnvironmentClusterProject
@@ -79,10 +79,10 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task DeleteProjectAsync(DeleteProjectCommand command)
         {
-            await _projectRepository.DeleteAsync(command.ProjectId);
+            await _projectRepository.RemoveAsync(command.ProjectId);
 
             var environmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
-            await _projectRepository.DeleteEnvironmentClusterProjects(environmentClusterProjects);
+            await _projectRepository.RemoveEnvironmentClusterProjects(environmentClusterProjects);
         }
     }
 }

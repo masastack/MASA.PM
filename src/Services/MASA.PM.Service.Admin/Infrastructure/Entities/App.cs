@@ -1,4 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Enum;
+﻿using MASA.PM.Contracts.Admin.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

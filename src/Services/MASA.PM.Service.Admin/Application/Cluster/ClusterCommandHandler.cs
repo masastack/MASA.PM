@@ -32,7 +32,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             });
             await _clusterRepository.AddEnvironmentClusters(addEnvironmentClusters);
 
-            command.Result = new ClustersViewModel { Id = newCluster.Id, Name = newCluster.Name };
+            command.Result = new ClusterDto { Id = newCluster.Id, Name = newCluster.Name };
         }
 
         [EventHandler]
@@ -58,7 +58,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             if (deleteEnvironmentIds.Any())
             {
                 var deleteEnvironmentClusters = await _clusterRepository.GetEnvironmentClustersByClusterIdAndEnvironmentIdsAsync(updateClusterModel.ClusterId, deleteEnvironmentIds);
-                await _clusterRepository.DeleteEnvironmentClusters(deleteEnvironmentClusters);
+                await _clusterRepository.RemoveEnvironmentClusters(deleteEnvironmentClusters);
             }
 
             // EnvironmentClusters need to insert
@@ -77,7 +77,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         public async Task DeleteClusterAsync(DeleteClusterCommand command)
         {
             var environmentClusters = await _clusterRepository.GetEnvironmentClustersByIds(new List<int> { command.EnvClusterId });
-            await _clusterRepository.DeleteEnvironmentClusters(environmentClusters);
+            await _clusterRepository.RemoveEnvironmentClusters(environmentClusters);
         }
     }
 }

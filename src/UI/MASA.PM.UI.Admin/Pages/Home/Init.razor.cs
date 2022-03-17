@@ -1,6 +1,5 @@
 ﻿using MASA.Blazor.Experimental.Components;
 using MASA.PM.Caller.Callers;
-using MASA.PM.Contracts.Base.Model;
 using MASA.PM.UI.Admin.Model;
 
 namespace MASA.PM.UI.Admin.Pages.Home
@@ -14,7 +13,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             new EnvClusterModel(2, "Production", "生产环境")
         };
         private int _step = 1;
-        private InitModel _initModel = new();
+        private InitDto _initModel = new();
         private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
         private bool _initLoading;
 

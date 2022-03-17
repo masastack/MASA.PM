@@ -1,4 +1,5 @@
-﻿using MASA.PM.Service.Admin.Application.Cluster.Commands;
+﻿using MASA.PM.Contracts.Admin.Dto;
+using MASA.PM.Service.Admin.Application.Cluster.Commands;
 using MASA.PM.Service.Admin.Application.Cluster.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,10 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/cluster/{Id}", GetAsync);
             App.MapGet("/api/v1/envClusters", GetEnvironmentClusters);
             App.MapPut("/api/v1/cluster", UpdateAsync);
-            App.MapDelete("/api/v1/cluster", DeleteEnvClusterAsync);
+            App.MapDelete("/api/v1/cluster", RemoveEnvClusterAsync);
         }
 
-        public async Task<ClustersViewModel> AddAsync(IEventBus eventBus, AddClusterWhitEnvironmentsModel model)
+        public async Task<ClusterDto> AddAsync(IEventBus eventBus, AddClusterWhitEnvironmentsDto model)
         {
             var command = new AddClusterCommand(model);
             await eventBus.PublishAsync(command);
@@ -25,7 +26,7 @@ namespace MASA.PM.Service.Admin.Services
             return command.Result;
         }
 
-        public async Task<List<ClustersViewModel>> GetList(IEventBus eventBus)
+        public async Task<List<ClusterDto>> GetList(IEventBus eventBus)
         {
             var query = new ClustersQuery();
             await eventBus.PublishAsync(query);
@@ -33,7 +34,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<ClustersViewModel>> GetListByEnvId(IEventBus eventBus, int envId)
+        public async Task<List<ClusterDto>> GetListByEnvId(IEventBus eventBus, int envId)
         {
             var query = new EnvironmentClustersQuery(envId);
             await eventBus.PublishAsync(query);
@@ -41,7 +42,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<ClusterViewModel> GetAsync(IEventBus eventBus, int Id)
+        public async Task<ClusterDetailDto> GetAsync(IEventBus eventBus, int Id)
         {
             var query = new ClusterQuery
             {
@@ -52,7 +53,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters(IEventBus eventBus)
+        public async Task<List<EnvironmentClusterDto>> GetEnvironmentClusters(IEventBus eventBus)
         {
             var query = new EnvironmentClustersQuery(null);
             await eventBus.PublishAsync(query);
@@ -60,13 +61,13 @@ namespace MASA.PM.Service.Admin.Services
             return query.EnvironmentClusters;
         }
 
-        public async Task UpdateAsync(IEventBus eventBus, UpdateClusterModel model)
+        public async Task UpdateAsync(IEventBus eventBus, UpdateClusterDto model)
         {
             var command = new UpdateClusterCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteEnvClusterAsync(IEventBus eventBus, [FromBody] int envClusterId)
+        public async Task RemoveEnvClusterAsync(IEventBus eventBus, [FromBody] int envClusterId)
         {
             var command = new DeleteClusterCommand(envClusterId);
             await eventBus.PublishAsync(command);

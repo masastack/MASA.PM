@@ -1,7 +1,7 @@
 ﻿namespace MASA.PM.Service.Admin.Application.App.Queries
 {
-    public record AppQuery(bool IsHaveEnvironmentClusterInfo, int AppId) : Query<AppViewModel>
+    public record AppQuery(bool IsHaveEnvironmentClusterInfo, int AppId) : Query<AppDto>
     {
-        public override AppViewModel Result { get; set; } = new AppViewModel();
+        public override AppDto Result { get; set; } = new AppDto();
     }
 }

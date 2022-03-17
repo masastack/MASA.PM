@@ -1,5 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Model;
-using MASA.PM.Contracts.Base.ViewModel;
+﻿using MASA.PM.Contracts.Admin.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,33 +18,33 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = "http://localhost:6030";
 
-        public async Task<List<ProjectsViewModel>> GetListByTeamIdAsync(Guid teamId)
+        public async Task<List<ProjectDto>> GetListByTeamIdAsync(Guid teamId)
         {
-            var result = await CallerProvider.GetAsync<List<ProjectsViewModel>>($"{_prefix}/teamProjects/{teamId}");
+            var result = await CallerProvider.GetAsync<List<ProjectDto>>($"{_prefix}/teamProjects/{teamId}");
 
             return result;
         }
 
-        public async Task<List<ProjectsViewModel>> GetListByEnvIdAsync(int envClusterId)
+        public async Task<List<ProjectDto>> GetListByEnvIdAsync(int envClusterId)
         {
-            var result = await CallerProvider.GetAsync<List<ProjectsViewModel>>($"/api/v1/{envClusterId}/project");
+            var result = await CallerProvider.GetAsync<List<ProjectDto>>($"/api/v1/{envClusterId}/project");
 
             return result;
         }
 
-        public async Task<ProjectViewModel> GetAsync(int Id)
+        public async Task<ProjectDetailDto> GetAsync(int Id)
         {
-            var result = await CallerProvider.GetAsync<ProjectViewModel>($"{_prefix}/{Id}");
+            var result = await CallerProvider.GetAsync<ProjectDetailDto>($"{_prefix}/{Id}");
 
             return result;
         }
 
-        public async Task AddAsync(AddProjectModel model)
+        public async Task AddAsync(AddProjectDto model)
         {
             await CallerProvider.PostAsync($"{_prefix}", model);
         }
 
-        public async Task UpdateAsync(UpdateProjectModel model)
+        public async Task UpdateAsync(UpdateProjectDto model)
         {
             await CallerProvider.PutAsync($"{_prefix}", model);
         }

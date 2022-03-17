@@ -1,5 +1,4 @@
-﻿@using MASA.PM.Contracts.Base.ViewModel
-
+﻿
 <MCard Class="hover-pointer" OnClick="OnClick" Outlined MinHeight="Height" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
     <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
         <div class="text-h7" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">@App.Name</div>
@@ -33,10 +32,10 @@
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
-    public List<AppEnvironmentClusterViewModel> EnvironmentClusters { get; set; } = new();
+    public List<AppEnvironmentClusterDto> EnvironmentClusters { get; set; } = new();
 
     [Parameter]
-    public AppViewModel App { get; set; } = new();
+    public AppDto App { get; set; } = new();
 
     [Parameter]
     public bool ShowEditInfo { get; set; }

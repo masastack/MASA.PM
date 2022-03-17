@@ -1,8 +1,8 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Cluster.Queries
 {
-    public record ClusterQuery : Query<ClusterViewModel>
+    public record ClusterQuery : Query<ClusterDetailDto>
     {
-        public override ClusterViewModel Result { get; set; } = new ClusterViewModel();
+        public override ClusterDetailDto Result { get; set; } = new ClusterDetailDto();
 
         public int ClusterId { get; set; }
     }

@@ -20,9 +20,9 @@
 
         Task UpdateAsync(Project cluster);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
 
-        Task DeleteEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
+        Task RemoveEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
 
         Task IsExistedProjectName(string name, List<int> environmentClusterIds, params int[] excludeProjectIds);
     }

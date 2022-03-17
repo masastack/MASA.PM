@@ -18,7 +18,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var projectEntity = await _projectRepository.GetAsync(query.ProjectId);
             var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
-            query.Result = new ProjectViewModel
+            query.Result = new ProjectDetailDto
             {
                 Id = projectEntity.Id,
                 Identity = projectEntity.Identity,
@@ -40,7 +40,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             if (query.EnvironmentClusterId.HasValue)
             {
                 var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
-                query.Result = projects.Select(project => new ProjectsViewModel
+                query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,
@@ -53,7 +53,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             else if (query.TeamId.HasValue)
             {
                 var projects = await _projectRepository.GetListByTeamIdAsync(query.TeamId.Value);
-                query.Result = projects.Select(project => new ProjectsViewModel
+                query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,

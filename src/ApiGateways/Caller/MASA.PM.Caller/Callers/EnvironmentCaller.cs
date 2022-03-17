@@ -1,6 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Model;
-using MASA.PM.Contracts.Base.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,31 +19,31 @@ namespace MASA.PM.Caller.Callers
 
         //protected override string AppId { get; set; } = "masa-pm-service-admin";
 
-        public async Task<EnvironmentViewModel> GetAsync(int Id)
+        public async Task<EnvironmentDetailDto> GetAsync(int Id)
         {
-            var data = await CallerProvider.GetAsync<EnvironmentViewModel>($"{_prefix}/{Id}");
+            var data = await CallerProvider.GetAsync<EnvironmentDetailDto>($"{_prefix}/{Id}");
 
             return data;
         }
 
-        public async Task InitAsync(InitModel model)
+        public async Task InitAsync(InitDto model)
         {
             await CallerProvider.PostAsync($"{_prefix}/init", model);
         }
 
-        public async Task<List<EnvironmentsViewModel>> GetListAsync()
+        public async Task<List<EnvironmentDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<EnvironmentsViewModel>>($"{_prefix}");
+            var result = await CallerProvider.GetAsync<List<EnvironmentDto>>($"{_prefix}");
 
             return result;
         }
 
-        public async Task<EnvironmentsViewModel> AddAsync(AddEnvironmentWhitClustersModel model)
+        public async Task<EnvironmentDto> AddAsync(AddEnvironmentWhitClustersDto model)
         {
-            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersModel, EnvironmentsViewModel>(_prefix, model);
+            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersDto, EnvironmentDto>(_prefix, model);
         }
 
-        public async Task UpdateAsync(UpdateEnvironmentModel model)
+        public async Task UpdateAsync(UpdateEnvironmentDto model)
         {
             await CallerProvider.PutAsync(_prefix, model);
         }

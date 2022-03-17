@@ -61,7 +61,7 @@ namespace MASA.PM.UI.Admin.Model
         /// <summary>
         /// 依赖的数据
         /// </summary>
-        public D Depend { get; private set; }
+        public D? Depend { get; private set; }
 
         public void Show(D depend)
         {

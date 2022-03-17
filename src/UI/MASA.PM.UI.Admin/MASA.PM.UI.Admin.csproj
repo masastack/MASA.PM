@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiGateways\Caller\MASA.PM.Caller\MASA.PM.Caller.csproj" />
-    <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Environment\MASA.PM.Contracts.Base.csproj" />
+    <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

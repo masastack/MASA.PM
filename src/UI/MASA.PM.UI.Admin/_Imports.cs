@@ -13,3 +13,5 @@ global using Masa.Blazor;
 global using MASA.PM.UI.Admin.Model;
 global using Masa.Blazor.Experimental.Components;
 global using MASA.PM.UI.Admin.Data.Base;
+global using MASA.PM.Contracts.Admin.Dto;
+global using MASA.PM.Contracts.Admin.Enum;

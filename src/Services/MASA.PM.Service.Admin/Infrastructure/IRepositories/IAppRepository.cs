@@ -22,11 +22,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task UpdateAsync(App app);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
 
-        Task DeleteEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds);
+        Task RemoveEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds);
 
-        Task DeleteEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
+        Task RemoveEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
 
         Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds);
     }

@@ -1,9 +1,9 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Environment.Commands
 {
-    public record AddEnvironmentCommand(AddEnvironmentWhitClustersModel EnvironmentWhitClusterModel) : Command, ITransaction
+    public record AddEnvironmentCommand(AddEnvironmentWhitClustersDto EnvironmentWhitClusterModel) : Command, ITransaction
     {
         public IUnitOfWork? UnitOfWork { get; set; }
 
-        public EnvironmentsViewModel Result { get; set; } = default!;
+        public EnvironmentDto Result { get; set; } = default!;
     }
 }

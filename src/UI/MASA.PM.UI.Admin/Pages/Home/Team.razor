@@ -1,5 +1,4 @@
 ﻿@page "/team"
-@using MASA.PM.Contracts.Base.Enum
 @inherits ProCompontentBase
 @inject MasaBlazor MasaBlazor
 @inject GlobalConfig GlobalConfig;
@@ -44,7 +43,7 @@
                                     <MExpansionPanel Style="margin-bottom: 12px;">
                                         <MExpansionPanelHeader>
                                             <span style="display:flex;align-items:center;margin-right:10px;">
-                                                <div class="text-h6" @onclick:stopPropagation @onclick="()=>ProjectDetail(project.Id,apps.Count)">
+                                                <div class="text-h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
                                                     @project.Name
                                                     <span class="ml-2 text-caption">|</span>
                                                     <sapn class="ml-1 text-caption">应用数量:@apps.Count</sapn>
@@ -52,7 +51,7 @@
                                                 </div>
                                                 <MSpacer />
                                                 <div style="display:flex;align-items:center;">
-                                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>EditProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
+                                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
                                                     <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                                 </div>
                                             </span>
@@ -114,7 +113,7 @@
                         <div style="width:100%;" class="text-body2">
                             <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
                                 <div class="text-h6">@_projectDetail.Name</div>
-                                <MButton Icon OnClick="()=>EditProjectAsync(_selectProjectId)"><MIcon>mdi-pencil</MIcon></MButton>
+                                <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId)"><MIcon>mdi-pencil</MIcon></MButton>
                             </MRow>
                             <MRow NoGutters Class="mt-6">
                                 应用总数：@_appCount
@@ -132,7 +131,7 @@
                                     var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                     foreach (var item in envCluster)
                                     {
-                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" ClusterName="@item.ClusterName" /> 
+                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" ClusterName="@item.ClusterName" />
                                     }
                                 }
                             </div>
@@ -158,7 +157,7 @@
                                     foreach (var app in _projectApps)
                                     {
                                         <MCol Lg="4" Md="6" Sm="1">
-                                            <AppCard OnClick="()=>EditAppAsync(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString()" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString()" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                         </MCol>
                                     }
                                 }
@@ -180,7 +179,6 @@
     <ChildContent>
         <MTextField Outlined Label="项目名称" @bind-Value="_projectFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_friends"
-                       Disabled="IsUpdating"
                        Items="_people"
                        Chips
                        SmallChips
@@ -237,7 +235,7 @@
                        Label="环境/集群"
                        Multiple>
             <SelectionContent Context="_context">
-                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" /> 
+                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
             </SelectionContent>
         </MAutocomplete>
         <MTextarea Outlined Label="项目描述" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
@@ -255,9 +253,9 @@
         <div style="width:100%; margin:10px;">
             @if (_projectFormModel.HasValue)
             {
-                <MButton OnClick="DeleteProject" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitProject" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -304,7 +302,7 @@
                        Label="环境/集群"
                        Multiple>
             <SelectionContent Context="_context">
-                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" /> 
+                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
             </SelectionContent>
         </MAutocomplete>
         <MTextarea Outlined Label="集群描述" @bind-Value="_appFormModel.Data.Description"></MTextarea>
@@ -322,9 +320,9 @@
         <div style="width:100%; margin:10px;">
             @if (_appFormModel.HasValue)
             {
-                <MButton OnClick="DeleteApp" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
+                <MButton OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">删除</MButton>
             }
-            <MButton OnClick="SubmitApp" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue?"保存":"提交")</MButton>
+            <MButton OnClick="SubmitAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue?"保存":"提交")</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -332,26 +330,23 @@
 
 @code {
     //team
-    private bool _autoUpdate = true;
     private List<string> _friends = new()
         {
             "Sandra Adams",
             "Britta Holt"
         };
-    private bool _isUpdating;
-    private string _name = "Midnight Crew";
 
     public class Person
     {
         public Guid Id => Guid.NewGuid();
 
-        public string Header { get; set; }
+        public string Header { get; set; } = "";
 
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
-        public string Group { get; set; }
+        public string Group { get; set; } = "";
 
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = "";
 
         public bool Divider { get; set; }
     }
@@ -388,25 +383,6 @@
                 Name="Group 1"
             }
         };
-    private string _title = "The summer breeze";
-
-    protected bool IsUpdating
-    {
-        get
-        {
-            return _isUpdating;
-        }
-        set
-        {
-            _isUpdating = value;
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(3000);
-                _isUpdating = false;
-                await InvokeAsync(StateHasChanged);
-            });
-        }
-    }
 
     public void Remove(Person item)
     {

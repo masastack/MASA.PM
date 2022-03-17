@@ -22,10 +22,10 @@
 
         Task UpdateAsync(Cluster cluster);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
 
-        Task DeleteEnvironmentClusters(List<EnvironmentCluster> environmentClusters);
+        Task RemoveEnvironmentClusters(List<EnvironmentCluster> environmentClusters);
 
-        Task DeleteEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects);
+        Task RemoveEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects);
     }
 }

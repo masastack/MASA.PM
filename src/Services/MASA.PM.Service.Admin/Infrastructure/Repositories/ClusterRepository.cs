@@ -113,7 +113,7 @@
             }
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             var cluster = await _dbContext.Clusters.FirstOrDefaultAsync(c => c.Id == Id);
             if (cluster == null)
@@ -125,7 +125,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteEnvironmentClusters(List<EnvironmentCluster> environmentClusters)
+        public async Task RemoveEnvironmentClusters(List<EnvironmentCluster> environmentClusters)
         {
             if (environmentClusters.Count > 0)
             {
@@ -134,7 +134,7 @@
             }
         }
 
-        public async Task DeleteEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects)
+        public async Task RemoveEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects)
         {
             if (environmentClusterProjects.Count > 0)
             {
