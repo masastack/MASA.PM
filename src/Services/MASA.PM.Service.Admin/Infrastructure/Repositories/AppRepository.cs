@@ -38,9 +38,9 @@
             }
         }
 
-        public async Task DeleteEnvironmentClusterProjectAppsByAppIdAsync(int Id)
+        public async Task DeleteEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds)
         {
-            var projectApp = await _dbContext.EnvironmentClusterProjectApps.Where(app => app.AppId == Id).ToListAsync();
+            var projectApp = await _dbContext.EnvironmentClusterProjectApps.Where(app => app.AppId == appId && envClusterProjectIds.Contains(app.EnvironmentClusterProjectId)).ToListAsync();
             if (projectApp.Any())
             {
                 _dbContext.EnvironmentClusterProjectApps.RemoveRange(projectApp);

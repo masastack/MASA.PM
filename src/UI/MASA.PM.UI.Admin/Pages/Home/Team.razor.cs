@@ -227,7 +227,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(_selectAppId);
+                await AppCaller.DeleteAsync(new RemoveAppModel { AppId = _selectAppId, ProjectId = _selectProjectId });
 
                 _apps.Remove(deleteApp);
                 _projectApps.Remove(deleteApp);

@@ -70,9 +70,9 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus, [FromBody] int Id)
+        public async Task DeleteAsync(IEventBus eventBus, [FromBody] RemoveAppModel model)
         {
-            var command = new DeleteAppCommand(Id);
+            var command = new DeleteAppCommand(model.AppId, model.ProjectId);
             await eventBus.PublishAsync(command);
         }
     }

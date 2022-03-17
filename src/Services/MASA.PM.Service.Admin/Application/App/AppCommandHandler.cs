@@ -97,8 +97,9 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task DeleteAppAsync(DeleteAppCommand command)
         {
+            var envClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             //await _appRepository.DeleteAsync(command.AppId);
-            await _appRepository.DeleteEnvironmentClusterProjectAppsByAppIdAsync(command.AppId);
+            await _appRepository.DeleteEnvironmentClusterProjectApps(command.AppId, envClusterProjects.Select(ecp => ecp.Id));
         }
     }
 }

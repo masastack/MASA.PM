@@ -91,9 +91,9 @@ namespace MASA.PM.UI.Admin.Pages.Home
 
         private async Task<List<AppViewModel>> GetAppByProjectIdAsync(IEnumerable<int> projectIds)
         {
-            var result = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
+            var apps = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
 
-            return result;
+            return apps;
         }
 
         private async Task<EnvironmentViewModel> GetEnvAsync(int envId)
@@ -372,7 +372,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
                 await AppCaller.UpdateAsync(_appFormModel.Data);
             }
 
-            _apps = await GetAppByProjectIdAsync(new List<int> { _selectProjectId });
+            _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
             AppHide();
         }
 
@@ -381,10 +381,9 @@ namespace MASA.PM.UI.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(_selectAppId);
+                await AppCaller.DeleteAsync(new RemoveAppModel { AppId = _selectAppId, ProjectId = _selectProjectId });
 
-                _apps.Remove(deleteApp);
-
+                _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
                 AppHide();
             });
         }
@@ -410,7 +409,7 @@ namespace MASA.PM.UI.Admin.Pages.Home
         private async Task SubmitRelationAppAsync()
         {
             await AppCaller.AddRelationAppAsync(_addRelationAppModel);
-            _apps = await GetAppByProjectIdAsync(new List<int> { _selectProjectId });
+            _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
             RelationAppHide();
         }
 
