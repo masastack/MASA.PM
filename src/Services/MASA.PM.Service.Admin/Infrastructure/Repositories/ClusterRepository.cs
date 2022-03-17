@@ -31,29 +31,28 @@
             }
         }
 
-        public async Task<ClusterViewModel> GetAsync(int Id)
+        public async Task<Cluster> GetAsync(int Id)
         {
-            var result = await _dbContext.Clusters.Select(e => new ClusterViewModel
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                Creator = e.Creator,
-                CreationTime = e.CreationTime,
-                Modifier = e.Modifier,
-                ModificationTime = e.ModificationTime
-            }).FirstOrDefaultAsync(e => e.Id == Id);
+            var result = await _dbContext.Clusters.FirstOrDefaultAsync(e => e.Id == Id);
 
-            return result ?? throw new Exception("集群不存在！");
+            if (result == null)
+            {
+                throw new Exception("集群不存在！");
+            }
+
+            return result;
         }
 
-        public async Task<List<ClustersViewModel>> GetListAsync()
+        public Task<IQueryable<Cluster>> GetListAsync()
         {
-            var result = await _dbContext.Clusters.Select(e => new ClustersViewModel
-            {
-                Id = e.Id,
-                Name = e.Name
-            }).ToListAsync();
+            var result = _dbContext.Clusters.AsQueryable();
+
+            return Task.FromResult(result);
+        }
+
+        public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId)
+        {
+            var result = await _dbContext.EnvironmentClusters.Where(environmentCluster => environmentCluster.EnvironmentId == envId).ToListAsync();
 
             return result;
         }
@@ -65,13 +64,6 @@
             return result;
         }
 
-        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByClusterIdAsync(IEnumerable<int> environmentClusterIds)
-        {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(environmentClusterProject => environmentClusterIds.Contains(environmentClusterProject.EnvironmentClusterId)).ToListAsync();
-
-            return result;
-        }
-
         public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAndEnvironmentIdsAsync(int clusterId, IEnumerable<int> environmentIds)
         {
             var result = await _dbContext.EnvironmentClusters.Where(
@@ -79,6 +71,24 @@
                     environmentCluster.ClusterId == clusterId &&
                     environmentIds.Contains(environmentCluster.EnvironmentId)
                 ).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds)
+        {
+            var result = await _dbContext.EnvironmentClusters.Where(envCluster => environmentClusterIds.Contains(envCluster.Id)).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<(int EnvClusterId, string EnvName, string ClusterName)>> GetEnvironmentClusters()
+        {
+            var result = await (from envCluster in _dbContext.EnvironmentClusters
+                                join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
+                                join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
+                                select new ValueTuple<int, string, string>(envCluster.Id, env.Name, cluster.Name)
+                                ).ToListAsync();
 
             return result;
         }
@@ -103,7 +113,7 @@
             }
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             var cluster = await _dbContext.Clusters.FirstOrDefaultAsync(c => c.Id == Id);
             if (cluster == null)
@@ -115,7 +125,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteEnvironmentClusters(List<EnvironmentCluster> environmentClusters)
+        public async Task RemoveEnvironmentClusters(List<EnvironmentCluster> environmentClusters)
         {
             if (environmentClusters.Count > 0)
             {
@@ -124,7 +134,7 @@
             }
         }
 
-        public async Task DeleteEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects)
+        public async Task RemoveEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects)
         {
             if (environmentClusterProjects.Count > 0)
             {

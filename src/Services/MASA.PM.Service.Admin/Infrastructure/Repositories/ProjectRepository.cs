@@ -31,7 +31,14 @@
             }
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task<List<Project>> GetListByTeamIdAsync(Guid teamId)
+        {
+            var result = await _dbContext.Projects.Where(project => project.TeamId == teamId).ToListAsync();
+
+            return result;
+        }
+
+        public async Task RemoveAsync(int Id)
         {
             var project = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
             if (project == null)
@@ -43,7 +50,7 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects)
+        public async Task RemoveEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects)
         {
             if (environmentClusterProjects.Any())
             {
@@ -66,9 +73,18 @@
             return result;
         }
 
-        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentIds)
+        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentClusterIds)
         {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => ecp.ProjectId == projectId && environmentIds.Contains(ecp.EnvironmentClusterId)).ToListAsync();
+            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => ecp.ProjectId == projectId && environmentClusterIds.Contains(ecp.EnvironmentClusterId)).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<int>> GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId)
+        {
+            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
+                .Select(ecp => ecp.Id)
+                .ToListAsync();
 
             return result;
         }
@@ -78,11 +94,11 @@
             System.Linq.Expressions.Expression<Func<EnvironmentClusterProject, bool>> predicate = environmentClusterProject =>
                                     environmentClusterProject.EnvironmentClusterId == environmentClusterId;
 
-            var projects = await _dbContext.EnvironmentClusterProjects.Where(predicate)
-                .Select(environmentClusterProject => environmentClusterProject.ProjectId)
+            var projectIds = await _dbContext.EnvironmentClusterProjects.Where(predicate)
+                .Select(project => project.ProjectId)
                 .ToListAsync();
 
-            var result = await _dbContext.Projects.Where(project => projects.Contains(project.Id)).ToListAsync();
+            var result = await _dbContext.Projects.Where(project => projectIds.Contains(project.Id)).ToListAsync();
             return result;
         }
 
@@ -95,6 +111,25 @@
 
             _dbContext.Projects.Update(project);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task IsExistedProjectName(string name, List<int> environmentClusterIds, params int[] excludeProjectIds)
+        {
+            var result = await (from project in _dbContext.Projects.Where(project => project.Name.ToLower() == name.ToLower() && !excludeProjectIds.Contains(project.Id))
+                                join ecp in _dbContext.EnvironmentClusterProjects on project.Id equals ecp.ProjectId
+                                join ec in _dbContext.EnvironmentClusters.Where(envCluster => environmentClusterIds.Contains(envCluster.Id)) on ecp.EnvironmentClusterId equals ec.Id
+                                join e in _dbContext.Environments on ec.EnvironmentId equals e.Id
+                                join c in _dbContext.Clusters on ec.ClusterId equals c.Id
+                                select new
+                                {
+                                    EnvironmentName = e.Name,
+                                    ClusterName = c.Name
+                                }).FirstOrDefaultAsync();
+
+            if (result != null)
+            {
+                throw new Exception($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+            }
         }
     }
 }

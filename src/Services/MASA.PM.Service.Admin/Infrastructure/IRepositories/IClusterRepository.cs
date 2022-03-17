@@ -6,22 +6,26 @@
 
         Task AddEnvironmentClusters(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<List<ClustersViewModel>> GetListAsync();
+        Task<IQueryable<Cluster>> GetListAsync();
+
+        Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId);
 
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAsync(int clusterId);
 
-        Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByClusterIdAsync(IEnumerable<int> environmentClusterIds);
-
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAndEnvironmentIdsAsync(int clusterId, IEnumerable<int> environmentIds);
 
-        Task<ClusterViewModel> GetAsync(int Id);
+        Task<Cluster> GetAsync(int Id);
+
+        Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds);
+
+        Task<List<(int EnvClusterId,string EnvName,string ClusterName)>> GetEnvironmentClusters();
 
         Task UpdateAsync(Cluster cluster);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
 
-        Task DeleteEnvironmentClusters(List<EnvironmentCluster> environmentClusters);
+        Task RemoveEnvironmentClusters(List<EnvironmentCluster> environmentClusters);
 
-        Task DeleteEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects);
+        Task RemoveEnvironmentClusterProjects(List<EnvironmentClusterProject> environmentClusterProjects);
     }
 }

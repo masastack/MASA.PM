@@ -1,4 +1,4 @@
-﻿using MASA.PM.Contracts.Base.Enum;
+﻿using MASA.PM.Contracts.Admin.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,9 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         /// App Id
         /// </summary>
         [Comment("Identity")]
-        [Required(ErrorMessage = "App id is required")]
+        [Required(ErrorMessage = "App identity is required")]
         [Column(TypeName = "nvarchar(100)")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "App id length range is [2-100]")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
         [Comment("Type")]
@@ -38,18 +38,18 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         public ServiceTypes ServiceType { get; set; }
 
         [Comment("Url")]
-        [Column(TypeName = "nvarchar(200)")]
-        [StringLength(200, MinimumLength = 0, ErrorMessage = "Url length range is [0-250]")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Url length range is [0-255]")]
         public string Url { get; set; } = "";
 
         [Comment("SwaggerUrl")]
-        [Column(TypeName = "nvarchar(200)")]
-        [StringLength(200, MinimumLength = 0, ErrorMessage = "Url length range is [0-250]")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Url length range is [0-255]")]
         public string SwaggerUrl { get; set; } = "";
 
         [Comment("Description")]
-        [Column(TypeName = "nvarchar(250)")]
-        [StringLength(250, MinimumLength = 0, ErrorMessage = "Description length range is [0-250]")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Description length range is [0-255]")]
         public string Description { get; set; } = "";
     }
 }

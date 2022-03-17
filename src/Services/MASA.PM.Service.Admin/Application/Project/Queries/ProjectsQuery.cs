@@ -1,7 +1,7 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Project.Queries
 {
-    public record ProjectsQuery(int EnvironmentClusterId) : Query<List<ProjectViewModel>>
+    public record ProjectsQuery(int? EnvironmentClusterId, Guid? TeamId) : Query<List<ProjectDto>>
     {
-        public override List<ProjectViewModel> Result { get; set; } = new List<ProjectViewModel>();
+        public override List<ProjectDto> Result { get; set; } = new List<ProjectDto>();
     }
 }

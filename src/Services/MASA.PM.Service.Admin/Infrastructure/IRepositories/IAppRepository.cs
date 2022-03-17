@@ -10,16 +10,24 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<App> GetAsync(int Id);
 
-        Task<List<App>> GetListByProjectIdAsync(int projectId);
+        Task<List<App>> GetListAsync();
 
-        Task<List<AppEnvironmentClusterViewModel>> GetEnvironmentAndClusterNamesByAppIds(IEnumerable<int> appIds);
+        Task<List<App>> GetListByProjectIdAsync(IEnumerable<int> projectIds);
 
-        Task<List<App>> GetListByEnvironmentClusterProjectIdAsync(int environmentClusterProjectId);
+        Task<List<(int AppId, int ProjectId, string ClusterName, string EnvironmentName, EnvironmentCluster)>> GetEnvironmentAndClusterNamesByAppIds(IEnumerable<int> appIds);
+
+        Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsAsync(int environmentClusterProjectId, int appId);
+
+        Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsByAppId(int appId);
 
         Task UpdateAsync(App app);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
 
-        Task DeleteEnvironmentClusterProjectAppsByAppIdAsync(int Id);
+        Task RemoveEnvironmentClusterProjectApps(int appId, IEnumerable<int> envClusterProjectIds);
+
+        Task RemoveEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
+
+        Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds);
     }
 }

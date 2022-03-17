@@ -2,16 +2,18 @@
 {
     public interface IEnvironmentRepository
     {
+        Task<List<int>> AddEnvironmentsAndClusterAsync(List<Entities.Environment> environments);
+
         Task<Entities.Environment> AddAsync(Entities.Environment environment);
 
-        Task AddEnvironmentClustersAsync(List<EnvironmentCluster> environmentClusters);
+        Task AddEnvironmentClustersAsync(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<List<EnvironmentsViewModel>> GetListAsync();
+        Task<IQueryable<Entities.Environment>> GetListAsync();
 
-        Task UpdateAsync(UpdateEnvironmentModel model);
+        Task UpdateAsync(UpdateEnvironmentDto model);
 
-        Task<EnvironmentViewModel> GetAsync(int Id);
+        Task<Entities.Environment> GetAsync(int Id);
 
-        Task DeleteAsync(int Id);
+        Task RemoveAsync(int Id);
     }
 }

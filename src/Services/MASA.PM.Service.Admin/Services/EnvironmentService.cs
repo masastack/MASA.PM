@@ -7,20 +7,29 @@ namespace MASA.PM.Service.Admin.Services
     {
         public EnvironmentService(IServiceCollection services) : base(services)
         {
+            App.MapPost("/api/v1/env/init", InitAsync);
             App.MapPost("/api/v1/env", AddAsync);
             App.MapGet("api/v1/env", GetList);
             App.MapGet("api/v1/env/{Id}", GetAsync);
             App.MapPut("/api/v1/env", UpdateAsync);
-            App.MapDelete("/api/v1/env/{Id}", DeleteAsync);
+            App.MapDelete("/api/v1/env", RemoveAsync);
         }
 
-        public async Task AddAsync(IEventBus eventBus, AddEnvironmentWhitClustersModel model)
+        public async Task InitAsync(IEventBus eventBus, InitDto model)
         {
-            var command = new AddEnvironmentCommand(model);
+            var command = new InitEnvironmentClusterCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task<List<EnvironmentsViewModel>> GetList(IEventBus eventBus)
+        public async Task<EnvironmentDto> AddAsync(IEventBus eventBus, AddEnvironmentWhitClustersDto model)
+        {
+            var command = new AddEnvironmentCommand(model);
+            await eventBus.PublishAsync(command);
+
+            return command.Result;
+        }
+
+        public async Task<List<EnvironmentDto>> GetList(IEventBus eventBus)
         {
             var query = new EnvironmentsQuery();
             await eventBus.PublishAsync(query);
@@ -28,7 +37,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<EnvironmentViewModel> GetAsync(IEventBus eventBus, int Id)
+        public async Task<EnvironmentDetailDto> GetAsync(IEventBus eventBus, int Id)
         {
             var query = new EnvironmentQuery
             {
@@ -39,13 +48,13 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task UpdateAsync(IEventBus eventBus, UpdateEnvironmentModel model)
+        public async Task UpdateAsync(IEventBus eventBus, UpdateEnvironmentDto model)
         {
             var command = new UpdateEnvironmentCommand(model);
             await eventBus.PublishAsync(command);
         }
 
-        public async Task DeleteAsync(IEventBus eventBus,int Id)
+        public async Task RemoveAsync(IEventBus eventBus, [FromBody] int Id)
         {
             var command = new DeleteEnvironmentCommand(Id);
             await eventBus.PublishAsync(command);
