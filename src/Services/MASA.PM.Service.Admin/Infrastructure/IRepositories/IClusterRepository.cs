@@ -6,21 +6,19 @@
 
         Task AddEnvironmentClusters(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<List<ClustersViewModel>> GetListAsync();
+        Task<IQueryable<Cluster>> GetListAsync();
 
-        Task<List<ClustersViewModel>> GetListByEnvIdAsync(int envId);
+        Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId);
 
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAsync(int clusterId);
 
-        Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByClusterIdAsync(IEnumerable<int> environmentClusterIds);
-
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAndEnvironmentIdsAsync(int clusterId, IEnumerable<int> environmentIds);
 
-        Task<ClusterViewModel> GetAsync(int Id);
+        Task<Cluster> GetAsync(int Id);
 
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds);
 
-        Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters();
+        Task<List<(int EnvClusterId,string EnvName,string ClusterName)>> GetEnvironmentClusters();
 
         Task UpdateAsync(Cluster cluster);
 

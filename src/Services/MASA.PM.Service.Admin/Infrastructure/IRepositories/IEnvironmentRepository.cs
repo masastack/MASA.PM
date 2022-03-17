@@ -8,11 +8,11 @@
 
         Task AddEnvironmentClustersAsync(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<List<EnvironmentsViewModel>> GetListAsync();
+        Task<IQueryable<Entities.Environment>> GetListAsync();
 
         Task UpdateAsync(UpdateEnvironmentModel model);
 
-        Task<EnvironmentViewModel> GetAsync(int Id);
+        Task<Entities.Environment> GetAsync(int Id);
 
         Task DeleteAsync(int Id);
     }

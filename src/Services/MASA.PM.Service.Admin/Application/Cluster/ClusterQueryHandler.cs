@@ -14,13 +14,31 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task ClusterQueryHandle(ClusterQuery query)
         {
-            query.Result = await _clusterRepository.GetAsync(query.ClusterId);
+            var cluster = await _clusterRepository.GetAsync(query.ClusterId);
+            var envclusters = await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(query.ClusterId);
+
+            query.Result = new ClusterViewModel
+            {
+                Id = cluster.Id,
+                Name = cluster.Name,
+                Description = cluster.Description,
+                Creator = cluster.Creator,
+                CreationTime = cluster.CreationTime,
+                Modifier = cluster.Modifier,
+                ModificationTime = cluster.ModificationTime,
+                EnvironmentIds = envclusters.Select(envCluster => envCluster.EnvironmentId).ToList()
+            };
         }
 
         [EventHandler]
         public async Task ClusterListQueryHandle(ClustersQuery query)
         {
-            query.Result = await _clusterRepository.GetListAsync();
+            var resule = await (await _clusterRepository.GetListAsync()).ToListAsync();
+            query.Result = resule.Select(cluster => new ClustersViewModel
+            {
+                Id = cluster.Id,
+                Name = cluster.Name,
+            }).ToList();
         }
 
         [EventHandler]
@@ -28,11 +46,40 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         {
             if (query.EnvId.HasValue)
             {
-                query.Result = await _clusterRepository.GetListByEnvIdAsync(query.EnvId.Value);
+                var envCluster = await _clusterRepository.GetEnvironmentClustersByEnvIdAsync(query.EnvId.Value);
+
+                var cluster = await (await _clusterRepository.GetListAsync())
+                    .Where(cluster => envCluster.Select(ec => ec.ClusterId).Contains(cluster.Id))
+                    .Select(cluster => new Infrastructure.Entities.Cluster
+                    {
+                        Id = cluster.Id,
+                        Name = cluster.Name
+                    }).ToListAsync();
+
+                var result = from ec in envCluster
+                             join c in cluster on ec.ClusterId equals c.Id
+                             select new ClustersViewModel
+                             {
+                                 Id = c.Id,
+                                 Name = c.Name,
+                                 EnvironmentClusterId = ec.Id
+                             };
+
+                query.Result = result.ToList();
             }
             else
             {
-                query.EnvironmentClusters = await _clusterRepository.GetEnvironmentClusters();
+                List<(int EnvClusterId,
+                    string EnvName,
+                    string ClusterName)>
+                    result = await _clusterRepository.GetEnvironmentClusters();
+
+                query.EnvironmentClusters = result.Select(envClusterGroup => new EnvironmentClusterViewModel
+                {
+                    Id = envClusterGroup.EnvClusterId,
+                    EnvironmentName = envClusterGroup.EnvName,
+                    ClusterName = envClusterGroup.ClusterName
+                }).ToList();
             }
         }
     }

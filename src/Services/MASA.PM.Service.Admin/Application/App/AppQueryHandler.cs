@@ -33,8 +33,24 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 
             if (query.IsHaveEnvironmentClusterInfo)
             {
-                var environmentClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(new List<int>() { app.Id });
-                query.Result.EnvironmentClusters = environmentClusters;
+                List<(int AppId,
+                    int ProjectId,
+                    string ClusterName,
+                    string EnvName,
+                    EnvironmentCluster EnvCluster)>
+                appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(new List<int>() { app.Id });
+
+                query.Result.EnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterViewModel
+                {
+                    AppId = appProjectEnvCluster.AppId,
+                    ProjectId = appProjectEnvCluster.ProjectId,
+                    EnvironmentCluster = new EnvironmentClusterViewModel
+                    {
+                        Id = appProjectEnvCluster.EnvCluster.Id,
+                        EnvironmentName = appProjectEnvCluster.EnvName,
+                        ClusterName = appProjectEnvCluster.ClusterName
+                    }
+                }).ToList();
             }
         }
 
@@ -44,8 +60,24 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             if (query.ProjectIds.Any())
             {
                 var apps = await _appRepository.GetListByProjectIdAsync(query.ProjectIds);
-                var environmentClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
-                var environmentClusterGroup = environmentClusters.GroupBy(c => new { c.ProjectId, c.AppId }).ToList();
+                List<(int AppId,
+                    int ProjectId,
+                    string ClusterName,
+                    string EnvName,
+                    EnvironmentCluster EnvCluster)>
+                appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
+                var appEnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterViewModel
+                {
+                    AppId = appProjectEnvCluster.AppId,
+                    ProjectId = appProjectEnvCluster.ProjectId,
+                    EnvironmentCluster = new EnvironmentClusterViewModel
+                    {
+                        Id = appProjectEnvCluster.EnvCluster.Id,
+                        EnvironmentName = appProjectEnvCluster.EnvName,
+                        ClusterName = appProjectEnvCluster.ClusterName
+                    }
+                }).ToList();
+                var environmentClusterGroup = appEnvironmentClusters.GroupBy(c => new { c.ProjectId, c.AppId }).ToList();
 
                 var result = apps.Join(
                         environmentClusterGroup,

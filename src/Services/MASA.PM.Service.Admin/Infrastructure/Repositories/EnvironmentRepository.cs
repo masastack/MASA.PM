@@ -49,36 +49,22 @@
             }
         }
 
-        public async Task<List<EnvironmentsViewModel>> GetListAsync()
+        public Task<IQueryable<Entities.Environment>> GetListAsync()
         {
-            var result = await _dbContext.Environments.Select(e => new EnvironmentsViewModel
-            {
-                Id = e.Id,
-                Name = e.Name
-            }).ToListAsync();
+            var result = _dbContext.Environments.AsQueryable();
 
-            return result;
+            return Task.FromResult(result);
         }
 
-        public async Task<EnvironmentViewModel> GetAsync(int Id)
+        public async Task<Entities.Environment> GetAsync(int Id)
         {
-            var result = await _dbContext.Environments.Select(e => new EnvironmentViewModel
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                Creator = e.Creator,
-                CreationTime = e.CreationTime,
-                Modifier = e.Modifier,
-                ModificationTime = e.ModificationTime
-            }).FirstOrDefaultAsync(e => e.Id == Id);
+            var result = await _dbContext.Environments.FirstOrDefaultAsync(env => env.Id == Id);
 
             if (result == null)
             {
                 throw new Exception("环境不存在！");
             }
 
-            result.ClusterIds = await _dbContext.EnvironmentClusters.Where(ec => ec.EnvironmentId == Id).Select(ec => ec.ClusterId).ToListAsync();
             return result;
         }
 

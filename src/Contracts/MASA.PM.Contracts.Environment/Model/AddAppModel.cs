@@ -25,9 +25,11 @@ namespace MASA.PM.Contracts.Base.Model
         public int ProjectId { get; set; }
 
         //[EnumDataType(typeof(AppTypes), ErrorMessage = "App type error")]
+        [NonDefault]
         public AppTypes Type { get; set; }
 
         //[EnumDataType(typeof(ServiceTypes), ErrorMessage = "App service type error")]
+        [NonDefault]
         public ServiceTypes ServiceType { get; set; }
 
         [Required(ErrorMessage = "Identity is required ")]

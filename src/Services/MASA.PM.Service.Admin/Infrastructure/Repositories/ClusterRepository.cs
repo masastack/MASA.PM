@@ -31,69 +31,35 @@
             }
         }
 
-        public async Task<ClusterViewModel> GetAsync(int Id)
+        public async Task<Cluster> GetAsync(int Id)
         {
-            var result = await _dbContext.Clusters.Select(e => new ClusterViewModel
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Description = e.Description,
-                Creator = e.Creator,
-                CreationTime = e.CreationTime,
-                Modifier = e.Modifier,
-                ModificationTime = e.ModificationTime
-            }).FirstOrDefaultAsync(e => e.Id == Id);
+            var result = await _dbContext.Clusters.FirstOrDefaultAsync(e => e.Id == Id);
 
             if (result == null)
             {
                 throw new Exception("集群不存在！");
             }
-            result.EnvironmentIds = await _dbContext.EnvironmentClusters.Where(ec => ec.ClusterId == Id).Select(ec => ec.EnvironmentId).ToListAsync();
 
             return result;
         }
 
-        public async Task<List<ClustersViewModel>> GetListAsync()
+        public Task<IQueryable<Cluster>> GetListAsync()
         {
-            var result = await _dbContext.Clusters.Select(e => new ClustersViewModel
-            {
-                Id = e.Id,
-                Name = e.Name
-            }).ToListAsync();
+            var result = _dbContext.Clusters.AsQueryable();
 
-            return result;
+            return Task.FromResult(result);
         }
 
-        public async Task<List<ClustersViewModel>> GetListByEnvIdAsync(int envId)
+        public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId)
         {
-            var envClusters = await _dbContext.EnvironmentClusters.Where(envCluster => envCluster.EnvironmentId == envId)
-                .Join(
-                    _dbContext.Clusters,
-                    envCluster => envCluster.ClusterId,
-                    cluster => cluster.Id,
-                    (envCluster, cluster) => new { EnvClusterId = envCluster.Id, ClusterId = cluster.Id, cluster.Name }
-                )
-                .Select(envClusterGroup => new ClustersViewModel
-                {
-                    Id = envClusterGroup.ClusterId,
-                    Name = envClusterGroup.Name,
-                    EnvironmentClusterId = envClusterGroup.EnvClusterId
-                })
-                .ToListAsync();
+            var result = await _dbContext.EnvironmentClusters.Where(environmentCluster => environmentCluster.EnvironmentId == envId).ToListAsync();
 
-            return envClusters;
+            return result;
         }
 
         public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAsync(int clusterId)
         {
             var result = await _dbContext.EnvironmentClusters.Where(environmentCluster => environmentCluster.ClusterId == clusterId).ToListAsync();
-
-            return result;
-        }
-
-        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByClusterIdAsync(IEnumerable<int> environmentClusterIds)
-        {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(environmentClusterProject => environmentClusterIds.Contains(environmentClusterProject.EnvironmentClusterId)).ToListAsync();
 
             return result;
         }
@@ -116,17 +82,13 @@
             return result;
         }
 
-        public async Task<List<EnvironmentClusterViewModel>> GetEnvironmentClusters()
+        public async Task<List<(int EnvClusterId, string EnvName, string ClusterName)>> GetEnvironmentClusters()
         {
             var result = await (from envCluster in _dbContext.EnvironmentClusters
                                 join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
                                 join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
-                                select new EnvironmentClusterViewModel
-                                {
-                                    Id = envCluster.Id,
-                                    EnvironmentName = env.Name,
-                                    ClusterName = cluster.Name
-                                }).ToListAsync();
+                                select new ValueTuple<int, string, string>(envCluster.Id, env.Name, cluster.Name)
+                                ).ToListAsync();
 
             return result;
         }
