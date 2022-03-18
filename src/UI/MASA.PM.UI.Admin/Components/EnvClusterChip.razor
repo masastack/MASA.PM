@@ -1,0 +1,19 @@
+﻿<MChip Small Outlined Class="@Class" Style="@Style">
+    <div style="color:#37A7FF">@EnvironmentName</div>
+    <div style="color:#485585">/</div>
+    <div style="color:#05CD99">@ClusterName</div>
+</MChip>
+
+@code {
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string EnvironmentName { get; set; }
+
+    [Parameter]
+    public string ClusterName { get; set; }
+}

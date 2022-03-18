@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  masa.pm.service.admin:
+    image: ${DOCKER_REGISTRY-}masapmserviceadmin
+    build:
+      context: .
+      dockerfile: src/Services/MASA.PM.Service.Admin/Dockerfile
+
+  masa.pm.ui.admin:
+    image: ${DOCKER_REGISTRY-}masapmuiadmin
+    build:
+      context: .
+      dockerfile: src/UI/MASA.PM.UI.Admin/Dockerfile
+
