@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@inherits LayoutComponentBase
+@inject GlobalConfig GlobalConfig
+@implements IDisposable
+
+<MApp>
+    <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
+        <MSpacer />
+        <Language />
+        <Login />
+    </MAppBar>
+
+    <Navigation />
+
+    <MMain Class="fill-lighten-1" Style="padding-top:60px">
+        <div class="pa-6 max-width">
+            @Body
+        </div>
+    </MMain>
+
+    <Settings @bind-Show=_showSetting />
+
+    <MasaPopupProvider />
+</MApp>
+
+@code {
+
+    private bool _showSetting;
+
+    protected override void OnInitialized()
+    {
+        GlobalConfig.OnPageModeChanged += base.StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        GlobalConfig.OnPageModeChanged -= base.StateHasChanged;
+    }
+}
