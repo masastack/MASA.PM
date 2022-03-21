@@ -1,4 +1,4 @@
-﻿namespace MASA.PM.UI.Admin;
+﻿namespace MASA.PM.Web.Admin;
 
 public abstract class ProCompontentBase : ComponentBase
 {

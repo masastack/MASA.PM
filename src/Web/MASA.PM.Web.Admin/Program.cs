@@ -1,5 +1,5 @@
 
-using MASA.Utils.Caller.Core;
+using Masa.Utils.Caller.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 

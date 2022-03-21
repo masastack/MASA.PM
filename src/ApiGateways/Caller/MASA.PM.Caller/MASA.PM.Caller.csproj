@@ -7,8 +7,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MASA.Utils.Caller.DaprClient" Version="0.0.1705937119" />
-		<PackageReference Include="MASA.Utils.Caller.HttpClient" Version="0.0.1705937119" />
+		<PackageReference Include="MASA.Utils.Caller.DaprClient" Version="0.3.5" />
+		<PackageReference Include="MASA.Utils.Caller.HttpClient" Version="0.3.5" />
 	</ItemGroup>
 
 	<ItemGroup>
