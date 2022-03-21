@@ -41,7 +41,5 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         [StringLength(250, ErrorMessage = "App description length must be less than 250")]
         public string Description { get; set; } = "";
-
-        public Guid UserId { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace MASA.PM.Contracts.Admin.Enum
 {
     public enum ProjectTypes
     {
-        [Description("Base Ability")]
-        BaseAbility = 1,
+        [Description("Basic Ability")]
+        BasicAbility = 1,
 
         [Description("Ops Ability")]
         OpsAbility,
