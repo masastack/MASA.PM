@@ -10,7 +10,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     {
         public int AppId { get; set; }
 
-        public int EnvironmentClusterId { get; set; }
+        public List<int> EnvironmentClusterIds { get; set; } = new();
 
         public int ProjectId { get; set; }
     }

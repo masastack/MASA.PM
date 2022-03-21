@@ -2,7 +2,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Clusters")]
-    public class Cluster : AuditEntity<int, Guid>
+    public class Cluster : BaseEntity<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "Cluster name is required")]

@@ -3,7 +3,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Projects")]
-    public class Project : AuditEntity<int, Guid>
+    public class Project : BaseEntity<int, Guid>
     {
         [Comment("Identity")]
         [Required(ErrorMessage = "Project identity is required")]

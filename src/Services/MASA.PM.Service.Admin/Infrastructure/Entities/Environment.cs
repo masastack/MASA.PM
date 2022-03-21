@@ -2,7 +2,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Environments")]
-    public class Environment : AuditEntity<int, Guid>
+    public class Environment : BaseEntity<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "Environment name is required")]

@@ -49,11 +49,4 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
 	</ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Application\" />
-	  <Folder Include="Infrastructure\IRepositories\" />
-	  <Folder Include="Infrastructure\Repositories\" />
-	  <Folder Include="Services\" />
-	</ItemGroup>
 </Project>
