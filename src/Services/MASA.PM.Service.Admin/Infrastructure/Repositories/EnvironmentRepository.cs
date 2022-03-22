@@ -109,6 +109,12 @@
 
         public async Task RemoveAsync(int Id)
         {
+            var envCount = await _dbContext.EnvironmentClusters.CountAsync();
+            if (envCount <= 1)
+            {
+                throw new Exception("环境不允许为空！");
+            }
+
             var environment = await _dbContext.Environments.FirstOrDefaultAsync(env => env.Id == Id);
             if (environment == null)
             {

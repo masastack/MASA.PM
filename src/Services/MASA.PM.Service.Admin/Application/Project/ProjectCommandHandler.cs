@@ -77,7 +77,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         }
 
         [EventHandler]
-        public async Task DeleteProjectAsync(DeleteProjectCommand command)
+        public async Task RemoveProjectAsync(DeleteProjectCommand command)
         {
             await _projectRepository.RemoveAsync(command.ProjectId);
 
