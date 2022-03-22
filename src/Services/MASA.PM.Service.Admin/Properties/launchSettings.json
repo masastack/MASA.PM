@@ -9,7 +9,7 @@
       },
       "applicationUrl": "http://localhost:19401",
       "dotnetRunMessages": true
-    },    
+    },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

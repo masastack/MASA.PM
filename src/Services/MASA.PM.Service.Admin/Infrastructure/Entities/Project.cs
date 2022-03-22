@@ -3,7 +3,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Projects")]
-    public class Project : AuditEntity<int, Guid>
+    public class Project : BaseEntity<int, Guid>
     {
         [Comment("Identity")]
         [Required(ErrorMessage = "Project identity is required")]
@@ -11,10 +11,9 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
-        [Comment("Type")]
-        [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
-        [Column(TypeName = "tinyint")]
-        public ProjectTypes Type { get; set; }
+        [Comment("LabelId")]
+        [Range(1, int.MaxValue, ErrorMessage = "Project label is required")]
+        public int LabelId { get; set; }
 
         [Comment("Name")]
         [Required(ErrorMessage = "System name is required")]

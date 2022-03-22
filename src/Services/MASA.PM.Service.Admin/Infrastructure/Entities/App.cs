@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Apps")]
-    public class App : AuditEntity<int, Guid>
+    public class App : BaseEntity<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "App name is required")]

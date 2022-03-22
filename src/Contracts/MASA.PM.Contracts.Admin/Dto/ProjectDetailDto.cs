@@ -12,7 +12,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string Identity { get; set; } = "";
 
-        public ProjectTypes Type { get; set; }
+        public int LabelId { get; set; }
 
         public string Name { get; set; } = "";
 
