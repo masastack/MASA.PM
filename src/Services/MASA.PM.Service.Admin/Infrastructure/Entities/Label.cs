@@ -2,7 +2,7 @@
 {
     [Table("ProjectTypes")]
     [Index(nameof(Name), nameof(IsDeleted), Name = "IX_Name")]
-    public class ProjectType : BaseEntity<int, Guid>
+    public class Label : BaseEntity<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "ProjectType name is required")]

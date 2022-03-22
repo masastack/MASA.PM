@@ -33,7 +33,7 @@
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
 
-            modelBuilder.Entity<ProjectType>()
+            modelBuilder.Entity<Label>()
                .Property(t => t.ModificationTime)
                .HasDefaultValueSql("SYSDATETIME()");
         }
@@ -52,6 +52,6 @@
 
         public DbSet<App> Apps { get; set; } = default!;
 
-        public DbSet<ProjectType> ProjectTypes { get; set; } = default!;
+        public DbSet<Label> ProjectTypes { get; set; } = default!;
     }
 }

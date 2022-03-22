@@ -23,8 +23,8 @@ namespace MASA.PM.Contracts.Admin.Dto
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
-        [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
-        public int TypeId { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Project label is required")]
+        public int LabelId { get; set; }
 
         [MinCount(1, ErrorMessage = "EnvironmentClusterIds is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();

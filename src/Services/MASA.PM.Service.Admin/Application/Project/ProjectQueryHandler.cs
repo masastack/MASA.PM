@@ -22,7 +22,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 Id = projectEntity.Id,
                 Identity = projectEntity.Identity,
-                TypeId = projectEntity.TypeId,
+                LabelId = projectEntity.LabelId,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 TeamId = projectEntity.TeamId,
