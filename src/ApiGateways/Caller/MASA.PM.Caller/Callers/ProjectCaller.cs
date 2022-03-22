@@ -22,38 +22,38 @@ namespace MASA.PM.Caller.Callers
         {
             var result = await CallerProvider.GetAsync<List<ProjectDto>>($"{_prefix}/teamProjects/{teamId}");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<List<ProjectDto>> GetListByEnvIdAsync(int envClusterId)
         {
             var result = await CallerProvider.GetAsync<List<ProjectDto>>($"/api/v1/{envClusterId}/project");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<ProjectDetailDto> GetAsync(int Id)
         {
             var result = await CallerProvider.GetAsync<ProjectDetailDto>($"{_prefix}/{Id}");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<List<ProjectTypesDto>> GetProjectTypesAsync()
         {
             var result = await CallerProvider.GetAsync<List<ProjectTypesDto>>($"{_prefix}/projectType");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task AddAsync(AddProjectDto model)
         {
-            await CallerProvider.PostAsync($"{_prefix}", model);
+            await CallerProvider.PostAsync(_prefix, model);
         }
 
         public async Task UpdateAsync(UpdateProjectDto model)
         {
-            await CallerProvider.PutAsync($"{_prefix}", model);
+            await CallerProvider.PutAsync(_prefix, model);
         }
 
         public async Task DeleteAsync(int Id)

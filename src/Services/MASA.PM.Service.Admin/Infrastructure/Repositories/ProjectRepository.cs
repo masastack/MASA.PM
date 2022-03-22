@@ -13,7 +13,7 @@
         {
             if (_dbContext.Projects.Any(p => p.Name.ToLower() == project.Name.ToLower()))
             {
-                throw new Exception("项目名称已存在！");
+                throw new UserFriendlyException("项目名称已存在！");
             }
 
             await _dbContext.Projects.AddAsync(project);
@@ -43,7 +43,7 @@
             var project = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
             if (project == null)
             {
-                throw new Exception("项目不存在！");
+                throw new UserFriendlyException("项目不存在！");
             }
 
             _dbContext.Projects.Remove(project);
@@ -63,7 +63,7 @@
         {
             var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
 
-            return result ?? throw new Exception("项目不存在！");
+            return result ?? throw new UserFriendlyException("项目不存在！");
         }
 
         public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAsync(int projectId)
@@ -113,7 +113,7 @@
         {
             if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))
             {
-                throw new Exception("项目名称已存在！");
+                throw new UserFriendlyException("项目名称已存在！");
             }
 
             _dbContext.Projects.Update(project);
@@ -135,7 +135,7 @@
 
             if (result != null)
             {
-                throw new Exception($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+                throw new UserFriendlyException($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
             }
         }
     }

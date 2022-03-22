@@ -21,33 +21,33 @@ namespace MASA.PM.Caller.Callers
         {
             var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/{envId}/cluster");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<List<ClusterDto>> GetListAsync()
         {
             var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/cluster");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<ClusterDetailDto> GetAsync(int Id)
         {
             var result = await CallerProvider.GetAsync<ClusterDetailDto>($"{_prefix}/{Id}");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<List<EnvironmentClusterDto>> GetEnvironmentClusters()
         {
             var result = await CallerProvider.GetAsync<List<EnvironmentClusterDto>>($"/api/v1/envClusters");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<ClusterDto> AddAsync(AddClusterWhitEnvironmentsDto model)
         {
-            return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsDto, ClusterDto>(_prefix, model);
+            return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsDto, ClusterDto>(_prefix, model) ?? new();
         }
 
         public async Task UpdateAsync(UpdateClusterDto model)

@@ -13,7 +13,7 @@
         {
             if (_dbContext.Apps.Any(e => e.Name.ToLower() == app.Name.ToLower()))
             {
-                throw new Exception("应用名称已存在！");
+                throw new UserFriendlyException("应用名称已存在！");
             }
 
             await _dbContext.Apps.AddAsync(app);
@@ -62,7 +62,7 @@
         {
             var app = await _dbContext.Apps.FindAsync(Id);
 
-            return app ?? throw new Exception("应用信息不存在！");
+            return app ?? throw new UserFriendlyException("应用信息不存在！");
         }
 
         public async Task<List<App>> GetListAsync()
@@ -137,7 +137,7 @@
 
             if (result != null)
             {
-                throw new Exception($"应用名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+                throw new UserFriendlyException($"应用名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
             }
         }
     }

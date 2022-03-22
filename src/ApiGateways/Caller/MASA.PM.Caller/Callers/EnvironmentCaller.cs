@@ -21,9 +21,9 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<EnvironmentDetailDto> GetAsync(int Id)
         {
-            var data = await CallerProvider.GetAsync<EnvironmentDetailDto>($"{_prefix}/{Id}");
+            var result = await CallerProvider.GetAsync<EnvironmentDetailDto>($"{_prefix}/{Id}");
 
-            return data;
+            return result ?? new();
         }
 
         public async Task InitAsync(InitDto model)
@@ -35,12 +35,12 @@ namespace MASA.PM.Caller.Callers
         {
             var result = await CallerProvider.GetAsync<List<EnvironmentDto>>($"{_prefix}");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<EnvironmentDto> AddAsync(AddEnvironmentWhitClustersDto model)
         {
-            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersDto, EnvironmentDto>(_prefix, model);
+            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersDto, EnvironmentDto>(_prefix, model) ?? new();
         }
 
         public async Task UpdateAsync(UpdateEnvironmentDto model)

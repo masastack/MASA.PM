@@ -22,19 +22,19 @@ namespace MASA.PM.Caller.Callers
         {
             var result = await CallerProvider.GetAsync<List<AppDto>>("/api/v1/app");
 
-            return result;
+            return result ?? new();
         }
 
         public async Task<List<AppDto>> GetListByProjectIdAsync(List<int> projectIds)
         {
             var result = await CallerProvider.PostAsync<List<int>, List<AppDto>>($"/api/v1/projects/app", projectIds);
 
-            return result;
+            return result ?? new();
         }
 
         public async Task AddAsync(AddAppDto model)
         {
-            await CallerProvider.PostAsync($"{_prefix}", model);
+            await CallerProvider.PostAsync(_prefix, model);
         }
 
         public async Task AddRelationAppAsync(AddRelationAppDto model)
@@ -44,7 +44,7 @@ namespace MASA.PM.Caller.Callers
 
         public async Task UpdateAsync(UpdateAppDto model)
         {
-            await CallerProvider.PutAsync($"{_prefix}", model);
+            await CallerProvider.PutAsync(_prefix, model);
         }
 
         public async Task DeleteAsync(RemoveAppDto model)

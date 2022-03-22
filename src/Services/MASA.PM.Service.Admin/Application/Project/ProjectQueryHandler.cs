@@ -63,6 +63,10 @@ namespace MASA.PM.Service.Admin.Application.Project
                     ModificationTime = project.ModificationTime,
                 }).ToList();
             }
+            else
+            {
+                query.Result = new();
+            }
         }
 
         [EventHandler]

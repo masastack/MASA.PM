@@ -13,7 +13,7 @@
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower()))
             {
-                throw new Exception("集群名称已存在！");
+                throw new UserFriendlyException("集群名称已存在！");
             }
 
             await _dbContext.Clusters.AddAsync(cluster);
@@ -37,7 +37,7 @@
 
             if (result == null)
             {
-                throw new Exception("集群不存在！");
+                throw new UserFriendlyException("集群不存在！");
             }
 
             return result;
@@ -97,7 +97,7 @@
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower() && e.Id != cluster.Id))
             {
-                throw new Exception("集群名称已存在！");
+                throw new UserFriendlyException("集群名称已存在！");
             }
 
             _dbContext.Clusters.Update(cluster);
@@ -118,7 +118,7 @@
             var cluster = await _dbContext.Clusters.FirstOrDefaultAsync(c => c.Id == Id);
             if (cluster == null)
             {
-                throw new Exception("集群不存在！");
+                throw new UserFriendlyException("集群不存在！");
             }
 
             _dbContext.Clusters.Remove(cluster);

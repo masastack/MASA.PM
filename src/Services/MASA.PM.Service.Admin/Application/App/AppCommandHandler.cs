@@ -58,7 +58,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsAsync(envClusterProjectIds[0], relationApp.AppId);
             if (envClusterProjectApps.Any())
             {
-                throw new Exception("该应用已存在");
+                throw new UserFriendlyException("该应用已存在");
             }
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(new List<EnvironmentClusterProjectApp> { envClusterProjectApp });
         }

@@ -31,7 +31,7 @@
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == environment.Name.ToLower()))
             {
-                throw new Exception("环境名称已存在！");
+                throw new UserFriendlyException("环境名称已存在！");
             }
 
             await _dbContext.Environments.AddAsync(environment);
@@ -62,7 +62,7 @@
 
             if (result == null)
             {
-                throw new Exception("环境不存在！");
+                throw new UserFriendlyException("环境不存在！");
             }
 
             return result;
@@ -72,7 +72,7 @@
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == model.Name.ToLower() && e.Id != model.EnvironmentId))
             {
-                throw new Exception("环境名称已存在！");
+                throw new UserFriendlyException("环境名称已存在！");
             }
 
             _dbContext.Environments.Update(new Entities.Environment
@@ -112,13 +112,13 @@
             var envCount = await _dbContext.EnvironmentClusters.CountAsync();
             if (envCount <= 1)
             {
-                throw new Exception("环境不允许为空！");
+                throw new UserFriendlyException("环境不允许为空！");
             }
 
             var environment = await _dbContext.Environments.FirstOrDefaultAsync(env => env.Id == Id);
             if (environment == null)
             {
-                throw new Exception("环境不存在！");
+                throw new UserFriendlyException("环境不存在！");
             }
             //var environmentClusters = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == environment.Id).ToListAsync();
             //var environmentClusterIds = environmentClusters.Select(e => e.Id);
