@@ -32,6 +32,10 @@
             modelBuilder.Entity<App>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
+
+            modelBuilder.Entity<ProjectType>()
+               .Property(t => t.ModificationTime)
+               .HasDefaultValueSql("SYSDATETIME()");
         }
 
         public DbSet<Entities.Environment> Environments { get; set; } = default!;
@@ -47,5 +51,7 @@
         public DbSet<EnvironmentClusterProjectApp> EnvironmentClusterProjectApps { get; set; } = default!;
 
         public DbSet<App> Apps { get; set; } = default!;
+
+        public DbSet<ProjectType> ProjectTypes { get; set; } = default!;
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Project.Commands
 {
-    public record DeleteProjectCommand(int ProjectId) : Command, ITransaction
+    public record DeleteProjectCommand(int ProjectId) : Command
     {
-        public IUnitOfWork? UnitOfWork { get; set; }
     }
 }

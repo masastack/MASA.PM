@@ -39,6 +39,13 @@ namespace MASA.PM.Caller.Callers
             return result;
         }
 
+        public async Task<List<ProjectTypesDto>> GetProjectTypesAsync()
+        {
+            var result = await CallerProvider.GetAsync<List<ProjectTypesDto>>($"{_prefix}/projectType");
+
+            return result;
+        }
+
         public async Task AddAsync(AddProjectDto model)
         {
             await CallerProvider.PostAsync($"{_prefix}", model);

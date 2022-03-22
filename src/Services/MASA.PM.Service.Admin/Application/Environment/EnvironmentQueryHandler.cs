@@ -12,7 +12,7 @@
         }
 
         [EventHandler]
-        public async Task GetEnvironmentAsync(EnvironmentQuery query)
+        public async Task EnvironmentHandleAsync(EnvironmentQuery query)
         {
             var cluster = await _environmentRepository.GetAsync(query.EnvironmentId);
             var envclusters = await _clusterRepository.GetEnvironmentClustersByEnvIdAsync(query.EnvironmentId);
@@ -31,7 +31,7 @@
         }
 
         [EventHandler]
-        public async Task GetEnvironmentListAsync(EnvironmentsQuery query)
+        public async Task EnvironmentListHandleAsync(EnvironmentsQuery query)
         {
             var envs = await (await _environmentRepository.GetListAsync()).ToListAsync();
             query.Result = envs.Select(env => new EnvironmentDto

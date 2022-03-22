@@ -24,7 +24,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         public string Identity { get; set; } = "";
 
         [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
-        public ProjectTypes Type { get; set; }
+        public int TypeId { get; set; }
 
         [MinCount(1, ErrorMessage = "EnvironmentClusterIds is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();

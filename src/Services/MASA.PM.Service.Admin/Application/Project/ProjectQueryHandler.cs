@@ -22,7 +22,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 Id = projectEntity.Id,
                 Identity = projectEntity.Identity,
-                Type = projectEntity.Type,
+                TypeId = projectEntity.TypeId,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 TeamId = projectEntity.TeamId,
@@ -63,6 +63,18 @@ namespace MASA.PM.Service.Admin.Application.Project
                     ModificationTime = project.ModificationTime,
                 }).ToList();
             }
+        }
+
+        [EventHandler]
+        public async Task GetProjectTypes(ProjectTypesQuery query)
+        {
+            var result = await _projectRepository.GetProjectTypesAsync();
+
+            query.Result = await result.Select(projectType => new ProjectTypesDto
+            {
+                Id = projectType.Id,
+                Name = projectType.Name
+            }).ToListAsync();
         }
     }
 }

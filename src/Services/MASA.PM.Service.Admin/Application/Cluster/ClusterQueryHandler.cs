@@ -12,7 +12,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task GetClusterAsync(ClusterQuery query)
+        public async Task ClusterQueryHandle(ClusterQuery query)
         {
             var cluster = await _clusterRepository.GetAsync(query.ClusterId);
             var envclusters = await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(query.ClusterId);
@@ -31,7 +31,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task GetClusterListAsync(ClustersQuery query)
+        public async Task ClusterListQueryHandle(ClustersQuery query)
         {
             var resule = await (await _clusterRepository.GetListAsync()).ToListAsync();
             query.Result = resule.Select(cluster => new ClusterDto
@@ -42,7 +42,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task GetEnvironmentClustersAsync(EnvironmentClustersQuery query)
+        public async Task EnvironmentClustersQueryHandle(EnvironmentClustersQuery query)
         {
             if (query.EnvId.HasValue)
             {

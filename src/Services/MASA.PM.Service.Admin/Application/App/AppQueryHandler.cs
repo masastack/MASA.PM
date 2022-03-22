@@ -12,7 +12,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task GetAppAsync(AppQuery query)
+        public async Task AppQueryHandle(AppQuery query)
         {
             var app = await _appRepository.GetAsync(query.AppId);
             query.Result = new AppDto
@@ -55,7 +55,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
-        public async Task GetAppListAsync(AppsQuery query)
+        public async Task AppListQueryHandle(AppsQuery query)
         {
             if (query.ProjectIds.Any())
             {

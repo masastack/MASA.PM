@@ -102,6 +102,13 @@
             return result;
         }
 
+        public Task<IQueryable<ProjectType>> GetProjectTypesAsync()
+        {
+            var result = _dbContext.ProjectTypes.AsQueryable();
+
+            return Task.FromResult(result);
+        }
+
         public async Task UpdateAsync(Project project)
         {
             if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))

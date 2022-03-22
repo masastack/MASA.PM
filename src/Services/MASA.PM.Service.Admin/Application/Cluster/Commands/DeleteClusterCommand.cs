@@ -1,7 +1,6 @@
 ﻿namespace MASA.PM.Service.Admin.Application.Cluster.Commands
 {
-    public record DeleteClusterCommand(int EnvClusterId) : Command, ITransaction
+    public record DeleteClusterCommand(int EnvClusterId) : Command
     {
-        public IUnitOfWork? UnitOfWork { get; set; }
     }
 }

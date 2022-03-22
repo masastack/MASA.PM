@@ -17,7 +17,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             var project = new Infrastructure.Entities.Project
             {
                 Identity = command.ProjectModel.Identity,
-                Type = command.ProjectModel.Type,
+                TypeId = command.ProjectModel.TypeId,
                 Name = command.ProjectModel.Name,
                 Description = command.ProjectModel.Description,
                 TeamId = command.ProjectModel.TeamId,
@@ -77,7 +77,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         }
 
         [EventHandler]
-        public async Task RemoveProjectAsync(DeleteProjectCommand command)
+        public async Task DeleteProjectAsync(DeleteProjectCommand command)
         {
             await _projectRepository.RemoveAsync(command.ProjectId);
 

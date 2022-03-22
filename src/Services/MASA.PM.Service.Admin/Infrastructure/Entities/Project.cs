@@ -11,10 +11,9 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
-        [Comment("Type")]
+        [Comment("TypeId")]
         [Range(1, int.MaxValue, ErrorMessage = "Project type is required")]
-        [Column(TypeName = "tinyint")]
-        public ProjectTypes Type { get; set; }
+        public int TypeId { get; set; }
 
         [Comment("Name")]
         [Required(ErrorMessage = "System name is required")]
