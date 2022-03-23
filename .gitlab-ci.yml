@@ -8,9 +8,9 @@ stages:
 variables:
   NEW_ALI_REGISTRY: registry.cn-hangzhou.aliyuncs.com
   NEW_IMAGE_PM: $NEW_ALI_REGISTRY/masa/masa-pm-service-admin:$CI_COMMIT_TAG
-  NEW_IMAGE_PM_DEV: $NEW_ALI_REGISTRY/masa/masa-pm-service-admin:DEV-$CI_PIPELINE_ID
+  NEW_IMAGE_PM_DEV: $NEW_ALI_REGISTRY/masa/masa-pm-service-admin:dev-$CI_PIPELINE_ID
   NEW_IMAGE_PM_UI: $NEW_ALI_REGISTRY/masa/masa-pm-ui-admin:$CI_COMMIT_TAG
-  NEW_IMAGE_PM_UI_DEV: $NEW_ALI_REGISTRY/masa/masa-pm-ui-admin:$CI_COMMIT_TAG
+  NEW_IMAGE_PM_UI_DEV: $NEW_ALI_REGISTRY/masa/masa-pm-ui-admin:dev-$CI_PIPELINE_ID
   DOCKER_PM_PATH: ./src/Services/MASA.PM.Service.Admin/Dockerfile
   DOCKER_UI_PATH: ./src/Web/Dockerfile
 
