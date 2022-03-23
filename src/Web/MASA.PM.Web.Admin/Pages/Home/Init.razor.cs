@@ -6,6 +6,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Init
     {
+        [Inject]
+        public IPopupService PopupService { get; set; } = default!;
+
+        [Inject]
+        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; } = default!;
+
         private readonly List<EnvClusterModel> _customEnv = new()
         {
             new EnvClusterModel(0, "Development", "开发环境"),
@@ -22,15 +31,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _requiredRule
         };
 
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
-        [Inject]
-        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
-
-        [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -38,7 +38,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
-                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                    //NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
             }
         }
@@ -50,6 +50,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             try
             {
                 await EnvironmentCaller.InitAsync(_initModel);
+
+                await PopupService.MessageAsync("初始化完成！", AlertTypes.Success);
+                NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
             }
             catch (Exception ex)
             {
@@ -59,10 +62,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 _initLoading = false;
             }
-
-            await PopupService.MessageAsync("初始化完成！", AlertTypes.Success);
-
-            NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
         }
 
         private void AddEnvComponent(int index)

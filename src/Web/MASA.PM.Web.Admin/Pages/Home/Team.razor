@@ -22,10 +22,8 @@
 
 <MTabsItems Value="_curTab" class="pt-6">
     <MTabItem>
-        <div>
-            <MRow NoGutters>
-
-                <div class="pr-6" style="width: calc(100% - 300px); display:block;">
+        <div class="d-flex">
+            <div class="pr-6" style="width: calc(100% - 300px); display:block;">
                     <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
                         <div class="d-flex mb-6">
                             <MTextField @bind-Value="_projectName" OnKeyDown="SearchProject" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the project name and press enter to query")">
@@ -60,7 +58,7 @@
                                             <MRow>
                                                 @foreach (var app in apps.Take(3))
                                                 {
-                                                    <MCol Lg="4" Md="6" Sm="1">
+                                                    <MCol Lg="4" Md="6" Sm="12">
                                                         <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                                     </MCol>
                                                 }
@@ -80,7 +78,7 @@
                     </div>
                 </div>
 
-                <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
+            <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
                     <div class="py-4 px-6" style="min-width:300px; display:flex; flex-direction:column; overflow: auto;">
                         <MAvatar>
                             <MImage Height="48" Width="48" Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"></MImage>
@@ -100,15 +98,11 @@
                         <MRow NoGutters Class="mt-4 text-body2">成员1</MRow>
                     </div>
                 </MNavigationDrawer>
-
-            </MRow>
         </div>
     </MTabItem>
     <MTabItem>
-        <div>
-            <MRow NoGutters>
-
-                <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
+        <div class="d-flex">
+            <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
                     <div style="min-width:300px; padding:16px 24px; display:flex; flex-direction:column; align-items:center; overflow: auto; height: calc(100vh - 218px);">
                         <div style="width:100%;" class="text-body2">
                             <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
@@ -141,7 +135,7 @@
                     </div>
                 </MNavigationDrawer>
 
-                <div class="pl-6" style="width: calc(100% - 300px); display:block;">
+            <div class="pl-6" style="width: calc(100% - 300px); display:block;">
                     <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
                         <div class="d-flex mb-6">
                             <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
@@ -156,7 +150,7 @@
                                 @{
                                     foreach (var app in _projectApps)
                                     {
-                                        <MCol Lg="4" Md="6" Sm="1">
+                                        <MCol Lg="4" Md="6" Sm="12">
                                             <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString()" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                         </MCol>
                                     }
@@ -165,8 +159,6 @@
                         </div>
                     </div>
                 </div>
-
-            </MRow>
         </div>
     </MTabItem>
 </MTabsItems>
@@ -229,13 +221,13 @@
         </MSelect>
         <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
                        Items="allEnvClusters"
-                       ItemText="@(r=>$"{r.EnvironmentName} / {r.ClusterName}")"
+                       ItemText="r=>r.EnvironmentClusterName"
                        ItemValue="r=>r.Id"
                        Outlined
                        Label="@T("Environment/Cluster")"
                        Multiple>
-            <SelectionContent Context="_context">
-                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
+            <SelectionContent>
+                <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" ClusterName="@context.Item.ClusterName" />
             </SelectionContent>
         </MAutocomplete>
         <MTextarea Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
@@ -296,7 +288,7 @@
         <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="@T("App identity")" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
         <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
                        Items="_projectEnvClusters"
-                       ItemText="@(r=>$"{r.EnvironmentName} / {r.ClusterName}")"
+                       ItemText="r=>r.EnvironmentClusterName"
                        ItemValue="r=>r.Id"
                        Outlined
                        Label="@T("Environment/Cluster")"

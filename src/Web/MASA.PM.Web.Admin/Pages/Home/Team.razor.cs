@@ -3,7 +3,22 @@
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team : ProCompontentBase
-    {
+    {     
+        [Inject]
+        public IPopupService PopupService { get; set; } = default!;
+
+        [Inject]
+        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
+
+        [Inject]
+        public ClusterCaller ClusterCaller { get; set; } = default!;
+
+        [Inject]
+        public ProjectCaller ProjectCaller { get; set; } = default!;
+
+        [Inject]
+        public AppCaller AppCaller { get; set; } = default!;
+
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
         private List<ProjectDto> _projects = new();
@@ -25,21 +40,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectTypesDto> _projectTypes = new();
 
         public Guid TeamId { get; set; } = Guid.Empty;
-
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
-        [Inject]
-        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
-
-        [Inject]
-        public ClusterCaller ClusterCaller { get; set; } = default!;
-
-        [Inject]
-        public ProjectCaller ProjectCaller { get; set; } = default!;
-
-        [Inject]
-        public AppCaller AppCaller { get; set; } = default!;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

@@ -7,7 +7,22 @@ using MASA.PM.Contracts.Admin.Dto;
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Landscape
-    {
+    {        
+        [Inject]
+        public IPopupService PopupService { get; set; } = default!;
+
+        [Inject]
+        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
+
+        [Inject]
+        public ClusterCaller ClusterCaller { get; set; } = default!;
+
+        [Inject]
+        public ProjectCaller ProjectCaller { get; set; } = default!;
+
+        [Inject]
+        public AppCaller AppCaller { get; set; } = default!;
+
         private StringNumber _selectedEnvId = 0;
         private StringNumber _selectEnvClusterId = 0;
         private int _selectProjectId;
@@ -35,21 +50,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _relationAppVisible;
         private List<int> _disableRelationAppEnvCluster = new();
         private List<ProjectTypesDto> _projectTypes = new();
-
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
-        [Inject]
-        public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
-
-        [Inject]
-        public ClusterCaller ClusterCaller { get; set; } = default!;
-
-        [Inject]
-        public ProjectCaller ProjectCaller { get; set; } = default!;
-
-        [Inject]
-        public AppCaller AppCaller { get; set; } = default!;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
