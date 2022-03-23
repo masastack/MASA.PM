@@ -344,6 +344,8 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     b.HasIndex(new[] { "Name", "IsDeleted" }, "IX_Name");
 
+                    b.HasIndex(new[] { "TypeCode", "IsDeleted" }, "IX_TypeCode");
+
                     b.ToTable("ProjectTypes");
                 });
 
@@ -395,9 +397,9 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("TeamId");
 
-                    b.Property<int>("TypeId")
+                    b.Property<int>("LabelId")
                         .HasColumnType("int")
-                        .HasComment("TypeId");
+                        .HasComment("LabelId");
 
                     b.HasKey("Id");
 

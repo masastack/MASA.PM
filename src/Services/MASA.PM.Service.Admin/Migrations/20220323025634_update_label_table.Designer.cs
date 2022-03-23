@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MASA.PM.Service.Admin.Migrations
 {
     [DbContext(typeof(PMDbContext))]
-    [Migration("20220322100416_update_label_table")]
+    [Migration("20220323025634_update_label_table")]
     partial class update_label_table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
