@@ -1,6 +1,6 @@
 ﻿namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
-    [Table("ProjectTypes")]
+    [Table("Labels")]
     [Index(nameof(Name), nameof(IsDeleted), Name = "IX_Name")]
     [Index(nameof(TypeCode), nameof(IsDeleted), Name = "IX_TypeCode")]
     public class Label : BaseEntity<int, Guid>
@@ -12,12 +12,17 @@
 
         [Comment("TypeCode")]
         [Required(ErrorMessage = "TypeCode is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "TypeCode length range is [2-100]")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "TypeCode length range is [0-255]")]
         public string TypeCode { get; set; } = "";
 
         [Comment("TypeName")]
         [Required(ErrorMessage = "TypeName is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "TypeName length range is [2-100]")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "TypeName length range is [0-255]")]
         public string TypeName { get; set; } = "";
+
+        [Comment("Description")]
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Description length range is [0-255]")]
+        public string Description { get; set; } = "";
     }
 }
