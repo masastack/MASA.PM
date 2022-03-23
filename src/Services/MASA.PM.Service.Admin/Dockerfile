@@ -1,23 +1,12 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_sdk:6.0.100 AS publish
 WORKDIR /src
-COPY ["src/Services/MASA.PM.Service.Admin/MASA.PM.Service.Admin.csproj", "src/Services/MASA.PM.Service.Admin/"]
-COPY ["src/Contracts/MASA.PM.Contracts.Environment/MASA.PM.Contracts.Base.csproj", "src/Contracts/MASA.PM.Contracts.Environment/"]
-RUN dotnet restore "src/Services/MASA.PM.Service.Admin/MASA.PM.Service.Admin.csproj"
 COPY . .
-WORKDIR "/src/src/Services/MASA.PM.Service.Admin"
-RUN dotnet build "MASA.PM.Service.Admin.csproj" -c Release -o /app/build
+ENV CSPROJ="src/Services/MASA.PM.Service.Admin/MASA.PM.Service.Admin.csproj"
+RUN dotnet restore $CSPROJ && dotnet publish $CSPROJ -c Release -o /app/publish
 
-FROM build AS publish
-RUN dotnet publish "MASA.PM.Service.Admin.csproj" -c Release -o /app/publish
-
-FROM base AS final
+FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_aspnet:6.0.0
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MASA.PM.Service.Admin.dll"]
+ENV ASPNETCORE_URLS=http://0.0.0.0:80
+EXPOSE 80
+ENTRYPOINT ["dotnet","MASA.PM.Service.Admin.dll"]
