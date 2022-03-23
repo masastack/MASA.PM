@@ -19,6 +19,8 @@
                 new Label
                 {
                     Name="Basic Ability",
+                    TypeCode ="ProjectType",
+                    TypeName ="项目类型",
                     Creator = MasaUser.UserId,
                     Modifier = MasaUser.UserId,
                     CreationTime = now,
@@ -27,6 +29,8 @@
                 new Label
                 {
                     Name="Ops Ability",
+                    TypeCode ="ProjectType",
+                    TypeName ="项目类型",
                     Creator = MasaUser.UserId,
                     Modifier = MasaUser.UserId,
                     CreationTime = now,
@@ -35,6 +39,8 @@
                 new Label
                 {
                     Name="Data Factory",
+                    TypeCode ="ProjectType",
+                    TypeName ="项目类型",
                     Creator = MasaUser.UserId,
                     Modifier = MasaUser.UserId,
                     CreationTime = now,
