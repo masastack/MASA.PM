@@ -10,6 +10,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     {
         private string _name = default!;
 
+        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "App name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App name length range is [2-100]")]
         public string Name
@@ -17,7 +18,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             get => _name;
             set => _name = value.Trim();
         }
-
+        
         //[MinCount(1, ErrorMessage = "EnvironmentClusterId is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new();
 
@@ -31,6 +32,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         [NonDefault]
         public ServiceTypes ServiceType { get; set; }
 
+        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "Identity is required ")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Identity length range is [2-100]")]
         public string Identity { get; set; } = "";

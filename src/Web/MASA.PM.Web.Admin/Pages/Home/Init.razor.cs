@@ -38,7 +38,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
-                    //NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
             }
         }
@@ -49,6 +49,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             try
             {
+                _initModel.Environments = _customEnv.Select(env => new AddEnvironmentDto
+                {
+                    Name = env.Name,
+                    Description = env.Description
+                }).ToList();
                 await EnvironmentCaller.InitAsync(_initModel);
 
                 await PopupService.MessageAsync("初始化完成！", AlertTypes.Success);
