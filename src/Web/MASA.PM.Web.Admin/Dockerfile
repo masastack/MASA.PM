@@ -1,7 +1,7 @@
 FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_sdk:6.0.100 AS publish
 WORKDIR /src
 COPY . .
-ENV CSPROJ="src/UI/MASA.PM.UI.Admin/MASA.PM.UI.Admin.csproj"
+ENV CSPROJ="src/Web/MASA.PM.Web.Admin/MASA.PM.Web.Admin.csproj"
 RUN dotnet restore $CSPROJ && dotnet publish $CSPROJ -c Release -o /app/publish
 
 FROM registry.cn-hangzhou.aliyuncs.com/masa/dotnet_aspnet:6.0.0
