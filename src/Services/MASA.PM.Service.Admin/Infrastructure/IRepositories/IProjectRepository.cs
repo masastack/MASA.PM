@@ -18,7 +18,7 @@
 
         Task<List<int>> GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId);
 
-        Task<IQueryable<Label>> GetProjectTypesAsync();
+        Task<List<Label>> GetProjectTypesAsync();
 
         Task UpdateAsync(Project cluster);
 

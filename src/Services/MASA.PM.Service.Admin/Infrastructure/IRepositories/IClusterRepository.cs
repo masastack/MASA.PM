@@ -6,7 +6,7 @@
 
         Task AddEnvironmentClusters(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<IQueryable<Cluster>> GetListAsync();
+        Task<List<Cluster>> GetListAsync();
 
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId);
 

@@ -78,11 +78,11 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var result = await _projectRepository.GetProjectTypesAsync();
 
-            query.Result = await result.Select(projectType => new ProjectTypesDto
+            query.Result = result.Select(projectType => new ProjectTypesDto
             {
                 Id = projectType.Id,
                 Name = projectType.Name
-            }).ToListAsync();
+            }).ToList();
         }
     }
 }

@@ -33,14 +33,15 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task GetClusterListAsync(ClustersQuery query)
         {
-            var result = await (await _clusterRepository.GetListAsync())
-                .OrderByDescending(cluster=>cluster.ModificationTime)
-                .ToListAsync();
-            query.Result = result.Select(cluster => new ClusterDto
-            {
-                Id = cluster.Id,
-                Name = cluster.Name,
-            }).ToList();
+            var result = (await _clusterRepository.GetListAsync())
+                .OrderByDescending(cluster => cluster.ModificationTime)
+                .Select(cluster => new ClusterDto
+                {
+                    Id = cluster.Id,
+                    Name = cluster.Name,
+                }).ToList();
+
+            query.Result = result;
         }
 
         [EventHandler]
@@ -50,14 +51,14 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             {
                 var envCluster = await _clusterRepository.GetEnvironmentClustersByEnvIdAsync(query.EnvId.Value);
 
-                var cluster = await (await _clusterRepository.GetListAsync())
+                var cluster = (await _clusterRepository.GetListAsync())
                     .Where(cluster => envCluster.Select(ec => ec.ClusterId).Contains(cluster.Id))
                     .OrderByDescending(cluster => cluster.ModificationTime)
                     .Select(cluster => new Infrastructure.Entities.Cluster
                     {
                         Id = cluster.Id,
                         Name = cluster.Name
-                    }).ToListAsync();
+                    }).ToList();
 
                 var result = from c in cluster
                              join ec in envCluster on c.Id equals ec.ClusterId

@@ -8,7 +8,7 @@
 
         Task AddEnvironmentClustersAsync(IEnumerable<EnvironmentCluster> environmentClusters);
 
-        Task<IQueryable<Entities.Environment>> GetListAsync();
+        Task<List<Entities.Environment>> GetListAsync();
 
         Task UpdateAsync(UpdateEnvironmentDto model);
 

@@ -49,11 +49,11 @@
             }
         }
 
-        public Task<IQueryable<Entities.Environment>> GetListAsync()
+        public async Task<List<Entities.Environment>> GetListAsync()
         {
-            var result = _dbContext.Environments.AsQueryable();
+            var result =await _dbContext.Environments.ToListAsync();
 
-            return Task.FromResult(result);
+            return result;
         }
 
         public async Task<Entities.Environment> GetAsync(int Id)
