@@ -408,7 +408,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private void RelationAppSelectChange(AppDto model)
         {
-            _appDetail = _apps.First(app => app.Id == model.Id);
+            _appDetail = _allApps.First(app => app.Id == model.Id);
             _selectAppType = (int)model.Type;
             _selectAppServiceType = (int)model.ServiceType;
             _addRelationAppModel.AppId = model.Id;
