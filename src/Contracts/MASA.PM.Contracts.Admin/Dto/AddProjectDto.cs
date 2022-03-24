@@ -11,6 +11,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     {
         private string _name = default!;
 
+        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "Project name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Project name length range is [2-100]")]
         public string Name
@@ -19,6 +20,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value.Trim();
         }
 
+        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "Project identity is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";

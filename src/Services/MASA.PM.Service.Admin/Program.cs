@@ -1,4 +1,6 @@
 ﻿
+using MASA.PM.Service.Admin.Migrations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -63,18 +65,20 @@ var app = builder.Services
                .UseUoW<PMDbContext>(dbOptions =>
                {
                    dbOptions.UseSqlServer(connectionString);
-                   dbOptions.UseSoftDelete(builder.Services);//Start soft delete
+                   dbOptions.UseSoftDelete();//Start soft delete
                })
                .UseEventLog<PMDbContext>();
     })
     .AddServices(builder);
 
+//SeedData
+await app.Seed();
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseRouting();
 
 app.UseAuthentication();

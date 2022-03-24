@@ -10,6 +10,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     {
         private string _name = default!;
 
+        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "Cluster name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Cluster name length range is [2-100]")]
         public string Name

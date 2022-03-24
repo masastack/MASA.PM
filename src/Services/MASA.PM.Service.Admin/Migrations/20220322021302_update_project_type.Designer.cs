@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MASA.PM.Service.Admin.Migrations
 {
     [DbContext(typeof(PMDbContext))]
-    [Migration("20220322093709_add_label_table")]
-    partial class add_label_table
+    [Migration("20220322021302_update_project_type")]
+    partial class update_project_type
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -292,59 +292,6 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.ToTable("EnvironmentClusterProjectApps");
                 });
 
-            modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.Label", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSDATETIME()");
-
-                    b.Property<Guid>("Modifier")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasComment("Name");
-
-                    b.Property<string>("TypeCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasComment("TypeCode");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasComment("TypeName");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Name", "IsDeleted" }, "IX_Name");
-
-                    b.HasIndex(new[] { "TypeCode", "IsDeleted" }, "IX_TypeCode");
-
-                    b.ToTable("ProjectTypes");
-                });
-
             modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -375,10 +322,6 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LabelId")
-                        .HasColumnType("int")
-                        .HasComment("LabelId");
-
                     b.Property<DateTime>("ModificationTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -397,9 +340,52 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("TeamId");
 
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int")
+                        .HasComment("TypeId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.ProjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSDATETIME()");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasComment("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "Name", "IsDeleted" }, "IX_Name");
+
+                    b.ToTable("ProjectTypes");
                 });
 #pragma warning restore 612, 618
         }

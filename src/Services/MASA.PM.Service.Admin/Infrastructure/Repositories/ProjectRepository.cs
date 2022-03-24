@@ -104,7 +104,7 @@
 
         public Task<IQueryable<Label>> GetProjectTypesAsync()
         {
-            var result = _dbContext.ProjectTypes.AsQueryable();
+            var result = _dbContext.Labels.AsQueryable();
 
             return Task.FromResult(result);
         }

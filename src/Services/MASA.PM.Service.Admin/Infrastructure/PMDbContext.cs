@@ -52,6 +52,6 @@
 
         public DbSet<App> Apps { get; set; } = default!;
 
-        public DbSet<Label> ProjectTypes { get; set; } = default!;
+        public DbSet<Label> Labels { get; set; } = default!;
     }
 }

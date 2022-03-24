@@ -16,7 +16,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         public int LabelId { get; set; }
 
         [Comment("Name")]
-        [Required(ErrorMessage = "System name is required")]
+        [Required(ErrorMessage = "Project name is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "System name length range is [2-100]")]
         public string Name { get; set; } = "";
 

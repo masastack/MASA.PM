@@ -4,6 +4,7 @@ using MASA.PM.Service.Admin.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MASA.PM.Service.Admin.Migrations
 {
     [DbContext(typeof(PMDbContext))]
-    partial class PMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220323025634_update_label_table")]
+    partial class update_label_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,7 +348,7 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     b.HasIndex(new[] { "TypeCode", "IsDeleted" }, "IX_TypeCode");
 
-                    b.ToTable("ProjectTypes");
+                    b.ToTable("Labels");
                 });
 
             modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.Project", b =>
@@ -379,6 +381,10 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LabelId")
+                        .HasColumnType("int")
+                        .HasComment("LabelId");
+
                     b.Property<DateTime>("ModificationTime")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -396,10 +402,6 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("TeamId");
-
-                    b.Property<int>("LabelId")
-                        .HasColumnType("int")
-                        .HasComment("LabelId");
 
                     b.HasKey("Id");
 
