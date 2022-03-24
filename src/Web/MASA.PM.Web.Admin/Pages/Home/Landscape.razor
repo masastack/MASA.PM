@@ -261,7 +261,7 @@
                 }
             </ItemContent>
         </MAutocomplete>
-        <MTextField Disabled="@(_projectFormModel.HasValue)" Outlined Label="@T("Project identity")" @bind-Value="_projectFormModel.Data.Identity"></MTextField>
+        <MTextField Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></MTextField>
         <MSelect @bind-Value="_projectFormModel.Data.LabelId"
                  Disabled="@(_projectFormModel.HasValue)"
                  Items="_projectTypes"
@@ -336,7 +336,7 @@
                 <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
             </Element>
         </FadeTransition>
-        <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="@T("App identity")" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
+        <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
         <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
                        Items="_projectEnvClusters"
                        ItemText="r=>r.EnvironmentClusterName"
@@ -429,7 +429,7 @@
                 <MTextField Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></MTextField>
             </Element>
         </FadeTransition>
-        <MTextField Disabled Outlined Label="@T("App identity")" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></MTextField>
+        <MTextField Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></MTextField>
         <MTextarea Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
     </ChildContent>
     <ActionsContent>
