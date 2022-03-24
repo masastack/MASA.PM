@@ -119,6 +119,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await ProjectCaller.UpdateAsync(_projectFormModel.Data);
             }
 
+            _projectDetail = await ProjectCaller.GetAsync(_projectFormModel.Data.ProjectId);
             _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
             _projectFormModel.Hide();
         }

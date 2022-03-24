@@ -43,11 +43,9 @@
             return result;
         }
 
-        public Task<IQueryable<Cluster>> GetListAsync()
+        public async Task<List<Cluster>> GetListAsync()
         {
-            var result = _dbContext.Clusters.AsQueryable();
-
-            return Task.FromResult(result);
+            return await _dbContext.Clusters.ToListAsync();
         }
 
         public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId)

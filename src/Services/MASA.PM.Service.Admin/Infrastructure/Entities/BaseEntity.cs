@@ -16,7 +16,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Required]
         public TUserKey Creator { get; set; } = default!;
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime ModificationTime { get; set; }
 
         [Required]

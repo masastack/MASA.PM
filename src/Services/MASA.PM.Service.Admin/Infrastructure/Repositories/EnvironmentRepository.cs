@@ -49,11 +49,11 @@
             }
         }
 
-        public Task<IQueryable<Entities.Environment>> GetListAsync()
+        public async Task<List<Entities.Environment>> GetListAsync()
         {
-            var result = _dbContext.Environments.AsQueryable();
+            var result =await _dbContext.Environments.ToListAsync();
 
-            return Task.FromResult(result);
+            return result;
         }
 
         public async Task<Entities.Environment> GetAsync(int Id)
@@ -80,7 +80,8 @@
                 Id = model.EnvironmentId,
                 Name = model.Name,
                 Description = model.Description,
-                Modifier = MasaUser.UserId
+                Modifier = MasaUser.UserId,
+                ModificationTime = DateTime.Now
             });
 
             var oldClusterIds = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == model.EnvironmentId).Select(e => e.ClusterId).ToListAsync();

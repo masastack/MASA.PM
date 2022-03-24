@@ -102,11 +102,11 @@
             return result;
         }
 
-        public Task<IQueryable<Label>> GetProjectTypesAsync()
+        public async Task<List<Label>> GetProjectTypesAsync()
         {
-            var result = _dbContext.Labels.AsQueryable();
+            var result = await _dbContext.Labels.ToListAsync();
 
-            return Task.FromResult(result);
+            return result;
         }
 
         public async Task UpdateAsync(Project project)

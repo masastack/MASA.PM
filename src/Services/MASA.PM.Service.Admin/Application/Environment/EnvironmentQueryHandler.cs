@@ -33,7 +33,7 @@
         [EventHandler]
         public async Task GetEnvironmentListAsync(EnvironmentsQuery query)
         {
-            var envs = await (await _environmentRepository.GetListAsync()).ToListAsync();
+            var envs = await _environmentRepository.GetListAsync();
             query.Result = envs.Select(env => new EnvironmentDto
             {
                 Id = env.Id,

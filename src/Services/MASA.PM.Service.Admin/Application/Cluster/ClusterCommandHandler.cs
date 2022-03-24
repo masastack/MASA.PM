@@ -44,7 +44,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 Id = updateClusterModel.ClusterId,
                 Name = updateClusterModel.Name,
                 Description = updateClusterModel.Description,
-                Modifier = MasaUser.UserId
+                Modifier = MasaUser.UserId,
+                ModificationTime = DateTime.Now
             });
 
             var oldEnvironmentIds = (

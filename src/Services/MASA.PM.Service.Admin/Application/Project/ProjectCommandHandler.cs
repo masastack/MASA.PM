@@ -36,14 +36,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task UpdateProjectAsync(UpdateProjectCommand command)
         {
-            var project = new Infrastructure.Entities.Project
-            {
-                Id = command.ProjectModel.ProjectId,
-                Name = command.ProjectModel.Name,
-                Description = command.ProjectModel.Description,
-                TeamId = command.ProjectModel.TeamId,
-                Modifier = MasaUser.UserId
-            };
+            var project = await _projectRepository.GetAsync(command.ProjectModel.ProjectId);
+
+            project.Name = command.ProjectModel.Name;
+            project.Description = command.ProjectModel.Description;
+            project.TeamId = command.ProjectModel.TeamId;
+            project.Modifier = MasaUser.UserId;
+            project.ModificationTime = DateTime.Now;
+
 
             await _projectRepository.UpdateAsync(project);
 
