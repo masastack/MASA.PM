@@ -420,6 +420,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task SubmitRelationAppAsync()
         {
+            _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id)).ToList();
             await AppCaller.AddRelationAppAsync(_addRelationAppModel);
             _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
             RelationAppHide();
@@ -428,6 +429,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private void RelationAppHide()
         {
             _disableRelationAppEnvCluster = new();
+            _appDetail = new();
             _addRelationAppModel = new();
             _selectAppType = 0;
             _selectAppServiceType = 0;
