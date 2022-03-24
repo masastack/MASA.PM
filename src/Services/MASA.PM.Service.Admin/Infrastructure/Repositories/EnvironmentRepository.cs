@@ -80,7 +80,8 @@
                 Id = model.EnvironmentId,
                 Name = model.Name,
                 Description = model.Description,
-                Modifier = MasaUser.UserId
+                Modifier = MasaUser.UserId,
+                ModificationTime = DateTime.Now
             });
 
             var oldClusterIds = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == model.EnvironmentId).Select(e => e.ClusterId).ToListAsync();

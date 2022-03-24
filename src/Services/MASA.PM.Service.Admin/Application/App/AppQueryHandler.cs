@@ -101,7 +101,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     ModificationTime = appEnvironmentCluster.app.ModificationTime,
                     Modifier = appEnvironmentCluster.app.Modifier,
                     EnvironmentClusters = appEnvironmentCluster.environmentClusters.ToList()
-                }).ToList();
+                }).OrderByDescending(app => app.ModificationTime)
+                .ToList();
             }
             else
             {
@@ -120,7 +121,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     CreationTime = app.CreationTime,
                     ModificationTime = app.ModificationTime,
                     Modifier = app.Modifier
-                }).ToList();
+                }).OrderByDescending(app => app.ModificationTime)
+                .ToList();
             }
         }
     }

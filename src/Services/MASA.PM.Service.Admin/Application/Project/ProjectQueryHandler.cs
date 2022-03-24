@@ -48,7 +48,9 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
-                }).ToList();
+                })
+                .OrderByDescending(project => project.ModificationTime)
+                .ToList();
             }
             else if (query.TeamId.HasValue)
             {
@@ -61,7 +63,9 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
-                }).ToList();
+                })
+                .OrderByDescending(project => project.ModificationTime)
+                .ToList();
             }
             else
             {

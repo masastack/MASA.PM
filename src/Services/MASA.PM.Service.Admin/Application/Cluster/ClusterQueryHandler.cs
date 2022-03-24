@@ -33,8 +33,10 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         [EventHandler]
         public async Task GetClusterListAsync(ClustersQuery query)
         {
-            var resule = await (await _clusterRepository.GetListAsync()).ToListAsync();
-            query.Result = resule.Select(cluster => new ClusterDto
+            var result = await (await _clusterRepository.GetListAsync())
+                .OrderByDescending(cluster=>cluster.ModificationTime)
+                .ToListAsync();
+            query.Result = result.Select(cluster => new ClusterDto
             {
                 Id = cluster.Id,
                 Name = cluster.Name,

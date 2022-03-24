@@ -42,7 +42,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Name = command.ProjectModel.Name,
                 Description = command.ProjectModel.Description,
                 TeamId = command.ProjectModel.TeamId,
-                Modifier = MasaUser.UserId
+                Modifier = MasaUser.UserId,
+                ModificationTime = DateTime.Now
             };
 
             await _projectRepository.UpdateAsync(project);
