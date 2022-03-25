@@ -1,4 +1,4 @@
-
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Masa.Utils.Caller.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 builder.Services.AddMasaBlazorExperimentalComponents();
 builder.Services.AddMasaBlazor(builder =>
