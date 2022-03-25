@@ -84,7 +84,7 @@ deploy-prd:
   before_script:
     - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
   only:
-    - main  
+    - tags
   script:
     - echo $KUBE_CONFIG_BLAZOR_PRD | base64 -d > ./config
     - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM -n masa-pm
