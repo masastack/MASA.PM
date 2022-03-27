@@ -19,6 +19,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; } = default!;
+
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
         private List<ProjectDto> _projects = new();
@@ -45,6 +48,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
+                var envs = await EnvironmentCaller.GetListAsync();
+                if (envs.Count <= 0)
+                {
+                    NavigationManager.NavigateTo("init", true);
+                }
+
                 await InitDataAsync();
                 StateHasChanged();
             }
@@ -119,7 +128,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await ProjectCaller.UpdateAsync(_projectFormModel.Data);
             }
 
-            _projectDetail = await ProjectCaller.GetAsync(_projectFormModel.Data.ProjectId);
             _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
             _projectFormModel.Hide();
         }
