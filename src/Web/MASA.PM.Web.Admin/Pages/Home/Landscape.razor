@@ -43,8 +43,8 @@
                     @foreach (var cluster in _clusters)
                     {
                         StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
-                        <MTab Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
-                            @cluster.Name
+                        <MTab Style="max-width:150px;" Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
+                            <div class="text-overflow">@cluster.Name</div>
                             @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                             {
                                 <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
@@ -72,7 +72,7 @@
                                         @project.Name
                                         <span class="ml-2 text-caption">|</span>
                                         <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                        <div class="text-caption" style="padding:0">@project.Description</div>
+                                        <div class="text-caption" style="padding:0">@project.Identity</div>
                                     </div>
                                     <MSpacer />
                                     <div style="display:flex;align-items:center;">
@@ -229,11 +229,10 @@
                        Color="blue-grey lighten-2"
                        Label="@T("Project`s team")"
                        ItemText="r=>r.Name"
-                       ItemValue="r=>r.Name"
-                       Multiple>
+                       ItemValue="r=>r.Name">
             <SelectionContent Context="data">
                 <MChip Small Close
-                       OnCloseClick="()=>Remove(data.Item)">
+                       OnCloseClick="()=>Remove()">
                     <MAvatar Left>
                         <MImage Src="@data.Item.Avatar"></MImage>
                     </MAvatar>
@@ -440,29 +439,29 @@
 </FormModal>
 
 @code {
-    private List<string> _friends = new()
-    {
-        "Sandra Adams",
-        "Britta Holt"
-    };
+    private string _friends = "Sandra Adams";
+    private string _name = "Midnight Crew";
 
     public class Person
     {
-        public Guid Id => Guid.NewGuid();
+        public string Header { get; set; }
 
-        public string Header { get; set; } = "";
+        public string Name { get; set; }
 
-        public string Name { get; set; } = "";
+        public string Group { get; set; }
 
-        public string Group { get; set; } = "";
-
-        public string Avatar { get; set; } = "";
+        public string Avatar { get; set; }
 
         public bool Divider { get; set; }
     }
 
     private List<Person> _people = new List<Person>
     {
+        new Person
+        {
+            Header="Group 1",
+            Name="Group 1"
+        },
         new Person
         {
             Name="Sandra Adams",
@@ -491,15 +490,41 @@
         {
             Divider=true,
             Name="Group 1"
+        },
+        new Person
+        {
+            Header="Group 2",
+            Name="Group 1"
+        },
+        new Person
+        {
+            Name="Britta Holt",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/4.png"
+        },
+        new Person
+        {
+            Name="Jane Smith ",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/5.png"
+        },
+        new Person
+        {
+            Name="John Smith",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
+        },
+        new Person
+        {
+            Name="Sandra Williams",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
         }
     };
+    private string _title = "The summer breeze";
 
-    public void Remove(Person item)
+    public void Remove()
     {
-        var index = _friends.IndexOf(item.Name);
-        if (index >= 0)
-        {
-            _friends.RemoveAt(index);
-        }
+        _friends = "";
     }
 }

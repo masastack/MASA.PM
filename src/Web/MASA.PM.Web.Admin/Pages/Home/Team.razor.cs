@@ -142,6 +142,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects.Remove(deleteProject);
 
                 _projectFormModel.Hide();
+
+                _curTab = 0;
             });
         }
 

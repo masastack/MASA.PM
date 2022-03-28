@@ -8,7 +8,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 {
     public class AddEnvironmentWhitClustersDto : AddEnvironmentDto
     {
-        [Required(ErrorMessage = "Related cluster is required")]
+        [MinCount(1, ErrorMessage = "Related cluster is required")]
         public List<int> ClusterIds { get; set; } = default!;
 
         public AddEnvironmentWhitClustersDto()

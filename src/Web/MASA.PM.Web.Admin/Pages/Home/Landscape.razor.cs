@@ -234,7 +234,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 newClusterId = _clusterFormModel.Data.ClusterId;
             }
 
-            await GetClustersByEnvIdAsync(newClusterId);
+            await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
             _clusterFormModel.Hide();
         }
 

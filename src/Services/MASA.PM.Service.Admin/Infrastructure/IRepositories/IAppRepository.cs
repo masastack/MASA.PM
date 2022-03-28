@@ -28,6 +28,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task RemoveEnvironmentClusterProjectApps(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
 
-        Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds);
+        Task IsExistedApp(string name, string identity, List<int> environmentClusterProjectIds, params int[] excludeAppIds);
     }
 }
