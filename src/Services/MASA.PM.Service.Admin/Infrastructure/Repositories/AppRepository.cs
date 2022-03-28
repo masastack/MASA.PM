@@ -119,25 +119,25 @@
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task IsExistedAppName(string name, List<int> environmentClusterProjectIds, params int[] excludeAppIds)
+        public async Task IsExistedApp(string name, string identity, List<int> environmentClusterProjectIds, params int[] excludeAppIds)
         {
-            var result = await (from project in _dbContext.Projects.Where(project => project.Name.ToLower() == name.ToLower())
+            var result = await (from project in _dbContext.Projects
                                 join ecp in _dbContext.EnvironmentClusterProjects on project.Id equals ecp.ProjectId
-                                join ec in _dbContext.EnvironmentClusters on ecp.EnvironmentClusterId equals ec.Id
-                                join e in _dbContext.Environments on ec.EnvironmentId equals e.Id
-                                join c in _dbContext.Clusters on ec.ClusterId equals c.Id
+                                join envCluster in _dbContext.EnvironmentClusters on ecp.EnvironmentClusterId equals envCluster.Id
+                                join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
+                                join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
                                 join ecpa in _dbContext.EnvironmentClusterProjectApps on ecp.Id equals ecpa.EnvironmentClusterProjectId
-                                join app in _dbContext.Apps.Where(a => !excludeAppIds.Contains(a.Id)) on ecpa.AppId equals app.Id
+                                join app in _dbContext.Apps.Where(app => app.Name.ToLower() == name.ToLower() || app.Identity.ToLower() == identity && !excludeAppIds.Contains(app.Id)) on ecpa.AppId equals app.Id
                                 select new
                                 {
-                                    EnvironmentName = e.Name,
-                                    ClusterName = c.Name,
+                                    EnvironmentName = env.Name,
+                                    ClusterName = cluster.Name,
                                     ProjedctName = project.Name
                                 }).FirstOrDefaultAsync();
 
             if (result != null)
             {
-                throw new UserFriendlyException($"应用名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+                throw new UserFriendlyException($"应用名或ID已存在！");
             }
         }
     }

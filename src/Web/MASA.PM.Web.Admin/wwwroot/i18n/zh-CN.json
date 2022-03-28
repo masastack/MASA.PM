@@ -41,5 +41,9 @@
   "Please enter the project name and press enter to query": "请输入项目名称，按回车进行查询",
   "Team name": "团队名称",
   "Participate team": "参与团队",
-  "Please enter the app name and press enter to query": "请输入应用名称，按回车进行查询"
+  "Please enter the app name and press enter to query": "请输入应用名称，按回车进行查询",
+  "App": "应用",
+  "Project": "项目",
+  "Admin": "管理员",
+  "Members": "成员"
 }

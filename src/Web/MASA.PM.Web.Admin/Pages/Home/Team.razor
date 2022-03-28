@@ -8,14 +8,14 @@
         <ChildContent>
             <span class="mtab-tab-line mtab-tab-linear-primary"></span>
             <span class="rounded-circle mtab-tab-indicator mtab-tab-indicator-primary"></span>
-            <span class="mtab-tab-title">Card</span>
+            <span class="mtab-tab-title">@T("Project")</span>
         </ChildContent>
     </MTab>
     <MTab class="text-capitalize pa-0" Disabled="_teamDetailDisabled">
         <ChildContent>
             <span class="mtab-tab-line @(_curTab.ToInt32()>0?"mtab-tab-linear-primary":"mtab-tab-linear-neutral")"></span>
             <span class="rounded-circle mtab-tab-indicator @(_curTab.ToInt32()>0?"mtab-tab-indicator-primary":"mtab-tab-indicator-neutral")"></span>
-            <span class="mtab-tab-title">Address</span>
+            <span class="mtab-tab-title">@T("App")</span>
         </ChildContent>
     </MTab>
 </MTabs>
@@ -45,7 +45,7 @@
                                                     @project.Name
                                                     <span class="ml-2 text-caption">|</span>
                                                     <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                                    <div class="text-caption" style="padding:0">@project.Description</div>
+                                                    <div class="text-caption" style="padding:0">@project.Identity</div>
                                                 </div>
                                                 <MSpacer />
                                                 <div style="display:flex;align-items:center;">
@@ -92,9 +92,9 @@
                         <MRow NoGutters Class="mt-4 text-body2">
                             This is your team's workspace. Invite members to your team to start collaborating. Click here to edit this description.Professional team
                         </MRow>
-                        <MRow NoGutters Class="text-caption mt-6">管理员</MRow>
+                        <MRow NoGutters Class="text-caption mt-6">@T("Admin")</MRow>
                         <MRow NoGutters Class="mt-4 text-body2">管理员1</MRow>
-                        <MRow NoGutters Class="text-caption mt-6">成员</MRow>
+                        <MRow NoGutters Class="text-caption mt-6">@T("Members")</MRow>
                         <MRow NoGutters Class="mt-4 text-body2">成员1</MRow>
                     </div>
                 </MNavigationDrawer>
@@ -151,7 +151,7 @@
                                     foreach (var app in _projectApps)
                                     {
                                         <MCol Lg="4" Md="6" Sm="12">
-                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString()" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                         </MCol>
                                     }
                                 }
@@ -178,11 +178,10 @@
                        Color="blue-grey lighten-2"
                        Label="@T("Project`s team")"
                        ItemText="r=>r.Name"
-                       ItemValue="r=>r.Name"
-                       Multiple>
+                       ItemValue="r=>r.Name">
             <SelectionContent Context="data">
                 <MChip Small Close
-                       OnCloseClick="()=>Remove(data.Item)">
+                       OnCloseClick="()=>Remove()">
                     <MAvatar Left>
                         <MImage Src="@data.Item.Avatar"></MImage>
                     </MAvatar>
@@ -322,66 +321,92 @@
 
 @code {
     //team
-    private List<string> _friends = new()
-        {
-            "Sandra Adams",
-            "Britta Holt"
-        };
+        private string _friends = "Sandra Adams";
+    private string _name = "Midnight Crew";
 
     public class Person
     {
-        public Guid Id => Guid.NewGuid();
+        public string Header { get; set; }
 
-        public string Header { get; set; } = "";
+        public string Name { get; set; }
 
-        public string Name { get; set; } = "";
+        public string Group { get; set; }
 
-        public string Group { get; set; } = "";
-
-        public string Avatar { get; set; } = "";
+        public string Avatar { get; set; }
 
         public bool Divider { get; set; }
     }
 
     private List<Person> _people = new List<Person>
-        {
-            new Person
-            {
-                Name="Sandra Adams",
-                Group="Group 1",
-                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
-            },
-            new Person
-            {
-                Name="Ali Connors",
-                Group="Group 1",
-                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
-            },
-            new Person
-            {
-                Name="Trevor Hansen",
-                Group="Group 1",
-                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
-            },
-            new Person
-            {
-                Name="Tucker Smith",
-                Group="Group 1",
-                Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
-            },
-            new Person
-            {
-                Divider=true,
-                Name="Group 1"
-            }
-        };
-
-    public void Remove(Person item)
     {
-        var index = _friends.IndexOf(item.Name);
-        if (index >= 0)
+        new Person
         {
-            _friends.RemoveAt(index);
+            Header="Group 1",
+            Name="Group 1"
+        },
+        new Person
+        {
+            Name="Sandra Adams",
+            Group="Group 1",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
+        },
+        new Person
+        {
+            Name="Ali Connors",
+            Group="Group 1",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+        },
+        new Person
+        {
+            Name="Trevor Hansen",
+            Group="Group 1",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
+        },
+        new Person
+        {
+            Name="Tucker Smith",
+            Group="Group 1",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/2.png"
+        },
+        new Person
+        {
+            Divider=true,
+            Name="Group 1"
+        },
+        new Person
+        {
+            Header="Group 2",
+            Name="Group 1"
+        },
+        new Person
+        {
+            Name="Britta Holt",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/4.png"
+        },
+        new Person
+        {
+            Name="Jane Smith ",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/5.png"
+        },
+        new Person
+        {
+            Name="John Smith",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/1.png"
+        },
+        new Person
+        {
+            Name="Sandra Williams",
+            Group="Group 2",
+            Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
         }
+    };
+    private string _title = "The summer breeze";
+
+    public void Remove()
+    {
+        _friends = "";
     }
 }

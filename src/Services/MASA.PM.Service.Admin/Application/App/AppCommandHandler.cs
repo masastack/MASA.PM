@@ -19,7 +19,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var appModel = command.AppModel;
             var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(appModel.EnvironmentClusterIds, appModel.ProjectId);
 
-            await _appRepository.IsExistedAppName(command.AppModel.Name, envClusterProjectIds);
+            await _appRepository.IsExistedApp(appModel.Name, appModel.Identity, envClusterProjectIds);
 
             var app = await _appRepository.AddAsync(new Infrastructure.Entities.App
             {
@@ -48,7 +48,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         {
             var relationApp = command.RelationAppModel;
 
-            var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId( relationApp.EnvironmentClusterIds, relationApp.ProjectId);
+            var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(relationApp.EnvironmentClusterIds, relationApp.ProjectId);
             var envClusterProjectApp = new EnvironmentClusterProjectApp
             {
                 EnvironmentClusterProjectId = envClusterProjectIds[0],
@@ -72,7 +72,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var envClusterProjectIds = await _projectRepository.GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(appModel.EnvironmentClusterIds, appModel.ProjectId);
             if (appEntity.Name != appModel.Name)
             {
-                await _appRepository.IsExistedAppName(appModel.Name, envClusterProjectIds, appModel.Id);
+                await _appRepository.IsExistedApp(appModel.Name, appModel.Identity, envClusterProjectIds, appModel.Id);
             }
 
             appEntity.Name = appModel.Name;

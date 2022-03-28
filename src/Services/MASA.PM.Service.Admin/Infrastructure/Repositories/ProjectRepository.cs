@@ -15,6 +15,10 @@
             {
                 throw new UserFriendlyException("项目名称已存在！");
             }
+            if (_dbContext.Projects.Any(p => p.Identity.ToLower() == project.Identity.ToLower()))
+            {
+                throw new UserFriendlyException("项目ID已存在！");
+            }
 
             await _dbContext.Projects.AddAsync(project);
             await _dbContext.SaveChangesAsync();

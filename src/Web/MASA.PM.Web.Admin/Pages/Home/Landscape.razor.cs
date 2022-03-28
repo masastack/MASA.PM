@@ -23,6 +23,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; } = default!;
+
         private StringNumber _selectedEnvId = 0;
         private StringNumber _selectEnvClusterId = 0;
         private int _selectProjectId;
@@ -59,7 +62,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (_environments.Any())
                 {
                     _selectedEnvId = _environments[0].Id;
-                    _clusters = await GetClustersByEnvIdAsync(_environments[0].Id);
+                    _clusters = await GetClustersByEnvIdAsync(_environments[0].Id); 
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("init", true);
                 }
 
                 StateHasChanged();
@@ -227,7 +234,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 newClusterId = _clusterFormModel.Data.ClusterId;
             }
 
-            await GetClustersByEnvIdAsync(newClusterId);
+            await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
             _clusterFormModel.Hide();
         }
 

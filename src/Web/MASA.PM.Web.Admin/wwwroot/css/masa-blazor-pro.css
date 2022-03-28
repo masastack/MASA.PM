@@ -1073,36 +1073,6 @@ tr:hover {
     border-bottom-right-radius: 20px !important;
 }
 
-
-/*123*/
-/*.async-btn .theme--light.m-btn--active:hover::before, .theme--light.m-btn--active::before {
-    opacity: 1 !important;
-}
-
-.m-btn.async-btn .m-btn__content {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 28px;
-}
-
-.m-btn.m-btn--active.async-btn .m-btn__content {
-    color: #fff !important;
-}
-
-.theme--light.m-btn.async-btn:not(.m-btn--active):hover::before {
-    opacity: 0.08 !important;
-}*/
-
-/*456*/
-/*.theme--light.m-list-item--active:hover::before, .theme--light.m-list-item--active::before {
-    opacity: 1 !important;
-}
-
-.m-list-item m-list-item--link m-list-item--active theme--light .m-list-item__content .m-list-item__title {
-    color: #fff !important;
-}*/
-
 .m-dialog--persistent {
     border-radius: 20px !important;
 }
@@ -1186,3 +1156,9 @@ tr:hover {
     .cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover .m-icon {
         color: #1B2559 !important;
     }
+
+.text-overflow {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
