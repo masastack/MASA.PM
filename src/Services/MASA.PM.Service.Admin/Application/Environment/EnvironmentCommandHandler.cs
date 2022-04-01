@@ -84,6 +84,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
 
             //add redis cache
             await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{newEnv.Id}", new EnvModel(newEnv.Id, newEnv.Name));
+            await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{newEnv.Name}", newEnv.Id);
         }
 
         [EventHandler]

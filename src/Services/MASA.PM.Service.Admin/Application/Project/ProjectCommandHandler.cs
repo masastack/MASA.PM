@@ -4,11 +4,11 @@ namespace MASA.PM.Service.Admin.Application.Project
 {
     public class ProjectCommandHandler
     {
+        private const string PROJECT_KEY_PREFIX = "masa.pm.project";
+
         private readonly IProjectRepository _projectRepository;
         private readonly IEnvironmentRepository _environmentRepository;
         private readonly IMemoryCacheClient _memoryCacheClient;
-        private const string PROJECT_KEYS = "masa.pm.project.keys";
-        private const string PROJECT_KEY_PREFIX = "masa.pm.project.key";
 
         public ProjectCommandHandler(IProjectRepository projectRepository, IEnvironmentRepository environmentRepository, IMemoryCacheClient memoryCacheClient)
         {
@@ -40,14 +40,15 @@ namespace MASA.PM.Service.Admin.Application.Project
 
             //add redis cache
             var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(command.ProjectModel.EnvironmentClusterIds);
-            foreach (var env in envs)
-            {
-                List<string> keys = await _memoryCacheClient.GetAsync<List<string>?>($"{PROJECT_KEYS}.{env.Name.ToLower()}") ?? new List<string>();
-                string projectKey = $"{PROJECT_KEY_PREFIX}.{env.Name.ToLower()}.{project.Id}";
-                keys.Add(projectKey);
-                await _memoryCacheClient.SetAsync<List<string>>($"{PROJECT_KEYS}.{env.Name.ToLower()}", keys);
-                await _memoryCacheClient.SetAsync<Infrastructure.Entities.Project>(projectKey, project);
-            }
+            await _memoryCacheClient.SetAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{project.Id}",
+                new ProjectModel(
+                    project.Id,
+                    project.Identity,
+                    project.Name,
+                    project.LabelId,
+                    project.TeamId,
+                    envs.Select(env => env.Id))
+                );
         }
 
         [EventHandler]
@@ -76,14 +77,6 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 var deleteEnvironmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(command.ProjectModel.ProjectId, deleteEnvironmentClusterIds);
                 await _projectRepository.RemoveEnvironmentClusterProjects(deleteEnvironmentClusterProjects);
-
-                //remove redis cache
-                var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(deleteEnvironmentClusterProjects.Select(e => e.EnvironmentClusterId));
-                foreach (var env in envs)
-                {
-                    string projectKey = $"{PROJECT_KEY_PREFIX}.{env.Name.ToLower()}.{command.ProjectModel.ProjectId}";
-                    await _memoryCacheClient.RemoveAsync<Infrastructure.Entities.Project>(projectKey);
-                }
             }
 
             //need to add EnvironmentClusterProject
@@ -96,18 +89,19 @@ namespace MASA.PM.Service.Admin.Application.Project
                     EnvironmentClusterId = environmentClusterId,
                     ProjectId = command.ProjectModel.ProjectId
                 }));
-
-                //add redis cache
-                var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(command.ProjectModel.EnvironmentClusterIds);
-                foreach (var env in envs)
-                {
-                    List<string> keys = await _memoryCacheClient.GetAsync<List<string>?>($"{PROJECT_KEYS}.{env.Name.ToLower()}") ?? new List<string>();
-                    string projectKey = $"{PROJECT_KEY_PREFIX}.{env.Name.ToLower()}.{project.Id}";
-                    keys.Add(projectKey);
-                    await _memoryCacheClient.SetAsync<List<string>>($"{PROJECT_KEYS}.{env.Name.ToLower()}", keys);
-                    await _memoryCacheClient.SetAsync<Infrastructure.Entities.Project>(projectKey, project);
-                }
             }
+
+            //update redis cache
+            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(command.ProjectModel.EnvironmentClusterIds);
+            await _memoryCacheClient.SetAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{project.Id}",
+                new ProjectModel(
+                    project.Id,
+                    project.Identity,
+                    project.Name,
+                    project.LabelId,
+                    project.TeamId,
+                    envs.Select(env => env.Id))
+                );
         }
 
         [EventHandler]
@@ -118,12 +112,8 @@ namespace MASA.PM.Service.Admin.Application.Project
             var environmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             await _projectRepository.RemoveEnvironmentClusterProjects(environmentClusterProjects);
 
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(environmentClusterProjects.Select(e => e.EnvironmentClusterId));
-            foreach (var env in envs)
-            {
-                string projectKey = $"{PROJECT_KEY_PREFIX}.{env.Name.ToLower()}.{command.ProjectId}";
-                await _memoryCacheClient.RemoveAsync<Infrastructure.Entities.Project>(projectKey);
-            }
+            //remove redis cache
+            await _memoryCacheClient.RemoveAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{command.ProjectId}");
         }
     }
 }
