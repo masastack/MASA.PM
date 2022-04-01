@@ -131,7 +131,7 @@
                             </div>
                         </div>
                         <MSpacer></MSpacer>
-                        <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                        <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
                     </div>
                 </MNavigationDrawer>
 
@@ -151,7 +151,7 @@
                                     foreach (var app in _projectApps)
                                     {
                                         <MCol Lg="4" Md="6" Sm="12">
-                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString(T("$DateTimeFormat"))" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                         </MCol>
                                     }
                                 }
@@ -234,9 +234,9 @@
         {
             <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                 <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
                 <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
             </MRow>
         }
     </ChildContent>
@@ -301,9 +301,9 @@
         {
             <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                 <MCol Cols=6>@T("Creator"): @_appDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_appDetail.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_appDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
                 <MCol Cols=6>@T("Modifier"): @_appDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_appDetail.ModificationTime.ToString("yyyy-MM-dd HH:mm:ss")</MCol>
+                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_appDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
             </MRow>
         }
     </ChildContent>

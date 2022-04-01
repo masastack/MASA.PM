@@ -10,6 +10,8 @@
 
         Task<List<Entities.Environment>> GetListAsync();
 
+        Task<List<Entities.Environment>> GetListByEnvClusterIdsAsync(IEnumerable<int> envClusterIds);
+
         Task UpdateAsync(UpdateEnvironmentDto model);
 
         Task<Entities.Environment> GetAsync(int Id);

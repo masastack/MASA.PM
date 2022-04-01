@@ -1,4 +1,7 @@
 ﻿
+using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
+using Masa.Utils.Caching.Redis.DependencyInjection;
+using Masa.Utils.Caching.Redis.Models;
 using MASA.PM.Service.Admin.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,12 @@ foreach (var item in assembly)
     builder.Services.AddScoped(item.GetInterfaces().First(), item);
 }
 #endregion
+
+//Redis
+var redisOptions = AppSettings.GetModel<RedisConfigurationOptions>("Redis");
+builder.Services
+    .AddMasaRedisCache(redisOptions)
+    .AddMasaMemoryCache();
 
 var connectionString = AppSettings.Get("ConnectionString");
 var app = builder.Services

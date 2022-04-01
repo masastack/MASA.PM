@@ -51,9 +51,28 @@
 
         public async Task<List<Entities.Environment>> GetListAsync()
         {
-            var result =await _dbContext.Environments.ToListAsync();
+            var result = await _dbContext.Environments.ToListAsync();
 
             return result;
+        }
+
+        public async Task<List<Entities.Environment>> GetListByEnvClusterIdsAsync(IEnumerable<int> envClusterIds)
+        {
+            try
+            {
+                var envs = await (from env in _dbContext.Environments
+                                  join envCluster in _dbContext.EnvironmentClusters.Where(envCluster => envClusterIds.Contains(envCluster.Id))
+                                  on env.Id equals envCluster.EnvironmentId
+                                  select env).Distinct().ToListAsync();
+
+                return envs;
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Entities.Environment> GetAsync(int Id)

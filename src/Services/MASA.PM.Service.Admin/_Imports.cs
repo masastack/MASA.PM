@@ -24,3 +24,4 @@ global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Reflection;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
+global using Masa.Utils.Caching.DistributedMemory.Interfaces;

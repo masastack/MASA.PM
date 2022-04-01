@@ -1,6 +1,7 @@
 {
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
+  "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
   "Save": "保存",
   "Submit": "提交",
   "Add Environment": "新增环境",

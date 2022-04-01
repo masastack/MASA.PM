@@ -11,11 +11,11 @@
 
         public async Task<Project> AddAsync(Project project)
         {
-            if (_dbContext.Projects.Any(p => p.Name.ToLower() == project.Name.ToLower()))
+            if (_dbContext.Projects.Any(p => p.Name == project.Name))
             {
                 throw new UserFriendlyException("项目名称已存在！");
             }
-            if (_dbContext.Projects.Any(p => p.Identity.ToLower() == project.Identity.ToLower()))
+            if (_dbContext.Projects.Any(p => p.Identity == project.Identity))
             {
                 throw new UserFriendlyException("项目ID已存在！");
             }
