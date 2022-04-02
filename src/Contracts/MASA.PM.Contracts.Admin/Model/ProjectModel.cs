@@ -18,16 +18,15 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public Guid TeamId { get; set; }
 
-        public List<int> EnvironmentIds { get; set; } = new();
+        public List<AppModel> Apps { get; set; } = new();
 
-        public ProjectModel(int id, string identity, string name, int labelId, Guid teamId, IEnumerable<int> envIds)
+        public ProjectModel(int id, string identity, string name, int labelId, Guid teamId)
         {
             Id = id;
             Identity = identity;
             Name = name;
             LabelId = labelId;
             TeamId = teamId;
-            EnvironmentIds = envIds.ToList();
         }
     }
 }

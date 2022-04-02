@@ -20,6 +20,8 @@
 
         Task<List<Label>> GetProjectTypesAsync();
 
+        Task<List<Project>> GetProjectListByEnvIdAsync(string envName);
+
         Task UpdateAsync(Project cluster);
 
         Task RemoveAsync(int Id);

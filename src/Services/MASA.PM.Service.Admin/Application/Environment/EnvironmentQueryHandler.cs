@@ -4,11 +4,15 @@
     {
         private readonly IEnvironmentRepository _environmentRepository;
         private readonly IClusterRepository _clusterRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IAppRepository _appRepository;
 
-        public EnvironmentQueryHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
+        public EnvironmentQueryHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository, IProjectRepository projectRepository, IAppRepository appRepository)
         {
             _environmentRepository = environmentRepository;
             _clusterRepository = clusterRepository;
+            _projectRepository = projectRepository;
+            _appRepository = appRepository;
         }
 
         [EventHandler]
@@ -39,6 +43,35 @@
                 Id = env.Id,
                 Name = env.Name
             }).ToList();
+        }
+
+        [EventHandler]
+        public async Task GetEnvByNameAsync(EnvsQuery query)
+        {
+            var projects = await _projectRepository.GetProjectListByEnvIdAsync(query.EnvName);
+            var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
+
+            List<ProjectModel> projectModels = projects.Select(
+                project => new ProjectModel(
+                    project.Id,
+                    project.Identity,
+                    project.Name,
+                    project.LabelId,
+                    project.TeamId)
+                ).ToList();
+
+            projectModels.ForEach(project =>
+            {
+                apps.ForEach(appGroup =>
+                {
+                    if (appGroup.ProjectId == project.Id)
+                    {
+                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id));
+                    }
+                });
+            });
+
+            query.Result = projectModels;
         }
     }
 }

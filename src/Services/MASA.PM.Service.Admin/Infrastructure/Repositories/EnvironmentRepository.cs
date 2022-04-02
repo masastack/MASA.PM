@@ -9,24 +9,6 @@
             _dbContext = dbContext;
         }
 
-        public async Task<List<int>> AddEnvironmentsAndClusterAsync(List<Entities.Environment> environments)
-        {
-            await Task.Delay(1);
-            List<int> envIds = new();
-
-            if (environments.Any())
-            {
-                environments.ForEach(env =>
-                {
-                    var newEnv = _dbContext.Environments.Add(env);
-                    _dbContext.SaveChanges();
-                    envIds.Add(newEnv.Entity.Id);
-                });
-            }
-
-            return envIds;
-        }
-
         public async Task<Entities.Environment> AddAsync(Entities.Environment environment)
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == environment.Name.ToLower()))
@@ -54,16 +36,6 @@
             var result = await _dbContext.Environments.ToListAsync();
 
             return result;
-        }
-
-        public async Task<List<Entities.Environment>> GetListByEnvClusterIdsAsync(IEnumerable<int> envClusterIds)
-        {
-            var envs = await (from env in _dbContext.Environments
-                              join envCluster in _dbContext.EnvironmentClusters.Where(envCluster => envClusterIds.Contains(envCluster.Id))
-                              on env.Id equals envCluster.EnvironmentId
-                              select env).Distinct().ToListAsync();
-
-            return envs;
         }
 
         public async Task<Entities.Environment> GetAsync(int Id)

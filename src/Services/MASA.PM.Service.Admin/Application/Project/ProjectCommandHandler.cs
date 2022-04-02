@@ -4,17 +4,11 @@ namespace MASA.PM.Service.Admin.Application.Project
 {
     public class ProjectCommandHandler
     {
-        private const string PROJECT_KEY_PREFIX = "masa.pm.project";
-
         private readonly IProjectRepository _projectRepository;
-        private readonly IEnvironmentRepository _environmentRepository;
-        private readonly IMemoryCacheClient _memoryCacheClient;
 
-        public ProjectCommandHandler(IProjectRepository projectRepository, IEnvironmentRepository environmentRepository, IMemoryCacheClient memoryCacheClient)
+        public ProjectCommandHandler(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
-            _environmentRepository = environmentRepository;
-            _memoryCacheClient = memoryCacheClient;
         }
 
         [EventHandler]
@@ -37,18 +31,6 @@ namespace MASA.PM.Service.Admin.Application.Project
             });
 
             await _projectRepository.AddEnvironmentClusterProjectsAsync(environmentClusterProjects);
-
-            //add redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(command.ProjectModel.EnvironmentClusterIds);
-            await _memoryCacheClient.SetAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{project.Id}",
-                new ProjectModel(
-                    project.Id,
-                    project.Identity,
-                    project.Name,
-                    project.LabelId,
-                    project.TeamId,
-                    envs.Select(env => env.Id))
-                );
         }
 
         [EventHandler]
@@ -90,18 +72,6 @@ namespace MASA.PM.Service.Admin.Application.Project
                     ProjectId = command.ProjectModel.ProjectId
                 }));
             }
-
-            //update redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(command.ProjectModel.EnvironmentClusterIds);
-            await _memoryCacheClient.SetAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{project.Id}",
-                new ProjectModel(
-                    project.Id,
-                    project.Identity,
-                    project.Name,
-                    project.LabelId,
-                    project.TeamId,
-                    envs.Select(env => env.Id))
-                );
         }
 
         [EventHandler]
@@ -111,9 +81,6 @@ namespace MASA.PM.Service.Admin.Application.Project
 
             var environmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             await _projectRepository.RemoveEnvironmentClusterProjects(environmentClusterProjects);
-
-            //remove redis cache
-            await _memoryCacheClient.RemoveAsync<ProjectModel>($"{PROJECT_KEY_PREFIX}.{command.ProjectId}");
         }
     }
 }

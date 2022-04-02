@@ -20,6 +20,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<List<EnvironmentClusterProjectApp>> GetEnvironmentClusterProjectAppsByAppId(int appId);
 
+        Task<List<(int ProjectId, App App)>> GetAppByEnvNameAndProjectIdsAsync(string envName, IEnumerable<int> projectIds);
+
         Task UpdateAsync(App app);
 
         Task RemoveAsync(int Id);

@@ -112,6 +112,21 @@
             return result;
         }
 
+        public async Task<List<(int ProjectId, App App)>> GetAppByEnvNameAndProjectIdsAsync(string envName, IEnumerable<int> projectIds)
+        {
+            var result = await (from environmentClusterProjectApp in _dbContext.EnvironmentClusterProjectApps
+                                join environmentClusterProject in _dbContext.EnvironmentClusterProjects.Where(project => projectIds.Contains(project.ProjectId)) on environmentClusterProjectApp.EnvironmentClusterProjectId equals environmentClusterProject.Id
+                                join environmentCluster in _dbContext.EnvironmentClusters on environmentClusterProject.EnvironmentClusterId equals environmentCluster.Id
+                                join environment in _dbContext.Environments.Where(env => env.Name == envName) on environmentCluster.EnvironmentId equals environment.Id
+                                join app in _dbContext.Apps on environmentClusterProjectApp.AppId equals app.Id
+                                select new ValueTuple<int, App>
+                                (environmentClusterProject.ProjectId, app)
+                                )
+                                .ToListAsync();
+
+            return result;
+        }
+
         public async Task UpdateAsync(App app)
         {
             _dbContext.Apps.Update(app);

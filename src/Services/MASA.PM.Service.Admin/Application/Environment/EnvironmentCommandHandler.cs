@@ -4,17 +4,13 @@ namespace MASA.PM.Service.Admin.Application.Environment
 {
     public class EnvironmentCommandHandler
     {
-        private const string ENV_KEY_PREFIX = "masa.pm.env";
-
         private readonly IEnvironmentRepository _environmentRepository;
         private readonly IClusterRepository _clusterRepository;
-        private readonly IMemoryCacheClient _memoryCacheClient;
 
-        public EnvironmentCommandHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository, IMemoryCacheClient memoryCacheClient)
+        public EnvironmentCommandHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
         {
             _environmentRepository = environmentRepository;
             _clusterRepository = clusterRepository;
-            _memoryCacheClient = memoryCacheClient;
         }
 
         [EventHandler]
@@ -51,12 +47,6 @@ namespace MASA.PM.Service.Admin.Application.Environment
             });
 
             await _environmentRepository.AddEnvironmentClustersAsync(envClusters);
-
-            //add redis cache
-            var dicEnvs = envs.Select(env => new EnvModel(env.Id, env.Name)).ToDictionary(env => { return $"{ENV_KEY_PREFIX}.{env.Id}"; });
-            var envIdAndNameMappings = envs.ToDictionary(env => $"{ENV_KEY_PREFIX}.{env.Name}", env => env.Id);
-            await _memoryCacheClient.SetListAsync(dicEnvs);
-            await _memoryCacheClient.SetListAsync(envIdAndNameMappings);
         }
 
         [EventHandler]
@@ -81,10 +71,6 @@ namespace MASA.PM.Service.Admin.Application.Environment
             await _environmentRepository.AddEnvironmentClustersAsync(addEnvironmentClusters);
 
             command.Result = new EnvironmentDto { Id = newEnv.Id, Name = newEnv.Name };
-
-            //add redis cache
-            await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{newEnv.Id}", new EnvModel(newEnv.Id, newEnv.Name));
-            await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{newEnv.Name}", newEnv.Id);
         }
 
         [EventHandler]
@@ -92,29 +78,12 @@ namespace MASA.PM.Service.Admin.Application.Environment
         {
             var envModel = command.EnvironmentModel;
             await _environmentRepository.UpdateAsync(envModel);
-
-            //update redis
-            var oldEnv = await _memoryCacheClient.GetAsync<EnvModel>($"{ENV_KEY_PREFIX}.{envModel.EnvironmentId}");
-            if (oldEnv != null)
-            {
-                await _memoryCacheClient.RemoveAsync<int>($"{ENV_KEY_PREFIX}.{oldEnv.Name}");
-            }
-            await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{envModel.Name}", envModel.EnvironmentId);
-            await _memoryCacheClient.SetAsync($"{ENV_KEY_PREFIX}.{envModel.EnvironmentId}", new EnvModel(envModel.EnvironmentId, envModel.Name));
         }
 
         [EventHandler]
         public async Task RemoveEnvironmentAsync(DeleteEnvironmentCommand command)
         {
             await _environmentRepository.RemoveAsync(command.EnvironmentId);
-
-            //remove redis
-            var oldEnv = await _memoryCacheClient.GetAsync<EnvModel>($"{ENV_KEY_PREFIX}.{command.EnvironmentId}");
-            if (oldEnv != null)
-            {
-                await _memoryCacheClient.RemoveAsync<int>($"{ENV_KEY_PREFIX}.{oldEnv.Name}");
-            }
-            await _memoryCacheClient.RemoveAsync<EnvModel>($"{ENV_KEY_PREFIX}.{command.EnvironmentId}");
         }
     }
 }

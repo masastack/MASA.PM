@@ -4,19 +4,13 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 {
     public class AppCommandHandler
     {
-        private const string APP_KEY_PREFIX = "masa.pm.app";
-
         private readonly IAppRepository _appRepository;
         private readonly IProjectRepository _projectRepository;
-        private readonly IEnvironmentRepository _environmentRepository;
-        private readonly IMemoryCacheClient _memoryCacheClient;
 
-        public AppCommandHandler(IAppRepository appRepository, IProjectRepository projectRepository, IEnvironmentRepository environmentRepository, IMemoryCacheClient memoryCacheClient)
+        public AppCommandHandler(IAppRepository appRepository, IProjectRepository projectRepository)
         {
             _appRepository = appRepository;
             _projectRepository = projectRepository;
-            _environmentRepository = environmentRepository;
-            _memoryCacheClient = memoryCacheClient;
         }
 
         [EventHandler]
@@ -47,17 +41,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 AppId = app.Id
             });
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
-
-            //add redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(appModel.EnvironmentClusterIds);
-            await _memoryCacheClient.SetAsync<AppModel>($"{APP_KEY_PREFIX}.{app.Id}",
-                new AppModel(
-                    app.Id,
-                    app.Name,
-                    app.Identity,
-                    appModel.ProjectId,
-                    envs.Select(env => env.Id))
-                );
         }
 
         [EventHandler]
@@ -78,19 +61,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 throw new UserFriendlyException("该应用已存在");
             }
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(new List<EnvironmentClusterProjectApp> { envClusterProjectApp });
-
-            //update redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(relationApp.EnvironmentClusterIds);
-            AppModel app = (await _memoryCacheClient.GetAsync<AppModel>($"{APP_KEY_PREFIX}.{relationApp.AppId}"))!;
-            app.EnvironmentIds.AddRange(envs.Select(env => env.Id));
-            await _memoryCacheClient.SetAsync<AppModel>($"{APP_KEY_PREFIX}.{app.Id}",
-                new AppModel(
-                    app.Id,
-                    app.Name,
-                    app.Identity,
-                    relationApp.ProjectId,
-                    app.EnvironmentIds)
-                );
         }
 
         [EventHandler]
@@ -123,17 +93,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 AppId = appModel.Id
             });
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
-
-            //update redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(appModel.EnvironmentClusterIds);
-            await _memoryCacheClient.SetAsync<AppModel>($"{APP_KEY_PREFIX}.{appEntity.Id}",
-                new AppModel(
-                    appEntity.Id,
-                    appEntity.Name,
-                    appEntity.Identity,
-                    appModel.ProjectId,
-                    envs.Select(env => env.Id))
-                );
         }
 
         [EventHandler]
@@ -142,12 +101,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var envClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             //await _appRepository.DeleteAsync(command.AppId);
             await _appRepository.RemoveEnvironmentClusterProjectApps(command.AppId, envClusterProjects.Select(ecp => ecp.Id));
-
-            //remove redis cache
-            var envs = await _environmentRepository.GetListByEnvClusterIdsAsync(envClusterProjects.Select(envClusterProject => envClusterProject.EnvironmentClusterId));
-            AppModel app = (await _memoryCacheClient.GetAsync<AppModel>($"{APP_KEY_PREFIX}.{command.AppId}"))!;
-            app.EnvironmentIds.RemoveAll(envId => envs.Select(env => env.Id).Contains(envId));
-            await _memoryCacheClient.SetAsync<AppModel>($"{APP_KEY_PREFIX}.{command.AppId}", app);
         }
     }
 }

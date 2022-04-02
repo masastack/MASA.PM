@@ -12,6 +12,8 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public string Name { get; set; }
 
+        public List<ProjectModel> Projects { get; set; } = new();
+
         public EnvModel(int id, string name)
         {
             Id = id;

@@ -113,6 +113,19 @@
             return result;
         }
 
+        public async Task<List<Project>> GetProjectListByEnvIdAsync(string envName)
+        {
+            var projects = await (from env in _dbContext.Environments.Where(env => env.Name == envName)
+                                  join envCluster in _dbContext.EnvironmentClusters on env.Id equals envCluster.EnvironmentId
+                                  join envClusterProject in _dbContext.EnvironmentClusterProjects on envCluster.Id equals envClusterProject.EnvironmentClusterId
+                                  join project in _dbContext.Projects on envClusterProject.ProjectId equals project.Id
+                                  select project)
+                              .Distinct()
+                              .ToListAsync();
+
+            return projects;
+        }
+
         public async Task UpdateAsync(Project project)
         {
             if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))
