@@ -31,12 +31,6 @@ foreach (var item in assembly)
 }
 #endregion
 
-//Redis
-var redisOptions = AppSettings.GetModel<RedisConfigurationOptions>("Redis");
-builder.Services
-    .AddMasaRedisCache(redisOptions)
-    .AddMasaMemoryCache();
-
 var connectionString = AppSettings.Get("ConnectionString");
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
