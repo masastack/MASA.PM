@@ -108,7 +108,7 @@
 
         public async Task<List<Label>> GetProjectTypesAsync()
         {
-            var result = await _dbContext.Labels.ToListAsync();
+            var result = await _dbContext.Labels.Where(label => label.TypeCode == "ProjectType").ToListAsync();
 
             return result;
         }

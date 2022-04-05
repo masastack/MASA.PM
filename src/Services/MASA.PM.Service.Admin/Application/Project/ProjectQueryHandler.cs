@@ -37,6 +37,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
+            var projectTypes = await _projectRepository.GetProjectTypesAsync();
             if (query.EnvironmentClusterId.HasValue)
             {
                 var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
@@ -45,6 +46,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    LableId = project.LabelId,
+                    LableName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
@@ -60,6 +63,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    LableId = project.LabelId,
+                    LableName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,

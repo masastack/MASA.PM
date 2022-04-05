@@ -45,7 +45,30 @@
                                                     @project.Name
                                                     <span class="ml-2 text-caption">|</span>
                                                     <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                                    <div class="text-caption" style="padding:0">@project.Identity</div>
+                                                    <div class="text-caption d-flex" style="padding:0">
+                                                        @{
+                                                            string backgroundColor;
+                                                            switch (project.LableName.ToLower())
+                                                            {
+                                                                case "basic ability":
+                                                                    backgroundColor = "#37D7AD";
+                                                                    break;
+                                                                case "ops ability":
+                                                                    backgroundColor = "#FFB547";
+                                                                    break;
+                                                                case "data factory":
+                                                                    backgroundColor = "#5FB9FF";
+                                                                    break;
+                                                                default:
+                                                                    backgroundColor = "";
+                                                                    break;
+                                                            }
+                                                        }
+                                                        <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
+                                                            @project.LableName
+                                                        </div>
+                                                        @project.Identity
+                                                    </div>
                                                 </div>
                                                 <MSpacer />
                                                 <div style="display:flex;align-items:center;">
@@ -103,37 +126,40 @@
     <MTabItem>
         <div class="d-flex">
             <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
-                    <div style="min-width:300px; padding:16px 24px; display:flex; flex-direction:column; align-items:center; overflow: auto; height: calc(100vh - 218px);">
-                        <div style="width:100%;" class="text-body2">
-                            <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
-                                <div class="text-h6">@_projectDetail.Name</div>
-                                <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId)"><MIcon>mdi-pencil</MIcon></MButton>
-                            </MRow>
-                            <MRow NoGutters Class="mt-6">
-                                @T("AppCount")：@_appCount
-                            </MRow>
-                            <MRow NoGutters Class="mt-4">
-                                @_projectDetail.Description
-                            </MRow>
-                            <MRow NoGutters Class="text-caption mt-6">@T("Creator")</MRow>
-                            <MRow NoGutters Class="mt-4">@_projectDetail.Creator</MRow>
-                            <MRow NoGutters Class="text-caption mt-6">@T("Participate team")</MRow>
-                            <MRow NoGutters Class="mt-4">@_projectDetail.TeamId</MRow>
-                            <MRow NoGutters Class="text-caption mt-6">@T("Environment/Cluster")</MRow>
-                            <div style="display:flex; flex-direction:column;align-items:start">
-                                @{
-                                    var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
-                                    foreach (var item in envCluster)
-                                    {
-                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" ClusterName="@item.ClusterName" />
-                                    }
+                <div style="min-width:300px; padding:16px 24px; display:flex; flex-direction:column; align-items:center; overflow: auto; height: calc(100vh - 218px);">
+                    <div style="width:100%;" class="text-body2">
+                        <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
+                            <div class="text-h6">@_projectDetail.Name</div>
+                            <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId)"><MIcon>mdi-pencil</MIcon></MButton>
+                        </MRow>
+                        <MRow NoGutters Class="mt-6">
+                            @T("AppCount")：@_appCount
+                        </MRow>
+                        <MRow NoGutters Class="text-caption">
+                            @_projectDetail.Identity
+                        </MRow>
+                        <MRow NoGutters Class="mt-4">
+                            @_projectDetail.Description
+                        </MRow>
+                        <MRow NoGutters Class="text-caption mt-6">@T("Creator")</MRow>
+                        <MRow NoGutters Class="mt-4">@_projectDetail.Creator</MRow>
+                        <MRow NoGutters Class="text-caption mt-6">@T("Participate team")</MRow>
+                        <MRow NoGutters Class="mt-4">@_projectDetail.TeamId</MRow>
+                        <MRow NoGutters Class="text-caption mt-6">@T("Environment/Cluster")</MRow>
+                        <div style="display:flex; flex-direction:column;align-items:start">
+                            @{
+                                var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
+                                foreach (var item in envCluster)
+                                {
+                                    <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" ClusterName="@item.ClusterName" />
                                 }
-                            </div>
+                            }
                         </div>
-                        <MSpacer></MSpacer>
-                        <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
                     </div>
-                </MNavigationDrawer>
+                    <MSpacer></MSpacer>
+                    <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
+                </div>
+             </MNavigationDrawer>
 
             <div class="pl-6" style="width: calc(100% - 300px); display:block;">
                     <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
@@ -246,7 +272,7 @@
             {
                 <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
             }
-            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
         </div>
     </ActionsContent>
 </FormModal>

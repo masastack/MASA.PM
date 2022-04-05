@@ -19,7 +19,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value.Trim();
         }
 
-        [StringLength(250, ErrorMessage = "Cluster description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "Cluster description length must be less than 255")]
         public string Description { get; set; } = "";
     }
 }

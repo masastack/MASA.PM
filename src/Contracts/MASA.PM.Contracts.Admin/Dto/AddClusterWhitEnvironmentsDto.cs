@@ -23,7 +23,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         [Required(ErrorMessage = "Related environment is required")]
         public List<int> EnvironmentIds { get; set; } = default!;
 
-        [StringLength(250, ErrorMessage = "Cluster description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "Cluster description length must be less than 255")]
         public string Description { get; set; } = "";
     }
 }

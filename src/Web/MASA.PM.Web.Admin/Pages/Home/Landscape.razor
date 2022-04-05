@@ -72,7 +72,30 @@
                                         @project.Name
                                         <span class="ml-2 text-caption">|</span>
                                         <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                        <div class="text-caption" style="padding:0">@project.Identity</div>
+                                        <div class="text-caption d-flex" style="padding:0">
+                                            @{
+                                                string backgroundColor;
+                                                switch (project.LableName.ToLower())
+                                                {
+                                                    case "basic ability":
+                                                        backgroundColor = "#37D7AD";
+                                                        break;
+                                                    case "ops ability":
+                                                        backgroundColor = "#FFB547";
+                                                        break;
+                                                    case "data factory":
+                                                        backgroundColor = "#5FB9FF";
+                                                        break;
+                                                    default:
+                                                        backgroundColor = "";
+                                                        break;
+                                                }
+                                            }
+                                            <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
+                                                @project.LableName
+                                            </div>
+                                            @project.Identity
+                                        </div>
                                     </div>
                                     <MSpacer />
                                     <div style="display:flex;align-items:center;">
@@ -209,7 +232,7 @@
             {
                 <MButton OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
             }
-            <MButton OnClick="SubmitClusterAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+            <MButton OnClick="SubmitClusterAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_clusterFormModel.HasValue? T("Save") : T("Submit"))</MButton>
         </div>
     </ActionsContent>
 </FormModal>
@@ -297,7 +320,7 @@
             {
                 <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
             }
-            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
         </div>
     </ActionsContent>
 </FormModal>

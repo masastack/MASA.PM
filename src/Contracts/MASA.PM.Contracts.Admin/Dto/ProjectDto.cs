@@ -16,6 +16,10 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string Description { get; set; } = "";
 
+        public int LableId { get; set; }
+
+        public string LableName { get; set; } = "";
+
         public Guid Modifier { get; set; }
 
         public DateTime ModificationTime { get; set; }

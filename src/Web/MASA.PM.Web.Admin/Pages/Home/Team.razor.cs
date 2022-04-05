@@ -238,6 +238,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _apps.Remove(deleteApp);
                 _projectApps.Remove(deleteApp);
 
+                _appCount = _projectApps.Count;
+
                 AppHide();
             });
         }

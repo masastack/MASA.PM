@@ -34,7 +34,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         [Required(ErrorMessage = "TeamId is required")]
         public Guid TeamId { get; set; }
 
-        [StringLength(250, ErrorMessage = "Project description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "Project description length must be less than 255")]
         public string Description { get; set; } = "";
     }
 }

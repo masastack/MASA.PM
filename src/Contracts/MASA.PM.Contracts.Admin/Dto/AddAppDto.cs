@@ -38,7 +38,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string SwaggerUrl { get; set; } = "";
 
-        [StringLength(250, ErrorMessage = "App description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "App description length must be less than 255")]
         public string Description { get; set; } = "";
     }
 }
