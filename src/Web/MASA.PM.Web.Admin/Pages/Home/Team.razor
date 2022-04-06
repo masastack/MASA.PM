@@ -292,31 +292,31 @@
         OnCancel="AppHide">
     <ChildContent>
         <MTextField Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></MTextField>
-        <MSelect @bind-Value="_selectAppType"
+        <MSelect @bind-Value="_appFormModel.Data.Type"
                  Disabled="@(_appFormModel.HasValue)"
-                 Items="Enum<AppTypes>.GetEnumObjectList()"
+                 Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
                  ItemText="r=>r.Name"
                  ItemValue="r=>r.Value"
                  Outlined
                  Label="@T("App type")">
         </MSelect>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                <MSelect @bind-Value="_selectAppServiceType"
+            <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
+                <MSelect @bind-Value="_appFormModel.Data.ServiceType"
                          Disabled="@(_appFormModel.HasValue)"
-                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                         Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Value"
                          Outlined
                          Label="@T("Service type")">
                 </MSelect>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
                 <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
         <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"

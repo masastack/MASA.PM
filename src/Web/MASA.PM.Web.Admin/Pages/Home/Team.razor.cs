@@ -37,8 +37,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private DataModal<UpdateAppDto> _appFormModel = new();
         private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private AppDto _appDetail = new();
-        private int _selectAppType;
-        private int _selectAppServiceType;
         private int _selectAppId;
         private List<ProjectTypesDto> _projectTypes = new();
 
@@ -196,8 +194,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _selectAppId = appId;
             _appDetail = _apps.First(app => app.Id == appId);
-            _selectAppType = (int)_appDetail.Type;
-            _selectAppServiceType = (int)_appDetail.ServiceType;
             ShowAppModal(new UpdateAppDto
             {
                 Id = _appDetail.Id,
@@ -230,8 +226,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _appFormModel.Data.ProjectId = _selectProjectId;
             if (!_appFormModel.HasValue)
             {
-                _appFormModel.Data.Type = (AppTypes)_selectAppType;
-                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
                 await AppCaller.AddAsync(_appFormModel.Data);
             }
             else
@@ -262,8 +256,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private void AppHide()
         {
-            _selectAppType = 0;
-            _selectAppServiceType = 0;
             _appFormModel.Hide();
         }
     }
