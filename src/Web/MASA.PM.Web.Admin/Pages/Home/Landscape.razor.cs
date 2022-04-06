@@ -367,8 +367,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private void AppHide()
         {
-            _selectAppType = 0;
-            _selectAppServiceType = 0;
             _appFormModel.Hide();
         }
 
@@ -376,8 +374,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (!_appFormModel.HasValue)
             {
-                _appFormModel.Data.Type = (AppTypes)_selectAppType;
-                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
                 await AppCaller.AddAsync(_appFormModel.Data);
             }
             else

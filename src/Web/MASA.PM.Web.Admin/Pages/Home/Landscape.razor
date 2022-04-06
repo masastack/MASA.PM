@@ -160,6 +160,7 @@
 </div>
 
 <PModal @bind-Value="_envFormModel.Visible"
+        Persistent
         Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")"
         HideCancelAction
         Width="684"
@@ -206,6 +207,7 @@
 </PModal>
 
 <PModal @bind-Value="_clusterFormModel.Visible"
+        Persistent
         Title="@(_clusterFormModel.HasValue ?$"{T("Edit Cluster")}":$"{T("Add Cluster")}")"
         HideCancelAction
         Width="684"
@@ -252,6 +254,7 @@
 </PModal>
 
 <PModal @bind-Value="_projectFormModel.Visible"
+        Persistent
         Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
         HideCancelAction
         Width="684"
@@ -343,6 +346,7 @@
 </PModal>
 
 <PModal @bind-Value="_appFormModel.Visible"
+        Persistent
         Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))"
         HideCancelAction
         Width="684"
@@ -352,31 +356,31 @@
         OnCancel="AppHide">
     <ChildContent>
         <MTextField Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></MTextField>
-        <MSelect @bind-Value="_selectAppType"
+        <MSelect @bind-Value="_appFormModel.Data.Type"
                  Disabled="@(_appFormModel.HasValue)"
-                 Items="Enum<AppTypes>.GetEnumObjectList()"
+                 Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
                  ItemText="r=>r.Name"
                  ItemValue="r=>r.Value"
                  Outlined
                  Label="@T("App type")">
         </MSelect>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                <MSelect @bind-Value="_selectAppServiceType"
+            <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
+                <MSelect @bind-Value="_appFormModel.Data.ServiceType"
                          Disabled="@(_appFormModel.HasValue)"
-                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                         Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Value"
                          Outlined
                          Label="@T("Service type")">
                 </MSelect>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
                 <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
         <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
@@ -414,6 +418,7 @@
 </PModal>
 
 <PModal @bind-Value="_relationAppVisible"
+        Persistent
         Title="@T("Add App")"
         HideCancelAction
         Width="684"
@@ -456,7 +461,7 @@
                  Label="@T("App type")">
         </MSelect>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
                 <MSelect @bind-Value="_selectAppServiceType"
                          Disabled
                          Items="Enum<ServiceTypes>.GetEnumObjectList()"
@@ -465,13 +470,13 @@
                          Outlined
                          Label="@T("Service type")">
                 </MSelect>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></MTextField>
         <FadeTransition>
-            <Element Show="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+            <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
                 <MTextField Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></MTextField>
-            </Element>
+            </ShowTransitionElement>
         </FadeTransition>
         <MTextField Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></MTextField>
         <MTextarea Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>

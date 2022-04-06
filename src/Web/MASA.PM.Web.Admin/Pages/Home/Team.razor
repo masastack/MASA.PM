@@ -190,6 +190,7 @@
 </MTabsItems>
 
 <PModal @bind-Value="_projectFormModel.Visible"
+        Persistent
         Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
         Width="684"
         FormModel="_projectFormModel.Data"
@@ -281,6 +282,7 @@
 </PModal>
 
 <PModal @bind-Value="_appFormModel.Visible"
+        Persistent
         Title="@(_appFormModel.HasValue ?T("Edit App"):T("Add App"))"
         HideCancelAction
         Width="684"
