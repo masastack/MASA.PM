@@ -24,103 +24,103 @@
     <MTabItem>
         <div class="d-flex">
             <div class="pr-6" style="width: calc(100% - 300px); display:block;">
-                    <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
-                        <div class="d-flex mb-6">
-                            <MTextField @bind-Value="_projectName" OnKeyDown="SearchProject" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the project name and press enter to query")">
-                                <PrependInnerContent>
-                                    <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
-                                </PrependInnerContent>
-                            </MTextField>
-                            <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
-                        </div>
-                        <div style="margin:0 -24px; height: calc(100vh - 298px); overflow:auto;">
-                            <MExpansionPanels Flat Accordion>
-                                @foreach (var project in _projects)
-                                {
-                                    var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
-                                    <MExpansionPanel Style="margin-bottom: 12px;">
-                                        <MExpansionPanelHeader>
-                                            <span style="display:flex;align-items:center;margin-right:10px;">
-                                                <div class="text-h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
-                                                    @project.Name
-                                                    <span class="ml-2 text-caption">|</span>
-                                                    <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                                    <div class="text-caption d-flex" style="padding:0">
-                                                        @{
-                                                            string backgroundColor;
-                                                            switch (project.LableName.ToLower())
-                                                            {
-                                                                case "basic ability":
-                                                                    backgroundColor = "#37D7AD";
-                                                                    break;
-                                                                case "ops ability":
-                                                                    backgroundColor = "#FFB547";
-                                                                    break;
-                                                                case "data factory":
-                                                                    backgroundColor = "#5FB9FF";
-                                                                    break;
-                                                                default:
-                                                                    backgroundColor = "";
-                                                                    break;
-                                                            }
+                <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
+                    <div class="d-flex mb-6">
+                        <MTextField @bind-Value="_projectName" OnKeyDown="SearchProject" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the project name and press enter to query")">
+                            <PrependInnerContent>
+                                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                            </PrependInnerContent>
+                        </MTextField>
+                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
+                    </div>
+                    <div style="margin:0 -24px; height: calc(100vh - 298px); overflow:auto;">
+                        <MExpansionPanels Flat Accordion>
+                            @foreach (var project in _projects)
+                            {
+                                var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
+                                <MExpansionPanel Style="margin-bottom: 12px;">
+                                    <MExpansionPanelHeader>
+                                        <span style="display:flex;align-items:center;margin-right:10px;">
+                                            <div class="text-h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
+                                                @project.Name
+                                                <span class="ml-2 text-caption">|</span>
+                                                <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
+                                                <div class="text-caption d-flex" style="padding:0">
+                                                    @{
+                                                        string backgroundColor;
+                                                        switch (project.LableName.ToLower())
+                                                        {
+                                                            case "basic ability":
+                                                                backgroundColor = "#37D7AD";
+                                                                break;
+                                                            case "ops ability":
+                                                                backgroundColor = "#FFB547";
+                                                                break;
+                                                            case "data factory":
+                                                                backgroundColor = "#5FB9FF";
+                                                                break;
+                                                            default:
+                                                                backgroundColor = "";
+                                                                break;
                                                         }
-                                                        <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
-                                                            @project.LableName
-                                                        </div>
-                                                        @project.Identity
+                                                    }
+                                                    <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
+                                                        @project.LableName
                                                     </div>
+                                                    @project.Identity
                                                 </div>
-                                                <MSpacer />
-                                                <div style="display:flex;align-items:center;">
-                                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
-                                                    <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
-                                                </div>
-                                            </span>
-                                        </MExpansionPanelHeader>
-                                        <MExpansionPanelContent>
-                                            <MRow>
-                                                @foreach (var app in apps.Take(3))
-                                                {
-                                                    <MCol Lg="4" Md="6" Sm="12">
-                                                        <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                                    </MCol>
-                                                }
-                                            </MRow>
-                                            <div class="d-flex justify-space-between mt-3">
-                                                <div>
-                                                    <img style="height:24px;width:24px" src="/img/avatar/9.svg">
-                                                </div>
-                                                <div class="text-caption">编辑于一小时前</div>
                                             </div>
-                                        </MExpansionPanelContent>
-                                    </MExpansionPanel>
-                                }
+                                            <MSpacer />
+                                            <div style="display:flex;align-items:center;">
+                                                <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
+                                                <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
+                                            </div>
+                                        </span>
+                                    </MExpansionPanelHeader>
+                                    <MExpansionPanelContent>
+                                        <MRow>
+                                            @foreach (var app in apps.Take(3))
+                                            {
+                                                <MCol Lg="4" Md="6" Sm="12">
+                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                                </MCol>
+                                            }
+                                        </MRow>
+                                        <div class="d-flex justify-space-between mt-3">
+                                            <div>
+                                                <img style="height:24px;width:24px" src="/img/avatar/9.svg">
+                                            </div>
+                                            <div class="text-caption">编辑于一小时前</div>
+                                        </div>
+                                    </MExpansionPanelContent>
+                                </MExpansionPanel>
+                            }
 
-                            </MExpansionPanels>
-                        </div>
+                        </MExpansionPanels>
                     </div>
                 </div>
+            </div>
 
             <MNavigationDrawer Right Permanent Class="rounded-4" Width="300" Style="height: calc(100vh - 186px);">
-                    <div class="py-4 px-6" style="min-width:300px; display:flex; flex-direction:column; overflow: auto;">
-                        <MAvatar>
-                            <MImage Height="48" Width="48" Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"></MImage>
-                        </MAvatar>
-                        <MRow NoGutters Class="mt-6">
-                            <div class="text-h6">@T("Team name")</div>
-                        </MRow>
-                        <MRow NoGutters Class="mt-1 text-body2">
-                            @T("ProjectCount")：@_projects.Count
-                        </MRow>
-                        <MRow NoGutters Class="mt-4 text-body2">
-                            This is your team's workspace. Invite members to your team to start collaborating. Click here to edit this description.Professional team
-                        </MRow>
-                        <MRow NoGutters Class="text-caption mt-6">@T("Admin")</MRow>
-                        <MRow NoGutters Class="mt-4 text-body2">管理员1</MRow>
-                        <MRow NoGutters Class="text-caption mt-6">@T("Members")</MRow>
-                        <MRow NoGutters Class="mt-4 text-body2">成员1</MRow>
-                    </div>
-                </MNavigationDrawer>
+                <div class="py-4 px-6" style="min-width:300px; display:flex; flex-direction:column; overflow: auto;">
+                    <MAvatar>
+                        <MImage Height="48" Width="48" Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"></MImage>
+                    </MAvatar>
+                    <MRow NoGutters Class="mt-6">
+                        <div class="text-h6">@T("Team name")</div>
+                    </MRow>
+                    <MRow NoGutters Class="mt-1 text-body2">
+                        @T("ProjectCount")：@_projects.Count
+                    </MRow>
+                    <MRow NoGutters Class="mt-4 text-body2">
+                        This is your team's workspace. Invite members to your team to start collaborating. Click here to edit this description.Professional team
+                    </MRow>
+                    <MRow NoGutters Class="text-caption mt-6">@T("Admin")</MRow>
+                    <MRow NoGutters Class="mt-4 text-body2">管理员1</MRow>
+                    <MRow NoGutters Class="text-caption mt-6">@T("Members")</MRow>
+                    <MRow NoGutters Class="mt-4 text-body2">成员1</MRow>
+                </div>
+            </MNavigationDrawer>
         </div>
     </MTabItem>
     <MTabItem>
@@ -159,41 +159,44 @@
                     <MSpacer></MSpacer>
                     <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
                 </div>
-             </MNavigationDrawer>
+            </MNavigationDrawer>
 
             <div class="pl-6" style="width: calc(100% - 300px); display:block;">
-                    <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
-                        <div class="d-flex mb-6">
-                            <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
-                                <PrependInnerContent>
-                                    <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
-                                </PrependInnerContent>
-                            </MTextField>
-                            <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModal()"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
-                        </div>
-                        <div style="margin:0 -24px; height: calc(100vh - 298px); overflow:auto;">
-                            <MRow Class="mx-3">
-                                @{
-                                    foreach (var app in _projectApps)
-                                    {
-                                        <MCol Lg="4" Md="6" Sm="12">
-                                            <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString(T("$DateTimeFormat"))" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                        </MCol>
-                                    }
+                <div class="rounded-5 pa-6" style="background:#fff;overflow: hidden;">
+                    <div class="d-flex mb-6">
+                        <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="fill-lighten-1" HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
+                            <PrependInnerContent>
+                                <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
+                            </PrependInnerContent>
+                        </MTextField>
+                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModal()"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
+                    </div>
+                    <div style="margin:0 -24px; height: calc(100vh - 298px); overflow:auto;">
+                        <MRow Class="mx-3">
+                            @{
+                                foreach (var app in _projectApps)
+                                {
+                                    <MCol Lg="4" Md="6" Sm="12">
+                                        <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString(T("$DateTimeFormat"))" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                    </MCol>
                                 }
-                            </MRow>
-                        </div>
+                            }
+                        </MRow>
                     </div>
                 </div>
+            </div>
         </div>
     </MTabItem>
 </MTabsItems>
 
-<FormModal Visible="_projectFormModel.Visible"
-           Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
-           Width="684"
-           Model="_projectFormModel.Data"
-           OnCancel="ProjectHide">
+<PModal @bind-Value="_projectFormModel.Visible"
+        Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
+        Width="684"
+        FormModel="_projectFormModel.Data"
+        HideCancelAction
+        OnCancel="ProjectHide"
+        OnDelete="RemoveProjectAsync"
+        OnSave="SubmitProjectAsync">
     <ChildContent>
         <MTextField Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_friends"
@@ -266,22 +269,25 @@
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_projectFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_projectFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
-<FormModal Visible="_appFormModel.Visible"
-           Title="@(_appFormModel.HasValue ?T("Edit App"):T("Add App"))"
-           Width="684"
-           Model="_appFormModel.Data"
-           OnCancel="AppHide">
+<PModal @bind-Value="_appFormModel.Visible"
+        Title="@(_appFormModel.HasValue ?T("Edit App"):T("Add App"))"
+        HideCancelAction
+        Width="684"
+        FormModel="_appFormModel.Data"
+        OnSave="SubmitAppAsync"
+        OnDelete="RemoveAppAsync"
+        OnCancel="AppHide">
     <ChildContent>
         <MTextField Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></MTextField>
         <MSelect @bind-Value="_selectAppType"
@@ -333,21 +339,21 @@
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_appFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_appFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
 
 @code {
     //team
-        private string _friends = "Sandra Adams";
+    private string _friends = "Sandra Adams";
     private string _name = "Midnight Crew";
 
     public class Person

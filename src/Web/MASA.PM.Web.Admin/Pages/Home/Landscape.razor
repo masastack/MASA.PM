@@ -39,12 +39,20 @@
     <div class="pl-6" style="width: calc(100% - 242px); overflow: hidden; display:block;">
         <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:102px;background:#fff;padding:0 12px;">
             <MCard Style="padding-right: 150px;">
+
                 <MTabs @bind-Value="_selectEnvClusterId" Class="cluster-tabs" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
                     @foreach (var cluster in _clusters)
                     {
                         StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
                         <MTab Style="max-width:150px;" Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
-                            <div class="text-overflow">@cluster.Name</div>
+                            <MTooltip Top>
+                                <ActivatorContent>
+                                    <div class="text-overflow" @attributes="@context.Attrs">@cluster.Name</div>
+                                </ActivatorContent>
+                                <ChildContent>
+                                    <span>@cluster.Name</span>
+                                </ChildContent>
+                            </MTooltip>
                             @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                             {
                                 <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
@@ -151,11 +159,14 @@
 
 </div>
 
-<FormModal Visible="_envFormModel.Visible"
-           Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")"
-           Width="684"
-           Model="_envFormModel.Data"
-           OnCancel="_envFormModel.Hide">
+<PModal @bind-Value="_envFormModel.Visible"
+        Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")"
+        HideCancelAction
+        Width="684"
+        FormModel="_envFormModel.Data"
+        OnSave="SubmitEnvAsync"
+        OnDelete="RemoveEnvAsync"
+        OnCancel="_envFormModel.Hide">
     <ChildContent>
         <MTextField Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
@@ -179,26 +190,29 @@
                 <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_envDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
                 <MCol Cols=6>@T("Modifier"): @_envDetail.Modifier</MCol>
                 <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_envDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds.Count</MCol>
+                <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_envFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitEnvAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_envFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
-<FormModal Visible="_clusterFormModel.Visible"
-           Title="@(_clusterFormModel.HasValue ?$"{T("Edit Cluster")}":$"{T("Add Cluster")}")"
-           Width="684"
-           Model="_clusterFormModel.Data"
-           OnCancel="_clusterFormModel.Hide">
+<PModal @bind-Value="_clusterFormModel.Visible"
+        Title="@(_clusterFormModel.HasValue ?$"{T("Edit Cluster")}":$"{T("Add Cluster")}")"
+        HideCancelAction
+        Width="684"
+        FormModel="_clusterFormModel.Data"
+        OnSave="SubmitClusterAsync"
+        OnDelete="RemoveClusterAsync"
+        OnCancel="_clusterFormModel.Hide">
     <ChildContent>
         <MTextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
@@ -226,22 +240,25 @@
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_clusterFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitClusterAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_clusterFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_clusterFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_clusterFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
-<FormModal Visible="_projectFormModel.Visible"
-           Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
-           Width="684"
-           Model="_projectFormModel.Data"
-           OnCancel="ProjectHide">
+<PModal @bind-Value="_projectFormModel.Visible"
+        Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
+        HideCancelAction
+        Width="684"
+        FormModel="_projectFormModel.Data"
+        OnSave="SubmitProjectAsync"
+        OnDelete="RemoveProjectAsync"
+        OnCancel="ProjectHide">
     <ChildContent>
         <MTextField Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></MTextField>
         <MAutocomplete @bind-Value="_friends"
@@ -314,22 +331,25 @@
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_projectFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitProjectAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_projectFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
-<FormModal Visible="_appFormModel.Visible"
-           Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))"
-           Width="684"
-           Model="_appFormModel.Data"
-           OnCancel="AppHide">
+<PModal @bind-Value="_appFormModel.Visible"
+        Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))"
+        HideCancelAction
+        Width="684"
+        FormModel="_appFormModel.Data"
+        OnDelete="RemoveAppAsync"
+        OnSave="SubmitAppAsync"
+        OnCancel="AppHide">
     <ChildContent>
         <MTextField Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></MTextField>
         <MSelect @bind-Value="_selectAppType"
@@ -382,21 +402,23 @@
             </MRow>
         }
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            @if (_appFormModel.HasValue)
-            {
-                <MButton OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-            }
-            <MButton OnClick="SubmitAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue? T("Save") : T("Submit"))</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <DeleteContent Context="delete">
+        @if (_appFormModel.HasValue)
+        {
+            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+        }
+    </DeleteContent>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue? T("Save") : T("Submit"))</MButton>
+    </SaveContent>
+</PModal>
 
-<FormModal Visible="_relationAppVisible"
-           Title="@T("Add App")"
-           Width="684"
-           OnCancel="RelationAppHide">
+<PModal @bind-Value="_relationAppVisible"
+        Title="@T("Add App")"
+        HideCancelAction
+        Width="684"
+        OnSave="SubmitRelationAppAsync"
+        OnCancel="RelationAppHide">
     <ChildContent>
         <MAutocomplete TItem="AppDto"
                        TValue="int"
@@ -454,12 +476,10 @@
         <MTextField Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></MTextField>
         <MTextarea Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
     </ChildContent>
-    <ActionsContent>
-        <div style="width:100%; margin:10px;">
-            <MButton OnClick="SubmitRelationAppAsync" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@T("Submit")</MButton>
-        </div>
-    </ActionsContent>
-</FormModal>
+    <SaveContent Context="save">
+        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@T("Submit")</MButton>
+    </SaveContent>
+</PModal>
 
 @code {
     private string _friends = "Sandra Adams";

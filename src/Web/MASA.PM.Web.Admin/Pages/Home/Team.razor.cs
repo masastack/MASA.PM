@@ -3,7 +3,7 @@
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team : ProCompontentBase
-    {     
+    {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
@@ -135,16 +135,32 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task RemoveProjectAsync()
         {
             var deleteProject = _projects.First(project => project.Id == _selectProjectId);
-            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+            var isHasApps = _apps.Where(app => app.ProjectId == _selectProjectId).Any();
+
+            if (isHasApps)
             {
-                await ProjectCaller.DeleteAsync(_selectProjectId);
+                await PopupService.AlertAsync(param =>
+                {
+                    param.Centered = true;
+                    param.Content = "您的项目中还有应用存在，无法删除项目!";
+                    param.Color = "warning";
+                    param.Top = true;
+                    param.Timeout = 2000;
+                });
+            }
+            else
+            {
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+                {
+                    await ProjectCaller.DeleteAsync(_selectProjectId);
 
-                _projects.Remove(deleteProject);
+                    _projects.Remove(deleteProject);
 
-                _projectFormModel.Hide();
+                    _projectFormModel.Hide();
 
-                _curTab = 0;
-            });
+                    _curTab = 0;
+                });
+            }
         }
 
         private async Task GetProjectDetailAsync(int projectId, int appCount)
@@ -192,7 +208,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster=>envCluster.EnvironmentCluster.Id).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id).ToList()
             });
         }
 

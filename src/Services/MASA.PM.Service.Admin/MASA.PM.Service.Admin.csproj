@@ -51,4 +51,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
 	</ItemGroup>
+	
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

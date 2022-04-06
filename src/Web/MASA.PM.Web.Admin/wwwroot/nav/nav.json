@@ -8,7 +8,7 @@
   {
     "Id": 1,
     "Title": "Team",
-    "Icon": "mdi-trending-up",
+    "Icon": "mdi-account-multiple",
     "Children": [
       {
         "Id": 2,

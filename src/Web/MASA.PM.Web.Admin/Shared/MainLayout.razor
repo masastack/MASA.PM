@@ -3,7 +3,7 @@
 @inject GlobalConfig GlobalConfig
 @implements IDisposable
 
-<MApp>
+<MApp ConfirmParameters="@(param=>{ param.CancelText = T("Cancel"); param.OkText = T("Ok"); })">
     <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
         <MSpacer />
         <Language />
@@ -19,17 +19,34 @@
     </MMain>
 
     <Settings @bind-Show=_showSetting />
-
-    <MasaPopupProvider />
 </MApp>
 
 @code {
 
     private bool _showSetting;
+    private I18n? _languageProvider;
+
+    [Inject]
+    public I18n LanguageProvider
+    {
+        get
+        {
+            return _languageProvider ?? throw new Exception("please Inject I18n!");
+        }
+        set
+        {
+            _languageProvider = value;
+        }
+    }
 
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;
+    }
+
+    public string T(string key)
+    {
+        return LanguageProvider.T(key);
     }
 
     public void Dispose()

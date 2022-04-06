@@ -16,9 +16,9 @@ namespace MASA.PM.Contracts.Admin.Dto
         public string Name
         {
             get => _name;
-            set => _name = value.Trim();
+            set => _name = value?.Trim() ?? "";
         }
-        
+
         public List<int> EnvironmentClusterIds { get; set; } = new();
 
         public int ProjectId { get; set; }

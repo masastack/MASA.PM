@@ -17,7 +17,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         public string Name
         {
             get => _name;
-            set => _name = value.Trim();
+            set => _name = value?.Trim() ?? "";
         }
 
         [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]

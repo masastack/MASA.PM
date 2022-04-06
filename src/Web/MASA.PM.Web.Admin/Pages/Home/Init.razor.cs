@@ -1,5 +1,4 @@
-﻿using MASA.Blazor.Experimental.Components;
-using MASA.PM.Caller.Callers;
+﻿using MASA.PM.Caller.Callers;
 using MASA.PM.UI.Admin.Model;
 
 namespace MASA.PM.Web.Admin.Pages.Home
@@ -56,12 +55,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }).ToList();
                 await EnvironmentCaller.InitAsync(_initModel);
 
-                await PopupService.MessageAsync("初始化完成！", AlertTypes.Success);
+                await PopupService.AlertAsync("初始化完成！", AlertTypes.Success);
                 NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
             }
             catch (Exception ex)
             {
-                await PopupService.MessageAsync(ex);
+                await PopupService.AlertAsync(ex);
             }
             finally
             {

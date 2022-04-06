@@ -2,7 +2,9 @@
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
+  "Cancel": "取消",
   "Save": "保存",
+  "Ok": "确定",
   "Submit": "提交",
   "Add Environment": "新增环境",
   "Edit Environment": "编辑环境",
@@ -46,5 +48,6 @@
   "App": "应用",
   "Project": "项目",
   "Admin": "管理员",
-  "Members": "成员"
+  "Members": "成员",
+  "Tips": "提示"
 }

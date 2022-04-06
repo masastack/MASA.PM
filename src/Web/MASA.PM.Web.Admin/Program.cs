@@ -16,7 +16,6 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
-builder.Services.AddMasaBlazorExperimentalComponents();
 builder.Services.AddMasaBlazor(builder =>
 {
     builder.UseTheme(option =>
