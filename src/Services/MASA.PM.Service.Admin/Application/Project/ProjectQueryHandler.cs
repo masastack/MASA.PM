@@ -89,5 +89,34 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Name = projectType.Name
             }).ToList();
         }
+
+        [EventHandler]
+        public async Task GetListByEnvNameAsync(ProjectAppsQuery query)
+        {
+            var projects = await _projectRepository.GetProjectListByEnvIdAsync(query.EnvName);
+            var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
+
+            List<ProjectModel> projectModels = projects.Select(
+                project => new ProjectModel(
+                    project.Id,
+                    project.Identity,
+                    project.Name,
+                    project.LabelId,
+                    project.TeamId)
+                ).ToList();
+
+            projectModels.ForEach(project =>
+            {
+                apps.ForEach(appGroup =>
+                {
+                    if (appGroup.ProjectId == project.Id)
+                    {
+                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id));
+                    }
+                });
+            });
+
+            query.Result = projectModels;
+        }
     }
 }

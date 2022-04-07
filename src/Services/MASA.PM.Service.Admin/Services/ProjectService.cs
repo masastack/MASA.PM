@@ -14,7 +14,8 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/project/teamProjects/{teamId}", GetListByTeamId);
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
-            App.MapGet("api/v1/project/projectType", GetProjectTypes);
+            App.MapGet("/api/v1/project/projectType", GetProjectTypes);
+            App.MapGet("/api/v1/project-with-apps/{envName}", GetListByEnvName);
             App.MapPut("/api/v1/project", UpdateAsync);
             App.MapDelete("/api/v1/project", RemoveAsync);
         }
@@ -36,6 +37,14 @@ namespace MASA.PM.Service.Admin.Services
         public async Task<List<ProjectDto>> GetListByTeamId(IEventBus eventBus, Guid teamId)
         {
             var query = new ProjectsQuery(null, teamId);
+            await eventBus.PublishAsync(query);
+
+            return query.Result;
+        }
+
+        public async Task<List<ProjectModel>> GetListByEnvName(IEventBus eventBus, string envName)
+        {
+            var query = new ProjectAppsQuery(envName);
             await eventBus.PublishAsync(query);
 
             return query.Result;
