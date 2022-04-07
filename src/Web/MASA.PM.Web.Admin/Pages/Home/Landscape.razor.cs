@@ -1,5 +1,4 @@
-﻿using MASA.Blazor.Experimental.Components;
-using MASA.PM.Caller.Callers;
+﻿using MASA.PM.Caller.Callers;
 using MASA.PM.Contracts.Admin.Enum;
 using MASA.PM.Contracts.Admin.Dto;
 using MASA.PM.Contracts.Admin.Dto;
@@ -166,7 +165,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (_environments.Count <= 1)
             {
-                await PopupService.MessageAsync("环境不能为空", AlertTypes.Error);
+                await PopupService.AlertAsync("环境不能为空", AlertTypes.Error);
             }
             else
             {
@@ -242,7 +241,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (_clusters.Count <= 1)
             {
-                await PopupService.MessageAsync("集群不能为空", AlertTypes.Error);
+                await PopupService.AlertAsync("集群不能为空", AlertTypes.Error);
             }
             else
             {
@@ -368,8 +367,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private void AppHide()
         {
-            _selectAppType = 0;
-            _selectAppServiceType = 0;
             _appFormModel.Hide();
         }
 
@@ -377,8 +374,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (!_appFormModel.HasValue)
             {
-                _appFormModel.Data.Type = (AppTypes)_selectAppType;
-                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
                 await AppCaller.AddAsync(_appFormModel.Data);
             }
             else

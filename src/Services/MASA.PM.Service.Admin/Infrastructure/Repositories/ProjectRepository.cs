@@ -11,11 +11,11 @@
 
         public async Task<Project> AddAsync(Project project)
         {
-            if (_dbContext.Projects.Any(p => p.Name.ToLower() == project.Name.ToLower()))
+            if (_dbContext.Projects.Any(p => p.Name == project.Name))
             {
                 throw new UserFriendlyException("项目名称已存在！");
             }
-            if (_dbContext.Projects.Any(p => p.Identity.ToLower() == project.Identity.ToLower()))
+            if (_dbContext.Projects.Any(p => p.Identity == project.Identity))
             {
                 throw new UserFriendlyException("项目ID已存在！");
             }
@@ -108,9 +108,22 @@
 
         public async Task<List<Label>> GetProjectTypesAsync()
         {
-            var result = await _dbContext.Labels.ToListAsync();
+            var result = await _dbContext.Labels.Where(label => label.TypeCode == "ProjectType").ToListAsync();
 
             return result;
+        }
+
+        public async Task<List<Project>> GetProjectListByEnvIdAsync(string envName)
+        {
+            var projects = await (from env in _dbContext.Environments.Where(env => env.Name == envName)
+                                  join envCluster in _dbContext.EnvironmentClusters on env.Id equals envCluster.EnvironmentId
+                                  join envClusterProject in _dbContext.EnvironmentClusterProjects on envCluster.Id equals envClusterProject.EnvironmentClusterId
+                                  join project in _dbContext.Projects on envClusterProject.ProjectId equals project.Id
+                                  select project)
+                              .Distinct()
+                              .ToListAsync();
+
+            return projects;
         }
 
         public async Task UpdateAsync(Project project)

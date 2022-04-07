@@ -37,6 +37,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
+            var projectTypes = await _projectRepository.GetProjectTypesAsync();
             if (query.EnvironmentClusterId.HasValue)
             {
                 var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
@@ -45,6 +46,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    LableId = project.LabelId,
+                    LableName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
@@ -60,6 +63,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    LableId = project.LabelId,
+                    LableName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
@@ -83,6 +88,35 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Id = projectType.Id,
                 Name = projectType.Name
             }).ToList();
+        }
+
+        [EventHandler]
+        public async Task GetListByEnvNameAsync(ProjectAppsQuery query)
+        {
+            var projects = await _projectRepository.GetProjectListByEnvIdAsync(query.EnvName);
+            var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
+
+            List<ProjectModel> projectModels = projects.Select(
+                project => new ProjectModel(
+                    project.Id,
+                    project.Identity,
+                    project.Name,
+                    project.LabelId,
+                    project.TeamId)
+                ).ToList();
+
+            projectModels.ForEach(project =>
+            {
+                apps.ForEach(appGroup =>
+                {
+                    if (appGroup.ProjectId == project.Id)
+                    {
+                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id));
+                    }
+                });
+            });
+
+            query.Result = projectModels;
         }
     }
 }

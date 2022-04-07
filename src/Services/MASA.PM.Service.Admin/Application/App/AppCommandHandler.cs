@@ -86,6 +86,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 
             var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsByAppId(appModel.Id);
             await _appRepository.RemoveEnvironmentClusterProjectApps(envClusterProjectApps);
+
             var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
             {
                 EnvironmentClusterProjectId = environmentClusterProjectId,

@@ -76,7 +76,8 @@ namespace MASA.PM.Service.Admin.Application.Environment
         [EventHandler]
         public async Task UpdateEnvironmentAsync(UpdateEnvironmentCommand command)
         {
-            await _environmentRepository.UpdateAsync(command.EnvironmentModel);
+            var envModel = command.EnvironmentModel;
+            await _environmentRepository.UpdateAsync(envModel);
         }
 
         [EventHandler]

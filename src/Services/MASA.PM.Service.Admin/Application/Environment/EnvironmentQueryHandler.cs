@@ -4,11 +4,15 @@
     {
         private readonly IEnvironmentRepository _environmentRepository;
         private readonly IClusterRepository _clusterRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IAppRepository _appRepository;
 
-        public EnvironmentQueryHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository)
+        public EnvironmentQueryHandler(IEnvironmentRepository environmentRepository, IClusterRepository clusterRepository, IProjectRepository projectRepository, IAppRepository appRepository)
         {
             _environmentRepository = environmentRepository;
             _clusterRepository = clusterRepository;
+            _projectRepository = projectRepository;
+            _appRepository = appRepository;
         }
 
         [EventHandler]

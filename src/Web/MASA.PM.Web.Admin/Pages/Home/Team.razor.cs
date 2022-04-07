@@ -3,7 +3,7 @@
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team : ProCompontentBase
-    {     
+    {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
@@ -37,8 +37,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private DataModal<UpdateAppDto> _appFormModel = new();
         private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private AppDto _appDetail = new();
-        private int _selectAppType;
-        private int _selectAppServiceType;
         private int _selectAppId;
         private List<ProjectTypesDto> _projectTypes = new();
 
@@ -135,16 +133,32 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task RemoveProjectAsync()
         {
             var deleteProject = _projects.First(project => project.Id == _selectProjectId);
-            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+            var isHasApps = _apps.Where(app => app.ProjectId == _selectProjectId).Any();
+
+            if (isHasApps)
             {
-                await ProjectCaller.DeleteAsync(_selectProjectId);
+                await PopupService.AlertAsync(param =>
+                {
+                    param.Centered = true;
+                    param.Content = "您的项目中还有应用存在，无法删除项目!";
+                    param.Color = "warning";
+                    param.Top = true;
+                    param.Timeout = 2000;
+                });
+            }
+            else
+            {
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+                {
+                    await ProjectCaller.DeleteAsync(_selectProjectId);
 
-                _projects.Remove(deleteProject);
+                    _projects.Remove(deleteProject);
 
-                _projectFormModel.Hide();
+                    _projectFormModel.Hide();
 
-                _curTab = 0;
-            });
+                    _curTab = 0;
+                });
+            }
         }
 
         private async Task GetProjectDetailAsync(int projectId, int appCount)
@@ -180,8 +194,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _selectAppId = appId;
             _appDetail = _apps.First(app => app.Id == appId);
-            _selectAppType = (int)_appDetail.Type;
-            _selectAppServiceType = (int)_appDetail.ServiceType;
             ShowAppModal(new UpdateAppDto
             {
                 Id = _appDetail.Id,
@@ -192,7 +204,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster=>envCluster.EnvironmentCluster.Id).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id).ToList()
             });
         }
 
@@ -214,8 +226,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _appFormModel.Data.ProjectId = _selectProjectId;
             if (!_appFormModel.HasValue)
             {
-                _appFormModel.Data.Type = (AppTypes)_selectAppType;
-                _appFormModel.Data.ServiceType = (ServiceTypes)_selectAppServiceType;
                 await AppCaller.AddAsync(_appFormModel.Data);
             }
             else
@@ -238,14 +248,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _apps.Remove(deleteApp);
                 _projectApps.Remove(deleteApp);
 
+                _appCount = _projectApps.Count;
+
                 AppHide();
             });
         }
 
         private void AppHide()
         {
-            _selectAppType = 0;
-            _selectAppServiceType = 0;
             _appFormModel.Hide();
         }
     }

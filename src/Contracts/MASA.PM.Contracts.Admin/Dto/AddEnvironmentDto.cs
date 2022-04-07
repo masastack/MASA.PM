@@ -17,10 +17,10 @@ namespace MASA.PM.Contracts.Admin.Dto
         public string Name
         {
             get => _name;
-            set => _name = value.Trim();
+            set => _name = value?.Trim() ?? "";
         }
 
-        [StringLength(250, ErrorMessage = "Environment description length must be less than 250")]
+        [StringLength(255, ErrorMessage = "Environment description length must be less than 255")]
         public string Description { get; set; } = "";
 
         public AddEnvironmentDto()

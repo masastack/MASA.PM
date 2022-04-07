@@ -12,7 +12,7 @@ namespace MASA.PM.Contracts.Admin.Enum
         [Description("Dapr")]
         Dapr = 1,
 
-        [Description("WebApi")]
+        [Description("Web Api")]
         WebApi
     }
 }

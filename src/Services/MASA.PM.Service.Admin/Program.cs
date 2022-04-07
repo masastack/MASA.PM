@@ -1,4 +1,7 @@
 ﻿
+using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
+using Masa.Utils.Caching.Redis.DependencyInjection;
+using Masa.Utils.Caching.Redis.Models;
 using MASA.PM.Service.Admin.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -9,24 +9,6 @@
             _dbContext = dbContext;
         }
 
-        public async Task<List<int>> AddEnvironmentsAndClusterAsync(List<Entities.Environment> environments)
-        {
-            await Task.Delay(1);
-            List<int> envIds = new();
-
-            if (environments.Any())
-            {
-                environments.ForEach(env =>
-                {
-                    var newEnv = _dbContext.Environments.Add(env);
-                    _dbContext.SaveChanges();
-                    envIds.Add(newEnv.Entity.Id);
-                });
-            }
-
-            return envIds;
-        }
-
         public async Task<Entities.Environment> AddAsync(Entities.Environment environment)
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == environment.Name.ToLower()))
@@ -51,7 +33,7 @@
 
         public async Task<List<Entities.Environment>> GetListAsync()
         {
-            var result =await _dbContext.Environments.ToListAsync();
+            var result = await _dbContext.Environments.ToListAsync();
 
             return result;
         }
