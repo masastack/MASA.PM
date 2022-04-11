@@ -14,7 +14,9 @@
 
     <MMain Class="fill-lighten-1" Style="padding-top:60px">
         <div class="pa-6 max-width">
-            @Body
+            <MErrorHandler OnErrorHandleAsync="CustomErrorHandleAsync">
+                @Body
+            </MErrorHandler>
         </div>
     </MMain>
 
@@ -25,6 +27,9 @@
 
     private bool _showSetting;
     private I18n? _languageProvider;
+
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
 
     [Inject]
     public I18n LanguageProvider
@@ -42,6 +47,18 @@
     protected override void OnInitialized()
     {
         GlobalConfig.OnPageModeChanged += base.StateHasChanged;
+    }
+
+    private async Task CustomErrorHandleAsync(Exception exception)
+    {
+        if (exception.InnerException is UserFriendlyException userFriendly)
+        {
+            await PopupService.AlertAsync(userFriendly.Message, AlertTypes.Error);
+        }
+        else
+        {
+            await PopupService.AlertAsync(T("Server error,please contact administrator"), AlertTypes.Error);
+        }
     }
 
     public string T(string key)

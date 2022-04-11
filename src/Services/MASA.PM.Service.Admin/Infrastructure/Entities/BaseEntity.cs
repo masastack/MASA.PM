@@ -1,6 +1,4 @@
-﻿using Masa.BuildingBlocks.Data.Contracts;
-
-namespace MASA.PM.Service.Admin.Infrastructure.Entities
+﻿namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     public class BaseEntity<TKey, TUserKey> : ISoftDelete
     {

@@ -48,7 +48,7 @@
                                                 <div class="text-caption d-flex" style="padding:0">
                                                     @{
                                                         string backgroundColor;
-                                                        switch (project.LableName.ToLower())
+                                                        switch (project.LabelName.ToLower())
                                                         {
                                                             case "basic ability":
                                                                 backgroundColor = "#37D7AD";
@@ -65,7 +65,7 @@
                                                         }
                                                     }
                                                     <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
-                                                        @project.LableName
+                                                        @project.LabelName
                                                     </div>
                                                     @project.Identity
                                                 </div>

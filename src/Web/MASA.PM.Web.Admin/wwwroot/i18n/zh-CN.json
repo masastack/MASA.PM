@@ -2,6 +2,7 @@
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
+  "Server error,please contact administrator": "服务异常，请联系管理员",
   "Cancel": "取消",
   "Save": "保存",
   "Ok": "确定",

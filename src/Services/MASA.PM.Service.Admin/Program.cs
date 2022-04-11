@@ -1,7 +1,4 @@
-﻿
-using Masa.Utils.Caching.DistributedMemory.DependencyInjection;
-using Masa.Utils.Caching.Redis.DependencyInjection;
-using Masa.Utils.Caching.Redis.Models;
+﻿using Masa.Utils.Data.EntityFrameworkCore.SqlServer;
 using MASA.PM.Service.Admin.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +28,6 @@ foreach (var item in assembly)
 }
 #endregion
 
-var connectionString = AppSettings.Get("ConnectionString");
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
@@ -64,13 +60,9 @@ var app = builder.Services
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddDaprEventBus<IntegrationEventLogService>(options =>
     {
-        options.UseEventBus()
-               .UseUoW<PMDbContext>(dbOptions =>
-               {
-                   dbOptions.UseSqlServer(connectionString);
-                   dbOptions.UseSoftDelete();//Start soft delete
-               })
-               .UseEventLog<PMDbContext>();
+        options.UseEventLog<PMDbContext>()
+               .UseEventBus()
+               .UseUoW<PMDbContext>(dbOptions => dbOptions.UseSqlServer().UseSoftDelete());
     })
     .AddServices(builder);
 

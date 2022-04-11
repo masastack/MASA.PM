@@ -15,7 +15,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapGet("/api/v1/project/projectType", GetProjectTypes);
-            App.MapGet("/api/v1/project-with-apps/{envName}", GetListByEnvName);
+            App.MapGet("/api/v1/projectwithapps/{envName}", GetListByEnvName);
             App.MapPut("/api/v1/project", UpdateAsync);
             App.MapDelete("/api/v1/project", RemoveAsync);
         }

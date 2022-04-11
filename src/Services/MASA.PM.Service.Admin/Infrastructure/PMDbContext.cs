@@ -1,6 +1,6 @@
 ﻿namespace MASA.PM.Service.Admin.Infrastructure
 {
-    public class PMDbContext : IntegrationEventLogContext
+    public class PMDbContext : MasaDbContext
     {
         public PMDbContext(MasaDbContextOptions<PMDbContext> options) : base(options)
         {
