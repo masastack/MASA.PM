@@ -169,7 +169,14 @@
         OnDelete="RemoveEnvAsync"
         OnCancel="_envFormModel.Hide">
     <ChildContent>
-        <MTextField Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></MTextField>
+        <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
+            <MCol Cols="9">
+                <MTextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></MTextField>
+            </MCol>
+            <MCol Cols="3" Align="AlignTypes.Start">
+                <ColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></ColorGroup>
+            </MCol>
+        </MRow>
         <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
                        Items="_allClusters"
                        ItemText="r=>r.Name"
@@ -224,11 +231,14 @@
                        Outlined
                        Label="@T("Relation environment")"
                        Multiple>
-            <SelectionContent Context="_context">
-                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                    @_context.Item.Name
+            <SelectionContent Context="context">
+                <MChip Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
+                    @context.Item.Name
                 </MChip>
             </SelectionContent>
+            <ItemContent>
+                <MListItemContent Class="@($"{context.Item.Color}--text")">@context.Item.Name</MListItemContent>
+            </ItemContent>
         </MAutocomplete>
         <MTextarea Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
         @if (_clusterFormModel.HasValue)
@@ -319,9 +329,16 @@
                        Outlined
                        Label="@T("Environment/Cluster")"
                        Multiple>
-            <SelectionContent Context="_context">
-                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
+            <SelectionContent Context="context">
+                <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
             </SelectionContent>
+            <ItemContent>
+                <MListItemContent>
+                    <div class="d-flex align-center">
+                        <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                    </div>
+                </MListItemContent>
+            </ItemContent>
         </MAutocomplete>
         <MTextarea Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
         @if (_projectFormModel.HasValue)
@@ -391,9 +408,16 @@
                        Outlined
                        Label="@T("Environment/Cluster")"
                        Multiple>
-            <SelectionContent Context="_context">
-                <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
+            <SelectionContent Context="context">
+                <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
             </SelectionContent>
+            <ItemContent>
+                <MListItemContent>
+                    <div class="d-flex align-center">
+                        <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                    </div>
+                </MListItemContent>
+            </ItemContent>
         </MAutocomplete>
         <MTextarea Outlined Label="@T("App description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
         @if (_appFormModel.HasValue)

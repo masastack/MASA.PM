@@ -18,18 +18,19 @@
         [EventHandler]
         public async Task GetEnvironmentAsync(EnvironmentQuery query)
         {
-            var cluster = await _environmentRepository.GetAsync(query.EnvironmentId);
+            var environment = await _environmentRepository.GetAsync(query.EnvironmentId);
             var envclusters = await _clusterRepository.GetEnvironmentClustersByEnvIdAsync(query.EnvironmentId);
 
             query.Result = new EnvironmentDetailDto
             {
-                Id = cluster.Id,
-                Name = cluster.Name,
-                Description = cluster.Description,
-                Creator = cluster.Creator,
-                CreationTime = cluster.CreationTime,
-                Modifier = cluster.Modifier,
-                ModificationTime = cluster.ModificationTime,
+                Id = environment.Id,
+                Name = environment.Name,
+                Color = environment.Color,
+                Description = environment.Description,
+                Creator = environment.Creator,
+                CreationTime = environment.CreationTime,
+                Modifier = environment.Modifier,
+                ModificationTime = environment.ModificationTime,
                 ClusterIds = envclusters.Select(ec => ec.ClusterId).ToList()
             };
         }
@@ -41,7 +42,8 @@
             query.Result = envs.Select(env => new EnvironmentDto
             {
                 Id = env.Id,
-                Name = env.Name
+                Name = env.Name,
+                Color = env.Color,
             }).ToList();
         }
     }

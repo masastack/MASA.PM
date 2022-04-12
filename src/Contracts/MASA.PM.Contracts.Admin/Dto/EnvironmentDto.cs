@@ -11,5 +11,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         public int Id { get; set; }
 
         public string Name { get; set; } = "";
+
+        public string Color { get; set; } = "";
     }
 }

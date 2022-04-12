@@ -20,6 +20,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             {
                 Name = e.Name,
                 Description = e.Description,
+                Color = e.Color,
                 Creator = Guid.NewGuid(),
                 CreationTime = DateTime.Now,
                 ModificationTime = DateTime.Now,
@@ -55,6 +56,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             var addEnvEntity = new Infrastructure.Entities.Environment
             {
                 Name = command.EnvironmentWhitClusterModel.Name,
+                Color = command.EnvironmentWhitClusterModel.Color,
                 Description = command.EnvironmentWhitClusterModel.Description
             };
             var newEnv = await _environmentRepository.AddAsync(addEnvEntity);
@@ -70,7 +72,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             });
             await _environmentRepository.AddEnvironmentClustersAsync(addEnvironmentClusters);
 
-            command.Result = new EnvironmentDto { Id = newEnv.Id, Name = newEnv.Name };
+            command.Result = new EnvironmentDto { Id = newEnv.Id, Name = newEnv.Name, Color = newEnv.Color };
         }
 
         [EventHandler]

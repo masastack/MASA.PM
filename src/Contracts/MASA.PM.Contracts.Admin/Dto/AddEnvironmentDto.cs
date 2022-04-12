@@ -23,6 +23,8 @@ namespace MASA.PM.Contracts.Admin.Dto
         [StringLength(255, ErrorMessage = "Environment description length must be less than 255")]
         public string Description { get; set; } = "";
 
+        public string Color { get; set; }
+
         public AddEnvironmentDto()
         {
 

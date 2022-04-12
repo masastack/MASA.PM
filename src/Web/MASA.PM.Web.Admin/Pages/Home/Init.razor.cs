@@ -14,16 +14,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        private readonly List<EnvClusterModel> _customEnv = new()
-        {
-            new EnvClusterModel(0, "Development", "开发环境"),
-            new EnvClusterModel(1, "Staging", "模拟环境"),
-            new EnvClusterModel(2, "Production", "生产环境")
-        };
+        private List<EnvClusterModel> _customEnv = new();
         private int _step = 1;
         private InitDto _initModel = new();
         private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
         private bool _initLoading;
+        private readonly List<string> _colors = new()
+        {
+            "#00b42a", "#ff7d00", "#ff5252", "#37a7ff", "#ffb547",
+        };
 
         private IEnumerable<Func<string, StringBoolean>> RequiredRules => new List<Func<string, StringBoolean>>
         {
@@ -34,6 +33,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
+                var defaultColor = _colors.First();
+                _customEnv = new List<EnvClusterModel>()
+                {
+                    new EnvClusterModel(0, "Development", "开发环境", defaultColor),
+                    new EnvClusterModel(1, "Staging", "模拟环境", defaultColor),
+                    new EnvClusterModel(2, "Production", "生产环境", defaultColor)
+                };
+
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
@@ -51,7 +58,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _initModel.Environments = _customEnv.Select(env => new AddEnvironmentDto
                 {
                     Name = env.Name,
-                    Description = env.Description
+                    Description = env.Description,
+                    Color = env.Color
                 }).ToList();
                 await EnvironmentCaller.InitAsync(_initModel);
 

@@ -61,6 +61,7 @@
             {
                 Id = model.EnvironmentId,
                 Name = model.Name,
+                Color = model.Color,
                 Description = model.Description,
                 Modifier = MasaUser.UserId,
                 ModificationTime = DateTime.Now

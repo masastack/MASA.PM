@@ -24,7 +24,14 @@
                     @{
                         foreach (var item in _customEnv)
                         {
-                            <MTextField Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                            <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
+                                <MCol Cols="9">
+                                    <MTextField TextColor="@item.Color" Class="pr-6" Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                                </MCol>
+                                <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
+                                    <ColorGroup @bind-Value="@item.Color" Colors="_colors"></ColorGroup>
+                                </MCol>
+                            </MRow>
                             <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
                             <div class="d-flex justify-end mb-6 mr-1">
                                 <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
