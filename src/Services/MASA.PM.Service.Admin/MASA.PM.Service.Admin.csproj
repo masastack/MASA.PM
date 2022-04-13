@@ -18,6 +18,10 @@
 	  <Compile Remove="Migrations\20220216015258_add_teamId_to_project.cs" />
 	  <Compile Remove="Migrations\20220216015258_add_teamId_to_project.Designer.cs" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.4.0-prevew.1" />

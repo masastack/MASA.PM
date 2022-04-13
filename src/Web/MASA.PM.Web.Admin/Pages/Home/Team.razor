@@ -370,17 +370,16 @@
 @code {
     //team
     private string _friends = "Sandra Adams";
-    private string _name = "Midnight Crew";
 
     public class Person
     {
-        public string Header { get; set; }
+        public string Header { get; set; } = "";
 
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
-        public string Group { get; set; }
+        public string Group { get; set; } = "";
 
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = "";
 
         public bool Divider { get; set; }
     }
@@ -451,7 +450,6 @@
             Avatar="https://cdn.masastack.com/stack/images/website/masa-blazor/lists/3.png"
         }
     };
-    private string _title = "The summer breeze";
 
     public void Remove()
     {
