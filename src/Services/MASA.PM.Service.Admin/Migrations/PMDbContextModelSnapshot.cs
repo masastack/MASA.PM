@@ -45,9 +45,10 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<DateTime>("ModificationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("RowVersion")
+                    b.Property<string>("RowVersion")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
@@ -60,7 +61,13 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventLogs");
+                    b.HasIndex(new[] { "EventId", "RowVersion" }, "index_eventid_version");
+
+                    b.HasIndex(new[] { "State", "ModificationTime" }, "index_state_modificationtime");
+
+                    b.HasIndex(new[] { "State", "TimesSent", "ModificationTime" }, "index_state_timessent_modificationtime");
+
+                    b.ToTable("IntegrationEventLog", (string)null);
                 });
 
             modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.App", b =>
@@ -94,7 +101,7 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
 
@@ -157,7 +164,7 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
 
@@ -183,6 +190,12 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasComment("Color");
+
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
@@ -200,7 +213,7 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
 
@@ -315,7 +328,7 @@ namespace MASA.PM.Service.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
 
@@ -346,7 +359,7 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     b.HasIndex(new[] { "TypeCode", "IsDeleted" }, "IX_TypeCode");
 
-                    b.ToTable("ProjectTypes");
+                    b.ToTable("Labels");
                 });
 
             modelBuilder.Entity("MASA.PM.Service.Admin.Infrastructure.Entities.Project", b =>
@@ -379,8 +392,12 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LabelId")
+                        .HasColumnType("int")
+                        .HasComment("LabelId");
+
                     b.Property<DateTime>("ModificationTime")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSDATETIME()");
 
@@ -396,10 +413,6 @@ namespace MASA.PM.Service.Admin.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("TeamId");
-
-                    b.Property<int>("LabelId")
-                        .HasColumnType("int")
-                        .HasComment("LabelId");
 
                     b.HasKey("Id");
 

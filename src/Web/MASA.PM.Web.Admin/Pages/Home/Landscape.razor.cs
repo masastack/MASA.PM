@@ -6,7 +6,7 @@ using MASA.PM.Contracts.Admin.Dto;
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Landscape
-    {        
+    {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
@@ -52,6 +52,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _relationAppVisible;
         private List<int> _disableRelationAppEnvCluster = new();
         private List<ProjectTypesDto> _projectTypes = new();
+        private List<string> _colors = new()
+        {
+            "success", "warning", "error", "info", "orange lighten-1",
+        };
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -61,7 +65,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (_environments.Any())
                 {
                     _selectedEnvId = _environments[0].Id;
-                    _clusters = await GetClustersByEnvIdAsync(_environments[0].Id); 
+                    _clusters = await GetClustersByEnvIdAsync(_environments[0].Id);
                 }
                 else
                 {
@@ -126,7 +130,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 ClusterIds = env.ClusterIds,
                 Name = env.Name,
                 Description = env.Description,
-                EnvironmentId = env.Id
+                EnvironmentId = env.Id,
+                Color = env.Color
             });
         }
 
@@ -134,6 +139,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (model == null)
             {
+                _envFormModel.Data.Color = _colors.First();
                 _envFormModel.Show();
             }
             else
@@ -341,7 +347,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster=>envCluster.EnvironmentCluster.Id).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id).ToList()
             });
         }
 

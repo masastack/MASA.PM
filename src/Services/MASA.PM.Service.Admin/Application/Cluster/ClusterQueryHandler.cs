@@ -75,6 +75,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             {
                 List<(int EnvClusterId,
                     string EnvName,
+                    string EnvColor,
                     string ClusterName)>
                     result = await _clusterRepository.GetEnvironmentClusters();
 
@@ -82,6 +83,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 {
                     Id = envClusterGroup.EnvClusterId,
                     EnvironmentName = envClusterGroup.EnvName,
+                    EnvironmentColor = envClusterGroup.EnvColor,
                     ClusterName = envClusterGroup.ClusterName
                 }).ToList();
             }

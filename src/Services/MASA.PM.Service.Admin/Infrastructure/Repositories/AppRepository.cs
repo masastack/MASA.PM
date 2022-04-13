@@ -83,15 +83,15 @@
             return result;
         }
 
-        public async Task<List<(int AppId, int ProjectId, string ClusterName, string EnvironmentName, EnvironmentCluster)>> GetEnvironmentAndClusterNamesByAppIds(IEnumerable<int> appIds)
+        public async Task<List<(int AppId, int ProjectId, string ClusterName, string EnvironmentName, string EnvColor, EnvironmentCluster)>> GetEnvironmentAndClusterNamesByAppIds(IEnumerable<int> appIds)
         {
             var result = await (from environmentClusterProjectApp in _dbContext.EnvironmentClusterProjectApps.Where(environmentClusterProjectApp => appIds.Contains(environmentClusterProjectApp.AppId))
                                 join environmentClusterProject in _dbContext.EnvironmentClusterProjects on environmentClusterProjectApp.EnvironmentClusterProjectId equals environmentClusterProject.Id
                                 join environmentCluster in _dbContext.EnvironmentClusters on environmentClusterProject.EnvironmentClusterId equals environmentCluster.Id
                                 join environment in _dbContext.Environments on environmentCluster.EnvironmentId equals environment.Id
                                 join cluster in _dbContext.Clusters on environmentCluster.ClusterId equals cluster.Id
-                                select new ValueTuple<int, int, string, string, EnvironmentCluster>
-                                (environmentClusterProjectApp.AppId, environmentClusterProject.ProjectId, cluster.Name, environment.Name, environmentCluster)
+                                select new ValueTuple<int, int, string, string, string, EnvironmentCluster>
+                                (environmentClusterProjectApp.AppId, environmentClusterProject.ProjectId, cluster.Name, environment.Name, environment.Color, environmentCluster)
                                 )
                                 .ToListAsync();
 

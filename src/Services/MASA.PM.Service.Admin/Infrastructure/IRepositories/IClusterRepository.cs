@@ -18,7 +18,7 @@
 
         Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds);
 
-        Task<List<(int EnvClusterId,string EnvName,string ClusterName)>> GetEnvironmentClusters();
+        Task<List<(int EnvClusterId, string EnvName, string EnvColor, string ClusterName)>> GetEnvironmentClusters();
 
         Task UpdateAsync(Cluster cluster);
 

@@ -37,6 +37,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     int ProjectId,
                     string ClusterName,
                     string EnvName,
+                    string EnvColor,
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(new List<int>() { app.Id });
 
@@ -48,6 +49,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     {
                         Id = appProjectEnvCluster.EnvCluster.Id,
                         EnvironmentName = appProjectEnvCluster.EnvName,
+                        EnvironmentColor = appProjectEnvCluster.EnvColor,
                         ClusterName = appProjectEnvCluster.ClusterName
                     }
                 }).ToList();
@@ -64,6 +66,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     int ProjectId,
                     string ClusterName,
                     string EnvName,
+                    string EnvColor,
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
                 var appEnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterDto
@@ -74,6 +77,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     {
                         Id = appProjectEnvCluster.EnvCluster.Id,
                         EnvironmentName = appProjectEnvCluster.EnvName,
+                        EnvironmentColor = appProjectEnvCluster.EnvColor,
                         ClusterName = appProjectEnvCluster.ClusterName
                     }
                 }).ToList();

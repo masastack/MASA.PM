@@ -14,6 +14,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string Description { get; set; } = "";
 
+        public string Color { get; set; } = "";
+
         public List<int> ClusterIds { get; set; } = default!;
     }
 }

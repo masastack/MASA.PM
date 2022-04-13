@@ -22,6 +22,10 @@ builder.Services.AddMasaBlazor(builder =>
         {
             option.Primary = "#4318FF";
             option.Accent = "#4318FF";
+            option.Success = "#00B42A";
+            option.Warning = "#FF7D00";
+            option.Error = "#FF5252";
+            option.Info = "#37A7FF";
         }
     );
 });

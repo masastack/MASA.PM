@@ -12,6 +12,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string EnvironmentName { get; set; } = "";
 
+        public string EnvironmentColor { get; set; } = "";
+
         public string ClusterName { get; set; } = "";
 
         public string EnvironmentClusterName

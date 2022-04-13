@@ -80,12 +80,12 @@
             return result;
         }
 
-        public async Task<List<(int EnvClusterId, string EnvName, string ClusterName)>> GetEnvironmentClusters()
+        public async Task<List<(int EnvClusterId, string EnvName, string EnvColor, string ClusterName)>> GetEnvironmentClusters()
         {
             var result = await (from envCluster in _dbContext.EnvironmentClusters
                                 join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
                                 join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
-                                select new ValueTuple<int, string, string>(envCluster.Id, env.Name, cluster.Name)
+                                select new ValueTuple<int, string, string, string>(envCluster.Id, env.Name, env.Color, cluster.Name)
                                 ).ToListAsync();
 
             return result;
