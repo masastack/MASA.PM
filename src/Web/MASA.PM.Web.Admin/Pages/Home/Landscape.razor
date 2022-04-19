@@ -72,7 +72,7 @@
                 <MExpansionPanels Flat Accordion>
                     @foreach (var project in _projects)
                     {
-                        var apps = _apps.Where(app => app.ProjectId == project.Id && app.EnvironmentClusters.Select(ec => ec.EnvironmentCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
+                        var apps = _apps.Where(app => app.ProjectId == project.Id && app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
                         <MExpansionPanel Style="margin-bottom: 12px; border-radius: 20px;">
                             <MExpansionPanelHeader>
                                 <span style="display:flex;align-items:center;margin-right:10px;">

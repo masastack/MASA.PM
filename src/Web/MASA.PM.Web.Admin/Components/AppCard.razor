@@ -14,7 +14,7 @@
                 <div class="mx-2" Style="height:24px;white-space: nowrap;overflow: hidden;">
                     @foreach (var item in EnvironmentClusters)
                     {
-                        <EnvClusterChip Style="margin:0 2px 1px 0;" EnvironmentName="@item.EnvironmentCluster.EnvironmentName" EnvironmentColor="@item.EnvironmentCluster.EnvironmentColor" ClusterName="@item.EnvironmentCluster.ClusterName" />
+                        <EnvClusterChip Style="margin:0 2px 1px 0;" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
                     }
                 </div>
                 @if (ShowEditInfo)
@@ -33,7 +33,7 @@
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
-    public List<AppEnvironmentClusterDto> EnvironmentClusters { get; set; } = new();
+    public List<EnvironmentClusterDto> EnvironmentClusters { get; set; } = new();
 
     [Parameter]
     public AppDto App { get; set; } = new();
