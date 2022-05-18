@@ -2,7 +2,7 @@
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
-    public partial class Team : ProCompontentBase
+    public partial class Team
     {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
