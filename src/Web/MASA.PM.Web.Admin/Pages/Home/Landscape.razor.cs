@@ -347,7 +347,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id).ToList()
             });
         }
 
@@ -421,14 +421,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _selectAppServiceType = (int)model.ServiceType;
             _addRelationAppModel.AppId = model.Id;
             _addRelationAppModel.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
-            _addRelationAppModel.EnvironmentClusterIds.AddRange(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id));
+            _addRelationAppModel.EnvironmentClusterIds.AddRange(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id));
             _disableRelationAppEnvCluster.AddRange(_addRelationAppModel.EnvironmentClusterIds);
             _addRelationAppModel.ProjectId = _selectProjectId;
         }
 
         private async Task SubmitRelationAppAsync()
         {
-            _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id)).ToList();
+            _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id)).ToList();
             await AppCaller.AddRelationAppAsync(_addRelationAppModel);
             _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
             RelationAppHide();

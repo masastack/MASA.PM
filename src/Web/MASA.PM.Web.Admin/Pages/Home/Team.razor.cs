@@ -2,7 +2,7 @@
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
-    public partial class Team : ProCompontentBase
+    public partial class Team
     {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
@@ -204,7 +204,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Description = _appDetail.Description,
                 SwaggerUrl = _appDetail.SwaggerUrl,
                 Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.EnvironmentCluster.Id).ToList()
+                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id).ToList()
             });
         }
 

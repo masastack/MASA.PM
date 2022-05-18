@@ -41,17 +41,12 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(new List<int>() { app.Id });
 
-                query.Result.EnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterDto
+                query.Result.EnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new EnvironmentClusterDto
                 {
-                    AppId = appProjectEnvCluster.AppId,
-                    ProjectId = appProjectEnvCluster.ProjectId,
-                    EnvironmentCluster = new EnvironmentClusterDto
-                    {
-                        Id = appProjectEnvCluster.EnvCluster.Id,
-                        EnvironmentName = appProjectEnvCluster.EnvName,
-                        EnvironmentColor = appProjectEnvCluster.EnvColor,
-                        ClusterName = appProjectEnvCluster.ClusterName
-                    }
+                    Id = appProjectEnvCluster.EnvCluster.Id,
+                    EnvironmentName = appProjectEnvCluster.EnvName,
+                    EnvironmentColor = appProjectEnvCluster.EnvColor,
+                    ClusterName = appProjectEnvCluster.ClusterName
                 }).ToList();
             }
         }
@@ -104,7 +99,13 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     CreationTime = appEnvironmentCluster.app.CreationTime,
                     ModificationTime = appEnvironmentCluster.app.ModificationTime,
                     Modifier = appEnvironmentCluster.app.Modifier,
-                    EnvironmentClusters = appEnvironmentCluster.environmentClusters.ToList()
+                    EnvironmentClusters = appEnvironmentCluster.environmentClusters.Select(envCluster=>new EnvironmentClusterDto
+                    {
+                        Id = envCluster.EnvironmentCluster.Id,
+                        EnvironmentName = envCluster.EnvironmentCluster.EnvironmentName,
+                        EnvironmentColor = envCluster.EnvironmentCluster.EnvironmentColor,
+                        ClusterName = envCluster.EnvironmentCluster.ClusterName
+                    }).ToList()
                 }).OrderByDescending(app => app.ModificationTime)
                 .ToList();
             }
