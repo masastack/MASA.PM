@@ -70,6 +70,13 @@
             return result ?? throw new UserFriendlyException("项目不存在！");
         }
 
+        public async Task<List<Project>> GetListAsync()
+        {
+            var result = await _dbContext.Projects.ToListAsync();
+
+            return result;
+        }
+
         public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAsync(int projectId)
         {
             var result = await _dbContext.EnvironmentClusterProjects.Where(environmentClusterProject => environmentClusterProject.ProjectId == projectId).ToListAsync();

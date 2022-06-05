@@ -79,6 +79,25 @@ namespace MASA.PM.Service.Admin.Application.Project
         }
 
         [EventHandler]
+        public async Task GetProjectListAsync(ProjectListQuery query)
+        {
+            var projectTypes = await _projectRepository.GetProjectTypesAsync();
+            var projects = await _projectRepository.GetListAsync();
+
+            query.Result = projects.Select(project => new ProjectDto
+            {
+                Id = project.Id,
+                Identity = project.Identity,
+                Name = project.Name,
+                LabelId = project.LabelId,
+                LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
+                Description = project.Description,
+                Modifier = project.Modifier,
+                ModificationTime = project.ModificationTime
+            }).ToList();
+        }
+
+        [EventHandler]
         public async Task GetProjectTypes(ProjectTypesQuery query)
         {
             var result = await _projectRepository.GetProjectTypesAsync();
