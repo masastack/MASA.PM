@@ -10,6 +10,8 @@
 
         Task<Project> GetAsync(int Id);
 
+        Task<List<Project>> GetListAsync();
+
         Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId);
 
         Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAsync(int projectId);
