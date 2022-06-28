@@ -57,6 +57,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             if (query.ProjectIds.Any())
             {
                 var apps = await _appRepository.GetListByProjectIdAsync(query.ProjectIds);
+
                 List<(int AppId,
                     int ProjectId,
                     string ClusterName,
@@ -64,18 +65,22 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     string EnvColor,
                     EnvironmentCluster EnvCluster)>
                 appProjectEnvClusters = await _appRepository.GetEnvironmentAndClusterNamesByAppIds(apps.Select(app => app.Id));
-                var appEnvironmentClusters = appProjectEnvClusters.Select(appProjectEnvCluster => new AppEnvironmentClusterDto
-                {
-                    AppId = appProjectEnvCluster.AppId,
-                    ProjectId = appProjectEnvCluster.ProjectId,
-                    EnvironmentCluster = new EnvironmentClusterDto
+
+                var appEnvironmentClusters = appProjectEnvClusters
+                    .Where(appProjectEnvCluster => query.ProjectIds.Contains(appProjectEnvCluster.ProjectId))
+                    .Select(appProjectEnvCluster => new AppEnvironmentClusterDto
                     {
-                        Id = appProjectEnvCluster.EnvCluster.Id,
-                        EnvironmentName = appProjectEnvCluster.EnvName,
-                        EnvironmentColor = appProjectEnvCluster.EnvColor,
-                        ClusterName = appProjectEnvCluster.ClusterName
-                    }
-                }).ToList();
+                        AppId = appProjectEnvCluster.AppId,
+                        ProjectId = appProjectEnvCluster.ProjectId,
+                        EnvironmentCluster = new EnvironmentClusterDto
+                        {
+                            Id = appProjectEnvCluster.EnvCluster.Id,
+                            EnvironmentName = appProjectEnvCluster.EnvName,
+                            EnvironmentColor = appProjectEnvCluster.EnvColor,
+                            ClusterName = appProjectEnvCluster.ClusterName
+                        }
+                    }).ToList();
+
                 var environmentClusterGroup = appEnvironmentClusters.GroupBy(c => new { c.ProjectId, c.AppId }).ToList();
 
                 var result = apps.Join(
@@ -99,7 +104,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     CreationTime = appEnvironmentCluster.app.CreationTime,
                     ModificationTime = appEnvironmentCluster.app.ModificationTime,
                     Modifier = appEnvironmentCluster.app.Modifier,
-                    EnvironmentClusters = appEnvironmentCluster.environmentClusters.Select(envCluster=>new EnvironmentClusterDto
+                    EnvironmentClusters = appEnvironmentCluster.environmentClusters.Select(envCluster => new EnvironmentClusterDto
                     {
                         Id = envCluster.EnvironmentCluster.Id,
                         EnvironmentName = envCluster.EnvironmentCluster.EnvironmentName,
