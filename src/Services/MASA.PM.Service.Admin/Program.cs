@@ -1,4 +1,6 @@
-﻿using Masa.Utils.Data.EntityFrameworkCore.SqlServer;
+﻿using Masa.BuildingBlocks.Identity.IdentityModel;
+using Masa.Contrib.Data.Contracts.EF;
+using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
 using MASA.PM.Service.Admin.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,14 @@ foreach (var item in assembly)
     builder.Services.AddScoped(item.GetInterfaces().First(), item);
 }
 #endregion
+
+builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+{
+    options.Environment = "environment";
+    options.UserName = "name";
+    options.UserId = "sub";
+});
+builder.Services.AddAuthClient(builder.Configuration["AuthServiceBaseAddress"]);
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -60,14 +70,16 @@ var app = builder.Services
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddDaprEventBus<IntegrationEventLogService>(options =>
     {
-        options.UseEventLog<PMDbContext>()
-               .UseEventBus()
-               .UseUoW<PMDbContext>(dbOptions => dbOptions.UseSqlServer().UseSoftDelete());
+        options.UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
+               .UseEventLog<PmDbContext>()
+               .UseEventBus();
     })
     .AddServices(builder);
 
 //SeedData
 await app.Seed();
+
+app.UseMasaExceptionHandling();
 
 // Configure the HTTP request pipeline.
 

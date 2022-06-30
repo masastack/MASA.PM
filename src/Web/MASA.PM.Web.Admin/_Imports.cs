@@ -2,10 +2,8 @@
 global using BlazorComponent.I18n;
 global using Masa.Blazor;
 global using MASA.PM.Contracts.Admin.Dto;
-global using MASA.PM.Contracts.Admin.Enum;
 global using MASA.PM.UI.Admin.Data.Base;
 global using MASA.PM.UI.Admin.Global;
-global using MASA.PM.UI.Admin.Global.Config;
 global using MASA.PM.UI.Admin.Global.Nav.Model;
 global using MASA.PM.UI.Admin.Model;
 global using Microsoft.AspNetCore.Components;

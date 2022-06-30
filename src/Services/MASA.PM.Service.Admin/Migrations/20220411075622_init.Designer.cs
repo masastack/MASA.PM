@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MASA.PM.Service.Admin.Migrations
 {
-    [DbContext(typeof(PMDbContext))]
+    [DbContext(typeof(PmDbContext))]
     [Migration("20220411075622_init")]
     partial class init
     {

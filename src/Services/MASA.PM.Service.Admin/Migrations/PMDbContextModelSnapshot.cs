@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MASA.PM.Service.Admin.Migrations
 {
-    [DbContext(typeof(PMDbContext))]
+    [DbContext(typeof(PmDbContext))]
     partial class PMDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -2,9 +2,9 @@
 {
     public class EnvironmentRepository : IEnvironmentRepository
     {
-        private readonly PMDbContext _dbContext;
+        private readonly PmDbContext _dbContext;
 
-        public EnvironmentRepository(PMDbContext dbContext)
+        public EnvironmentRepository(PmDbContext dbContext)
         {
             _dbContext = dbContext;
         }

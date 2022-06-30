@@ -1,8 +1,10 @@
-﻿namespace MASA.PM.Service.Admin.Infrastructure
+﻿using Masa.Contrib.Data.EntityFrameworkCore;
+
+namespace MASA.PM.Service.Admin.Infrastructure
 {
-    public class PMDbContext : MasaDbContext
+    public class PmDbContext : MasaDbContext
     {
-        public PMDbContext(MasaDbContextOptions<PMDbContext> options) : base(options)
+        public PmDbContext(MasaDbContextOptions<PmDbContext> options) : base(options)
         {
             ChangeTracker.LazyLoadingEnabled = false;
             ChangeTracker.AutoDetectChangesEnabled = false;

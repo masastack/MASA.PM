@@ -2,9 +2,9 @@
 {
     public class ProjectRepository : IProjectRepository
     {
-        private readonly PMDbContext _dbContext;
+        private readonly PmDbContext _dbContext;
 
-        public ProjectRepository(PMDbContext dbContext)
+        public ProjectRepository(PmDbContext dbContext)
         {
             _dbContext = dbContext;
         }

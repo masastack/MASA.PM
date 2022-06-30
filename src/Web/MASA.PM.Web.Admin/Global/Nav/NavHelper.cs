@@ -4,7 +4,6 @@ public class NavHelper
 {
     private List<NavModel> _navList;
     private NavigationManager _navigationManager;
-    private GlobalConfig _globalConfig;
 
     public List<NavModel> Navs { get; } = new();
 
@@ -12,11 +11,10 @@ public class NavHelper
 
     public List<PageTabItem> PageTabItems { get; } = new();
 
-    public NavHelper(List<NavModel> navList, NavigationManager navigationManager, GlobalConfig globalConfig)
+    public NavHelper(List<NavModel> navList, NavigationManager navigationManager)
     {
         _navList = navList;
         _navigationManager = navigationManager;
-        _globalConfig = globalConfig;
         Initialization();
     }
 
@@ -67,7 +65,6 @@ public class NavHelper
     public void RefreshRender(NavModel nav)
     {
         Active(nav);
-        _globalConfig.CurrentNav = nav;
     }
 
     public void NavigateToByEvent(NavModel nav)
