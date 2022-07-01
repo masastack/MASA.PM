@@ -1,21 +1,24 @@
 ﻿<MHover Context="hoverContext" Class="d-flex flex-column">
-    <MCard Class="hover-pointer" OnClick="OnClick" Outlined MinHeight="Height" @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
+    <MCard Class="hover-pointer" Ripple=false OnClick="OnClick" Outlined MinHeight="Height" @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
         <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
-            <div class="text-h7 text-overflow">@App.Name</div>
+            <div class="emphasis2--text h7 text-overflow">@App.Name</div>
             <MSpacer />
-            <div class="text-h7 text-overflow">@App.Type</div>
+            <div class="emphasis2--text h7 text-overflow">@App.Type</div>
         </MCardTitle>
         <MCardSubtitle>
-            <div class="text-caption text-overflow">@App.Identity</div>
-            <div class="text-body3" style="display:-webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;text-overflow: ellipsis;overflow: hidden;">@App.Description</div>
+            <div class="regular3--text btn text-overflow">@App.Identity</div>
+            <div class="regular--text body text-overflow mt-4" >@App.Description</div>
         </MCardSubtitle>
         <MCardActions Style="position:absolute;bottom:0;left:0;right:0; padding-bottom:16px !important;">
             <div class="d-flex flex-column" style="overflow:hidden; width:100%;">
-                <div class="mx-2" Style="height:24px;white-space: nowrap;overflow: hidden;">
-                    @foreach (var item in EnvironmentClusters)
-                    {
-                        <EnvClusterChip Style="margin:0 2px 1px 0;" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
-                    }
+                <div class="mx-2 d-flex justify-space-between" Style="height:24px;white-space: nowrap;overflow: hidden;">
+                    <div class="mr-3" style="overflow:hidden">
+                        @foreach (var item in EnvironmentClusters)
+                        {
+                            <EnvClusterChip Style="margin:0 12px 1px 0;" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                        }
+                    </div>
+                    @ChildContent
                 </div>
                 @if (ShowEditInfo)
                 {
@@ -37,6 +40,9 @@
 
     [Parameter]
     public AppDto App { get; set; } = new();
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
 
     [Parameter]
     public bool ShowEditInfo { get; set; }

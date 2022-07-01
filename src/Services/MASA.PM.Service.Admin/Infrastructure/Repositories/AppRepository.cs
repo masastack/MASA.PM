@@ -2,9 +2,9 @@
 {
     public class AppRepository : IAppRepository
     {
-        private readonly PMDbContext _dbContext;
+        private readonly PmDbContext _dbContext;
 
-        public AppRepository(PMDbContext dbContext)
+        public AppRepository(PmDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -2,9 +2,9 @@
 {
     public class ClusterRepository : IClusterRepository
     {
-        private readonly PMDbContext _dbContext;
+        private readonly PmDbContext _dbContext;
 
-        public ClusterRepository(PMDbContext dbContext)
+        public ClusterRepository(PmDbContext dbContext)
         {
             _dbContext = dbContext;
         }

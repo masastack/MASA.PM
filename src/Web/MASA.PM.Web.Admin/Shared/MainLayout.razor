@@ -1,35 +1,33 @@
 ﻿@using Microsoft.AspNetCore.Components.Rendering
 @inherits LayoutComponentBase
-@inject GlobalConfig GlobalConfig
-@implements IDisposable
 
-<MApp ConfirmParameters="@(param=>{ param.CancelText = T("Cancel"); param.OkText = T("Ok"); })">
-    <MAppBar Elevation=0 App MaxHeight=60 Class="mx-6 rounded-b-4">
-        <MSpacer />
-        <Language />
-        <Login />
-    </MAppBar>
-
-    <Navigation />
-
-    <MMain Class="fill-lighten-1" Style="padding-top:60px">
-        <div class="pa-6 max-width">
-            <MErrorHandler OnErrorHandleAsync="CustomErrorHandleAsync">
-                @Body
-            </MErrorHandler>
-        </div>
-    </MMain>
-
-    <Settings @bind-Show=_showSetting />
-</MApp>
+<Layout AppId="Masa-Pm-Web"
+        UserCenterRoute="/user"
+        Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
+        MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
+    <MErrorHandler OnErrorHandleAsync="CustomErrorHandleAsync" ShowDetail=false>
+        @Body
+    </MErrorHandler>
+</Layout>
 
 @code {
 
-    private bool _showSetting;
     private I18n? _languageProvider;
 
     [Inject]
     public IPopupService PopupService { get; set; } = default!;
+
+    private async Task CustomErrorHandleAsync(Exception exception)
+    {
+        if (exception.GetType().IsAssignableFrom(typeof(UserFriendlyException)))
+        {
+            await PopupService.AlertAsync(exception.Message, AlertTypes.Error);
+        }
+        else
+        {
+            await PopupService.AlertAsync(T("Server error,please contact administrator"), AlertTypes.Error);
+        }
+    }
 
     [Inject]
     public I18n LanguageProvider
@@ -44,30 +42,8 @@
         }
     }
 
-    protected override void OnInitialized()
-    {
-        GlobalConfig.OnPageModeChanged += base.StateHasChanged;
-    }
-
-    private async Task CustomErrorHandleAsync(Exception exception)
-    {
-        if (exception.InnerException is UserFriendlyException userFriendly)
-        {
-            await PopupService.AlertAsync(userFriendly.Message, AlertTypes.Error);
-        }
-        else
-        {
-            await PopupService.AlertAsync(T("Server error,please contact administrator"), AlertTypes.Error);
-        }
-    }
-
     public string T(string key)
     {
         return LanguageProvider.T(key);
-    }
-
-    public void Dispose()
-    {
-        GlobalConfig.OnPageModeChanged -= base.StateHasChanged;
     }
 }

@@ -6,7 +6,7 @@
         {
             await using var scope = host.Services.CreateAsyncScope();
             var services = scope.ServiceProvider;
-            var context = services.GetRequiredService<PMDbContext>();
+            var context = services.GetRequiredService<PmDbContext>();
 
             if (context.Labels.Any())
             {

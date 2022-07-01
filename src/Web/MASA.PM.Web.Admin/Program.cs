@@ -1,5 +1,6 @@
+using Masa.BuildingBlocks.Identity.IdentityModel;
+using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Masa.Utils.Caller.Core;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,19 +17,16 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
-builder.Services.AddMasaBlazor(builder =>
+builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
-    builder.UseTheme(option =>
-        {
-            option.Primary = "#4318FF";
-            option.Accent = "#4318FF";
-            option.Success = "#00B42A";
-            option.Warning = "#FF7D00";
-            option.Error = "#FF5252";
-            option.Info = "#37A7FF";
-        }
-    );
+    options.Environment = "environment";
+    options.UserName = "name";
+    options.UserId = "sub";
 });
+builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
+
+builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
 builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));

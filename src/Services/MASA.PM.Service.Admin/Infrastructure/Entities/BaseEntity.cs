@@ -1,22 +1,22 @@
-﻿namespace MASA.PM.Service.Admin.Infrastructure.Entities
+﻿
+namespace MASA.PM.Service.Admin.Infrastructure.Entities;
+
+public class BaseEntity<TKey, TUserKey> : ISoftDelete
 {
-    public class BaseEntity<TKey, TUserKey> : ISoftDelete
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public TKey Id { get; set; } = default!;
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public TKey Id { get; set; } = default!;
 
-        public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreationTime { get; set; } = DateTime.Now;
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime CreationTime { get; set; } = DateTime.Now;
 
-        [Required]
-        public TUserKey Creator { get; set; } = default!;
+    [Required]
+    public TUserKey Creator { get; set; } = default!;
 
-        public DateTime ModificationTime { get; set; }
+    public DateTime ModificationTime { get; set; }
 
-        [Required]
-        public TUserKey Modifier { get; set; } = default!;
-    }
+    [Required]
+    public TUserKey Modifier { get; set; } = default!;
 }
