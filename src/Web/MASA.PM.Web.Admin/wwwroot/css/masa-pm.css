@@ -1,33 +1,12 @@
 ﻿html {
     font-size: 16px;
+    font-family: Roboto,'Microsoft YaHei';
 }
 
 /*scrollbar*/
 ::-webkit-scrollbar-track {
     border-radius: 15px;
     margin: 12px 0 0 0;
-}
-
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-    margin: 5px 0;
-}
-
-::-webkit-scrollbar-thumb {
-    margin: 5px 0;
-    border-radius: 15px;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(170 168 168)), color-stop(0.72, rgb(170 168 168)), color-stop(0.86, rgb(170 168 168)));
-}
-
-html {
-    font-size: 16px;
-}
-
-/*scrollbar*/
-::-webkit-scrollbar-track {
-    border-radius: 15px;
-    margin: 5px 0;
 }
 
 ::-webkit-scrollbar {
@@ -617,20 +596,20 @@ input::-webkit-input-placeholder {
     margin: 16px 0 !important;
 }
 
-.m-list-item-group .env-list.m-list-item--active {
+.m-list-item-group .env-list.m-list-item--active:not(.m-icon) {
     background: #4318FF !important;
     color: #fff !important;
 }
 
-    .m-list-item-group .env-list.m-list-item--active .m-icon {
-        color: #fff !important;
-    }
+.m-list-item-group .env-list.m-list-item--active .pencil.m-icon {
+    color: #fff !important;
+}
 
-    .m-list-item-group .env-list.m-list-item--active .m-list-item__title {
-        color: #fff !important;
-    }
+.m-list-item-group .env-list.m-list-item--active .m-list-item__title {
+    color: #fff !important;
+}
 
-.env-list.m-list-item:not(.env-list.m-list-item--active):hover .m-icon {
+.env-list.m-list-item:not(.env-list.m-list-item--active):hover .pencil.m-icon {
     color: #1B2559 !important;
 }
 

@@ -40,11 +40,11 @@
                                 <MExpansionPanel Style="margin-bottom: 12px;">
                                     <MExpansionPanelHeader>
                                         <span style="display:flex;align-items:center;margin-right:10px;">
-                                            <div class="text-h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
+                                            <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
                                                 @project.Name
-                                                <span class="ml-2 text-caption">|</span>
-                                                <sapn class="ml-1 text-caption">@T("AppCount"):@apps.Count</sapn>
-                                                <div class="text-caption d-flex" style="padding:0">
+                                                <span class="ml-2 regular3--text btn">|</span>
+                                                <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
+                                                <div class="regular3--text btn d-flex" style="padding:0">
                                                     @{
                                                         string backgroundColor;
                                                         switch (project.LabelName.ToLower())
@@ -89,7 +89,7 @@
                                             <div>
                                                 <img style="height:24px;width:24px" src="/img/avatar/9.svg">
                                             </div>
-                                            <div class="text-caption">编辑于一小时前</div>
+                                            <div class="regular3--text btn">编辑于一小时前</div>
                                         </div>
                                     </MExpansionPanelContent>
                                 </MExpansionPanel>
@@ -106,7 +106,7 @@
                         <MImage Height="48" Width="48" Src="https://cdn.masastack.com/stack/images/website/masa-blazor/jack.png"></MImage>
                     </MAvatar>
                     <MRow NoGutters Class="mt-6">
-                        <div class="text-h6">@T("Team name")</div>
+                        <div class="emphasis--text h6">@T("Team name")</div>
                     </MRow>
                     <MRow NoGutters Class="mt-1 text-body2">
                         @T("ProjectCount")：@_projects.Count
@@ -114,9 +114,9 @@
                     <MRow NoGutters Class="mt-4 text-body2">
                         This is your team's workspace. Invite members to your team to start collaborating. Click here to edit this description.Professional team
                     </MRow>
-                    <MRow NoGutters Class="text-caption mt-6">@T("Admin")</MRow>
+                    <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
                     <MRow NoGutters Class="mt-4 text-body2">管理员1</MRow>
-                    <MRow NoGutters Class="text-caption mt-6">@T("Members")</MRow>
+                    <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
                     <MRow NoGutters Class="mt-4 text-body2">成员1</MRow>
                 </div>
             </MNavigationDrawer>
@@ -128,23 +128,23 @@
                 <div style="min-width:300px; padding:16px 24px; display:flex; flex-direction:column; align-items:center; overflow: auto; height: calc(100vh - 218px);">
                     <div style="width:100%;" class="text-body2">
                         <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
-                            <div class="text-h6">@_projectDetail.Name</div>
+                            <div class="emphasis--text h6">@_projectDetail.Name</div>
                             <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId)"><MIcon>mdi-pencil</MIcon></MButton>
                         </MRow>
                         <MRow NoGutters Class="mt-6">
                             @T("AppCount")：@_appCount
                         </MRow>
-                        <MRow NoGutters Class="text-caption">
+                        <MRow NoGutters Class="regular3--text btn">
                             @_projectDetail.Identity
                         </MRow>
                         <MRow NoGutters Class="mt-4">
                             @_projectDetail.Description
                         </MRow>
-                        <MRow NoGutters Class="text-caption mt-6">@T("Creator")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Creator")</MRow>
                         <MRow NoGutters Class="mt-4">@_projectDetail.Creator</MRow>
-                        <MRow NoGutters Class="text-caption mt-6">@T("Participate team")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Participate team")</MRow>
                         <MRow NoGutters Class="mt-4">@_projectDetail.TeamId</MRow>
-                        <MRow NoGutters Class="text-caption mt-6">@T("Environment/Cluster")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
                         <div style="display:flex; flex-direction:column;align-items:start">
                             @{
                                 var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
@@ -156,7 +156,7 @@
                         </div>
                     </div>
                     <MSpacer></MSpacer>
-                    <div style="width:100%" class="text-caption d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
+                    <div style="width:100%" class="regular3--text btn d-flex justify-end mt-6">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
                 </div>
             </MNavigationDrawer>
 
