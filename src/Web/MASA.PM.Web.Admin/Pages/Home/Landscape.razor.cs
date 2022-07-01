@@ -1,7 +1,8 @@
-﻿using MASA.PM.Caller.Callers;
-using MASA.PM.Contracts.Admin.Enum;
-using MASA.PM.Contracts.Admin.Dto;
-using MASA.PM.Contracts.Admin.Dto;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using MASA.PM.Caller.Callers;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
@@ -150,21 +151,24 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _allClusters = await ClusterCaller.GetListAsync();
         }
 
-        private async Task SubmitEnvAsync()
+        private async Task SubmitEnvAsync(EditContext context)
         {
-            if (!_envFormModel.HasValue)
+            if (context.Validate())
             {
-                var newEnv = await EnvironmentCaller.AddAsync(_envFormModel.Data);
-                _environments.Add(newEnv);
-            }
-            else
-            {
-                await EnvironmentCaller.UpdateAsync(_envFormModel.Data);
-                var env = _environments.First(env => env.Id == _envFormModel.Data.EnvironmentId);
-                env.Name = _envFormModel.Data.Name;
-            }
+                if (!_envFormModel.HasValue)
+                {
+                    var newEnv = await EnvironmentCaller.AddAsync(_envFormModel.Data);
+                    _environments.Add(newEnv);
+                }
+                else
+                {
+                    await EnvironmentCaller.UpdateAsync(_envFormModel.Data);
+                    var env = _environments.First(env => env.Id == _envFormModel.Data.EnvironmentId);
+                    env.Name = _envFormModel.Data.Name;
+                }
 
-            _envFormModel.Hide();
+                _envFormModel.Hide();
+            }
         }
 
         private async Task RemoveEnvAsync()
@@ -188,6 +192,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                     _envFormModel.Hide();
                 });
+            }
+        }
+
+        private void EnvModalValueChanged(bool value)
+        {
+            _envFormModel.Visible = value;
+            if (!value)
+            {
+                _envFormModel.Hide();
             }
         }
 
@@ -225,22 +238,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _allEnvs = await EnvironmentCaller.GetListAsync();
         }
 
-        private async Task SubmitClusterAsync()
+        private async Task SubmitClusterAsync(EditContext context)
         {
-            int newClusterId;
-            if (!_clusterFormModel.HasValue)
+            if (context.Validate())
             {
-                var cluster = await ClusterCaller.AddAsync(_clusterFormModel.Data);
-                newClusterId = cluster.Id;
-            }
-            else
-            {
-                await ClusterCaller.UpdateAsync(_clusterFormModel.Data);
-                newClusterId = _clusterFormModel.Data.ClusterId;
-            }
+                if (!_clusterFormModel.HasValue)
+                {
+                    await ClusterCaller.AddAsync(_clusterFormModel.Data);
+                }
+                else
+                {
+                    await ClusterCaller.UpdateAsync(_clusterFormModel.Data);
+                }
 
-            await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
-            _clusterFormModel.Hide();
+                await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
+                _clusterFormModel.Hide();
+            }
         }
 
         private async Task RemoveClusterAsync()
@@ -263,6 +276,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                     _clusterFormModel.Hide();
                 });
+            }
+        }
+
+        private void ClusterModalValueChanged(bool value)
+        {
+            _clusterFormModel.Visible = value;
+            if (!value)
+            {
+                _clusterFormModel.Hide();
             }
         }
 
@@ -298,19 +320,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await Task.Delay(0);
         }
 
-        private async Task SubmitProjectAsync()
+        private async Task SubmitProjectAsync(EditContext context)
         {
-            if (!_projectFormModel.HasValue)
+            if (context.Validate())
             {
-                await ProjectCaller.AddAsync(_projectFormModel.Data);
-            }
-            else
-            {
-                await ProjectCaller.UpdateAsync(_projectFormModel.Data);
-            }
+                if (!_projectFormModel.HasValue)
+                {
+                    await ProjectCaller.AddAsync(_projectFormModel.Data);
+                }
+                else
+                {
+                    await ProjectCaller.UpdateAsync(_projectFormModel.Data);
+                }
 
-            _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);
-            _projectFormModel.Hide();
+                _projects = await ProjectCaller.GetListByEnvIdAsync(_selectEnvClusterId.AsT1);
+                _projectFormModel.Hide();
+            }
         }
 
         private async Task RemoveProjectAsync()
@@ -326,9 +351,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
             });
         }
 
-        private void ProjectHide()
+        private void ProjectModalValueChanged(bool value)
         {
-            _projectFormModel.Hide();
+            _projectFormModel.Visible = value;
+            if (!value)
+            {
+                _projectFormModel.Hide();
+            }
         }
 
         private async Task UpdateAppAsync(int appId, int projectId)
@@ -371,24 +400,31 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private void AppHide()
+        private void AppModalValueChanged(bool value)
         {
-            _appFormModel.Hide();
+            _appFormModel.Visible = value;
+            if (!value)
+            {
+                _appFormModel.Hide();
+            }
         }
 
-        private async Task SubmitAppAsync()
+        private async Task SubmitAppAsync(EditContext context)
         {
-            if (!_appFormModel.HasValue)
+            if (context.Validate())
             {
-                await AppCaller.AddAsync(_appFormModel.Data);
-            }
-            else
-            {
-                await AppCaller.UpdateAsync(_appFormModel.Data);
-            }
+                if (!_appFormModel.HasValue)
+                {
+                    await AppCaller.AddAsync(_appFormModel.Data);
+                }
+                else
+                {
+                    await AppCaller.UpdateAsync(_appFormModel.Data);
+                }
 
-            _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
-            AppHide();
+                _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
+                _appFormModel.Hide();
+            }
         }
 
         private async Task RemoveAppAsync()
@@ -399,7 +435,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await AppCaller.DeleteAsync(new RemoveAppDto { AppId = _selectAppId, ProjectId = _selectProjectId });
 
                 _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
-                AppHide();
+                _appFormModel.Hide();
             });
         }
 

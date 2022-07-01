@@ -546,6 +546,7 @@ input::-webkit-input-placeholder {
         color: #1B2559 !important;
     }
 
+
 .m-page-tabs > .m-tabs-bar {
     border-bottom-left-radius: 20px !important;
     border-bottom-right-radius: 20px !important;
@@ -574,6 +575,36 @@ input::-webkit-input-placeholder {
 .m-dialog--drawer .m-card {
     border-radius: 0;
 }
+
+.m-text-field--outlined:not(.m-textarea) {
+    height: 48px !important;
+}
+
+    .m-text-field--outlined:not(.m-textarea) fieldset {
+        height: 53px !important;
+    }
+
+.m-select.m-text-field--outlined .m-label {
+    top: 14px !important;
+}
+
+    .m-select.m-text-field--outlined .m-label.m-label--active {
+        top: 18px !important;
+    }
+
+.m-text-field--outlined .m-text-field__details {
+    margin-top: -5px !important;
+}
+
+.m-text-field--outlined:not(.m-textarea) .m-input__slot {
+    height: 48px !important;
+    min-height: 0px !important;
+}
+
+.m-text-field .m-input__prepend-inner, .m-text-field .m-input__append-inner {
+    margin-top: 12px !important;
+}
+
 
 /*Pm*/
 .m-dialog--persistent {
@@ -642,6 +673,10 @@ input::-webkit-input-placeholder {
 
 .cluster-tab-active .m-icon {
     color: inherit !important;
+}
+
+.cluster-tabs .m-tab:not(.m-tab--active) {
+    color: rgb(118, 129, 171) !important;
 }
 
 .cluster-tab-active {
