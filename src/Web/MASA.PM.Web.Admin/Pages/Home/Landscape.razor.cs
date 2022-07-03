@@ -450,12 +450,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _relationAppVisible = true;
         }
 
-        private void RelationAppSelectChange(AppDto model)
+        private void RelationAppSelectChange(int appId)
         {
-            _appDetail = _allApps.First(app => app.Id == model.Id);
-            _selectAppType = (int)model.Type;
-            _selectAppServiceType = (int)model.ServiceType;
-            _addRelationAppModel.AppId = model.Id;
+            _appDetail = _allApps.First(app => app.Id == appId);
+            _selectAppType = (int)_appDetail.Type;
+            _selectAppServiceType = (int)_appDetail.ServiceType;
+            _addRelationAppModel.AppId = _appDetail.Id;
             _addRelationAppModel.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
             _addRelationAppModel.EnvironmentClusterIds.AddRange(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id));
             _disableRelationAppEnvCluster.AddRange(_addRelationAppModel.EnvironmentClusterIds);
@@ -467,17 +467,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id)).ToList();
             await AppCaller.AddRelationAppAsync(_addRelationAppModel);
             _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
-            RelationAppHide();
+            RelationAppValueChanged(false);
         }
 
-        private void RelationAppHide()
+        private void RelationAppValueChanged(bool value)
         {
-            _disableRelationAppEnvCluster = new();
-            _appDetail = new();
-            _addRelationAppModel = new();
-            _selectAppType = 0;
-            _selectAppServiceType = 0;
-            _relationAppVisible = false;
+            _relationAppVisible = value;
+
+            if (!value)
+            {
+                _allApps = new();
+                _disableRelationAppEnvCluster = new();
+                _appDetail = new();
+                _addRelationAppModel = new();
+                _selectAppType = 0;
+                _selectAppServiceType = 0;
+            }
         }
     }
 }

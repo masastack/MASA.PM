@@ -429,75 +429,75 @@
         </MForm>
     </SheetDialog>
 
-    <PModal @bind-Value="_relationAppVisible"
-        Persistent
-        Title="@T("Add App")"
-        HideCancelAction
-        Width="684"
-        OnSave="SubmitRelationAppAsync"
-        OnCancel="RelationAppHide">
-        <ChildContent>
-            <MAutocomplete TItem="AppDto"
-                       TValue="int"
-                       TItemValue="int"
-                       Items="_allApps"
-                       ItemText="r=>r.Name"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       OnSelectedItemUpdate="RelationAppSelectChange"
-                       Label="@T("Select an existing app")">
-                <SelectionContent Context="_context">
-                    <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                        @_context.Item.Name
-                    </MChip>
-                </SelectionContent>
-            </MAutocomplete>
-            <MAutocomplete @bind-Value="_addRelationAppModel.EnvironmentClusterIds"
-                       Items="_projectEnvClusters"
-                       ItemText="r=>r.EnvironmentClusterName"
-                       ItemDisabled="@(r=>_disableRelationAppEnvCluster.Contains(r.Id))"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Environment/Cluster")"
-                       Multiple>
-                <SelectionContent Context="_context">
-                    <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
-                </SelectionContent>
-            </MAutocomplete>
-            <MSelect @bind-Value="_selectAppType"
-                 Disabled
-                 Items="Enum<AppTypes>.GetEnumObjectList()"
-                 ItemText="r=>r.Name"
-                 ItemValue="r=>r.Value"
-                 Outlined
-                 Label="@T("App type")">
-            </MSelect>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                    <MSelect @bind-Value="_selectAppServiceType"
-                         Disabled
-                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
-                         ItemText="r=>r.Name"
-                         ItemValue="r=>r.Value"
-                         Outlined
-                         Label="@T("Service type")">
-                    </MSelect>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <DefaultTextField Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></DefaultTextField>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                    <DefaultTextField Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></DefaultTextField>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <DefaultTextField Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></DefaultTextField>
-            <MTextarea Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
-        </ChildContent>
-        <SaveContent Context="save">
-            <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@T("Submit")</MButton>
-        </SaveContent>
-    </PModal>
-
+    <SheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
+        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+            <div class="full-height">
+                <MAutocomplete TItem="AppDto"
+                           TValue="int"
+                           TItemValue="int"
+                           Items="_allApps"
+                           ItemText="r=>r.Name"
+                           ItemValue="r=>r.Id"
+                           Class="mt-6"
+                           Outlined
+                           Value="_addRelationAppModel.AppId"
+                           ValueChanged="RelationAppSelectChange"
+                           Label="@T("Select an existing app")">
+                    <SelectionContent Context="_context">
+                        <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                            @_context.Item.Name
+                        </MChip>
+                    </SelectionContent>
+                </MAutocomplete>
+                <MAutocomplete @bind-Value="_addRelationAppModel.EnvironmentClusterIds"
+                           Class="mt-6"
+                           Items="_projectEnvClusters"
+                           ItemText="r=>r.EnvironmentClusterName"
+                           ItemDisabled="@(r=>_disableRelationAppEnvCluster.Contains(r.Id))"
+                           ItemValue="r=>r.Id"
+                           Outlined
+                           Label="@T("Environment/Cluster")"
+                           Multiple>
+                    <SelectionContent Context="_context">
+                        <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
+                    </SelectionContent>
+                </MAutocomplete>
+                <MSelect @bind-Value="_selectAppType"
+                     Disabled
+                     Class="mt-6"
+                     Items="Enum<AppTypes>.GetEnumObjectList()"
+                     ItemText="r=>r.Name"
+                     ItemValue="r=>r.Value"
+                     Outlined
+                     Label="@T("App type")">
+                </MSelect>
+                <FadeTransition>
+                    <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                        <MSelect @bind-Value="_selectAppServiceType"
+                             Disabled
+                             Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                             ItemText="r=>r.Name"
+                             ItemValue="r=>r.Value"
+                             Outlined
+                             Label="@T("Service type")">
+                        </MSelect>
+                    </ShowTransitionElement>
+                </FadeTransition>
+                <DefaultTextField Class="mt-6" Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></DefaultTextField>
+                <FadeTransition>
+                    <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                        <DefaultTextField Class="mt-6" Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></DefaultTextField>
+                    </ShowTransitionElement>
+                </FadeTransition>
+                <DefaultTextField Class="mt-6" Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></DefaultTextField>
+                <MTextarea Class="mt-6" Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+            <MSpacer></MSpacer>
+            <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="SubmitRelationAppAsync">@T("Submit")</MButton>
+            </div>
+        </div>
+    </SheetDialog>
 
     @code {
     private string _friends = "Sandra Adams";
