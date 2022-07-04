@@ -1,7 +1,10 @@
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using System.Security.Cryptography.X509Certificates;
 using Masa.BuildingBlocks.Identity.IdentityModel;
 using Masa.Stack.Components;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,7 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 });
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
 
-//builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();

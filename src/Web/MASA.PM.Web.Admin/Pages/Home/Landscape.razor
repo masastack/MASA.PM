@@ -34,8 +34,8 @@
                 </MListItemGroup>
             </MList>
         </div>
-        <MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
-            <MIcon Left>mdi-plus</MIcon>@T("Add Environment")
+        <MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Style="height: 54px; border-radius: 8px; border: 2px dashed #E9EDF7; position: fixed; left:24px; right:24px; bottom: 24px;">
+            <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
         </MButton>
     </MNavigationDrawer>
 
@@ -66,8 +66,8 @@
                     }
                 </MTabs>
             </MCard>
-            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Style="position:fixed; right:48px; height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12);">
-                <MIcon Left>mdi-plus</MIcon>@T("Add Cluster")
+            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Style="position:fixed; right:48px; height: 54px; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
             </MButton>
         </MRow>
         <div class="rounded-5 mt-6 py-2 full-height" style="background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
@@ -110,7 +110,7 @@
                                     </div>
                                     <MSpacer />
                                     <div style="display:flex;align-items:center;">
-                                        <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
+                                        <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
                                         <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                     </div>
                                 </span>
@@ -129,14 +129,14 @@
                                     <MCol Lg="4" Md="6" Sm="12">
                                         <MRow NoGutters>
                                             <MCol Class="pr-2">
-                                                <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                    <MButton Ripple=false Plain OnClick="()=>ShowAppModalAsync(project.Id)"><MIcon Left>mdi-plus</MIcon>@T("Add App")</MButton>
-                                                </MCard>
+                                                <MButton Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                                                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add App")</span>
+                                                </MButton>
                                             </MCol>
                                             <MCol>
-                                                <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                    <MButton Ripple=false Plain OnClick="()=>ShowRelationAppModalAsync(project.Id)"><MIcon Left>mdi-plus</MIcon>@T("Select an existing app")</MButton>
-                                                </MCard>
+                                                <MButton Height="162" OnClick="()=>ShowRelationAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                                                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Select an existing app")</span>
+                                                </MButton>
                                             </MCol>
                                         </MRow>
                                     </MCol>
@@ -152,11 +152,9 @@
                     }
                 </MExpansionPanels>
             </div>
-            <MCard Outlined Class="mb-4 mx-6" Style="padding:0 6px; border-radius:0 !important; display: flex; justify-content: center; align-items: center; border-style: dashed;" MinHeight=54>
-                <MButton Ripple=false Plain OnClick="()=>ShowProjectModalAsync()">
-                    <MIcon Left>mdi-plus</MIcon>@T("Add Project")
-                </MButton>
-            </MCard>
+            <MButton Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text Style="margin:24px 24px 16px 24px !important; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
+            </MButton>
         </div>
     </div>
 
@@ -333,7 +331,7 @@
                 <MTextarea Class="mt-6" Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
                 @if (_projectFormModel.HasValue)
                 {
-                    <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
                         <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
@@ -493,8 +491,8 @@
                 <MTextarea Class="mt-6" Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
             </div>
             <div class="d-flex align-end" style="width:100%;">
-            <MSpacer></MSpacer>
-            <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="SubmitRelationAppAsync">@T("Submit")</MButton>
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="SubmitRelationAppAsync">@T("Submit")</MButton>
             </div>
         </div>
     </SheetDialog>

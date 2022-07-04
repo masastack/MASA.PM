@@ -601,8 +601,12 @@ input::-webkit-input-placeholder {
     min-height: 0px !important;
 }
 
-.m-text-field .m-input__prepend-inner, .m-text-field .m-input__append-inner {
-    margin-top: 12px !important;
+.m-input__icon.m-input__icon--append {
+    height: 48px !important;
+}
+
+.m-input__append-inner {
+    margin-top: 0 !important;
 }
 
 
@@ -707,4 +711,8 @@ input::-webkit-input-placeholder {
 
 .m-menu__content {
     max-width: 636px !important;
+}
+
+.app-tab .m-window-item.m-window-item--active{
+    height:100% !important;
 }
