@@ -1,5 +1,5 @@
 ﻿@page "/Landscape"
-@inherits ProCompontentBase
+@inherits PmCompontentBase
 
 <div class="d-flex full-height">
 
@@ -14,7 +14,7 @@
                     {
                         <MListItem Style="height: 40px !important;" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                             <ItemContent>
-                                <MListItemIcon Class="d-flex align-center pt-1 mr-0">
+                                <MListItemIcon Class="d-flex align-center mr-0">
                                     <MIcon Color="@env.Color" Size="12">mdi-circle</MIcon>
                                 </MListItemIcon>
                                 <MListItemContent>
@@ -22,7 +22,7 @@
                                 </MListItemContent>
                                 @if (context.Active)
                                 {
-                                    <MListItemIcon Class="d-flex align-center pt-1">
+                                    <MListItemIcon Class="d-flex align-center">
                                         <MButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
                                             <MIcon Size="18" Class="pencil">mdi-pencil</MIcon>
                                         </MButton>
@@ -34,8 +34,8 @@
                 </MListItemGroup>
             </MList>
         </div>
-        <MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Style="height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12); position: fixed; left:24px; right:24px; bottom: 24px;">
-            <MIcon Left>mdi-plus</MIcon>@T("Add Environment")
+        <MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Style="height: 54px; border-radius: 8px; border: 2px dashed #E9EDF7; position: fixed; left:24px; right:24px; bottom: 24px;">
+            <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
         </MButton>
     </MNavigationDrawer>
 
@@ -66,8 +66,8 @@
                     }
                 </MTabs>
             </MCard>
-            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Style="position:fixed; right:48px; height: 54px; border: dashed 1px rgba(0, 0, 0, 0.12);">
-                <MIcon Left>mdi-plus</MIcon>@T("Add Cluster")
+            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Style="position:fixed; right:48px; height: 54px; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
             </MButton>
         </MRow>
         <div class="rounded-5 mt-6 py-2 full-height" style="background:#fff;display:flex; flex-direction:column; justify-content:space-between; overflow:auto;">
@@ -110,7 +110,7 @@
                                     </div>
                                     <MSpacer />
                                     <div style="display:flex;align-items:center;">
-                                        <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon>mdi-pencil</MIcon></MButton>
+                                        <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
                                         <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                     </div>
                                 </span>
@@ -129,14 +129,14 @@
                                     <MCol Lg="4" Md="6" Sm="12">
                                         <MRow NoGutters>
                                             <MCol Class="pr-2">
-                                                <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                    <MButton Ripple=false Plain OnClick="()=>ShowAppModalAsync(project.Id)"><MIcon Left>mdi-plus</MIcon>@T("Add App")</MButton>
-                                                </MCard>
+                                                <MButton Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                                                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add App")</span>
+                                                </MButton>
                                             </MCol>
                                             <MCol>
-                                                <MCard Outlined Style="border-radius:10px !important; display:flex; align-items: center; justify-content: center; border-style: dashed;" MinHeight="162">
-                                                    <MButton Ripple=false Plain OnClick="()=>ShowRelationAppModalAsync(project.Id)"><MIcon Left>mdi-plus</MIcon>@T("Select an existing app")</MButton>
-                                                </MCard>
+                                                <MButton Height="162" OnClick="()=>ShowRelationAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                                                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Select an existing app")</span>
+                                                </MButton>
                                             </MCol>
                                         </MRow>
                                     </MCol>
@@ -152,366 +152,350 @@
                     }
                 </MExpansionPanels>
             </div>
-            <MCard Outlined Class="mb-4 mx-6" Style="padding:0 6px; border-radius:0 !important; display: flex; justify-content: center; align-items: center; border-style: dashed;" MinHeight=54>
-                <MButton Ripple=false Plain OnClick="()=>ShowProjectModalAsync()">
-                    <MIcon Left>mdi-plus</MIcon>@T("Add Project")
-                </MButton>
-            </MCard>
+            <MButton Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text Style="margin:24px 24px 16px 24px !important; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
+            </MButton>
         </div>
     </div>
 
 </div>
 
-<PModal @bind-Value="_envFormModel.Visible"
-        Persistent
-        Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")"
-        HideCancelAction
-        Width="684"
-        FormModel="_envFormModel.Data"
-        OnSave="SubmitEnvAsync"
-        OnDelete="RemoveEnvAsync"
-        OnCancel="_envFormModel.Hide">
-    <ChildContent>
-        <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
-            <MCol Cols="9">
-                <MTextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></MTextField>
-            </MCol>
-            <MCol Cols="3" Align="AlignTypes.Start">
-                <ColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></ColorGroup>
-            </MCol>
-        </MRow>
-        <MAutocomplete @bind-Value="_envFormModel.Data.ClusterIds"
-                       Items="_allClusters"
-                       ItemText="r=>r.Name"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Relation cluster")"
-                       Multiple>
-            <SelectionContent Context="_context">
-                <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                    @_context.Item.Name
-                </MChip>
-            </SelectionContent>
-        </MAutocomplete>
-        <MTextarea Outlined Label="@T("Environment description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
-        @if (_envFormModel.HasValue)
-        {
-            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                <MCol Cols=6>@T("Creator"): @_envDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_envDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("Modifier"): @_envDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_envDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
-            </MRow>
-        }
-    </ChildContent>
-    <DeleteContent Context="delete">
-        @if (_envFormModel.HasValue)
-        {
-            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-        }
-    </DeleteContent>
-    <SaveContent Context="save">
-        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_envFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
-        </SaveContent>
-    </PModal>
-
-    <PModal @bind-Value="_clusterFormModel.Visible"
-        Persistent
-        Title="@(_clusterFormModel.HasValue ?$"{T("Edit Cluster")}":$"{T("Add Cluster")}")"
-        HideCancelAction
-        Width="684"
-        FormModel="_clusterFormModel.Data"
-        OnSave="SubmitClusterAsync"
-        OnDelete="RemoveClusterAsync"
-        OnCancel="_clusterFormModel.Hide">
-        <ChildContent>
-            <MTextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></MTextField>
-            <MAutocomplete @bind-Value="_clusterFormModel.Data.EnvironmentIds"
-                       Items="_allEnvs"
-                       ItemText="r=>r.Name"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Relation environment")"
-                       Multiple>
-                <SelectionContent Context="context">
-                    <MChip Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
-                        @context.Item.Name
-                    </MChip>
-                </SelectionContent>
-                <ItemContent>
-                    <MListItemContent Class="@($"{context.Item.Color}--text")">@context.Item.Name</MListItemContent>
-                </ItemContent>
-            </MAutocomplete>
-            <MTextarea Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-            @if (_clusterFormModel.HasValue)
-        {
-            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                <MCol Cols=6>@T("Creator"): @_clusterDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_clusterDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("Modifier"): @_clusterDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_clusterDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("ProjectCount")：@_projects.Count</MCol>
-            </MRow>
-        }
-    </ChildContent>
-    <DeleteContent Context="delete">
-        @if (_clusterFormModel.HasValue)
-        {
-            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-        }
-    </DeleteContent>
-    <SaveContent Context="save">
-        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
-        </SaveContent>
-    </PModal>
-
-    <PModal @bind-Value="_projectFormModel.Visible"
-        Persistent
-        Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")"
-        HideCancelAction
-        Width="684"
-        FormModel="_projectFormModel.Data"
-        OnSave="SubmitProjectAsync"
-        OnDelete="RemoveProjectAsync"
-        OnCancel="ProjectHide">
-        <ChildContent>
-            <MTextField Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></MTextField>
-            <MAutocomplete @bind-Value="_friends"
-                       Items="_people"
-                       Chips
-                       SmallChips
-                       Outlined
-                       Color="blue-grey lighten-2"
-                       Label="@T("Project`s team")"
-                       ItemText="r=>r.Name"
-                       ItemValue="r=>r.Name">
-                <SelectionContent Context="data">
-                    <MChip Small Close
-                       OnCloseClick="()=>Remove()">
-                        <MAvatar Left>
-                            <MImage Src="@data.Item.Avatar"></MImage>
-                        </MAvatar>
-                        @data.Item.Name
-                    </MChip>
-                </SelectionContent>
-                <ItemContent Context="data">
-                    @if (data.Item is not object)
+<SheetDialog ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_clusterFormModel.HasValue ?$"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
+    <MForm Class="full-height" Context="formContext" EnableValidation Model="_envFormModel.Data">
+        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+            <div class="full-height">
+                <MRow NoGutters Justify="JustifyTypes.SpaceBetween" Align="AlignTypes.Center">
+                    <MCol Cols="9">
+                        <DefaultTextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></DefaultTextField>
+                    </MCol>
+                    <MCol Cols="3" Align="AlignTypes.Start">
+                        <ColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></ColorGroup>
+                    </MCol>
+                </MRow>
+                <MAutocomplete Class="mt-3" @bind-Value="_envFormModel.Data.ClusterIds"
+                               Items="_allClusters"
+                               ItemText="r=>r.Name"
+                               ItemValue="r=>r.Id"
+                               Outlined
+                               Label="@T("Relation cluster")"
+                               Multiple>
+                    <SelectionContent Context="_context">
+                        <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                            @_context.Item.Name
+                        </MChip>
+                    </SelectionContent>
+                </MAutocomplete>
+                <MTextarea Class="mt-6" Outlined Label="@T("Environment description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
+                @if (_envFormModel.HasValue)
                 {
-                    <MListItemContent>@data.Item</MListItemContent>
+                    <MRow Justify="JustifyTypes.SpaceBetween" Class="pt-3 regular--text" Style="line-height:normal !important;">
+                        <MCol Cols=6>@T("Creator"): @_envDetail.Creator</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_envDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_envDetail.Modifier</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_envDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
+                    </MRow>
                 }
-                else
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                @if (_envFormModel.HasValue)
                 {
-                    <MListItemAvatar>
-                        <img src="@data.Item.Avatar">
-                    </MListItemAvatar>
-                    <MListItemContent>
-                        <MListItemTitle>
-                            @((MarkupString)data.Item.Name)
-                        </MListItemTitle>
-                        <MListItemSubtitle>
-                            @((MarkupString)data.Item.Group)
-                        </MListItemSubtitle>
-                    </MListItemContent>
+                    <MButton Height="40" OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
                 }
-            </ItemContent>
-        </MAutocomplete>
-        <MTextField Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></MTextField>
-        <MSelect @bind-Value="_projectFormModel.Data.LabelId"
-                 Disabled="@(_projectFormModel.HasValue)"
-                 Items="_projectTypes"
-                 ItemText="r=>r.Name"
-                 ItemValue="r=>r.Id"
-                 Outlined
-                 Label="@T("Project type")">
-        </MSelect>
-        <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
-                       Items="allEnvClusters"
-                       ItemText="r=>r.EnvironmentClusterName"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Environment/Cluster")"
-                       Multiple>
-            <SelectionContent Context="context">
-                <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
-            </SelectionContent>
-            <ItemContent>
-                <MListItemContent>
-                    <div class="d-flex align-center">
-                        <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
-                    </div>
-                </MListItemContent>
-            </ItemContent>
-        </MAutocomplete>
-        <MTextarea Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
-        @if (_projectFormModel.HasValue)
-        {
-            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-            </MRow>
-        }
-    </ChildContent>
-    <DeleteContent Context="delete">
-        @if (_projectFormModel.HasValue)
-        {
-            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-        }
-    </DeleteContent>
-    <SaveContent Context="save">
-        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_projectFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
-        </SaveContent>
-    </PModal>
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitEnvAsync(formContext)">@(_envFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                </div>
+            </div>
+        </MForm>
+    </SheetDialog>
 
-    <PModal @bind-Value="_appFormModel.Visible"
-        Persistent
-        Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))"
-        HideCancelAction
-        Width="684"
-        FormModel="_appFormModel.Data"
-        OnDelete="RemoveAppAsync"
-        OnSave="SubmitAppAsync"
-        OnCancel="AppHide">
-        <ChildContent>
-            <MTextField Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></MTextField>
-            <MSelect @bind-Value="_appFormModel.Data.Type"
-                 Disabled="@(_appFormModel.HasValue)"
-                 Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
-                 ItemText="r=>r.Name"
-                 ItemValue="r=>r.Value"
-                 Outlined
-                 Label="@T("App type")">
-            </MSelect>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
-                    <MSelect @bind-Value="_appFormModel.Data.ServiceType"
+    <SheetDialog ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Icon="mdi-circle" IconColor="success">
+        <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
+            <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+                <div class="full-height">
+                    <DefaultTextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></DefaultTextField>
+                    <MAutocomplete Class="mt-6" @bind-Value="_clusterFormModel.Data.EnvironmentIds"
+                               Items="_allEnvs"
+                               ItemText="r=>r.Name"
+                               ItemValue="r=>r.Id"
+                               Outlined
+                               Label="@T("Relation environment")"
+                               Multiple>
+                        <SelectionContent Context="context">
+                            <MChip Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
+                                @context.Item.Name
+                            </MChip>
+                        </SelectionContent>
+                        <ItemContent>
+                            <MListItemContent Class="@($"{context.Item.Color}--text")">@context.Item.Name</MListItemContent>
+                        </ItemContent>
+                    </MAutocomplete>
+                    <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
+                    @if (_clusterFormModel.HasValue)
+                {
+                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                        <MCol Cols=6>@T("Creator"): @_clusterDetail.Creator</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_clusterDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_clusterDetail.Modifier</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_clusterDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("ProjectCount")：@_projects.Count</MCol>
+                    </MRow>
+                }
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                @if (_clusterFormModel.HasValue)
+                {
+                    <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                }
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitClusterAsync(formContext)">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                </div>
+            </div>
+        </MForm>
+    </SheetDialog>
+
+    <SheetDialog ValueChanged="ProjectModalValueChanged" Value="_projectFormModel.Visible" Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
+        <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
+            <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+                <div class="full-height">
+                    <DefaultTextField Class="mt-6" Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></DefaultTextField>
+                    <MAutocomplete @bind-Value="_friends"
+                               Items="_people"
+                               Chips
+                               Class="mt-6"
+                               SmallChips
+                               Outlined
+                               Color="blue-grey lighten-2"
+                               Label="@T("Project`s team")"
+                               ItemText="r=>r.Name"
+                               ItemValue="r=>r.Name">
+                        <SelectionContent Context="data">
+                            <MChip Small Close
+                               OnCloseClick="()=>Remove()">
+                                <MAvatar Left>
+                                    <MImage Src="@data.Item.Avatar"></MImage>
+                                </MAvatar>
+                                @data.Item.Name
+                            </MChip>
+                        </SelectionContent>
+                        <ItemContent Context="data">
+                            @if (data.Item is not object)
+                        {
+                            <MListItemContent>@data.Item</MListItemContent>
+                        }
+                        else
+                        {
+                            <MListItemAvatar>
+                                <img src="@data.Item.Avatar">
+                            </MListItemAvatar>
+                            <MListItemContent>
+                                <MListItemTitle>
+                                    @((MarkupString)data.Item.Name)
+                                </MListItemTitle>
+                                <MListItemSubtitle>
+                                    @((MarkupString)data.Item.Group)
+                                </MListItemSubtitle>
+                            </MListItemContent>
+                        }
+                    </ItemContent>
+                </MAutocomplete>
+                <DefaultTextField Class="mt-6" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></DefaultTextField>
+                <MSelect @bind-Value="_projectFormModel.Data.LabelId"
+                         Disabled="@(_projectFormModel.HasValue)"
+                         Items="_projectTypes"
+                         ItemText="r=>r.Name"
+                         ItemValue="r=>r.Id"
+                         Outlined
+                         Class="mt-6"
+                         Label="@T("Project type")">
+                </MSelect>
+                <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
+                               Items="allEnvClusters"
+                               Class="mt-6"
+                               ItemText="r=>r.EnvironmentClusterName"
+                               ItemValue="r=>r.Id"
+                               Outlined
+                               Label="@T("Environment/Cluster")"
+                               Multiple>
+                    <SelectionContent Context="context">
+                        <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
+                    </SelectionContent>
+                    <ItemContent>
+                        <MListItemContent>
+                            <div class="d-flex align-center">
+                                <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                            </div>
+                        </MListItemContent>
+                    </ItemContent>
+                </MAutocomplete>
+                <MTextarea Class="mt-6" Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+                @if (_projectFormModel.HasValue)
+                {
+                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                        <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                    </MRow>
+                }
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                @if (_projectFormModel.HasValue)
+                {
+                    <MButton Height="40" OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                }
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitProjectAsync(formContext)">@(_projectFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                </div>
+            </div>
+        </MForm>
+    </SheetDialog>
+
+    <SheetDialog ValueChanged="AppModalValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))" Icon="mdi-circle" IconColor="success">
+        <MForm Class="full-height" Context="formContext" EnableValidation Model="_appFormModel.Data">
+            <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+                <div class="full-height">
+                    <DefaultTextField Class="mt-6" Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></DefaultTextField>
+                    <MSelect @bind-Value="_appFormModel.Data.Type"
                          Disabled="@(_appFormModel.HasValue)"
-                         Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
+                         Class="mt-6"
+                         Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Value"
                          Outlined
-                         Label="@T("Service type")">
+                         Label="@T("App type")">
                     </MSelect>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <MTextField Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></MTextField>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
-                    <MTextField Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></MTextField>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <MTextField Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></MTextField>
-            <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
-                       Items="_projectEnvClusters"
-                       ItemText="r=>r.EnvironmentClusterName"
-                       ItemDisabled="@(r=>r.Id==_selectEnvClusterId.AsT1)"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Environment/Cluster")"
-                       Multiple>
-                <SelectionContent Context="context">
-                    <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
-                </SelectionContent>
-                <ItemContent>
-                    <MListItemContent>
-                        <div class="d-flex align-center">
-                            <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
-                        </div>
-                    </MListItemContent>
-                </ItemContent>
-            </MAutocomplete>
-            <MTextarea Outlined Label="@T("App description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
-            @if (_appFormModel.HasValue)
-        {
-            <MRow Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                <MCol Cols=6>@T("Creator"): @_appDetail.Creator</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_appDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                <MCol Cols=6>@T("Modifier"): @_appDetail.Modifier</MCol>
-                <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_appDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-            </MRow>
-        }
-    </ChildContent>
-    <DeleteContent Context="delete">
-        @if (_appFormModel.HasValue)
-        {
-            <MButton OnClick="delete.Click" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-        }
-    </DeleteContent>
-    <SaveContent Context="save">
-        <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
-        </SaveContent>
-    </PModal>
+                    <FadeTransition>
+                        <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
+                            <MSelect Class="mt-6"
+                                 @bind-Value="_appFormModel.Data.ServiceType"
+                                 Disabled="@(_appFormModel.HasValue)"
+                                 Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
+                                 ItemText="r=>r.Name"
+                                 ItemValue="r=>r.Value"
+                                 Outlined
+                                 Label="@T("Service type")">
+                            </MSelect>
+                        </ShowTransitionElement>
+                    </FadeTransition>
+                    <DefaultTextField Class="mt-6" Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></DefaultTextField>
+                    <FadeTransition>
+                        <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
+                            <DefaultTextField Class="mt-6" Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></DefaultTextField>
+                        </ShowTransitionElement>
+                    </FadeTransition>
+                    <DefaultTextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></DefaultTextField>
+                    <MAutocomplete Class="mt-6" @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
+                               Items="_projectEnvClusters"
+                               ItemText="r=>r.EnvironmentClusterName"
+                               ItemDisabled="@(r=>r.Id==_selectEnvClusterId.AsT1)"
+                               ItemValue="r=>r.Id"
+                               Outlined
+                               Label="@T("Environment/Cluster")"
+                               Multiple>
+                        <SelectionContent Context="context">
+                            <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
+                        </SelectionContent>
+                        <ItemContent>
+                            <MListItemContent>
+                                <div class="d-flex align-center">
+                                    <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                                </div>
+                            </MListItemContent>
+                        </ItemContent>
+                    </MAutocomplete>
+                    <MTextarea Class="mt-6" Outlined Label="@T("App description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
+                    @if (_appFormModel.HasValue)
+                {
+                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                        <MCol Cols=6>@T("Creator"): @_appDetail.Creator</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_appDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_appDetail.Modifier</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_appDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                    </MRow>
+                }
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                @if (_appFormModel.HasValue)
+                {
+                    <MButton Height="40" OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                }
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                </div>
+            </div>
+        </MForm>
+    </SheetDialog>
 
-    <PModal @bind-Value="_relationAppVisible"
-        Persistent
-        Title="@T("Add App")"
-        HideCancelAction
-        Width="684"
-        OnSave="SubmitRelationAppAsync"
-        OnCancel="RelationAppHide">
-        <ChildContent>
-            <MAutocomplete TItem="AppDto"
-                       TValue="int"
-                       TItemValue="int"
-                       Items="_allApps"
-                       ItemText="r=>r.Name"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       OnSelectedItemUpdate="RelationAppSelectChange"
-                       Label="@T("Select an existing app")">
-                <SelectionContent Context="_context">
-                    <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                        @_context.Item.Name
-                    </MChip>
-                </SelectionContent>
-            </MAutocomplete>
-            <MAutocomplete @bind-Value="_addRelationAppModel.EnvironmentClusterIds"
-                       Items="_projectEnvClusters"
-                       ItemText="r=>r.EnvironmentClusterName"
-                       ItemDisabled="@(r=>_disableRelationAppEnvCluster.Contains(r.Id))"
-                       ItemValue="r=>r.Id"
-                       Outlined
-                       Label="@T("Environment/Cluster")"
-                       Multiple>
-                <SelectionContent Context="_context">
-                    <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
-                </SelectionContent>
-            </MAutocomplete>
-            <MSelect @bind-Value="_selectAppType"
-                 Disabled
-                 Items="Enum<AppTypes>.GetEnumObjectList()"
-                 ItemText="r=>r.Name"
-                 ItemValue="r=>r.Value"
-                 Outlined
-                 Label="@T("App type")">
-            </MSelect>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                    <MSelect @bind-Value="_selectAppServiceType"
-                         Disabled
-                         Items="Enum<ServiceTypes>.GetEnumObjectList()"
-                         ItemText="r=>r.Name"
-                         ItemValue="r=>r.Value"
-                         Outlined
-                         Label="@T("Service type")">
-                    </MSelect>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <MTextField Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></MTextField>
-            <FadeTransition>
-                <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                    <MTextField Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></MTextField>
-                </ShowTransitionElement>
-            </FadeTransition>
-            <MTextField Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></MTextField>
-            <MTextarea Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
-        </ChildContent>
-        <SaveContent Context="save">
-            <MButton OnClick="save.Click" Width=100 Class="rounded-pill" Color="primary" Style="float:right;">@T("Submit")</MButton>
-        </SaveContent>
-    </PModal>
+    <SheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
+        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+            <div class="full-height">
+                <MAutocomplete TItem="AppDto"
+                           TValue="int"
+                           TItemValue="int"
+                           Items="_allApps"
+                           ItemText="r=>r.Name"
+                           ItemValue="r=>r.Id"
+                           Class="mt-6"
+                           Outlined
+                           Value="_addRelationAppModel.AppId"
+                           ValueChanged="RelationAppSelectChange"
+                           Label="@T("Select an existing app")">
+                    <SelectionContent Context="_context">
+                        <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                            @_context.Item.Name
+                        </MChip>
+                    </SelectionContent>
+                </MAutocomplete>
+                <MAutocomplete @bind-Value="_addRelationAppModel.EnvironmentClusterIds"
+                           Class="mt-6"
+                           Items="_projectEnvClusters"
+                           ItemText="r=>r.EnvironmentClusterName"
+                           ItemDisabled="@(r=>_disableRelationAppEnvCluster.Contains(r.Id))"
+                           ItemValue="r=>r.Id"
+                           Outlined
+                           Label="@T("Environment/Cluster")"
+                           Multiple>
+                    <SelectionContent Context="_context">
+                        <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
+                    </SelectionContent>
+                </MAutocomplete>
+                <MSelect @bind-Value="_selectAppType"
+                     Disabled
+                     Class="mt-6"
+                     Items="Enum<AppTypes>.GetEnumObjectList()"
+                     ItemText="r=>r.Name"
+                     ItemValue="r=>r.Value"
+                     Outlined
+                     Label="@T("App type")">
+                </MSelect>
+                <FadeTransition>
+                    <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                        <MSelect @bind-Value="_selectAppServiceType"
+                             Disabled
+                             Items="Enum<ServiceTypes>.GetEnumObjectList()"
+                             ItemText="r=>r.Name"
+                             ItemValue="r=>r.Value"
+                             Outlined
+                             Label="@T("Service type")">
+                        </MSelect>
+                    </ShowTransitionElement>
+                </FadeTransition>
+                <DefaultTextField Class="mt-6" Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></DefaultTextField>
+                <FadeTransition>
+                    <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
+                        <DefaultTextField Class="mt-6" Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></DefaultTextField>
+                    </ShowTransitionElement>
+                </FadeTransition>
+                <DefaultTextField Class="mt-6" Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></DefaultTextField>
+                <MTextarea Class="mt-6" Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="SubmitRelationAppAsync">@T("Submit")</MButton>
+            </div>
+        </div>
+    </SheetDialog>
 
     @code {
     private string _friends = "Sandra Adams";

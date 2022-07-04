@@ -1,6 +1,9 @@
-﻿namespace MASA.PM.Web.Admin;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-public abstract class ProCompontentBase : ComponentBase
+namespace MASA.PM.Web.Admin;
+
+public abstract class PmCompontentBase : ComponentBase
 {
     private I18n? _languageProvider;
 

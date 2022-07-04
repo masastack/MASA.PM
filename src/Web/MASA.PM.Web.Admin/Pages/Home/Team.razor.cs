@@ -1,4 +1,8 @@
-﻿using MASA.PM.Caller.Callers;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using MASA.PM.Caller.Callers;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
@@ -115,19 +119,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await Task.Delay(0);
         }
 
-        private async Task SubmitProjectAsync()
+        private async Task SubmitProjectAsync(EditContext context)
         {
-            if (!_projectFormModel.HasValue)
+            if (context.Validate())
             {
-                await ProjectCaller.AddAsync(_projectFormModel.Data);
-            }
-            else
-            {
-                await ProjectCaller.UpdateAsync(_projectFormModel.Data);
-            }
+                if (!_projectFormModel.HasValue)
+                {
+                    await ProjectCaller.AddAsync(_projectFormModel.Data);
+                }
+                else
+                {
+                    await ProjectCaller.UpdateAsync(_projectFormModel.Data);
+                }
 
-            _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
-            _projectFormModel.Hide();
+                _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
+                _projectFormModel.Hide();
+            }
         }
 
         private async Task RemoveProjectAsync()
@@ -173,9 +180,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await GetProjectAsync(projectId);
         }
 
-        private void ProjectHide()
+        private void ProjectValueChanged(bool value)
         {
-            _projectFormModel.Hide();
+            _projectFormModel.Visible = value;
+            if (!value)
+            {
+                _projectFormModel.Hide();
+            }
         }
 
         private void SearchApp()
@@ -221,21 +232,24 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task SubmitAppAsync()
+        private async Task SubmitAppAsync(EditContext context)
         {
-            _appFormModel.Data.ProjectId = _selectProjectId;
-            if (!_appFormModel.HasValue)
+            if (context.Validate())
             {
-                await AppCaller.AddAsync(_appFormModel.Data);
-            }
-            else
-            {
-                await AppCaller.UpdateAsync(_appFormModel.Data);
-            }
+                _appFormModel.Data.ProjectId = _selectProjectId;
+                if (!_appFormModel.HasValue)
+                {
+                    await AppCaller.AddAsync(_appFormModel.Data);
+                }
+                else
+                {
+                    await AppCaller.UpdateAsync(_appFormModel.Data);
+                }
 
-            _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
-            _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
-            AppHide();
+                _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
+                _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
+                AppValueChanged(false);
+            }
         }
 
         private async Task RemoveAppAsync()
@@ -250,13 +264,17 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 _appCount = _projectApps.Count;
 
-                AppHide();
+                AppValueChanged(false);
             });
         }
 
-        private void AppHide()
+        private void AppValueChanged(bool value)
         {
-            _appFormModel.Hide();
+            _appFormModel.Visible = value;
+            if (!value)
+            {
+                _appFormModel.Hide();
+            }
         }
     }
 }

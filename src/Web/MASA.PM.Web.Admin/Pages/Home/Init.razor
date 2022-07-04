@@ -26,7 +26,7 @@
                         {
                             <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
                                 <MCol Cols="9">
-                                    <MTextField TextColor="@item.Color" Class="pr-6" Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></MTextField>
+                                    <DefaultTextField TextColor="@item.Color" Class="pr-6" Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></DefaultTextField>
                                 </MCol>
                                 <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
                                     <ColorGroup @bind-Value="@item.Color" Colors="_colors"></ColorGroup>
@@ -42,7 +42,7 @@
                     <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>_step=2">下一步</MButton>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
-                    <MTextField Rules=RequiredRules Class="mt-2" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></MTextField>
+                    <DefaultTextField Rules=RequiredRules Class="mt-2" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></DefaultTextField>
                     <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                     <div class="d-flex justify-end">
                         <MButton Width=100 Outlined Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
