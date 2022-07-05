@@ -1,4 +1,7 @@
-﻿global using Masa.BuildingBlocks.Data.Contracts.DataFiltering;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+global using Masa.BuildingBlocks.Data.Contracts.DataFiltering;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.Contrib.Data.UoW.EF;

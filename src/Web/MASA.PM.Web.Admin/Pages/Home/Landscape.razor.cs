@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Caller.Callers;
-using Microsoft.AspNetCore.Components.Forms;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Landscape
@@ -405,6 +402,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _appFormModel.Visible = value;
             if (!value)
             {
+                _appDetail = new();
+                _selectAppType = 0;
                 _appFormModel.Hide();
             }
         }

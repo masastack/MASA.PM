@@ -28,7 +28,7 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 });
 builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
 
-builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+//builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGlobalForServer();
