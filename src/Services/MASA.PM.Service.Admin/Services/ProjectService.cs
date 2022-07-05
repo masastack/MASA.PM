@@ -1,4 +1,7 @@
-﻿using MASA.PM.Service.Admin.Application.Cluster.Commands;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using MASA.PM.Service.Admin.Application.Cluster.Commands;
 using MASA.PM.Service.Admin.Application.Cluster.Queries;
 using MASA.PM.Service.Admin.Application.Project.Commands;
 using MASA.PM.Service.Admin.Application.Project.Queries;

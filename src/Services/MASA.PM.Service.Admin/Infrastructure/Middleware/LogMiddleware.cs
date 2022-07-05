@@ -1,4 +1,7 @@
-﻿namespace MASA.PM.Service.Admin.Infrastructure.Middleware
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+namespace MASA.PM.Service.Admin.Infrastructure.Middleware
 {
     public class LogMiddleware<TEvent> : IMiddleware<TEvent>
         where TEvent : notnull, IEvent

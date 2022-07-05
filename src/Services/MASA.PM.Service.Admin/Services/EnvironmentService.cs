@@ -1,4 +1,7 @@
-﻿using MASA.PM.Service.Admin.Application.Environment.Commands;
+﻿// Copyright (c) MASA Stack All rights reserved.
+// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using MASA.PM.Service.Admin.Application.Environment.Commands;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
