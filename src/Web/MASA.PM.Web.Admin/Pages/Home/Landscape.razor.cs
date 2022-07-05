@@ -30,7 +30,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<EnvironmentDto> _environments = new();
         private List<ClusterDto> _clusters = new();
         private List<ProjectDto> _projects = new();
-        private List<AppDto> _allApps = new();
+        private List<AppDto> _canRelationApps = new();
         private List<AppDto> _apps = new();
         private DataModal<UpdateEnvironmentDto> _envFormModel = new();
         private List<ClusterDto> _allClusters = new();
@@ -48,7 +48,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private int _selectAppServiceType;
         private AddRelationAppDto _addRelationAppModel = new();
         private bool _relationAppVisible;
-        private List<int> _disableRelationAppEnvCluster = new();
         private List<ProjectTypesDto> _projectTypes = new();
         private List<string> _colors = new()
         {
@@ -261,11 +260,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                var envName = _environments.First(env => env.Id == _selectedEnvId.AsT1).Name;
                 var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
-                await PopupService.ConfirmAsync("提示", $"确定要删除[{envName}]环境下的[{deleteCluster.Name}]集群吗？", async (c) =>
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteCluster.Name}]集群吗？", async (c) =>
                 {
-                    await ClusterCaller.DeleteAsync(_selectEnvClusterId.AsT1);
+                    try
+                    {
+                        await ClusterCaller.RemoveAsync(deleteCluster.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        c.Cancel();
+                        await PopupService.ToastErrorAsync(ex.Message);
+                    }
 
                     _clusters.Remove(deleteCluster);
                     _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
@@ -418,6 +424,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
+                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
+                    {
+                        await PopupService.ToastErrorAsync("环境/集群不能为空");
+                        return;
+                    }
+
                     await AppCaller.UpdateAsync(_appFormModel.Data);
                 }
 
@@ -431,7 +443,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(new RemoveAppDto { AppId = _selectAppId, ProjectId = _selectProjectId });
+                await AppCaller.RemoveAsync(_selectAppId);
 
                 _apps = await GetAppByProjectIdAsync(_projects.Select(project => project.Id).ToList());
                 _appFormModel.Hide();
@@ -445,19 +457,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectEnvClusters = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
 
             _selectProjectId = projectId;
-            _allApps = await AppCaller.GetListAsync();
+            _canRelationApps = await AppCaller.GetListByProjectIdAsync(new List<int> { projectId });
+            _canRelationApps.RemoveAll(a => a.EnvironmentClusters.Select(ec => ec.Id).Contains(_selectEnvClusterId.AsT1));
+
             _relationAppVisible = true;
         }
 
         private void RelationAppSelectChange(int appId)
         {
-            _appDetail = _allApps.First(app => app.Id == appId);
+            _appDetail = _canRelationApps.First(app => app.Id == appId);
             _selectAppType = (int)_appDetail.Type;
             _selectAppServiceType = (int)_appDetail.ServiceType;
             _addRelationAppModel.AppId = _appDetail.Id;
             _addRelationAppModel.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
             _addRelationAppModel.EnvironmentClusterIds.AddRange(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id));
-            _disableRelationAppEnvCluster.AddRange(_addRelationAppModel.EnvironmentClusterIds);
             _addRelationAppModel.ProjectId = _selectProjectId;
         }
 
@@ -475,8 +488,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (!value)
             {
-                _allApps = new();
-                _disableRelationAppEnvCluster = new();
+                _canRelationApps = new();
                 _appDetail = new();
                 _addRelationAppModel = new();
                 _selectAppType = 0;

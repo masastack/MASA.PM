@@ -180,7 +180,7 @@
                                Label="@T("Relation cluster")"
                                Multiple>
                     <SelectionContent Context="_context">
-                        <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                        <MChip Outlined Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
                             @_context.Item.Name
                         </MChip>
                     </SelectionContent>
@@ -222,7 +222,7 @@
                                Label="@T("Relation environment")"
                                Multiple>
                         <SelectionContent Context="context">
-                            <MChip Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
+                            <MChip Outlined Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
                                 @context.Item.Name
                             </MChip>
                         </SelectionContent>
@@ -270,7 +270,7 @@
                                ItemText="r=>r.Name"
                                ItemValue="r=>r.Name">
                         <SelectionContent Context="data">
-                            <MChip Small Close
+                            <MChip Outlined Small Close
                                OnCloseClick="()=>Remove()">
                                 <MAvatar Left>
                                     <MImage Src="@data.Item.Avatar"></MImage>
@@ -388,7 +388,6 @@
                     <MAutocomplete Class="mt-6" @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
                                Items="_projectEnvClusters"
                                ItemText="r=>r.EnvironmentClusterName"
-                               ItemDisabled="@(r=>r.Id==_selectEnvClusterId.AsT1)"
                                ItemValue="r=>r.Id"
                                Outlined
                                Label="@T("Environment/Cluster")"
@@ -399,7 +398,7 @@
                         <ItemContent>
                             <MListItemContent>
                                 <div class="d-flex align-center">
-                                    <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                                    <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div><div class="ml-1">@context.Item.ClusterName</div>
                                 </div>
                             </MListItemContent>
                         </ItemContent>
@@ -433,7 +432,7 @@
                 <MAutocomplete TItem="AppDto"
                            TValue="int"
                            TItemValue="int"
-                           Items="_allApps"
+                           Items="_canRelationApps"
                            ItemText="r=>r.Name"
                            ItemValue="r=>r.Id"
                            Class="mt-6"
@@ -451,7 +450,6 @@
                            Class="mt-6"
                            Items="_projectEnvClusters"
                            ItemText="r=>r.EnvironmentClusterName"
-                           ItemDisabled="@(r=>_disableRelationAppEnvCluster.Contains(r.Id))"
                            ItemValue="r=>r.Id"
                            Outlined
                            Label="@T("Environment/Cluster")"
@@ -459,6 +457,13 @@
                     <SelectionContent Context="_context">
                         <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
                     </SelectionContent>
+                    <ItemContent>
+                        <MListItemContent>
+                            <div class="d-flex align-center">
+                                <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div><div class="ml-1">@context.Item.ClusterName</div>
+                            </div>
+                        </MListItemContent>
+                    </ItemContent>
                 </MAutocomplete>
                 <MSelect @bind-Value="_selectAppType"
                      Disabled

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Application.Cluster.Commands;
-using MASA.PM.Service.Admin.Application.Cluster.Queries;
 using MASA.PM.Service.Admin.Application.Project.Commands;
 using MASA.PM.Service.Admin.Application.Project.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -90,7 +88,7 @@ namespace MASA.PM.Service.Admin.Services
 
         public async Task RemoveAsync(IEventBus eventBus, [FromBody] int Id)
         {
-            var command = new DeleteProjectCommand(Id);
+            var command = new RemoveProjectCommand(Id);
             await eventBus.PublishAsync(command);
         }
     }

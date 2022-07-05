@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Caller.Callers;
-using Microsoft.AspNetCore.Components.Forms;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
@@ -243,6 +240,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
+                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
+                    {
+                        await PopupService.ToastErrorAsync("环境/集群不能为空");
+                        return;
+                    }
+
                     await AppCaller.UpdateAsync(_appFormModel.Data);
                 }
 
@@ -257,7 +260,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(new RemoveAppDto { AppId = _selectAppId, ProjectId = _selectProjectId });
+                await AppCaller.RemoveAsync(_selectAppId);
 
                 _apps.Remove(deleteApp);
                 _projectApps.Remove(deleteApp);
