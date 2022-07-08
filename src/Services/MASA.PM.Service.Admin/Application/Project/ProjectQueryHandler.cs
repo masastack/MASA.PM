@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Application.Project.Queries;
-
 namespace MASA.PM.Service.Admin.Application.Project
 {
     public class ProjectQueryHandler
@@ -20,6 +18,27 @@ namespace MASA.PM.Service.Admin.Application.Project
         public async Task GetProject(ProjectQuery query)
         {
             var projectEntity = await _projectRepository.GetAsync(query.ProjectId);
+            var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
+            query.Result = new ProjectDetailDto
+            {
+                Id = projectEntity.Id,
+                Identity = projectEntity.Identity,
+                LabelId = projectEntity.LabelId,
+                Name = projectEntity.Name,
+                Description = projectEntity.Description,
+                TeamId = projectEntity.TeamId,
+                EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
+                CreationTime = projectEntity.CreationTime,
+                Creator = projectEntity.Creator,
+                Modifier = projectEntity.Modifier,
+                ModificationTime = projectEntity.ModificationTime
+            };
+        }
+
+        [EventHandler]
+        public async Task GetProjectByIdentity(ProjectByIdentityQuery query)
+        {
+            var projectEntity = await _projectRepository.GetByIdentityAsync(query.identity);
             var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
             query.Result = new ProjectDetailDto
             {

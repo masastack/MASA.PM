@@ -11,6 +11,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<App> GetAsync(int Id);
 
+        Task<App> GetByIdenityAsync(string identity);
+
         Task<List<App>> GetListAsync();
 
         Task<List<App>> GetListByProjectIdAsync(IEnumerable<int> projectIds);

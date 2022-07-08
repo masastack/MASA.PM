@@ -55,6 +55,27 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         }
 
         [EventHandler]
+        public async Task GetAppAsync(AppByIdentityQuery query)
+        {
+            var app = await _appRepository.GetByIdenityAsync(query.identity);
+            query.Result = new AppDto
+            {
+                Name = app.Name,
+                Description = app.Description,
+                Id = app.Id,
+                Identity = app.Identity,
+                Type = app.Type,
+                ServiceType = app.ServiceType,
+                Url = app.Url,
+                SwaggerUrl = app.SwaggerUrl,
+                Creator = app.Creator,
+                CreationTime = app.CreationTime,
+                ModificationTime = app.ModificationTime,
+                Modifier = app.Modifier,
+            };
+        }
+
+        [EventHandler]
         public async Task GetAppListAsync(AppsQuery query)
         {
             if (query.ProjectIds.Any())

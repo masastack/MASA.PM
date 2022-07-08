@@ -73,6 +73,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return result ?? throw new UserFriendlyException("项目不存在！");
         }
 
+        public async Task<Project> GetByIdentityAsync(string identity)
+        {
+            var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Identity == identity);
+
+            return result ?? throw new UserFriendlyException("项目不存在！");
+        }
+
         public async Task<List<Project>> GetListAsync()
         {
             var result = await _dbContext.Projects.ToListAsync();

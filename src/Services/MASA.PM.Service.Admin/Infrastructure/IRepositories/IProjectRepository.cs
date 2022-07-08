@@ -13,6 +13,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<Project> GetAsync(int Id);
 
+        Task<Project> GetByIdentityAsync(string identity);
+
         Task<List<Project>> GetListAsync();
 
         Task<List<Project>> GetListByEnvironmentClusterIdAsync(int environmentClusterId);
