@@ -38,9 +38,9 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<Project>> GetListByTeamIdAsync(Guid teamId)
+        public async Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds)
         {
-            var result = await _dbContext.Projects.Where(project => project.TeamId == teamId).ToListAsync();
+            var result = await _dbContext.Projects.Where(project => teamIds.Contains(project.TeamId)).ToListAsync();
 
             return result;
         }

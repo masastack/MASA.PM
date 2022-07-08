@@ -49,6 +49,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    TeamId = project.TeamId,
                     LabelId = project.LabelId,
                     LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
@@ -58,14 +59,15 @@ namespace MASA.PM.Service.Admin.Application.Project
                 .OrderByDescending(project => project.ModificationTime)
                 .ToList();
             }
-            else if (query.TeamId.HasValue)
+            else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                var projects = await _projectRepository.GetListByTeamIdAsync(query.TeamId.Value);
+                var projects = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds);
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    TeamId = project.TeamId,
                     LabelId = project.LabelId,
                     LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
@@ -92,6 +94,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Id = project.Id,
                 Identity = project.Identity,
                 Name = project.Name,
+                TeamId = project.TeamId,
                 LabelId = project.LabelId,
                 LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                 Description = project.Description,
@@ -133,7 +136,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 {
                     if (appGroup.ProjectId == project.Id)
                     {
-                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id));
+                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id, appGroup.App.Type));
                     }
                 });
             });

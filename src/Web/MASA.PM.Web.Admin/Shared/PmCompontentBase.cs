@@ -7,8 +7,8 @@ public abstract class PmCompontentBase : ComponentBase
 {
     private I18n? _languageProvider;
 
-    [Inject]
-    public I18n LanguageProvider
+    [CascadingParameter]
+    public I18n I18n
     {
         get
         {
@@ -22,7 +22,7 @@ public abstract class PmCompontentBase : ComponentBase
 
     public string T(string key)
     {
-        return LanguageProvider.T(key);
+        return I18n.T(key);
     }
 }
 

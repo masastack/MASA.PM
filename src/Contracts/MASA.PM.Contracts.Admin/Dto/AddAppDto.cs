@@ -8,7 +8,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         private string _name = default!;
         private string _swaggerUrl = default!;
 
-        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
+        //[RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "App name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "App name length range is [2-50]")]
         public string Name
@@ -27,7 +27,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public ServiceTypes ServiceType { get; set; }
 
-        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
+        [RegularExpression(@"^[A-Za-z0-9_-]+$", ErrorMessage = "Please enter [English、and - _ symbols] ")]
         [Required(ErrorMessage = "Identity is required ")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Identity length range is [2-50]")]
         public string Identity { get; set; } = "";

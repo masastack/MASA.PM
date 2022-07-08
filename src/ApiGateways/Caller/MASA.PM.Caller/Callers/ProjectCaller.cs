@@ -1,13 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Contracts.Admin.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Caller.Callers
 {
     public class ProjectCaller : HttpClientCallerBase
@@ -21,9 +14,9 @@ namespace MASA.PM.Caller.Callers
 
         protected override string BaseAddress { get; set; } = AppSettings.Get("ServiceBaseUrl");
 
-        public async Task<List<ProjectDto>> GetListByTeamIdAsync(Guid teamId)
+        public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)
         {
-            var result = await CallerProvider.GetAsync<List<ProjectDto>>($"{_prefix}/teamProjects/{teamId}");
+            var result = await CallerProvider.PostAsync<List<ProjectDto>>($"{_prefix}/teamsProject", teamIds);
 
             return result ?? new();
         }

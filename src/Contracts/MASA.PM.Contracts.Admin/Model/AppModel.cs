@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Contracts.Admin.Model
 {
     public class AppModel
@@ -19,12 +13,15 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public int ProjectId { get; set; }
 
-        public AppModel(int id, string name, string identity, int projectId)
+        public AppTypes AppType { get; set; }
+
+        public AppModel(int id, string name, string identity, int projectId, AppTypes appType)
         {
             Id = id;
             Name = name;
             Identity = identity;
             ProjectId = projectId;
+            AppType = appType;
         }
     }
 }
