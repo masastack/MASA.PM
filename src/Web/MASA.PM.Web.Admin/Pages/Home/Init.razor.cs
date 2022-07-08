@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Caller.Callers;
-using MASA.PM.UI.Admin.Model;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Init
@@ -17,7 +14,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        private List<EnvClusterModel> _customEnv = new();
+        private EnvModel _customEnv = new();
         private int _step = 1;
         private InitDto _initModel = new();
         private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
@@ -37,66 +34,90 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (firstRender)
             {
                 var defaultColor = _colors.First();
-                _customEnv = new List<EnvClusterModel>()
+                _customEnv = new EnvModel()
                 {
-                    new EnvClusterModel(0, "Development", "开发环境", defaultColor),
-                    new EnvClusterModel(1, "Staging", "模拟环境", defaultColor),
-                    new EnvClusterModel(2, "Production", "生产环境", defaultColor)
+                    Environments = new List<EnvClusterModel>
+                    {
+                        new EnvClusterModel(0, "Development", "开发环境", defaultColor),
+                        new EnvClusterModel(1, "Staging", "模拟环境", defaultColor),
+                        new EnvClusterModel(2, "Production", "生产环境", defaultColor)
+                    }
                 };
 
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
-                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                    //NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
             }
         }
 
-        private async Task InitAsync()
+        private async void NextStep(EditContext context)
         {
-            _initLoading = true;
-
-            try
+            if (context.Validate())
             {
-                _initModel.Environments = _customEnv.Select(env => new AddEnvironmentDto
+                foreach (var item in _customEnv.Environments)
                 {
-                    Name = env.Name,
-                    Description = env.Description,
-                    Color = env.Color
-                }).ToList();
-                await EnvironmentCaller.InitAsync(_initModel);
+                    if (_customEnv.Environments.Count(e => e.Name.Equals(item.Name)) > 1)
+                    {
+                        await PopupService.ToastErrorAsync("环境名称不允许重复");
+                        return;
+                    }
+                }
 
-                await PopupService.AlertAsync("初始化完成！", AlertTypes.Success);
-                NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                _step = 2;
             }
-            catch (Exception ex)
+
+        }
+
+        private async Task InitAsync(EditContext context)
+        {
+            if (context.Validate())
             {
-                await PopupService.AlertAsync(ex);
-            }
-            finally
-            {
-                _initLoading = false;
+                _initLoading = true;
+
+                try
+                {
+                    _initModel.Environments = _customEnv.Environments.Select(env => new AddEnvironmentDto
+                    {
+                        Name = env.Name,
+                        Description = env.Description,
+                        Color = env.Color
+                    }).ToList();
+                    await EnvironmentCaller.InitAsync(_initModel);
+
+                    await PopupService.AlertAsync("初始化完成！", AlertTypes.Success);
+                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                }
+                catch (Exception ex)
+                {
+                    await PopupService.AlertAsync(ex);
+                }
+                finally
+                {
+                    _initLoading = false;
+                }
             }
         }
 
         private void AddEnvComponent(int index)
         {
-            var env = _customEnv.FirstOrDefault(e => e.Index == index);
+            var env = _customEnv.Environments.FirstOrDefault(e => e.Index == index);
             if (env != null)
             {
-                var newIndex = _customEnv.IndexOf(env) + 1;
-                _customEnv.Insert(newIndex, new EnvClusterModel(_customEnv.Count));
+                var newIndex = _customEnv.Environments.IndexOf(env) + 1;
+                _customEnv.Environments.Insert(newIndex, new EnvClusterModel(_customEnv.Environments.Count));
             }
         }
 
         private void RemoveEnvComponent(int index)
         {
-            if (_customEnv.Count > 1)
+            if (_customEnv.Environments.Count > 1)
             {
-                var env = _customEnv.FirstOrDefault(e => e.Index == index);
+                var env = _customEnv.Environments.FirstOrDefault(e => e.Index == index);
                 if (env != null)
                 {
-                    _customEnv.Remove(env);
+                    _customEnv.Environments.Remove(env);
                 }
             }
         }
