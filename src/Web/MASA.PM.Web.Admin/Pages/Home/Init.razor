@@ -21,33 +21,37 @@
 
             <MStepperItems>
                 <MStepperContent Style="padding-top:12px !important;" Step="1">
-                    @{
-                        foreach (var item in _customEnv)
-                        {
-                            <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
-                                <MCol Cols="9">
-                                    <DefaultTextField TextColor="@item.Color" Class="pr-6" Style="margin-top:9px;" Rules=RequiredRules @bind-Value="item.Name" Label="环境名称" Outlined></DefaultTextField>
-                                </MCol>
-                                <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
-                                    <ColorGroup @bind-Value="@item.Color" Colors="_colors"></ColorGroup>
-                                </MCol>
-                            </MRow>
-                            <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
-                            <div class="d-flex justify-end mb-6 mr-1">
-                                <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
-                                <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
-                            </div>
+                    <MForm Model="_customEnv" EnableValidation>
+                        @{
+                            foreach (var item in _customEnv.Environments)
+                            {
+                                <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
+                                    <MCol Cols="9">
+                                        <DefaultTextField TextColor="@item.Color" Class="pr-6 mb-4" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></DefaultTextField>
+                                    </MCol>
+                                    <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
+                                        <ColorGroup @bind-Value="@item.Color" Colors="_colors"></ColorGroup>
+                                    </MCol>
+                                </MRow>
+                                <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
+                                <div class="d-flex justify-end mb-6 mr-1">
+                                    <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
+                                    <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
+                                </div>
+                            }
                         }
-                    }
-                    <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>_step=2">下一步</MButton>
+                        <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">下一步</MButton>
+                    </MForm>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
-                    <DefaultTextField Rules=RequiredRules Class="mt-2" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></DefaultTextField>
-                    <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
-                    <div class="d-flex justify-end">
-                        <MButton Width=100 Outlined Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
-                        <MButton Width=100 Class="rounded-pill" Color="primary" OnClick="InitAsync" Loading="_initLoading">提交</MButton>
-                    </div>
+                    <MForm Model="_initModel" EnableValidation>
+                        <DefaultTextField Class="mt-2 mb-4" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></DefaultTextField>
+                        <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
+                        <div class="d-flex justify-end">
+                            <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
+                            <MButton Height="40" Width=100 Class="rounded-pill" Color="primary" OnClick="()=>InitAsync(context)" Loading="_initLoading">提交</MButton>
+                        </div>
+                    </MForm>
                 </MStepperContent>
             </MStepperItems>
         </MStepper>

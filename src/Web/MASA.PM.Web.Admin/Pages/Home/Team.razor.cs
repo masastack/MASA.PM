@@ -32,7 +32,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private string _projectName = "";
         private ProjectDetailDto _projectDetail = new();
-        private DataModal<UpdateProjectDto> _projectFormModel = new();
         private List<EnvironmentClusterDto> allEnvClusters = new();
         private int _selectProjectId;
         private int _appCount;
@@ -43,6 +42,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppDto _appDetail = new();
         private int _selectAppId;
         private List<TeamModel> _userTeams = new();
+        private TeamModel _userTeam = new();
         private ProjectModal? _projectModal;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -50,6 +50,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (firstRender)
             {
                 _userTeams = await AuthClient.TeamService.GetUserTeamsAsync();
+                _userTeam = _userTeams.Any() ? _userTeams[0] : new();
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count <= 0)
                 {
