@@ -38,9 +38,9 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<Project>> GetListByTeamIdAsync(Guid teamId)
+        public async Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds)
         {
-            var result = await _dbContext.Projects.Where(project => project.TeamId == teamId).ToListAsync();
+            var result = await _dbContext.Projects.Where(project => teamIds.Contains(project.TeamId)).ToListAsync();
 
             return result;
         }
@@ -69,6 +69,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         public async Task<Project> GetAsync(int Id)
         {
             var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
+
+            return result ?? throw new UserFriendlyException("项目不存在！");
+        }
+
+        public async Task<Project> GetByIdentityAsync(string identity)
+        {
+            var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Identity == identity);
 
             return result ?? throw new UserFriendlyException("项目不存在！");
         }

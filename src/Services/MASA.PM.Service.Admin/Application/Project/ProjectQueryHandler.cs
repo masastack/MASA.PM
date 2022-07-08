@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Application.Project.Queries;
-
 namespace MASA.PM.Service.Admin.Application.Project
 {
     public class ProjectQueryHandler
@@ -38,6 +36,27 @@ namespace MASA.PM.Service.Admin.Application.Project
         }
 
         [EventHandler]
+        public async Task GetProjectByIdentity(ProjectByIdentityQuery query)
+        {
+            var projectEntity = await _projectRepository.GetByIdentityAsync(query.identity);
+            var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
+            query.Result = new ProjectDetailDto
+            {
+                Id = projectEntity.Id,
+                Identity = projectEntity.Identity,
+                LabelId = projectEntity.LabelId,
+                Name = projectEntity.Name,
+                Description = projectEntity.Description,
+                TeamId = projectEntity.TeamId,
+                EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
+                CreationTime = projectEntity.CreationTime,
+                Creator = projectEntity.Creator,
+                Modifier = projectEntity.Modifier,
+                ModificationTime = projectEntity.ModificationTime
+            };
+        }
+
+        [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
             var projectTypes = await _projectRepository.GetProjectTypesAsync();
@@ -49,6 +68,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    TeamId = project.TeamId,
                     LabelId = project.LabelId,
                     LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
@@ -58,14 +78,15 @@ namespace MASA.PM.Service.Admin.Application.Project
                 .OrderByDescending(project => project.ModificationTime)
                 .ToList();
             }
-            else if (query.TeamId.HasValue)
+            else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                var projects = await _projectRepository.GetListByTeamIdAsync(query.TeamId.Value);
+                var projects = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds);
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
+                    TeamId = project.TeamId,
                     LabelId = project.LabelId,
                     LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                     Description = project.Description,
@@ -92,6 +113,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Id = project.Id,
                 Identity = project.Identity,
                 Name = project.Name,
+                TeamId = project.TeamId,
                 LabelId = project.LabelId,
                 LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
                 Description = project.Description,
@@ -133,7 +155,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 {
                     if (appGroup.ProjectId == project.Id)
                     {
-                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id));
+                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id, appGroup.App.Type));
                     }
                 });
             });

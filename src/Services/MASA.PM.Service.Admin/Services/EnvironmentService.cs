@@ -59,7 +59,7 @@ namespace MASA.PM.Service.Admin.Services
 
         public async Task RemoveAsync(IEventBus eventBus, [FromBody] int Id)
         {
-            var command = new DeleteEnvironmentCommand(Id);
+            var command = new RemoveEnvironmentCommand(Id);
             await eventBus.PublishAsync(command);
         }
     }

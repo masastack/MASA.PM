@@ -18,7 +18,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/app/{Id}", GetAsync);
             App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync);
             App.MapPut("/api/v1/app", UpdateAsync);
-            App.MapDelete("/api/v1/app", RemoveAsync);
+            App.MapDelete("/api/v1/app/{id}", RemoveAsync);
         }
 
         public async Task AddAsync(IEventBus eventBus, AddAppDto model)
@@ -73,9 +73,9 @@ namespace MASA.PM.Service.Admin.Services
             await eventBus.PublishAsync(command);
         }
 
-        public async Task RemoveAsync(IEventBus eventBus, [FromBody] RemoveAppDto model)
+        public async Task RemoveAsync(IEventBus eventBus, int id)
         {
-            var command = new DeleteAppCommand(model.AppId, model.ProjectId);
+            var command = new RemoveAppCommand(id);
             await eventBus.PublishAsync(command);
         }
     }

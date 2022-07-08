@@ -1,0 +1,87 @@
+﻿@inherits PmCompontentBase
+
+<SheetDialog Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
+    <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
+        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+            <div class="full-height">
+                <DefaultTextField Class="mt-6" Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></DefaultTextField>
+                <MAutocomplete @bind-Value="_projectFormModel.Data.TeamId"
+                               Items="_allTeams"
+                               Chips
+                               Class="mt-6"
+                               Outlined
+                               Color="blue-grey lighten-2"
+                               Label="@T("Project`s team")"
+                               ItemText="r=>r.Name"
+                               ItemValue="r=>r.Id">
+                    <SelectionContent Context="data">
+                        <MChip Small Close
+                               OnCloseClick="()=>{_projectFormModel.Data.TeamId = Guid.Empty;}">
+                            <MAvatar Left>
+                                <MImage Src="@data.Item.Avatar"></MImage>
+                            </MAvatar>
+                            @data.Item.Name
+                        </MChip>
+                    </SelectionContent>
+                    <ItemContent Context="data">
+                        <MListItemAvatar>
+                            <img src="@data.Item.Avatar">
+                        </MListItemAvatar>
+                        <MListItemContent>
+                            <MListItemTitle>
+                                @((MarkupString)data.Item.Name)
+                            </MListItemTitle>
+                        </MListItemContent>
+                    </ItemContent>
+                </MAutocomplete>
+                <DefaultTextField Class="mt-6" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></DefaultTextField>
+                <MSelect @bind-Value="_projectFormModel.Data.LabelId"
+                         Disabled="@(_projectFormModel.HasValue)"
+                         Items="_projectTypes"
+                         ItemText="r=>r.Name"
+                         ItemValue="r=>r.Id"
+                         Outlined
+                         Class="mt-6"
+                         Label="@T("Project type")">
+                </MSelect>
+                <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
+                               Items="_allEnvClusters"
+                               Class="mt-6"
+                               ItemText="r=>r.EnvironmentClusterName"
+                               ItemValue="r=>r.Id"
+                               Outlined
+                               Label="@T("Environment/Cluster")"
+                               Multiple>
+                    <SelectionContent Context="context">
+                        <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
+                    </SelectionContent>
+                    <ItemContent>
+                        <MListItemContent>
+                            <div class="d-flex align-center">
+                                <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                            </div>
+                        </MListItemContent>
+                    </ItemContent>
+                </MAutocomplete>
+                <MTextarea Class="mt-6" Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+                @if (_projectFormModel.HasValue)
+                {
+                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
+                        <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                    </MRow>
+                }
+            </div>
+            <div class="d-flex align-end" style="width:100%;">
+                @if (_projectFormModel.HasValue)
+                {
+                    <MButton Height="40" OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                }
+                <MSpacer></MSpacer>
+                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitProjectAsync(formContext)">@(_projectFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                </div>
+            </div>
+        </MForm>
+</SheetDialog>

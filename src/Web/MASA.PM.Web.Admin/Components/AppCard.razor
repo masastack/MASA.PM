@@ -1,7 +1,7 @@
 ﻿<MHover Context="hoverContext" Class="d-flex flex-column">
     <MCard Class="hover-pointer" Ripple=false OnClick="OnClick" Outlined MinHeight="Height" @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)" Style="border-radius:10px !important; border: 1px solid #E2E7F4;">
         <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
-            <div class="emphasis2--text h7 text-overflow">@App.Name</div>
+            <div class="emphasis2--text h7 text-overflow" style="max-width: 320px;">@App.Name</div>
             <MSpacer />
             <div class="emphasis2--text h7 text-overflow">@App.Type</div>
         </MCardTitle>

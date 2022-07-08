@@ -86,7 +86,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
         }
 
         [EventHandler]
-        public async Task RemoveEnvironmentAsync(DeleteEnvironmentCommand command)
+        public async Task RemoveEnvironmentAsync(RemoveEnvironmentCommand command)
         {
             await _environmentRepository.RemoveAsync(command.EnvironmentId);
         }

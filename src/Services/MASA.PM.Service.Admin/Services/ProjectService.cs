@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Application.Cluster.Commands;
-using MASA.PM.Service.Admin.Application.Cluster.Queries;
 using MASA.PM.Service.Admin.Application.Project.Commands;
 using MASA.PM.Service.Admin.Application.Project.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +13,7 @@ namespace MASA.PM.Service.Admin.Services
         {
             App.MapPost("/api/v1/project", AddAsync);
             App.MapGet("/api/v1/projects", GetListAsync);
-            App.MapGet("/api/v1/project/teamProjects/{teamId}", GetListByTeamId);
+            App.MapPost("/api/v1/project/teamsProject", GetListByTeamIds);
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapGet("/api/v1/project/projectType", GetProjectTypes);
@@ -38,9 +36,9 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<ProjectDto>> GetListByTeamId(IEventBus eventBus, Guid teamId)
+        public async Task<List<ProjectDto>> GetListByTeamIds(IEventBus eventBus, List<Guid> teamIds)
         {
-            var query = new ProjectsQuery(null, teamId);
+            var query = new ProjectsQuery(null, teamIds);
             await eventBus.PublishAsync(query);
 
             return query.Result;
@@ -90,7 +88,7 @@ namespace MASA.PM.Service.Admin.Services
 
         public async Task RemoveAsync(IEventBus eventBus, [FromBody] int Id)
         {
-            var command = new DeleteProjectCommand(Id);
+            var command = new RemoveProjectCommand(Id);
             await eventBus.PublishAsync(command);
         }
     }

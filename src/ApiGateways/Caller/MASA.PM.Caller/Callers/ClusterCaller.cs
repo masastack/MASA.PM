@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Caller.Callers
 {
     public class ClusterCaller : HttpClientCallerBase
@@ -58,9 +52,9 @@ namespace MASA.PM.Caller.Callers
             await CallerProvider.PutAsync(_prefix, model);
         }
 
-        public async Task DeleteAsync(int envClusterId)
+        public async Task RemoveAsync(int id)
         {
-            await CallerProvider.DeleteAsync(_prefix, envClusterId);
+            await CallerProvider.DeleteAsync($"{_prefix}/{id}", null);
         }
     }
 }

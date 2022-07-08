@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Infrastructure.Entities;
-
 namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 {
     public interface IAppRepository
@@ -12,6 +10,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
         Task AddEnvironmentClusterProjectAppsAsync(IEnumerable<EnvironmentClusterProjectApp> environmentClusterProjectApps);
 
         Task<App> GetAsync(int Id);
+
+        Task<App> GetByIdenityAsync(string identity);
 
         Task<List<App>> GetListAsync();
 

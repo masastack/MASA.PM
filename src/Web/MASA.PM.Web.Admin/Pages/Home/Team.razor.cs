@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Caller.Callers;
-using Microsoft.AspNetCore.Components.Forms;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
@@ -26,6 +23,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
+        [Inject]
+        public IAuthClient AuthClient { get; set; } = default!;
+
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
         private List<ProjectDto> _projects = new();
@@ -42,14 +42,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private AppDto _appDetail = new();
         private int _selectAppId;
-        private List<ProjectTypesDto> _projectTypes = new();
-
-        public Guid TeamId { get; set; } = Guid.Empty;
+        private List<TeamModel> _userTeams = new();
+        private ProjectModal? _projectModal;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
+                _userTeams = await AuthClient.TeamService.GetUserTeamsAsync();
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count <= 0)
                 {
@@ -63,9 +63,16 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task InitDataAsync()
         {
-            _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
+            _projects = await GetProjectListAsync();
             var projectIds = _projects.Select(project => project.Id).ToList();
             _apps = await AppCaller.GetListByProjectIdAsync(projectIds);
+        }
+
+        private async Task<List<ProjectDto>> GetProjectListAsync()
+        {
+            _projects = await ProjectCaller.GetListByTeamIdsAsync(_userTeams.Select(t => t.Id));
+
+            return _projects;
         }
 
         private async Task SearchProject(KeyboardEventArgs args)
@@ -97,6 +104,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 LabelId = project.LabelId,
                 ProjectId = project.Id,
                 Name = project.Name,
+                TeamId = project.TeamId,
                 Description = project.Description,
                 EnvironmentClusterIds = project.EnvironmentClusterIds
             });
@@ -104,67 +112,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
         {
-            _projectTypes = await ProjectCaller.GetProjectTypesAsync();
-            allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
-            if (model == null)
+            if (_projectModal != null)
             {
-                _projectFormModel.Show();
-            }
-            else
-            {
-                _projectFormModel.Show(model);
-            }
-
-            //TODO: get team by auth sdk;
-            await Task.Delay(0);
-        }
-
-        private async Task SubmitProjectAsync(EditContext context)
-        {
-            if (context.Validate())
-            {
-                if (!_projectFormModel.HasValue)
-                {
-                    await ProjectCaller.AddAsync(_projectFormModel.Data);
-                }
-                else
-                {
-                    await ProjectCaller.UpdateAsync(_projectFormModel.Data);
-                }
-
-                _projects = await ProjectCaller.GetListByTeamIdAsync(TeamId);
-                _projectFormModel.Hide();
-            }
-        }
-
-        private async Task RemoveProjectAsync()
-        {
-            var deleteProject = _projects.First(project => project.Id == _selectProjectId);
-            var isHasApps = _apps.Where(app => app.ProjectId == _selectProjectId).Any();
-
-            if (isHasApps)
-            {
-                await PopupService.AlertAsync(param =>
-                {
-                    param.Centered = true;
-                    param.Content = "您的项目中还有应用存在，无法删除项目!";
-                    param.Color = "warning";
-                    param.Top = true;
-                    param.Timeout = 2000;
-                });
-            }
-            else
-            {
-                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
-                {
-                    await ProjectCaller.DeleteAsync(_selectProjectId);
-
-                    _projects.Remove(deleteProject);
-
-                    _projectFormModel.Hide();
-
-                    _curTab = 0;
-                });
+                await _projectModal.InitDataAsync(model);
             }
         }
 
@@ -178,15 +128,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _appCount = appCount;
             _projectApps = _apps.Where(app => app.ProjectId == projectId).ToList();
             await GetProjectAsync(projectId);
-        }
-
-        private void ProjectValueChanged(bool value)
-        {
-            _projectFormModel.Visible = value;
-            if (!value)
-            {
-                _projectFormModel.Hide();
-            }
         }
 
         private void SearchApp()
@@ -243,6 +184,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
+                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
+                    {
+                        await PopupService.ToastErrorAsync("环境/集群不能为空");
+                        return;
+                    }
+
                     await AppCaller.UpdateAsync(_appFormModel.Data);
                 }
 
@@ -257,7 +204,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var deleteApp = _apps.First(app => app.Id == _selectAppId);
             await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
             {
-                await AppCaller.DeleteAsync(new RemoveAppDto { AppId = _selectAppId, ProjectId = _selectProjectId });
+                await AppCaller.RemoveAsync(_selectAppId);
 
                 _apps.Remove(deleteApp);
                 _projectApps.Remove(deleteApp);

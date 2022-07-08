@@ -31,7 +31,6 @@ builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configu
 //builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddGlobalForServer();
 builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
 
 var app = builder.Build();

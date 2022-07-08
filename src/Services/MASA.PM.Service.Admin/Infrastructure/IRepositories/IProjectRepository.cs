@@ -9,9 +9,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task AddEnvironmentClusterProjectsAsync(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
 
-        Task<List<Project>> GetListByTeamIdAsync(Guid teamId);
+        Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds);
 
         Task<Project> GetAsync(int Id);
+
+        Task<Project> GetByIdentityAsync(string identity);
 
         Task<List<Project>> GetListAsync();
 

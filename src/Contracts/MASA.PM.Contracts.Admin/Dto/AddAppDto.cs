@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Contracts.Admin.Dto
 {
     public class AddAppDto
@@ -14,7 +8,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         private string _name = default!;
         private string _swaggerUrl = default!;
 
-        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
+        //[RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "App name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "App name length range is [2-50]")]
         public string Name
@@ -23,6 +17,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value?.Trim() ?? "";
         }
 
+        [MinCount(1)]
         public List<int> EnvironmentClusterIds { get; set; } = new();
 
         public int ProjectId { get; set; }
@@ -32,7 +27,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public ServiceTypes ServiceType { get; set; }
 
-        [RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
+        [RegularExpression(@"^[A-Za-z0-9_-]+$", ErrorMessage = "Please enter [English、and - _ symbols] ")]
         [Required(ErrorMessage = "Identity is required ")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Identity length range is [2-50]")]
         public string Identity { get; set; } = "";
