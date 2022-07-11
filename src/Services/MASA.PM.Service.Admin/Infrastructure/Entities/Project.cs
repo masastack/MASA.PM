@@ -12,7 +12,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
-        [Comment("LabelId")]
+        [Comment("LabelCode")]
         public string LabelCode { get; set; } = "";
 
         [Comment("Name")]

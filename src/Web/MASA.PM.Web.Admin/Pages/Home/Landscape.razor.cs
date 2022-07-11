@@ -61,7 +61,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
-                _allTeams = await AuthClient.TeamService.GetAllAsync();
+                //_allTeams = await AuthClient.TeamService.GetAllAsync();
+                _allTeams = new List<TeamModel>();
                 _environments = await EnvironmentCaller.GetListAsync();
                 if (_environments.Any())
                 {

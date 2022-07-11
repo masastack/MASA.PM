@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Dispatcher.IntegrationEvents.Dapr;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -68,18 +70,19 @@ var app = builder.Services
         });
     })
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
-    .AddDaprEventBus<IntegrationEventLogService>(options =>
+    .AddIntegrationEventBus<IntegrationEventLogService>(options =>
     {
-        options.UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
-               .UseEventLog<PmDbContext>()
-               .UseEventBus();
+        options.UseDapr()
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
+        .UseEventLog<PmDbContext>()
+        .UseEventBus();
     })
     .AddServices(builder);
 
 //SeedData
 //await app.Seed();
 
-app.UseMasaExceptionHandling();
+app.UseMasaExceptionHandler();
 
 // Configure the HTTP request pipeline.
 
