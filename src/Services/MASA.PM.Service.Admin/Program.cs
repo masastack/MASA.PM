@@ -1,11 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Identity.IdentityModel;
-using Masa.Contrib.Data.Contracts.EF;
-using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
-using MASA.PM.Service.Admin.Migrations;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -40,6 +35,8 @@ builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
     options.UserId = "sub";
 });
 builder.Services.AddAuthClient(builder.Configuration["AuthServiceBaseAddress"]);
+
+builder.Services.AddDccClient();
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -80,7 +77,7 @@ var app = builder.Services
     .AddServices(builder);
 
 //SeedData
-await app.Seed();
+//await app.Seed();
 
 app.UseMasaExceptionHandling();
 

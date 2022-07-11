@@ -15,7 +15,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string Description { get; set; } = "";
 
-        public int LabelId { get; set; }
+        public string LabelCode { get; set; } = "";
 
         public string LabelName { get; set; } = "";
 

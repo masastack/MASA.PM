@@ -301,7 +301,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await ShowProjectModalAsync(new UpdateProjectDto
             {
                 Identity = project.Identity,
-                LabelId = project.LabelId,
+                LabelCode = project.LabelCode,
                 ProjectId = project.Id,
                 Name = project.Name,
                 TeamId = project.TeamId,

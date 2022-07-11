@@ -24,24 +24,25 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.5.0-preview.2" />
-		<PackageReference Include="Masa.Contrib.BasicAbility.Auth" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.Data.Contracts.EF" Version="0.5.0-preview.2" />
-		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.5.0-preview.2" />
+		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.BasicAbility.Auth" Version="0.5.0-preview.5" />
+    <PackageReference Include="Masa.Contrib.BasicAbility.Dcc" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.Data.Contracts.EF" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Contrib.Data.EntityFrameworkCore.SqlServer" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EF" Version="0.5.0-preview.5" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
-		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.ReadWriteSpliting.CQRS" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.5.0-preview.2" />
-		<PackageReference Include="Masa.Utils.Caching.DistributedMemory" Version="0.5.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.5.0-preview.3" />
-		<PackageReference Include="MASA.Utils.Configuration.Json" Version="0.5.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.3" />
-		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.5.0-preview.3" />
+		<PackageReference Include="Masa.Contrib.Identity.IdentityModel" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.ReadWriteSpliting.CQRS" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Caching.DistributedMemory" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Utils.Configuration.Json" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.5.0-preview.5" />
+		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.5.0-preview.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
-		<PackageReference Include="MASA.Contrib.Data.UoW.EF" Version="0.5.0-preview.2" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-preview.2" />
+		<PackageReference Include="MASA.Contrib.Data.UoW.EF" Version="0.5.0-preview.5" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.5.0-preview.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

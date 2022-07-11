@@ -14,19 +14,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        private EnvModel _customEnv = new();
+        private EnvironmentModel _customEnv = new();
         private int _step = 1;
         private InitDto _initModel = new();
-        private readonly Func<string, StringBoolean> _requiredRule = value => !string.IsNullOrEmpty(value) ? true : "Required.";
         private bool _initLoading;
         private readonly List<string> _colors = new()
         {
             "#00b42a", "#ff7d00", "#ff5252", "#37a7ff", "#ffb547",
-        };
-
-        private IEnumerable<Func<string, StringBoolean>> RequiredRules => new List<Func<string, StringBoolean>>
-        {
-            _requiredRule
         };
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -34,13 +28,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (firstRender)
             {
                 var defaultColor = _colors.First();
-                _customEnv = new EnvModel()
+                _customEnv = new EnvironmentModel()
                 {
-                    Environments = new List<EnvClusterModel>
+                    Environments = new List<EnvModel>
                     {
-                        new EnvClusterModel(0, "Development", "开发环境", defaultColor),
-                        new EnvClusterModel(1, "Staging", "模拟环境", defaultColor),
-                        new EnvClusterModel(2, "Production", "生产环境", defaultColor)
+                        new EnvModel(0, "Development", "开发环境", defaultColor),
+                        new EnvModel(1, "Staging", "模拟环境", defaultColor),
+                        new EnvModel(2, "Production", "生产环境", defaultColor)
                     }
                 };
 
@@ -106,7 +100,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (env != null)
             {
                 var newIndex = _customEnv.Environments.IndexOf(env) + 1;
-                _customEnv.Environments.Insert(newIndex, new EnvClusterModel(_customEnv.Environments.Count));
+                _customEnv.Environments.Insert(newIndex, new EnvModel(_customEnv.Environments.Count));
             }
         }
 

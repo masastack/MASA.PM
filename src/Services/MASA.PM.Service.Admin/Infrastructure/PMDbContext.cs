@@ -37,10 +37,6 @@ namespace MASA.PM.Service.Admin.Infrastructure
             modelBuilder.Entity<App>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
-
-            modelBuilder.Entity<Label>()
-               .Property(t => t.ModificationTime)
-               .HasDefaultValueSql("SYSDATETIME()");
         }
 
         public DbSet<Entities.Environment> Environments { get; set; } = default!;
@@ -56,7 +52,5 @@ namespace MASA.PM.Service.Admin.Infrastructure
         public DbSet<EnvironmentClusterProjectApp> EnvironmentClusterProjectApps { get; set; } = default!;
 
         public DbSet<App> Apps { get; set; } = default!;
-
-        public DbSet<Label> Labels { get; set; } = default!;
     }
 }

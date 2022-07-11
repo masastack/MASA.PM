@@ -5,12 +5,12 @@ using FluentValidation;
 
 namespace MASA.PM.UI.Admin.Model
 {
-    public class EnvModel
+    public class EnvironmentModel
     {
-        public List<EnvClusterModel> Environments { get; set; } = new();
+        public List<EnvModel> Environments { get; set; } = new();
     }
 
-    public class EnvClusterModel
+    public class EnvModel
     {
         public string Name { get; set; } = "";
 
@@ -20,7 +20,7 @@ namespace MASA.PM.UI.Admin.Model
 
         public int Index { get; set; }
 
-        public EnvClusterModel(int index, string name, string description, string color)
+        public EnvModel(int index, string name, string description, string color)
         {
             Index = index;
             Name = name;
@@ -28,13 +28,13 @@ namespace MASA.PM.UI.Admin.Model
             Color = color;
         }
 
-        public EnvClusterModel(int index)
+        public EnvModel(int index)
         {
             Index = index;
         }
     }
 
-    class EnvModelValidator : AbstractValidator<EnvModel>
+    class EnvModelValidator : AbstractValidator<EnvironmentModel>
     {
         public EnvModelValidator()
         {
@@ -42,7 +42,7 @@ namespace MASA.PM.UI.Admin.Model
         }
     }
 
-    class EnvClusterModelValidator : AbstractValidator<EnvClusterModel>
+    class EnvClusterModelValidator : AbstractValidator<EnvModel>
     {
         public EnvClusterModelValidator()
         {
