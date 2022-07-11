@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Dispatcher.IntegrationEvents.Dapr;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -30,13 +28,15 @@ foreach (var item in assembly)
 }
 #endregion
 
+builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
 });
-builder.Services.AddAuthClient(builder.Configuration["AuthServiceBaseAddress"]);
+builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()["Appsettings:AuthServiceBaseAddress"]);
 
 builder.Services.AddDccClient();
 
@@ -72,8 +72,11 @@ var app = builder.Services
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddIntegrationEventBus<IntegrationEventLogService>(options =>
     {
+        var connectionString = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+        ["Appsettings:ConnectionStrings:DefaultConnection"];
+
         options.UseDapr()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connectionString).UseFilter())
         .UseEventLog<PmDbContext>()
         .UseEventBus();
     })
