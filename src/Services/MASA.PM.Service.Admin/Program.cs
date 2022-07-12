@@ -47,7 +47,7 @@ if (builder.Environment.IsProduction())
     //        Password = ""
     //    }
     //};
-    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc();
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 }
 else
 {
