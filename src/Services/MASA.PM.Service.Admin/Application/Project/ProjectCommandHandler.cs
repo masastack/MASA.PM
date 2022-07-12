@@ -41,6 +41,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var project = await _projectRepository.GetAsync(command.ProjectModel.ProjectId);
 
+            project.LabelCode = command.ProjectModel.LabelCode;
             project.Name = command.ProjectModel.Name;
             project.Description = command.ProjectModel.Description;
             project.TeamId = command.ProjectModel.TeamId;

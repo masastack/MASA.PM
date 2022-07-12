@@ -20,7 +20,7 @@ namespace MASA.PM.Service.Admin.Services
 
         public async Task InitAsync(IEventBus eventBus, InitDto model)
         {
-            var command = new InitEnvironmentClusterCommand(model);
+            var command = new InitCommand(model);
             await eventBus.PublishAsync(command);
         }
 

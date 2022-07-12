@@ -1,7 +1,15 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDaprStarter(opt =>
+{
+    opt.DaprHttpPort = 3600;
+    opt.DaprGrpcPort = 3601;
+});
 
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
@@ -30,24 +38,7 @@ foreach (var item in assembly)
 
 if (builder.Environment.IsProduction())
 {
-    //Next update,this will get config by dapr secret.
-
-    //var daprClient = GetDaprClient(builder.Services);
-    //var host = await daprClient.GetSecretAsync("secretstore", "");
-
-    //var dccOptions = new DccConfigurationOptions
-    //{
-    //    RedisOptions = new Masa.Utils.Caching.Redis.Models.RedisConfigurationOptions
-    //    {
-    //        Servers = new List<Masa.Utils.Caching.Redis.Models.RedisServerOptions>
-    //        {
-    //            new(daprClient.getsecreta)
-    //        },
-    //        DefaultDatabase = 0,
-    //        Password = ""
-    //    }
-    //};
-    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+    await AddProductionMasaConfigurationAsync(builder);
 }
 else
 {
@@ -135,4 +126,34 @@ DaprClient GetDaprClient(IServiceCollection services)
     var daprClient = services.BuildServiceProvider().GetRequiredService<DaprClient>();
 
     return daprClient;
+}
+
+async Task AddProductionMasaConfigurationAsync(WebApplicationBuilder builder)
+{
+    var daprClient = GetDaprClient(builder.Services);
+    var config = await daprClient.GetSecretAsync("local-secret-store", "Config");
+    var redisHost = config["RedisHost"];
+    var redisPassword = config["RedisPassword"];
+    var redisDB = config["RedisDatabase"];
+    var dccAddress = config["DccManageServiceAddress"];
+    var dccOptions = new DccConfigurationOptions
+    {
+        RedisOptions = new Masa.Utils.Caching.Redis.Models.RedisConfigurationOptions
+        {
+            Servers = new List<Masa.Utils.Caching.Redis.Models.RedisServerOptions>
+            {
+                new(redisHost)
+            },
+            DefaultDatabase = int.Parse(redisDB),
+            Password = redisPassword
+        }
+    };
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc(() => dccOptions, option =>
+    {
+        option.Environment = builder.Configuration[nameof(DccSectionOptions.Environment)];
+        option.Cluster = builder.Configuration[nameof(DccSectionOptions.Cluster)];
+        option.AppId = builder.Configuration[nameof(DccSectionOptions.AppId)];
+        option.ConfigObjects = builder.Configuration.GetSection(nameof(DccSectionOptions.ConfigObjects)).Get<List<string>>();
+        option.Secret = builder.Configuration[nameof(DccSectionOptions.Secret)];
+    }, null));
 }

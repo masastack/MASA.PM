@@ -9,6 +9,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task AddEnvironmentClustersAsync(IEnumerable<EnvironmentCluster> environmentClusters);
 
+        Task<EnvironmentCluster> AddEnvironmentClusterAsync(EnvironmentCluster environmentCluster);
+
         Task<List<Entities.Environment>> GetListAsync();
 
         Task UpdateAsync(UpdateEnvironmentDto model);

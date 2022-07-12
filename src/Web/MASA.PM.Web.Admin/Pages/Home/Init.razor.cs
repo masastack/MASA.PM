@@ -20,7 +20,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _initLoading;
         private readonly List<string> _colors = new()
         {
-            "#00b42a", "#ff7d00", "#ff5252", "#37a7ff", "#ffb547",
+            "success", "warning", "error", "info", "orange lighten-1"
         };
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -41,7 +41,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
-                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                    //NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
             }
         }
@@ -58,7 +58,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                         return;
                     }
                 }
-
                 _step = 2;
             }
 
