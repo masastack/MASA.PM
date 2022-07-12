@@ -4,6 +4,7 @@
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Reflection;
+global using Dapr.Client;
 global using Masa.BuildingBlocks.BasicAbility.Dcc;
 global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.Data.Contracts.DataFiltering;

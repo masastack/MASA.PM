@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Dapr.Client;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -32,6 +30,8 @@ foreach (var item in assembly)
 
 if (builder.Environment.IsProduction())
 {
+    //Next update,this will get config by dapr secret.
+
     //var daprClient = GetDaprClient(builder.Services);
     //var host = await daprClient.GetSecretAsync("secretstore", "");
 
