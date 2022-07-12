@@ -1,11 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Identity.IdentityModel;
-using Masa.Contrib.Data.Contracts.EF;
-using Masa.Contrib.Data.EntityFrameworkCore.SqlServer;
-using MASA.PM.Service.Admin.Migrations;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -33,13 +28,41 @@ foreach (var item in assembly)
 }
 #endregion
 
+if (builder.Environment.IsProduction())
+{
+    //Next update,this will get config by dapr secret.
+
+    //var daprClient = GetDaprClient(builder.Services);
+    //var host = await daprClient.GetSecretAsync("secretstore", "");
+
+    //var dccOptions = new DccConfigurationOptions
+    //{
+    //    RedisOptions = new Masa.Utils.Caching.Redis.Models.RedisConfigurationOptions
+    //    {
+    //        Servers = new List<Masa.Utils.Caching.Redis.Models.RedisServerOptions>
+    //        {
+    //            new(daprClient.getsecreta)
+    //        },
+    //        DefaultDatabase = 0,
+    //        Password = ""
+    //    }
+    //};
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+}
+else
+{
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+}
+
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
 });
-builder.Services.AddAuthClient(builder.Configuration["AuthServiceBaseAddress"]);
+builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()["Appsettings:AuthServiceBaseAddress"]);
+
+builder.Services.AddDccClient();
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -71,18 +94,22 @@ var app = builder.Services
         });
     })
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
-    .AddDaprEventBus<IntegrationEventLogService>(options =>
+    .AddIntegrationEventBus<IntegrationEventLogService>(options =>
     {
-        options.UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
-               .UseEventLog<PmDbContext>()
-               .UseEventBus();
+        var connectionString = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+        ["Appsettings:ConnectionStrings:DefaultConnection"];
+
+        options.UseDapr()
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connectionString).UseFilter())
+        .UseEventLog<PmDbContext>()
+        .UseEventBus();
     })
     .AddServices(builder);
 
 //SeedData
-await app.Seed();
+//await app.Seed();
 
-app.UseMasaExceptionHandling();
+app.UseMasaExceptionHandler();
 
 // Configure the HTTP request pipeline.
 
@@ -102,3 +129,10 @@ app.UseEndpoints(endpoints =>
 app.UseHttpsRedirection();
 
 app.Run();
+
+DaprClient GetDaprClient(IServiceCollection services)
+{
+    var daprClient = services.BuildServiceProvider().GetRequiredService<DaprClient>();
+
+    return daprClient;
+}

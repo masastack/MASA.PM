@@ -13,15 +13,15 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public int ProjectId { get; set; }
 
-        public AppTypes AppType { get; set; }
+        public AppTypes Type { get; set; }
 
-        public AppModel(int id, string name, string identity, int projectId, AppTypes appType)
+        public AppModel(int id, string name, string identity, int projectId, AppTypes type)
         {
             Id = id;
             Name = name;
             Identity = identity;
             ProjectId = projectId;
-            AppType = appType;
+            Type = type;
         }
     }
 }

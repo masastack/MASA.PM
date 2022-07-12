@@ -7,11 +7,13 @@ namespace MASA.PM.Service.Admin.Application.Project
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IAppRepository _appRepository;
+        private readonly IDccClient _dccClient;
 
-        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository)
+        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient)
         {
             _projectRepository = projectRepository;
             _appRepository = appRepository;
+            _dccClient = dccClient;
         }
 
         [EventHandler]
@@ -23,7 +25,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 Id = projectEntity.Id,
                 Identity = projectEntity.Identity,
-                LabelId = projectEntity.LabelId,
+                LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 TeamId = projectEntity.TeamId,
@@ -44,7 +46,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             {
                 Id = projectEntity.Id,
                 Identity = projectEntity.Identity,
-                LabelId = projectEntity.LabelId,
+                LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 TeamId = projectEntity.TeamId,
@@ -59,7 +61,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjects(ProjectsQuery query)
         {
-            var projectTypes = await _projectRepository.GetProjectTypesAsync();
+            var projectTypes = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
             if (query.EnvironmentClusterId.HasValue)
             {
                 var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
@@ -69,8 +71,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Identity = project.Identity,
                     Name = project.Name,
                     TeamId = project.TeamId,
-                    LabelId = project.LabelId,
-                    LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
+                    LabelCode = project.LabelCode,
+                    LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
@@ -87,8 +89,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                     Identity = project.Identity,
                     Name = project.Name,
                     TeamId = project.TeamId,
-                    LabelId = project.LabelId,
-                    LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
+                    LabelCode = project.LabelCode,
+                    LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                     Description = project.Description,
                     Modifier = project.Modifier,
                     ModificationTime = project.ModificationTime,
@@ -105,7 +107,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjectListAsync(ProjectListQuery query)
         {
-            var projectTypes = await _projectRepository.GetProjectTypesAsync();
+            var projectTypes = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
             var projects = await _projectRepository.GetListAsync();
 
             query.Result = projects.Select(project => new ProjectDto
@@ -114,8 +116,8 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Identity = project.Identity,
                 Name = project.Name,
                 TeamId = project.TeamId,
-                LabelId = project.LabelId,
-                LabelName = projectTypes.FirstOrDefault(label => label.Id == project.LabelId)?.Name ?? "",
+                LabelCode = project.LabelCode,
+                LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                 Description = project.Description,
                 Modifier = project.Modifier,
                 ModificationTime = project.ModificationTime
@@ -125,11 +127,12 @@ namespace MASA.PM.Service.Admin.Application.Project
         [EventHandler]
         public async Task GetProjectTypes(ProjectTypesQuery query)
         {
-            var result = await _projectRepository.GetProjectTypesAsync();
+            var result = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
 
             query.Result = result.Select(projectType => new ProjectTypesDto
             {
                 Id = projectType.Id,
+                Code = projectType.Code,
                 Name = projectType.Name
             }).ToList();
         }
@@ -145,7 +148,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                     project.Id,
                     project.Identity,
                     project.Name,
-                    project.LabelId,
+                    project.LabelCode,
                     project.TeamId)
                 ).ToList();
 

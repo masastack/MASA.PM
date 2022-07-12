@@ -1,11 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Security.Cryptography.X509Certificates;
-using Masa.BuildingBlocks.Identity.IdentityModel;
-using Masa.Stack.Components;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,6 +26,7 @@ builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configu
 //builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
 
 var app = builder.Build();
@@ -38,6 +34,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
 }
 else
 {

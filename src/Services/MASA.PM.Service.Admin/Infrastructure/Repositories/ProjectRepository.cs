@@ -123,13 +123,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<Label>> GetProjectTypesAsync()
-        {
-            var result = await _dbContext.Labels.Where(label => label.TypeCode == "ProjectType").ToListAsync();
-
-            return result;
-        }
-
         public async Task<List<Project>> GetProjectListByEnvIdAsync(string envName)
         {
             var projects = await (from env in _dbContext.Environments.Where(env => env.Name == envName)

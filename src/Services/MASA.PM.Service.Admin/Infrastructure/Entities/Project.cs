@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Contracts.Admin.Enum;
-
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Projects")]
@@ -14,9 +12,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [StringLength(100, MinimumLength = 2, ErrorMessage = "App identity length range is [2-100]")]
         public string Identity { get; set; } = "";
 
-        [Comment("LabelId")]
-        [Range(1, int.MaxValue, ErrorMessage = "Project label is required")]
-        public int LabelId { get; set; }
+        [Comment("LabelCode")]
+        public string LabelCode { get; set; } = "";
 
         [Comment("Name")]
         [Required(ErrorMessage = "Project name is required")]

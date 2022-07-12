@@ -32,7 +32,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public async Task InitDataAsync(UpdateProjectDto? updateProjectDto = null)
         {
             if (updateProjectDto == null)
+            {
                 _projectFormModel.Show();
+            }
             else
             {
                 _projectFormModel.Show(updateProjectDto);
