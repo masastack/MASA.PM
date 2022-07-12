@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Dapr.Client;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -28,7 +30,29 @@ foreach (var item in assembly)
 }
 #endregion
 
-builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+if (builder.Environment.IsProduction())
+{
+    //var daprClient = GetDaprClient(builder.Services);
+    //var host = await daprClient.GetSecretAsync("secretstore", "");
+
+    //var dccOptions = new DccConfigurationOptions
+    //{
+    //    RedisOptions = new Masa.Utils.Caching.Redis.Models.RedisConfigurationOptions
+    //    {
+    //        Servers = new List<Masa.Utils.Caching.Redis.Models.RedisServerOptions>
+    //        {
+    //            new(daprClient.getsecreta)
+    //        },
+    //        DefaultDatabase = 0,
+    //        Password = ""
+    //    }
+    //};
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc();
+}
+else
+{
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+}
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
@@ -105,3 +129,10 @@ app.UseEndpoints(endpoints =>
 app.UseHttpsRedirection();
 
 app.Run();
+
+DaprClient GetDaprClient(IServiceCollection services)
+{
+    var daprClient = services.BuildServiceProvider().GetRequiredService<DaprClient>();
+
+    return daprClient;
+}
