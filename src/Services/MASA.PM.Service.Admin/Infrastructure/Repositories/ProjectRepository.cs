@@ -38,6 +38,14 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             }
         }
 
+        public async Task<EnvironmentClusterProject> AddEnvironmentClusterProjectAsync(EnvironmentClusterProject environmentClusterProject)
+        {
+            await _dbContext.AddAsync(environmentClusterProject);
+            await _dbContext.SaveChangesAsync();
+
+            return environmentClusterProject;
+        }
+
         public async Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds)
         {
             var result = await _dbContext.Projects.Where(project => teamIds.Contains(project.TeamId)).ToListAsync();

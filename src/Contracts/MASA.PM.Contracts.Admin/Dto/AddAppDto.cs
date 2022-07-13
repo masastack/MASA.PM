@@ -6,7 +6,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     public class AddAppDto
     {
         private string _name = default!;
-        private string _swaggerUrl = default!;
+        private string _swaggerUrl = "";
 
         //[RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "App name is required")]

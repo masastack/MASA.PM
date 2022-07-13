@@ -34,6 +34,14 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             }
         }
 
+        public async Task<EnvironmentCluster> AddEnvironmentClusterAsync(EnvironmentCluster environmentCluster)
+        {
+            await _dbContext.AddAsync(environmentCluster);
+            await _dbContext.SaveChangesAsync();
+
+            return environmentCluster;
+        }
+
         public async Task<List<Entities.Environment>> GetListAsync()
         {
             var result = await _dbContext.Environments.ToListAsync();

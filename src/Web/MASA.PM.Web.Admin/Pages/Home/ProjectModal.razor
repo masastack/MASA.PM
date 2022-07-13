@@ -36,7 +36,6 @@
                 </MAutocomplete>
                 <DefaultTextField Class="mt-6" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></DefaultTextField>
                 <MSelect @bind-Value="_projectFormModel.Data.LabelCode"
-                         Disabled="@(_projectFormModel.HasValue)"
                          Items="_projectTypes"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Code"

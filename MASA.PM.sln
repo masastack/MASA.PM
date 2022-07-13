@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{FBFB499A-7022-4417-881B-68F63DBDB7F4}"
 	ProjectSection(SolutionItems) = preProject
 		dapr\components\masa-framework-pubsub.yaml = dapr\components\masa-framework-pubsub.yaml
+		dapr\components\masa-framework-secretstore.yaml = dapr\components\masa-framework-secretstore.yaml
 		dapr\components\masa-framework-statestore.yaml = dapr\components\masa-framework-statestore.yaml
 	EndProjectSection
 EndProject
