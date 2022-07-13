@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDaprClient();
@@ -32,6 +30,11 @@ foreach (var item in assembly)
 
 if (builder.Environment.IsProduction())
 {
+    builder.Services.AddDaprStarter(opt =>
+    {
+        opt.DaprHttpPort = 3600;
+        opt.DaprGrpcPort = 3601;
+    });
     await AddProductionMasaConfigurationAsync(builder);
 }
 else if (builder.Environment.IsDevelopment())
@@ -149,7 +152,8 @@ async Task AddProductionMasaConfigurationAsync(WebApplicationBuilder builder)
             },
             DefaultDatabase = int.Parse(redisDB),
             Password = redisPassword
-        }
+        },
+        ManageServiceAddress = dccAddress
     };
     builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc(() => dccOptions, option =>
     {

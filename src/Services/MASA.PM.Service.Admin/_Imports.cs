@@ -16,6 +16,7 @@ global using Masa.BuildingBlocks.ReadWriteSpliting.Cqrs.Commands;
 global using Masa.BuildingBlocks.ReadWriteSpliting.Cqrs.Queries;
 global using Masa.Contrib.BasicAbility.Dcc;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
+global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.Data.Contracts.EF;
 global using Masa.Contrib.Data.EntityFrameworkCore;
 global using Masa.Contrib.Data.UoW.EF;
