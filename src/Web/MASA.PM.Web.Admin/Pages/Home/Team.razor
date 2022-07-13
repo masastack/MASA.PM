@@ -40,7 +40,7 @@
                                 <MExpansionPanel Style="margin-bottom: 12px;">
                                     <MExpansionPanelHeader>
                                         <span style="display:flex;align-items:center;margin-right:10px;">
-                                            <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
+                                            <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id)">
                                                 @project.Name
                                                 <span class="ml-2 regular3--text btn">|</span>
                                                 <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
@@ -49,17 +49,17 @@
                                                         string backgroundColor;
                                                         switch (project.LabelName.ToLower())
                                                         {
-                                                            case "basic ability":
+                                                            case "basicability":
                                                                 backgroundColor = "#37D7AD";
                                                                 break;
-                                                            case "ops ability":
+                                                            case "operator":
                                                                 backgroundColor = "#FFB547";
                                                                 break;
-                                                            case "data factory":
+                                                            case "datafactory":
                                                                 backgroundColor = "#5FB9FF";
                                                                 break;
                                                             default:
-                                                                backgroundColor = "";
+                                                                backgroundColor = "#BDBDBD";
                                                                 break;
                                                         }
                                                     }
@@ -81,7 +81,7 @@
                                             @foreach (var app in apps.Take(3))
                                             {
                                                 <MCol Lg="4" Md="6" Sm="12">
-                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                                    <AppCard OnClick="()=>UpdateApp(app.Id)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                                 </MCol>
                                             }
                                         </MRow>

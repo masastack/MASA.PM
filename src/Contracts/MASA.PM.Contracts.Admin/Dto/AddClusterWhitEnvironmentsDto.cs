@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Contracts.Admin.Dto
 {
     public class AddClusterWhitEnvironmentsDto
@@ -23,8 +17,8 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value?.Trim() ?? "";
         }
 
-        [Required(ErrorMessage = "Related environment is required")]
-        public List<int> EnvironmentIds { get; set; } = default!;
+        [MinCount(1, ErrorMessage = "Related environment is required")]
+        public List<int> EnvironmentIds { get; set; } = new List<int>();
 
         [StringLength(255, ErrorMessage = "Cluster description length must be less than 255")]
         public string Description { get; set; } = "";

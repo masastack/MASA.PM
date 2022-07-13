@@ -119,15 +119,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task GetProjectDetailAsync(int projectId, int appCount)
+        private async Task GetProjectDetailAsync(int projectId)
         {
             _teamDetailDisabled = false;
             _curTab = 1;
 
             allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             _selectProjectId = projectId;
-            _appCount = appCount;
             _projectApps = _apps.Where(app => app.ProjectId == projectId).ToList();
+            _appCount = _projectApps.Count;
             await GetProjectAsync(projectId);
         }
 
@@ -196,6 +196,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
                 _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
+                _appCount = _projectApps.Count;
                 AppValueChanged(false);
             }
         }
