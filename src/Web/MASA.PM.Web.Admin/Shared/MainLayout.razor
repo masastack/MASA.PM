@@ -19,7 +19,7 @@
 
     private async Task CustomErrorHandleAsync(Exception exception)
     {
-        if (exception.GetType().IsAssignableFrom(typeof(UserFriendlyException)))
+        if (exception is UserFriendlyException)
         {
             await PopupService.AlertAsync(exception.Message, AlertTypes.Error);
         }
