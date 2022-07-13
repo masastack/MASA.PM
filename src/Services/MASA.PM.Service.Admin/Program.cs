@@ -5,12 +5,6 @@ using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDaprStarter(opt =>
-{
-    opt.DaprHttpPort = 3600;
-    opt.DaprGrpcPort = 3601;
-});
-
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
@@ -39,6 +33,15 @@ foreach (var item in assembly)
 if (builder.Environment.IsProduction())
 {
     await AddProductionMasaConfigurationAsync(builder);
+}
+else if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDaprStarter(opt =>
+    {
+        opt.DaprHttpPort = 3600;
+        opt.DaprGrpcPort = 3601;
+    });
+    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 }
 else
 {
