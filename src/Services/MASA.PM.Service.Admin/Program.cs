@@ -28,28 +28,16 @@ foreach (var item in assembly)
 }
 #endregion
 
-if (builder.Environment.IsProduction())
+if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDaprStarter(opt =>
     {
         opt.DaprHttpPort = 3600;
         opt.DaprGrpcPort = 3601;
     });
-    await AddProductionMasaConfigurationAsync(builder);
 }
-else if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDaprStarter(opt =>
-    {
-        opt.DaprHttpPort = 3600;
-        opt.DaprGrpcPort = 3601;
-    });
-    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
-}
-else
-{
-    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
-}
+
+builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {

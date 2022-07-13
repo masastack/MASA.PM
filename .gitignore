@@ -220,4 +220,3 @@ Thunbs.db
 #忽略nuget库 
 packages/
 .vscode/
-/dapr/localfile
