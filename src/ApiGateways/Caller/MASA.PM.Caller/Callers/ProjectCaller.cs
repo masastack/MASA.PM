@@ -21,7 +21,7 @@ namespace MASA.PM.Caller.Callers
             return result ?? new();
         }
 
-        public async Task<List<ProjectDto>> GetListByEnvIdAsync(int environmentClusterId)
+        public async Task<List<ProjectDto>> GetListByEnvClusterIdAsync(int environmentClusterId)
         {
             var result = await CallerProvider.GetAsync<List<ProjectDto>>($"/api/v1/{environmentClusterId}/project");
 

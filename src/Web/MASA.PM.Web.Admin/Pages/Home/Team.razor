@@ -40,7 +40,7 @@
                                 <MExpansionPanel Style="margin-bottom: 12px;">
                                     <MExpansionPanelHeader>
                                         <span style="display:flex;align-items:center;margin-right:10px;">
-                                            <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id,apps.Count)">
+                                            <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id)">
                                                 @project.Name
                                                 <span class="ml-2 regular3--text btn">|</span>
                                                 <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
@@ -49,17 +49,17 @@
                                                         string backgroundColor;
                                                         switch (project.LabelName.ToLower())
                                                         {
-                                                            case "basic ability":
+                                                            case "basicability":
                                                                 backgroundColor = "#37D7AD";
                                                                 break;
-                                                            case "ops ability":
+                                                            case "operator":
                                                                 backgroundColor = "#FFB547";
                                                                 break;
-                                                            case "data factory":
+                                                            case "datafactory":
                                                                 backgroundColor = "#5FB9FF";
                                                                 break;
                                                             default:
-                                                                backgroundColor = "";
+                                                                backgroundColor = "#BDBDBD";
                                                                 break;
                                                         }
                                                     }
@@ -81,7 +81,7 @@
                                             @foreach (var app in apps.Take(3))
                                             {
                                                 <MCol Lg="4" Md="6" Sm="12">
-                                                    <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                                    <AppCard OnClick="()=>UpdateApp(app.Id)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                                 </MCol>
                                             }
                                         </MRow>
@@ -193,7 +193,7 @@
     <SheetDialog ValueChanged="AppValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ?T("Edit App"):T("Add App"))" Icon="mdi-circle" IconColor="success">
         <MForm Class="full-height" Context="formContext" EnableValidation Model="_appFormModel.Data">
             <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-                <div class="full-height">
+                <div class="full-height mb-2" style="overflow-x: hidden; overflow-y: auto;">
                     <DefaultTextField Class="mt-6" Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></DefaultTextField>
                     <MSelect @bind-Value="_appFormModel.Data.Type"
                          Disabled="@(_appFormModel.HasValue)"
