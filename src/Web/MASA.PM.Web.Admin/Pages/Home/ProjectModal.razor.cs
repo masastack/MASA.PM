@@ -51,6 +51,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public async Task GetProjectAsync(int projectId)
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
+            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).Name;
+            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
         }
 
         private void ProjectModalValueChanged(bool value)

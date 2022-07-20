@@ -18,7 +18,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
 
         [Comment("Color")]
         [Required(ErrorMessage = "Environment color is required")]
-        [StringLength(10, MinimumLength = 2, ErrorMessage = "Environment color length range is [2-10]")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Environment color length range is [2-10]")]
         public string Color { get; set; } = "";
     }
 }
