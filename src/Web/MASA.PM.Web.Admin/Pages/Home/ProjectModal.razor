@@ -66,9 +66,9 @@
                 @if (_projectFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @_projectDetail.Creator</MCol>
+                        <MCol Cols=6>@T("Creator"): @_projectDetail.CreatorName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                        <MCol Cols=6>@T("Modifier"): @_projectDetail.Modifier</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_projectDetail.ModifierName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_projectDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
                     </MRow>
                 }

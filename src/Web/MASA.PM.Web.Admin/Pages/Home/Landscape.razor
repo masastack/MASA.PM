@@ -40,7 +40,7 @@
     </MNavigationDrawer>
 
     <div class="pl-6 d-flex flex-column" style="width: calc(100% - 242px); overflow: hidden;">
-        <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:102px;background:#fff;padding:0 12px;">
+        <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:88px; background:#fff;padding:0 12px;">
             <MCard Style="padding-right: 150px;">
 
                 <MTabs @bind-Value="_selectEnvClusterId" Class="cluster-tabs mt-2" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
@@ -70,7 +70,7 @@
                 <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
             </MButton>
         </MRow>
-        <div class="rounded-5 mt-6 py-2" style="background:#fff; height: calc(100vh - 246px); overflow:hidden;">
+        <div class="rounded-5 mt-6 py-2" style="background:#fff; height: calc(100vh - 232px); overflow:hidden;">
             <div style="height: calc(100vh - 332px); overflow:auto;">
                 <MExpansionPanels Flat Accordion>
                     @foreach (var project in _projects)
@@ -122,7 +122,7 @@
                                         @if (app.ProjectId == project.Id)
                                         {
                                             <MCol Lg="4" Md="6" Sm="12">
-                                                <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>UpdateAppAsync(app,project.Id)"></AppCard>
+                                                <AppCard App="app" EnvironmentClusters="app.EnvironmentClusters" OnClick="()=>UpdateAppAsync(app)"></AppCard>
                                             </MCol>
                                         }
                                     }
@@ -157,7 +157,7 @@
                                             </MTooltip>
                                         }
                                     </div>
-                                    <div class="regular3--text btn">@T("Edit in") @project.ModificationTime.Humanize(culture:I18n.Culture)</div>
+                                    <div class="regular3--text btn">@T("Edit in") @project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                                 </div>
                             </MExpansionPanelContent>
                         </MExpansionPanel>
@@ -206,9 +206,9 @@
                 @if (_envFormModel.HasValue)
                 {
                     <MRow Justify="JustifyTypes.SpaceBetween" Class="pt-3 regular--text" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @GetUser(_envDetail.Creator).Name</MCol>
+                        <MCol Cols=6>@T("Creator"): @_envDetail.CreatorName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_envDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                        <MCol Cols=6>@T("Modifier"):@GetUser(_envDetail.Modifier).Name</MCol>
+                        <MCol Cols=6>@T("Modifier"):@_envDetail.ModifierName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_envDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
                         <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
                     </MRow>
@@ -248,12 +248,12 @@
                         </ItemContent>
                     </MAutocomplete>
                     <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-                    @if (_clusterFormModel.HasValue)
+                @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @_clusterDetail.Creator</MCol>
+                        <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_clusterDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                        <MCol Cols=6>@T("Modifier"): @_clusterDetail.Modifier</MCol>
+                        <MCol Cols=6>@T("Modifier"): @_clusterDetail.ModifierName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_clusterDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
                         <MCol Cols=6>@T("ProjectCount")：@_projects.Count</MCol>
                     </MRow>

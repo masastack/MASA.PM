@@ -46,9 +46,11 @@ namespace MASA.PM.UI.Admin.Model
     {
         public EnvClusterModelValidator()
         {
-            RuleFor(o => o.Name).NotEmpty().WithMessage("environment name is required");
-            RuleFor(o => o.Name).Matches(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$").WithMessage("Please enter [Chinese, English、and - _ symbols]");
-            RuleFor(o => o.Name).MinimumLength(2).MaximumLength(50).WithMessage("environment name length range is [2-50]");
+            RuleFor(o => o.Name).NotEmpty().WithMessage("environment name is required")
+                .Matches(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$").WithMessage("Please enter [Chinese, English、and - _ symbols]")
+                .MinimumLength(2).MaximumLength(50).WithMessage("environment name length range is [2-50]");
+
+            RuleFor(o => o.Description).MaximumLength(255).WithMessage("Environment description length must be less than 255");
         }
     }
 }

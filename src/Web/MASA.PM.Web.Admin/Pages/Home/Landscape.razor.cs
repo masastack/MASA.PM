@@ -23,9 +23,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        [Inject]
-        public IAuthClient AuthClient { get; set; } = default!;
-
         private StringNumber _selectedEnvId = 0;
         private StringNumber _selectEnvClusterId = 0;
         private int _selectProjectId;
@@ -142,6 +139,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                _envDetail.ModifierName = (await GetUserAsync(_envDetail.Modifier)).Name;
+                _envDetail.CreatorName = (await GetUserAsync(_envDetail.Creator)).Name;
                 _envFormModel.Show(model);
             }
 
@@ -234,6 +233,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).Name;
+                _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).Name;
                 _clusterFormModel.Show(model);
             }
 
@@ -301,6 +302,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _selectProjectId = projectId;
             var project = await ProjectCaller.GetAsync(projectId);
+            _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).Name;
+            _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).Name;
             await ShowProjectModalAsync(new UpdateProjectDto
             {
                 Identity = project.Identity,
@@ -326,16 +329,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projects = await ProjectCaller.GetListByEnvClusterIdAsync(_selectEnvClusterId.AsT1);
         }
 
-        private async Task UpdateAppAsync(AppDto app, int projectId)
+        private async Task UpdateAppAsync(AppDto app)
         {
             _appDetail = app;
 
             if (_appModal != null)
             {
+                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).Name;
+                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).Name;
                 _appModal.AppDetail = _appDetail;
             }
 
-            await ShowAppModalAsync(projectId, new UpdateAppDto
+            await ShowAppModalAsync(app.ProjectId, new UpdateAppDto
             {
                 Id = _appDetail.Id,
                 Type = _appDetail.Type,
@@ -404,11 +409,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _selectAppType = 0;
                 _selectAppServiceType = 0;
             }
-        }
-
-        private UserModel GetUser(Guid userId)
-        {
-            return new UserModel();
         }
     }
 }

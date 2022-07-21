@@ -23,9 +23,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
-        [Inject]
-        public IAuthClient AuthClient { get; set; } = default!;
-
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
         private List<ProjectDto> _projects = new();
@@ -37,20 +34,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private int _appCount;
         private List<AppDto> _projectApps = new();
         private string _appName = "";
-        private DataModal<UpdateAppDto> _appFormModel = new();
-        private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private AppDto _appDetail = new();
-        private int _selectAppId;
+        private List<TeamModel> _allTeams = new();
         private List<TeamModel> _userTeams = new();
         private TeamModel _userTeam = new();
         private ProjectModal? _projectModal;
+        private AppModal? _appModal;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
+                _allTeams = await AuthClient.TeamService.GetUserTeamsAsync();
                 _userTeams = await AuthClient.TeamService.GetUserTeamsAsync();
-                _userTeam = _userTeams.Any() ? _userTeams[0] : new();
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count <= 0)
                 {
@@ -78,14 +74,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task SearchProject(KeyboardEventArgs args)
         {
-            if (!string.IsNullOrWhiteSpace(_projectName))
+            if (args.Key == "Enter")
             {
-                _projects = _projects.Where(project => project.Name.ToLower().Contains(_projectName.ToLower())).ToList();
+                if (!string.IsNullOrWhiteSpace(_projectName))
+                {
+                    _projects = _projects.Where(project => project.Name.ToLower().Contains(_projectName.ToLower())).ToList();
+                }
+                else
+                {
+                    await InitDataAsync();
+                }
             }
-            else
-            {
-                await InitDataAsync();
-            }
+
         }
 
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
@@ -131,23 +131,42 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await GetProjectAsync(projectId);
         }
 
-        private void SearchApp()
+        private void SearchApp(KeyboardEventArgs args)
         {
-            if (!string.IsNullOrWhiteSpace(_appName))
+            if (args.Key == "Enter")
             {
-                _projectApps = _projectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
-            }
-            else
-            {
-                _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
+                if (!string.IsNullOrWhiteSpace(_appName))
+                {
+                    _projectApps = _projectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
+                }
+                else
+                {
+                    _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
+                }
             }
         }
 
-        private void UpdateApp(int appId)
+        private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int>? projectIds = null)
         {
-            _selectAppId = appId;
-            _appDetail = _apps.First(app => app.Id == appId);
-            ShowAppModal(new UpdateAppDto
+            var newProjectIds = projectIds ?? _projects.Select(p => p.Id);
+
+            _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
+
+            return _apps;
+        }
+
+        private async Task UpdateAppAsync(AppDto app)
+        {
+            _appDetail = app;
+
+            if (_appModal != null)
+            {
+                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).Name;
+                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).Name;
+                _appModal.AppDetail = _appDetail;
+            }
+
+            await ShowAppModalAsync(app.ProjectId, new UpdateAppDto
             {
                 Id = _appDetail.Id,
                 Type = _appDetail.Type,
@@ -161,68 +180,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
             });
         }
 
-        private void ShowAppModal(UpdateAppDto? model = null)
+        private async Task ShowAppModalAsync(int projectId, UpdateAppDto? model = null)
         {
-            _projectEnvClusters = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
-            if (model == null)
+            if (_appModal != null)
             {
-                _appFormModel.Show();
-            }
-            else
-            {
-                _appFormModel.Show(model);
-            }
-        }
-
-        private async Task SubmitAppAsync(EditContext context)
-        {
-            if (context.Validate())
-            {
-                _appFormModel.Data.ProjectId = _selectProjectId;
-                if (!_appFormModel.HasValue)
-                {
-                    await AppCaller.AddAsync(_appFormModel.Data);
-                }
-                else
-                {
-                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
-                    {
-                        await PopupService.ToastErrorAsync("环境/集群不能为空");
-                        return;
-                    }
-
-                    await AppCaller.UpdateAsync(_appFormModel.Data);
-                }
-
-                _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
-                _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
-                _appCount = _projectApps.Count;
-                AppValueChanged(false);
-            }
-        }
-
-        private async Task RemoveAppAsync()
-        {
-            var deleteApp = _apps.First(app => app.Id == _selectAppId);
-            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteApp.Name}]应用吗？", async (c) =>
-            {
-                await AppCaller.RemoveAsync(_selectAppId);
-
-                _apps.Remove(deleteApp);
-                _projectApps.Remove(deleteApp);
-
-                _appCount = _projectApps.Count;
-
-                AppValueChanged(false);
-            });
-        }
-
-        private void AppValueChanged(bool value)
-        {
-            _appFormModel.Visible = value;
-            if (!value)
-            {
-                _appFormModel.Hide();
+                _appModal.ProjectId = projectId;
+                await _appModal.InitDataAsync(model);
             }
         }
     }

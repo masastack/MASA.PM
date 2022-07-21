@@ -81,15 +81,27 @@
                                             @foreach (var app in apps.Take(3))
                                             {
                                                 <MCol Lg="4" Md="6" Sm="12">
-                                                    <AppCard OnClick="()=>UpdateApp(app.Id)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                                    <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                                 </MCol>
                                             }
                                         </MRow>
                                         <div class="d-flex justify-space-between mt-3">
                                             <div>
-                                                <img style="height:24px;width:24px" src="/img/avatar/9.svg">
+                                                @{
+                                                    var team = _allTeams.FirstOrDefault(t => t.Id == project.TeamId) ?? new();
+                                                    <MTooltip Right>
+                                                        <ActivatorContent>
+                                                            <MAvatar Size="24" @attributes="@context.Attrs">
+                                                                <MImage Src="@team.Avatar"></MImage>
+                                                            </MAvatar>
+                                                        </ActivatorContent>
+                                                        <ChildContent>
+                                                            <span>@team.Name</span>
+                                                        </ChildContent>
+                                                    </MTooltip>
+                                                }
                                             </div>
-                                            <div class="regular3--text btn">编辑于一小时前</div>
+                                            <div class="regular3--text btn">@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                                         </div>
                                     </MExpansionPanelContent>
                                 </MExpansionPanel>
@@ -167,15 +179,19 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModal()"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
+                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
                     </div>
                     <div class="full-height" style="margin:0 -24px; overflow:auto;">
                         <MRow Class="mx-3">
                             @{
                                 foreach (var app in _projectApps)
                                 {
+                                    Task.Run(async () =>
+                                    {
+                                        app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
+                                    }).Wait();
                                     <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard OnClick="()=>UpdateApp(app.Id)" ShowEditInfo EditInfo="@app.CreationTime.ToString(T("$DateTimeFormat"))" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                        <AppCard OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                     </MCol>
                                 }
                             }
@@ -189,79 +205,4 @@
 
 <ProjectModal @ref="@_projectModal" Projects="_projects" OnSubmitProjectAfter="GetProjectListAsync" />
 
-
-    <SheetDialog ValueChanged="AppValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ?T("Edit App"):T("Add App"))" Icon="mdi-circle" IconColor="success">
-        <MForm Class="full-height" Context="formContext" EnableValidation Model="_appFormModel.Data">
-            <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-                <div class="full-height mb-2" style="overflow-x: hidden; overflow-y: auto;">
-                    <DefaultTextField Class="mt-6" Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></DefaultTextField>
-                    <MSelect @bind-Value="_appFormModel.Data.Type"
-                         Disabled="@(_appFormModel.HasValue)"
-                         Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
-                         ItemText="r=>r.Name"
-                         ItemValue="r=>r.Value"
-                         Class="mt-6"
-                         Outlined
-                         Label="@T("App type")">
-                    </MSelect>
-                    <FadeTransition>
-                        <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
-                            <MSelect @bind-Value="_appFormModel.Data.ServiceType"
-                                 Disabled="@(_appFormModel.HasValue)"
-                                 Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
-                                 ItemText="r=>r.Name"
-                                 ItemValue="r=>r.Value"
-                                 Outlined
-                                 Class="mt-6"
-                                 Label="@T("Service type")">
-                            </MSelect>
-                        </ShowTransitionElement>
-                    </FadeTransition>
-                    <DefaultTextField Class="mt-6" Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></DefaultTextField>
-                    <FadeTransition>
-                        <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
-                            <DefaultTextField Class="mt-6" Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></DefaultTextField>
-                        </ShowTransitionElement>
-                    </FadeTransition>
-                    <DefaultTextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></DefaultTextField>
-                    <MAutocomplete @bind-Value="_appFormModel.Data.EnvironmentClusterIds"
-                               Items="_projectEnvClusters"
-                               ItemText="r=>r.EnvironmentClusterName"
-                               ItemValue="r=>r.Id"
-                               Outlined
-                               Class="mt-6"
-                               Label="@T("Environment/Cluster")"
-                               Multiple>
-                        <SelectionContent Context="context">
-                            <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
-                        </SelectionContent>
-                        <ItemContent>
-                            <MListItemContent>
-                                <div class="d-flex align-center">
-                                    <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div><div class="ml-1">@context.Item.ClusterName</div>
-                                </div>
-                            </MListItemContent>
-                        </ItemContent>
-                    </MAutocomplete>
-                    <MTextarea Class="mt-6" Outlined Label="@T("App description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
-                    @if (_appFormModel.HasValue)
-                {
-                    <MRow Justify="JustifyTypes.SpaceBetween" Class="mt-6" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @_appDetail.Creator</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_appDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
-                        <MCol Cols=6>@T("Modifier"): @_appDetail.Modifier</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_appDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-                    </MRow>
-                }
-            </div>
-            <div class="d-flex align-end" style="width:100%;">
-                @if (_appFormModel.HasValue)
-                {
-                    <MButton Height="40" OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
-                }
-                <MSpacer></MSpacer>
-                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
-                </div>
-            </div>
-        </MForm>
-    </SheetDialog>
+<AppModal @ref="@_appModal" OnSubmitProjectAfter="()=>GetAppByProjectIdsAsync(null)" />
