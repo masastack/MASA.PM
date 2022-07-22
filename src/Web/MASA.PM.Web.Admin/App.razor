@@ -1,6 +1,6 @@
 ﻿<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly"
-            AdditionalAssemblies="additionalAssemblies">
+            AdditionalAssemblies='new List<Assembly>(){ Assembly.Load("Masa.Stack.Components")}'>
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -13,14 +13,3 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-
-@code {
-
-    private List<Assembly> additionalAssemblies = new();
-
-    public App()
-    {
-        var masaStackComponentsAssembly = typeof(Masa.Stack.Components.UserCenter).Assembly;
-        additionalAssemblies.Add(masaStackComponentsAssembly);
-    }
-}

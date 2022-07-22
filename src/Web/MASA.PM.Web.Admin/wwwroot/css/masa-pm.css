@@ -713,6 +713,10 @@ input::-webkit-input-placeholder {
     max-width: 636px !important;
 }
 
-.app-tab .m-window-item.m-window-item--active{
-    height:100% !important;
+.app-tab .m-window-item.m-window-item--active {
+    height: 100% !important;
+}
+
+.m-expansion-panel-header {
+    padding: 20px 24px !important;
 }
