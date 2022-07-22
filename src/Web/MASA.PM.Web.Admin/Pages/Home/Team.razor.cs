@@ -5,6 +5,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
     {
+        [Parameter]
+        public string TeamId { get; set; } = default!;
+
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
@@ -35,9 +38,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _projectApps = new();
         private string _appName = "";
         private AppDto _appDetail = new();
-        private List<TeamModel> _allTeams = new();
-        private List<TeamModel> _userTeams = new();
-        private TeamModel _userTeam = new();
+        private TeamDetailModel _userTeam = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
@@ -45,8 +46,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
-                _allTeams = await AuthClient.TeamService.GetUserTeamsAsync();
-                _userTeams = await AuthClient.TeamService.GetUserTeamsAsync();
+                _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count <= 0)
                 {
@@ -67,7 +67,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task<List<ProjectDto>> GetProjectListAsync()
         {
-            _projects = await ProjectCaller.GetListByTeamIdsAsync(_userTeams.Select(t => t.Id));
+            _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { Guid.Parse(TeamId) });
 
             return _projects;
         }
@@ -91,6 +91,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
+
+            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).Name;
+            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
+            _projectDetail.TeamName = _userTeam.Name;
 
             return _projectDetail;
         }

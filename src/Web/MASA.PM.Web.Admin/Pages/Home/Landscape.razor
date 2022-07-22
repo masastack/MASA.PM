@@ -76,44 +76,51 @@
                     @foreach (var project in _projects)
                     {
                         var apps = _apps.Where(app => app.ProjectId == project.Id && app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
-                        <MExpansionPanel Style="margin-bottom: 12px; border-radius: 20px;">
+                        <MExpansionPanel Class="rounded-5">
                             <MExpansionPanelHeader>
-                                <span style="display:flex;align-items:center;margin-right:10px;">
-                                    <div class="emphasis--text h6">
-                                        @project.Name
-                                        <span class="ml-2 regular3--text btn">|</span>
-                                        <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
-                                        <div class="regular3--text btn d-flex" style="padding:0">
-                                            @{
-                                                string backgroundColor;
-                                                switch (project.LabelCode.ToLower())
-                                                {
-                                                    case "basicability":
-                                                        backgroundColor = "#37D7AD";
-                                                        break;
-                                                    case "operator":
-                                                        backgroundColor = "#FFB547";
-                                                        break;
-                                                    case "datafactory":
-                                                        backgroundColor = "#5FB9FF";
-                                                        break;
-                                                    default:
-                                                        backgroundColor = "#BDBDBD";
-                                                        break;
+                                <ChildContent>
+                                    <span style="display:flex;align-items:center;margin-right:10px;">
+                                        <div class="emphasis--text h6">
+                                            @project.Name
+                                            <span class="ml-2 regular3--text btn">|</span>
+                                            <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
+                                            <div class="regular3--text btn d-flex" style="padding:0">
+                                                @{
+                                                    string backgroundColor;
+                                                    switch (project.LabelCode.ToLower())
+                                                    {
+                                                        case "basicability":
+                                                            backgroundColor = "#37D7AD";
+                                                            break;
+                                                        case "operator":
+                                                            backgroundColor = "#FFB547";
+                                                            break;
+                                                        case "datafactory":
+                                                            backgroundColor = "#5FB9FF";
+                                                            break;
+                                                        default:
+                                                            backgroundColor = "#BDBDBD";
+                                                            break;
+                                                    }
                                                 }
-                                            }
-                                            <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
-                                                @project.LabelName
+                                                <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
+                                                    @project.LabelName
+                                                </div>
+                                                <span class="body2">@project.Identity</span>
                                             </div>
-                                            <span class="body2">@project.Identity</span>
                                         </div>
-                                    </div>
-                                    <MSpacer />
-                                    <div style="display:flex;align-items:center;">
-                                        <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
-                                        <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
-                                    </div>
-                                </span>
+                                        <MSpacer />
+                                        <div style="display:flex;align-items:center;">
+                                            <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
+                                            <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
+                                        </div>
+                                    </span>
+                                </ChildContent>
+                                <ActionsContent>
+                                    <MIcon Color="#485585">
+                                        mdi-chevron-down
+                                    </MIcon>
+                                </ActionsContent>
                             </MExpansionPanelHeader>
                             <MExpansionPanelContent>
                                 <MRow>
@@ -160,6 +167,7 @@
                                     <div class="regular3--text btn">@T("Edit in") @project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                                 </div>
                             </MExpansionPanelContent>
+                            <hr class="mx-6" style="background: none repeat scroll 0 0 #E9EDF7; border: thin none; height: 1px;" />
                         </MExpansionPanel>
                     }
                 </MExpansionPanels>

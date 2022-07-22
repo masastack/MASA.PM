@@ -16,7 +16,7 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)
         {
-            var result = await CallerProvider.PostAsync<List<ProjectDto>>($"{_prefix}/teamsProject", teamIds);
+            var result = await CallerProvider.PostAsync<List<ProjectDto>>($"{_prefix}/teamProjects", teamIds);
 
             return result ?? new();
         }

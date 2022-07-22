@@ -1,48 +1,8 @@
-﻿@using Microsoft.AspNetCore.Components.Rendering
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 <Layout AppId="masa-pm-web-admin"
+        TeamRouteFormat="team/{0}"
         Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
         MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
-    <MErrorHandler OnErrorHandleAsync="CustomErrorHandleAsync" ShowDetail=false>
-        @Body
-    </MErrorHandler>
+    @Body
 </Layout>
-
-@code {
-
-    private I18n? _languageProvider;
-
-    [Inject]
-    public IPopupService PopupService { get; set; } = default!;
-
-    private async Task CustomErrorHandleAsync(Exception exception)
-    {
-        if (exception is UserFriendlyException)
-        {
-            await PopupService.AlertAsync(exception.Message, AlertTypes.Error);
-        }
-        else
-        {
-            await PopupService.AlertAsync(T("Server error,please contact administrator"), AlertTypes.Error);
-        }
-    }
-
-    [Inject]
-    public I18n LanguageProvider
-    {
-        get
-        {
-            return _languageProvider ?? throw new Exception("please Inject I18n!");
-        }
-        set
-        {
-            _languageProvider = value;
-        }
-    }
-
-    public string T(string key)
-    {
-        return LanguageProvider.T(key);
-    }
-}
