@@ -200,7 +200,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _envFormModel.Visible = value;
             if (!value)
             {
-                _envFormModel.Hide();
+                _envFormModel.Data = new();
             }
         }
 
@@ -294,7 +294,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _clusterFormModel.Visible = value;
             if (!value)
             {
-                _clusterFormModel.Hide();
+                _clusterFormModel.Data = new();
             }
         }
 
@@ -371,7 +371,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectEnvClusters = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
 
             _selectProjectId = projectId;
-            _canRelationApps = await AppCaller.GetListByProjectIdAsync(new List<int> { projectId });
+            _canRelationApps = await AppCaller.GetListAsync();
             _canRelationApps.RemoveAll(a => a.EnvironmentClusters.Select(ec => ec.Id).Contains(_selectEnvClusterId.AsT1));
             _appDetail = new();
             _selectAppType = 0;
@@ -389,12 +389,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _addRelationAppModel.ProjectId = _selectProjectId;
         }
 
-        private async Task SubmitRelationAppAsync()
+        private async Task SubmitRelationAppAsync(EditContext context)
         {
-            _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id)).ToList();
-            await AppCaller.AddRelationAppAsync(_addRelationAppModel);
-            await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
-            RelationAppValueChanged(false);
+            if (context.Validate())
+            {
+                _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id)).ToList();
+                await AppCaller.AddRelationAppAsync(_addRelationAppModel);
+                await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
+                RelationAppValueChanged(false);
+            }
         }
 
         private void RelationAppValueChanged(bool value)

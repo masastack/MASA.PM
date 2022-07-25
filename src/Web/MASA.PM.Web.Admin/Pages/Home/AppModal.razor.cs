@@ -57,7 +57,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (!value)
             {
                 AppDetail = new();
-                _appFormModel.Hide();
+                _appFormModel.Data = new();
             }
         }
 

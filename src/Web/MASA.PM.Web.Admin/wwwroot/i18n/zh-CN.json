@@ -51,5 +51,6 @@
   "Project": "项目",
   "Admin": "管理员",
   "Members": "成员",
-  "Tips": "提示"
+  "Tips": "提示",
+  "There are still applications under the current project, which cannot be deleted": "当前项目下还存在应用，不能删除"
 }

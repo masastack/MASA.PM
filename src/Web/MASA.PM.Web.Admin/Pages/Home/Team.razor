@@ -30,7 +30,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
+                        <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="margin:0 -24px; overflow:auto;">
                         <MExpansionPanels Flat Accordion>
@@ -147,7 +147,7 @@
                     {
                         <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
                             <MAvatar Class="mr-3">
-                                <MImage Height="48" Width="48" Src="@item.Avatar"></MImage>
+                                <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
                             </MAvatar>
                             @item.Name
                         </MRow>
@@ -163,7 +163,7 @@
                     <div style="width:100%;" class="text-body2">
                         <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
                             <div class="emphasis--text h6">@_projectDetail.Name</div>
-                            <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId)"><MIcon Color="#485585" Size="20">mdi-pencil</MIcon></MButton>
+                            <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId,true)"><MIcon Color="#485585" Size="20">mdi-pencil</MIcon></MButton>
                         </MRow>
                         <MRow NoGutters Class="mt-4 regular--text body2">
                             @T("AppCount")：@_appCount
@@ -175,9 +175,26 @@
                             @_projectDetail.Description
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Creator")</MRow>
-                        <MRow NoGutters Class="mt-4">@_projectDetail.CreatorName</MRow>
+                        <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                            <MAvatar Class="mr-3" Height="40" Width="40" MinHeight="40" MinWidth="40">
+                                <MImage Height="40" Width="40" Src="@_userInfo.Avatar"></MImage>
+                            </MAvatar>
+                            @_projectDetail.CreatorName
+                        </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Participate team")</MRow>
-                        <MRow NoGutters Class="mt-4">@_projectDetail.TeamName</MRow>
+                        <MRow NoGutters Class="mt-4">
+                            <MTooltip Bottom>
+                                <ActivatorContent>
+                                    <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
+                                        <MImage Height="24" Width="24" Src="@_projectDetail.TeamAvatar"></MImage>
+                                    </MAvatar>
+                                </ActivatorContent>
+                                <ChildContent>
+                                    <span>@_projectDetail.TeamName</span>
+                                </ChildContent>
+                            </MTooltip>
+
+                        </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
                         <div style="display:flex; flex-direction:column;align-items:start">
                             @{
@@ -201,7 +218,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
+                        <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
                     </div>
                     <div class="full-height" style="margin:0 -24px; overflow:auto;">
                         <MRow Class="mx-3">
@@ -225,6 +242,6 @@
     </MTabItem>
 </MTabsItems>
 
-<ProjectModal @ref="@_projectModal" Projects="_projects" OnSubmitProjectAfter="GetProjectListAsync" />
+<ProjectModal @ref="@_projectModal" Projects="_projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 
-<AppModal @ref="@_appModal" OnSubmitProjectAfter="()=>GetAppByProjectIdsAsync(null)" />
+<AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />
