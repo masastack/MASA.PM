@@ -41,7 +41,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
                 {
-                    NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
+                    //NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
             }
         }
