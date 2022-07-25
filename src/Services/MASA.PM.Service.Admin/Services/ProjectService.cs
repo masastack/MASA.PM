@@ -2,7 +2,6 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using MASA.PM.Service.Admin.Application.Project.Commands;
-using MASA.PM.Service.Admin.Application.Project.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
@@ -13,7 +12,7 @@ namespace MASA.PM.Service.Admin.Services
         {
             App.MapPost("/api/v1/project", AddAsync);
             App.MapGet("/api/v1/projects", GetListAsync);
-            App.MapPost("/api/v1/project/teamsProject", GetListByTeamIds);
+            App.MapPost("/api/v1/project/teamProjects", GetListByTeamIds);
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapGet("/api/v1/project/projectType", GetProjectTypes);
