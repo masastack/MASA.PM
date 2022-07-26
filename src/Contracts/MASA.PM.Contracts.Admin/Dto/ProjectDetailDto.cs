@@ -19,6 +19,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string TeamName { get; set; } = "";
 
+        public string TeamAvatar { get; set; } = "";
+
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();
     }
 }

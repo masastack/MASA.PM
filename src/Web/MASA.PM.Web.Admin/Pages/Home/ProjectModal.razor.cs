@@ -6,19 +6,25 @@ namespace MASA.PM.Web.Admin.Pages.Home
     public partial class ProjectModal
     {
         [Inject]
-        public IAuthClient AuthClient { get; set; } = default!;
-
-        [Inject]
         public ProjectCaller ProjectCaller { get; set; } = default!;
 
         [Inject]
         public ClusterCaller ClusterCaller { get; set; } = default!;
 
         [Inject]
+        public AppCaller AppCaller { get; set; } = default!;
+
+        [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
         [Parameter]
         public List<ProjectDto> Projects { get; set; } = new();
+
+        [Parameter]
+        public int EnvironmentClusterId { get; set; }
+
+        [Parameter]
+        public bool DisableTeamSelect { get; set; }
 
         [Parameter]
         public EventCallback OnSubmitProjectAfter { get; set; }
@@ -31,8 +37,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         public async Task InitDataAsync(UpdateProjectDto? updateProjectDto = null)
         {
+            _allTeams = await AuthClient.TeamService.GetAllAsync();
+            _projectTypes = await ProjectCaller.GetProjectTypesAsync();
+            _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
+
             if (updateProjectDto == null)
             {
+                if (EnvironmentClusterId != 0)
+                    _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
+
+                if (_projectTypes.Any())
+                    _projectFormModel.Data.LabelCode = _projectTypes[0].Code;
+
                 _projectFormModel.Show();
             }
             else
@@ -40,10 +56,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projectFormModel.Show(updateProjectDto);
                 await GetProjectAsync(updateProjectDto.ProjectId);
             }
-
-            _allTeams = await AuthClient.TeamService.GetAllAsync();
-            _projectTypes = await ProjectCaller.GetProjectTypesAsync();
-            _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
 
             StateHasChanged();
         }
@@ -60,24 +72,32 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectFormModel.Visible = value;
             if (!value)
             {
-                _projectFormModel.Hide();
+                _projectFormModel.Data = new();
             }
         }
 
         private async Task RemoveProjectAsync()
         {
-            var deleteProject = Projects.First(project => project.Id == _projectDetail.Id);
-            await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
+            var apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _projectDetail.Id });
+            if (apps.Any())
             {
-                await ProjectCaller.DeleteAsync(_projectDetail.Id);
-
-                if (OnSubmitProjectAfter.HasDelegate)
+                await PopupService.ToastErrorAsync(T("There are still applications under the current project, which cannot be deleted"));
+            }
+            else
+            {
+                var deleteProject = Projects.First(project => project.Id == _projectDetail.Id);
+                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
                 {
-                    await OnSubmitProjectAfter.InvokeAsync();
-                }
+                    await ProjectCaller.DeleteAsync(_projectDetail.Id);
 
-                _projectFormModel.Hide();
-            });
+                    if (OnSubmitProjectAfter.HasDelegate)
+                    {
+                        await OnSubmitProjectAfter.InvokeAsync();
+                    }
+
+                    _projectFormModel.Hide();
+                });
+            }
         }
 
         private async Task SubmitProjectAsync(EditContext context)
@@ -97,7 +117,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     await OnSubmitProjectAfter.InvokeAsync();
                 }
-                _projectFormModel.Hide();
+
+                ProjectModalValueChanged(false);
             }
         }
     }

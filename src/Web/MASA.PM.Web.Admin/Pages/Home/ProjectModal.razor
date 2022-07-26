@@ -1,11 +1,12 @@
 ﻿@inherits PmCompontentBase
 
-<SheetDialog Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ?$"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
+<SheetDialog Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height">
                 <DefaultTextField Class="mt-6" Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></DefaultTextField>
                 <MAutocomplete @bind-Value="_projectFormModel.Data.TeamId"
+                               Disabled="DisableTeamSelect"
                                Items="_allTeams"
                                Chips
                                Class="mt-6"
@@ -15,7 +16,7 @@
                                ItemText="r=>r.Name"
                                ItemValue="r=>r.Id">
                     <SelectionContent Context="data">
-                        <MChip Small Close
+                        <MChip Close
                                OnCloseClick="()=>{_projectFormModel.Data.TeamId = Guid.Empty;}">
                             <MAvatar Left>
                                 <MImage Src="@data.Item.Avatar"></MImage>

@@ -35,7 +35,7 @@
                                 </MRow>
                                 <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
                                 <div class="d-flex justify-end mb-6 mr-1">
-                                    <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
+                                    <MIcon Disabled="@(_customEnv.Environments.Count == 1)" OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
                                     <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
                                 </div>
                             }
@@ -45,7 +45,7 @@
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
                     <MForm Model="_initModel" EnableValidation>
-                        <DefaultTextField Class="mt-2 mb-4" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></DefaultTextField>
+                        <DefaultTextField Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></DefaultTextField>
                         <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                         <div class="d-flex justify-end">
                             <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>

@@ -1,19 +1,13 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.UI.Admin.Model
 {
     public class DataModal<T> where T : class, new()
     {
         public bool Visible { get; set; }
 
-        public T Data { get; private set; }
+        public T Data { get; set; }
 
         public bool HasValue { get; private set; }
 
@@ -24,7 +18,11 @@ namespace MASA.PM.UI.Admin.Model
             Data = new T();
         }
 
-        public void Show() => Visible = true;
+        public void Show()
+        {
+            Visible = true;
+            HasValue = false;
+        }
 
         /// <summary>
         /// 显示弹窗

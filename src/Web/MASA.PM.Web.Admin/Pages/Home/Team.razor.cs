@@ -39,12 +39,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private string _appName = "";
         private AppDto _appDetail = new();
         private TeamDetailModel _userTeam = new();
+        private bool _disableTeamSelect;
+        private UserPortraitModel _userInfo = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
+            if (!string.IsNullOrEmpty(TeamId) && Guid.Parse(TeamId) != _userTeam.Id)
             {
                 _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
                 var envs = await EnvironmentCaller.GetListAsync();
@@ -54,6 +56,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 await InitDataAsync();
+
                 StateHasChanged();
             }
         }
@@ -70,6 +73,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { Guid.Parse(TeamId) });
 
             return _projects;
+        }
+
+        private async Task OnSubmitProjectAsyncAfter()
+        {
+            if (_curTab == 0)
+            {
+                await GetProjectListAsync();
+            }
+            else
+            {
+                await GetProjectDetailAsync(_selectProjectId);
+            }
         }
 
         private async Task SearchProject(KeyboardEventArgs args)
@@ -92,15 +107,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
 
-            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).Name;
+            _userInfo = await GetUserAsync(_projectDetail.Creator);
+            _projectDetail.CreatorName = _userInfo.Name;
             _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
-            _projectDetail.TeamName = _userTeam.Name;
+            var team = await AuthClient.TeamService.GetDetailAsync(_projectDetail.TeamId);
+            if (team != null)
+            {
+                _projectDetail.TeamAvatar = team.Avatar;
+                _projectDetail.TeamName = team.Name;
+            }
 
             return _projectDetail;
         }
 
-        private async Task UpdateProjectAsync(int projectId)
+        private async Task UpdateProjectAsync(int projectId, bool disableTeamSelect = false)
         {
+            _disableTeamSelect = disableTeamSelect;
             _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
             await ShowProjectModalAsync(new UpdateProjectDto
@@ -157,6 +179,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
 
             return _apps;
+        }
+
+        private async Task OnSubmitAppAsyncAfter()
+        {
+            if (_curTab == 0)
+            {
+                await GetAppByProjectIdsAsync();
+            }
+            else
+            {
+                _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
+                await GetProjectDetailAsync(_selectProjectId);
+            }
         }
 
         private async Task UpdateAppAsync(AppDto app)
