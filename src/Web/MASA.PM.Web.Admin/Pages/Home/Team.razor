@@ -146,7 +146,7 @@
                     @foreach (var item in _userTeam.Members)
                     {
                         <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
-                            <MAvatar Class="mr-3">
+                            <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
                                 <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
                             </MAvatar>
                             @item.Name
