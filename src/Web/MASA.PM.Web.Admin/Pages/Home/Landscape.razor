@@ -182,16 +182,16 @@
 
 </div>
 
-<SheetDialog ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Icon="mdi-circle" IconColor="success">
+<SSheetDialog ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_envFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height">
                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween" Align="AlignTypes.Center">
                     <MCol Cols="9">
-                        <DefaultTextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></DefaultTextField>
+                        <STextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></STextField>
                     </MCol>
                     <MCol Cols="3" Align="AlignTypes.Start">
-                        <ColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></ColorGroup>
+                        <SColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></SColorGroup>
                     </MCol>
                 </MRow>
                 <MAutocomplete Class="mt-3" @bind-Value="_envFormModel.Data.ClusterIds"
@@ -232,13 +232,13 @@
                 </div>
             </div>
         </MForm>
-    </SheetDialog>
+    </SSheetDialog>
 
-    <SheetDialog ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
+    <SSheetDialog ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
         <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
             <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
                 <div class="full-height">
-                    <DefaultTextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></DefaultTextField>
+                    <STextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
                     <MAutocomplete Class="mt-6" @bind-Value="_clusterFormModel.Data.EnvironmentIds"
                                Items="_allEnvs"
                                ItemText="r=>r.Name"
@@ -277,13 +277,13 @@
                 </div>
             </div>
         </MForm>
-    </SheetDialog>
+    </SSheetDialog>
 
     <ProjectModal @ref="@_projectModal" EnvironmentClusterId="_selectEnvClusterId.AsT1" Projects="_projects" OnSubmitProjectAfter="GetProjectsByEnvIdAsync" />
 
     <AppModal @ref="@_appModal" OnSubmitProjectAfter="()=>GetAppByProjectIdsAsync(null)" />
 
-    <SheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
+    <SSheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
         <MForm Class="full-height" Context="formContext" EnableValidation Model="_addRelationAppModel">
             <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
                 <div class="full-height">
@@ -344,13 +344,13 @@
                             </MSelect>
                         </ShowTransitionElement>
                     </FadeTransition>
-                    <DefaultTextField Class="mt-6" Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></DefaultTextField>
+                    <STextField Class="mt-6" Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></STextField>
                     <FadeTransition>
                         <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                            <DefaultTextField Class="mt-6" Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></DefaultTextField>
+                            <STextField Class="mt-6" Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></STextField>
                         </ShowTransitionElement>
                     </FadeTransition>
-                    <DefaultTextField Class="mt-6" Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></DefaultTextField>
+                    <STextField Class="mt-6" Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></STextField>
                     <MTextarea Class="mt-6" Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
                 </div>
                 <div class="d-flex align-end" style="width:100%;">
@@ -359,5 +359,5 @@
                 </div>
             </div>
         </MForm>
-    </SheetDialog>
+    </SSheetDialog>
 
