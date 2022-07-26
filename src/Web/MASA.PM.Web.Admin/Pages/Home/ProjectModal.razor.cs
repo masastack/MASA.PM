@@ -117,7 +117,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     await OnSubmitProjectAfter.InvokeAsync();
                 }
-                _projectFormModel.Hide();
+
+                ProjectModalValueChanged(false);
             }
         }
     }

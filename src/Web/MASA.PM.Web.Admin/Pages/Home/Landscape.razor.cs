@@ -167,7 +167,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     await GetClustersByEnvIdAsync(newEnv.Id);
                 }
 
-                _envFormModel.Hide();
+                EnvModalValueChanged(false);
             }
         }
 
@@ -255,7 +255,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
-                _clusterFormModel.Hide();
+
+                ClusterModalValueChanged(false);
             }
         }
 

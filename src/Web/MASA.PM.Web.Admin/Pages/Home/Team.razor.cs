@@ -46,7 +46,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
+            if (!string.IsNullOrEmpty(TeamId) && Guid.Parse(TeamId) != _userTeam.Id)
             {
                 _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
                 var envs = await EnvironmentCaller.GetListAsync();
@@ -56,6 +56,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 await InitDataAsync();
+
                 StateHasChanged();
             }
         }

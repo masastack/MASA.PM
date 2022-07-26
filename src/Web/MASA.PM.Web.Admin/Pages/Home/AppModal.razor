@@ -18,19 +18,18 @@
                          Outlined
                          Label="@T("App type")">
                 </MSelect>
-                <FadeTransition>
-                    <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">
-                        <MSelect Class="mt-6"
-                                 @bind-Value="_appFormModel.Data.ServiceType"
-                                 Disabled="@(_appFormModel.HasValue)"
-                                 Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
-                                 ItemText="r=>r.Name"
-                                 ItemValue="r=>r.Value"
-                                 Outlined
-                                 Label="@T("Service type")">
-                        </MSelect>
-                    </ShowTransitionElement>
-                </FadeTransition>
+                @if (_appFormModel.Data.Type == AppTypes.Service)
+                {
+                    <MSelect Class="mt-6"
+                         @bind-Value="_appFormModel.Data.ServiceType"
+                         Disabled="@(_appFormModel.HasValue)"
+                         Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
+                         ItemText="r=>r.Name"
+                         ItemValue="r=>r.Value"
+                         Outlined
+                         Label="@T("Service type")">
+                    </MSelect>
+                }
                 <DefaultTextField Class="mt-6" Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></DefaultTextField>
                 <FadeTransition>
                     <ShowTransitionElement Value="@(_appFormModel.Data.Type == AppTypes.Service)" Class="text-center">

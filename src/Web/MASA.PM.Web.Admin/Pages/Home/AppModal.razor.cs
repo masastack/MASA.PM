@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using System.Text.RegularExpressions;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class AppModal
@@ -88,6 +90,25 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (context.Validate())
             {
+                if (!string.IsNullOrEmpty(_appFormModel.Data.Url))
+                {
+                    Regex urlRegex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0- 9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+                    if (!urlRegex.IsMatch(_appFormModel.Data.Url))
+                    {
+                        await PopupService.ToastErrorAsync(T("The Url format is incorrect"));
+                        return;
+                    }
+                }
+                if (!string.IsNullOrEmpty(_appFormModel.Data.SwaggerUrl))
+                {
+                    Regex regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0- 9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+                    if (!regex.IsMatch(_appFormModel.Data.SwaggerUrl))
+                    {
+                        await PopupService.ToastErrorAsync(T("The SwaggerUrl format is incorrect"));
+                        return;
+                    }
+                }
+
                 if (!_appFormModel.HasValue)
                 {
                     await AppCaller.AddAsync(_appFormModel.Data);
@@ -96,7 +117,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     if (!_appFormModel.Data.EnvironmentClusterIds.Any())
                     {
-                        await PopupService.ToastErrorAsync("环境/集群不能为空");
+                        await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
                         return;
                     }
 
@@ -107,7 +128,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     await OnSubmitProjectAfter.InvokeAsync();
                 }
-                _appFormModel.Hide();
+
+                AppModalValueChanged(false);
             }
         }
     }

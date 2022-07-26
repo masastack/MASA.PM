@@ -35,7 +35,7 @@
                                 </MRow>
                                 <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
                                 <div class="d-flex justify-end mb-6 mr-1">
-                                    <MIcon OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
+                                    <MIcon Disabled="@(_customEnv.Environments.Count == 1)" OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
                                     <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
                                 </div>
                             }
