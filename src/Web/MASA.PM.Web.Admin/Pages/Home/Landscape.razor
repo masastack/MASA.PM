@@ -71,7 +71,7 @@
             </MButton>
         </MRow>
         <div class="rounded-5 mt-6 py-2" style="background:#fff; height: calc(100vh - 232px); overflow:hidden;">
-            <div style="height: calc(100vh - 332px); overflow:auto;">
+            <div class="mb-3" style="height: calc(100vh - 330px); overflow:auto;">
                 <MExpansionPanels Flat Accordion>
                     @foreach (var project in _projects)
                     {
@@ -172,7 +172,7 @@
                     }
                 </MExpansionPanels>
             </div>
-            <div style="position: sticky;bottom: 16px;z-index: 1;right: 48px;left: 48px;padding: 0 24px;">
+            <div style="position: static; z-index: 1;right: 48px;left: 48px;padding: 0 24px;">
                 <MButton Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text Style="width: 100%; display: flex; border-radius: 8px; border: 2px dashed #E9EDF7;">
                     <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
                 </MButton>
