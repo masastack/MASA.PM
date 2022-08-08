@@ -10,7 +10,6 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/open-api/project/{identity}", GetProjectByIdentityAsync);
             App.MapGet("/open-api/app/{identity}", GetAppByIdentityAsync);
             App.MapPost("/open-api/app/by-types", GetListByTypesAsync);
-            App.MapGet("/api/v1/projectwithapps/{envName}", GetListByEnvName);
             App.MapGet("/open-api/projectwithapps/{envName}", GetListByEnvName);
         }
 
