@@ -75,6 +75,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return app ?? throw new UserFriendlyException("应用信息不存在！");
         }
 
+        public async Task<List<App>> GetByAppTypesAsync(List<AppTypes> appTypes)
+        {
+            var app = await _dbContext.Apps.Where(app => appTypes.Contains(app.Type)).ToListAsync();
+
+            return app;
+        }
+
         public async Task<List<App>> GetListAsync()
         {
             var apps = await _dbContext.Apps.ToListAsync();

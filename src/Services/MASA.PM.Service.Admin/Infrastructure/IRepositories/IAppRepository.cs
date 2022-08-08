@@ -13,6 +13,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<App> GetByIdenityAsync(string identity);
 
+        Task<List<App>> GetByAppTypesAsync(List<AppTypes> appTypes);
+
         Task<List<App>> GetListAsync();
 
         Task<List<App>> GetListByProjectIdAsync(IEnumerable<int> projectIds);

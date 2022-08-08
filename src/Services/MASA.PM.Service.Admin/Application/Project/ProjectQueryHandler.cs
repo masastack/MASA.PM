@@ -158,7 +158,16 @@ namespace MASA.PM.Service.Admin.Application.Project
                 {
                     if (appGroup.ProjectId == project.Id)
                     {
-                        project.Apps.Add(new AppModel(appGroup.App.Id, appGroup.App.Name, appGroup.App.Identity, project.Id, appGroup.App.Type));
+                        project.Apps.Add(new AppModel(
+                            appGroup.App.Id,
+                            appGroup.App.Name,
+                            appGroup.App.Identity,
+                            project.Id,
+                            appGroup.App.Type,
+                            appGroup.App.Url,
+                            appGroup.App.ServiceType,
+                            appGroup.App.SwaggerUrl,
+                            appGroup.App.Description));
                     }
                 });
             });
