@@ -157,5 +157,26 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 .ToList();
             }
         }
+
+        [EventHandler]
+        public async Task GetAppAsync(AppByTypesQuery query)
+        {
+            var app = await _appRepository.GetByAppTypesAsync(query.AppTypes.ToList());
+            query.Result = app.Select(app => new AppDto
+            {
+                Name = app.Name,
+                Description = app.Description,
+                Id = app.Id,
+                Identity = app.Identity,
+                Type = app.Type,
+                ServiceType = app.ServiceType,
+                Url = app.Url,
+                SwaggerUrl = app.SwaggerUrl,
+                Creator = app.Creator,
+                CreationTime = app.CreationTime,
+                ModificationTime = app.ModificationTime,
+                Modifier = app.Modifier,
+            }).ToList();
+        }
     }
 }

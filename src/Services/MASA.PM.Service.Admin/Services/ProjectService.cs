@@ -2,7 +2,6 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using MASA.PM.Service.Admin.Application.Project.Commands;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MASA.PM.Service.Admin.Services
 {
@@ -16,7 +15,6 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapGet("/api/v1/project/projectType", GetProjectTypes);
-            App.MapGet("/api/v1/projectwithapps/{envName}", GetListByEnvName);
             App.MapPut("/api/v1/project", UpdateAsync);
             App.MapDelete("/api/v1/project", RemoveAsync);
         }
@@ -46,14 +44,6 @@ namespace MASA.PM.Service.Admin.Services
         public async Task<List<ProjectDto>> GetListAsync(IEventBus eventBus)
         {
             var query = new ProjectListQuery();
-            await eventBus.PublishAsync(query);
-
-            return query.Result;
-        }
-
-        public async Task<List<ProjectModel>> GetListByEnvName(IEventBus eventBus, string envName)
-        {
-            var query = new ProjectAppsQuery(envName);
             await eventBus.PublishAsync(query);
 
             return query.Result;
