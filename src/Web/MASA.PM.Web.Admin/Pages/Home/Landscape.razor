@@ -70,21 +70,19 @@
                 <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
             </MButton>
         </MRow>
-        <div class="rounded-5 mt-6 py-2" style="background:#fff; height: calc(100vh - 232px); overflow:hidden;">
-            <div class="mb-3" style="height: calc(100vh - 330px); overflow:auto;">
+        <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
+            <div class="rounded-5 mt-3" style="height:calc(100vh - 292px ); overflow:auto;">
                 <MExpansionPanels Flat Accordion>
                     @foreach (var project in _projects)
                     {
                         var apps = _apps.Where(app => app.ProjectId == project.Id && app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
-                        <MExpansionPanel Class="rounded-5">
-                            <MExpansionPanelHeader>
+                        <MExpansionPanel Class="rounded-5 my-3">
+                            <MExpansionPanelHeader Style="height: 56px;" Class="my-6">
                                 <ChildContent>
                                     <span style="display:flex;align-items:center;margin-right:10px;">
                                         <div class="emphasis--text h6">
                                             @project.Name
-                                            <span class="ml-2 regular3--text btn">|</span>
-                                            <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
-                                            <div class="regular3--text btn d-flex" style="padding:0">
+                                            <div class="mt-1 regul ar3--text btn d-flex" style="padding:0">
                                                 @{
                                                     string backgroundColor;
                                                     switch (project.LabelCode.ToLower())
@@ -106,7 +104,9 @@
                                                 <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
                                                     @project.LabelName
                                                 </div>
-                                                <span class="body2">@project.Identity</span>
+                                                <span class="regular3--text body2">@project.Identity</span>
+                                                <span class="ml-2 regular3--text body2">|</span>
+                                                <sapn class="ml-2 regular3--text body2">@T("AppCount"):@apps.Count</sapn>
                                             </div>
                                         </div>
                                         <MSpacer />
@@ -167,16 +167,14 @@
                                     <div class="regular3--text btn">@T("Edit in") @project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                                 </div>
                             </MExpansionPanelContent>
-                            <hr class="mx-6" style="background: none repeat scroll 0 0 #E9EDF7; border: thin none; height: 1px;" />
                         </MExpansionPanel>
                     }
                 </MExpansionPanels>
             </div>
-            <div style="position: static; z-index: 1;right: 48px;left: 48px;padding: 0 24px;">
-                <MButton Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text Style="width: 100%; display: flex; border-radius: 8px; border: 2px dashed #E9EDF7;">
-                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
-                </MButton>
-            </div>
+
+            <MButton Style="border-radius: 10px !important; background-color: #fff !important;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text>
+                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
+            </MButton>
         </div>
     </div>
 

@@ -44,6 +44,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
+        protected override void OnInitialized()
+        {
+            NavigationManager.LocationChanged += HandleLocationChanged;
+            base.OnInitialized();
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (!string.IsNullOrEmpty(TeamId) && Guid.Parse(TeamId) != _userTeam.Id)
@@ -59,6 +65,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 StateHasChanged();
             }
+        }
+
+        private async void HandleLocationChanged(object? sender, LocationChangedEventArgs args)
+        {
+            _curTab = 0;
+            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
+            await InitDataAsync();
+
+            await InvokeAsync(StateHasChanged);
         }
 
         private async Task InitDataAsync()
