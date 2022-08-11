@@ -43,6 +43,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private UserPortraitModel _userInfo = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+        private ProjectList? _projectListComponent;
 
         protected override void OnInitialized()
         {
@@ -78,9 +79,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task InitDataAsync()
         {
-            _projects = await GetProjectListAsync();
-            var projectIds = _projects.Select(project => project.Id).ToList();
-            _apps = await AppCaller.GetListByProjectIdAsync(projectIds);
+            if (_projectListComponent != null)
+            {
+                _projectListComponent.ProjectDataSource = async () =>
+                {
+                    _projects = await GetProjectListAsync();
+                    return _projects;
+                };
+                await _projectListComponent.GetProjectListAsync();
+
+                var projectIds = _projects.Select(project => project.Id).ToList();
+                _apps = await AppCaller.GetListByProjectIdAsync(projectIds);
+                _projectListComponent.SetApps(_apps);
+            }
         }
 
         private async Task<List<ProjectDto>> GetProjectListAsync()
@@ -108,14 +119,21 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 if (!string.IsNullOrWhiteSpace(_projectName))
                 {
-                    _projects = _projects.Where(project => project.Name.ToLower().Contains(_projectName.ToLower())).ToList();
+                    if (_projectListComponent != null)
+                    {
+                        _projectListComponent.ProjectDataSource = () =>
+                        {
+                            _projects = _projects.Where(project => project.Name.ToLower().Contains(_projectName.ToLower())).ToList();
+                            return Task.FromResult(_projects);
+                        };
+                        await _projectListComponent.GetProjectListAsync();
+                    }
                 }
                 else
                 {
                     await InitDataAsync();
                 }
             }
-
         }
 
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)

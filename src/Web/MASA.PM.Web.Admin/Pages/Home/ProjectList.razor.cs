@@ -5,6 +5,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class ProjectList
     {
+        [Parameter]
+        public EventCallback<int> OnNameClick { get; set; }
+
+        [Parameter]
+        public bool CanAddApp { get; set; }
+
         public Func<Task<List<ProjectDto>>> ProjectDataSource = () => { return Task.FromResult(new List<ProjectDto>()); };
 
         [Inject]
@@ -17,8 +23,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
-        private bool _disableTeamSelect;
-        private int _selectProjectId;
         private UserPortraitModel _userInfo = new();
         private TeamDetailModel _userTeam = new();
         private ProjectModal? _projectModal;
@@ -37,7 +41,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task UpdateProjectAsync(int projectId)
         {
-            _selectProjectId = projectId;
             var project = await GetProjectAsync(projectId);
             await ShowProjectModalAsync(new UpdateProjectDto
             {
@@ -128,6 +131,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task OnSubmitAppAsyncAfter()
         {
             await GetAppByProjectIdsAsync();
+        }
+
+        private async Task HandleProjectNameClick(int projectId)
+        {
+            await OnNameClick.InvokeAsync(projectId);
         }
     }
 }

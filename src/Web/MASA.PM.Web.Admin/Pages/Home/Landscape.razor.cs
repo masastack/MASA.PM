@@ -81,7 +81,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (_clusters.Any())
             {
                 _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-                _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
 
                 if (_projectListComponent != null)
                 {
@@ -313,24 +312,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task UpdateProjectAsync(int projectId)
-        {
-            _selectProjectId = projectId;
-            var project = await ProjectCaller.GetAsync(projectId);
-            _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).Name;
-            _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).Name;
-            await ShowProjectModalAsync(new UpdateProjectDto
-            {
-                Identity = project.Identity,
-                LabelCode = project.LabelCode,
-                ProjectId = project.Id,
-                Name = project.Name,
-                TeamId = project.TeamId,
-                Description = project.Description,
-                EnvironmentClusterIds = project.EnvironmentClusterIds
-            });
-        }
-
         private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
         {
             if (_projectModal != null)
@@ -342,41 +323,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task GetProjectsByEnvIdAsync()
         {
             _projects = await ProjectCaller.GetListByEnvClusterIdAsync(_selectEnvClusterId.AsT1);
-        }
-
-        private async Task UpdateAppAsync(AppDto app)
-        {
-            _appDetail = app;
-
-            if (_appModal != null)
-            {
-                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).Name;
-                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).Name;
-                _appModal.AppDetail = _appDetail;
-            }
-
-            await ShowAppModalAsync(app.ProjectId, new UpdateAppDto
-            {
-                Id = _appDetail.Id,
-                Type = _appDetail.Type,
-                ServiceType = _appDetail.ServiceType,
-                Identity = _appDetail.Identity,
-                Name = _appDetail.Name,
-                Description = _appDetail.Description,
-                SwaggerUrl = _appDetail.SwaggerUrl,
-                Url = _appDetail.Url,
-                EnvironmentClusterIds = _appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id).ToList()
-            });
-        }
-
-        private async Task ShowAppModalAsync(int projectId, UpdateAppDto? model = null)
-        {
-            if (_appModal != null)
-            {
-                _appModal.ProjectId = projectId;
-                _appModal.EnvironmentClusterId = _selectEnvClusterId.AsT1;
-                await _appModal.InitDataAsync(model);
-            }
         }
 
         private async Task ShowRelationAppModalAsync(int projectId)
