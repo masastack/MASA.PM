@@ -201,7 +201,7 @@
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
                         <div style="display:flex; flex-direction:column;align-items:start">
                             @{
-                                var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
+                                var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                 foreach (var item in envCluster)
                                 {
                                     <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />

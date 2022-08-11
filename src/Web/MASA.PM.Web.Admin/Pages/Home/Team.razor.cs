@@ -32,7 +32,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private string _projectName = "";
         private ProjectDetailDto _projectDetail = new();
-        private List<EnvironmentClusterDto> allEnvClusters = new();
+        private List<EnvironmentClusterDto> _allEnvClusters = new();
         private int _selectProjectId;
         private int _appCount;
         private List<AppDto> _projectApps = new();
@@ -165,7 +165,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _teamDetailDisabled = false;
             _curTab = 1;
 
-            allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
+            _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             _selectProjectId = projectId;
             _projectApps = _apps.Where(app => app.ProjectId == projectId).ToList();
             _appCount = _projectApps.Count;

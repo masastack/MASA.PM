@@ -52,6 +52,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<TeamModel> _allTeams = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+        private ProjectList? _projectListComponent;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -81,10 +82,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
                 _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
+
+                if (_projectListComponent != null)
+                {
+                    _projectListComponent.ProjectDataSource = async () =>
+                    {
+                        _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
+                        return _projects;
+                    };
+                    await _projectListComponent.GetProjectListAsync();
+                }
             }
             else
             {
-                _projects.Clear();
+                _projectListComponent?.ClearProjects();
             }
 
             return _clusters;
@@ -107,6 +118,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var newProjectIds = projectIds ?? _projects.Select(p => p.Id);
 
             _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
+
+            var app = _apps.Where(app => app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
+            _projectListComponent?.SetApps(app);
 
             return _apps;
         }
