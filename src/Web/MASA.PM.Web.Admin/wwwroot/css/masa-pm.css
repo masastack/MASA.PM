@@ -713,6 +713,13 @@ input::-webkit-input-placeholder {
     overflow: hidden;
 }
 
+.text-overflow2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+}
+
 .m-menu__content {
     max-width: 636px !important;
 }
@@ -721,6 +728,6 @@ input::-webkit-input-placeholder {
     height: 100% !important;
 }
 
-.m-expansion-panel-header {
-    padding: 20px 24px !important;
+.project-expansion-panel-header::before {
+    content: none !important;
 }

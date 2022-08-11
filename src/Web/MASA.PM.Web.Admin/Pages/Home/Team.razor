@@ -19,36 +19,38 @@
     </MTab>
 </MTabs>
 
-<MTabsItems Value="_curTab" class="app-tab pt-6" Style="height: calc(100% - 24px) !important;">
+<MTabsItems Value="_curTab" class="app-tab pt-6" Style="height: calc(100% - 24px) !important; background-color:transparent !important">
     <MTabItem>
         <div class="d-flex full-height">
             <div class="pr-6" style="width: calc(100% - 300px); display:block;">
-                <div class="rounded-5 pa-6 full-height" style="background:#fff;overflow: hidden;">
-                    <div class="d-flex align-center mb-6">
-                        <MTextField @bind-Value="_projectName" OnKeyDown="SearchProject" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="#F6F8FD" HideDetails="@("auto")" Placeholder="@T("Please enter the project name and press enter to query")">
+                <div class="full-height" style="overflow: hidden;">
+                    <div class="d-flex align-center mb-3">
+                        <MTextField @bind-Value="_projectName" OnKeyDown="SearchProject" Class="rounded-2 mr-6" Height="40" Flat Dense Solo HideDetails="@("auto")" Placeholder="@T("Please enter the project name and press enter to query")">
                             <PrependInnerContent>
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
-                    <div style="margin:0 -24px; overflow:auto;">
+                    <div style="overflow:auto;">
                         <MExpansionPanels Flat Accordion>
                             @foreach (var project in _projects)
                             {
                                 var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
-                                <MExpansionPanel>
-                                    <MExpansionPanelHeader>
+                                <MExpansionPanel Class="rounded-5 my-3">
+                                    <MExpansionPanelHeader Style="height: 56px;" Class="my-6 project-expansion-panel-header">
                                         <ChildContent>
                                             <span style="display:flex;align-items:center;margin-right:10px;">
-                                                <div class="emphasis--text h6" @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id)">
-                                                    @project.Name
-                                                    <span class="ml-2 regular3--text btn">|</span>
-                                                    <sapn class="ml-1 regular3--text btn">@T("AppCount"):@apps.Count</sapn>
-                                                    <div class="regular3--text btn d-flex" style="padding:0">
+                                                <div class="emphasis--text h6">
+                                                    <MHover Context="hoverContext">
+                                                        <span @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id)" @attributes="hoverContext.Attrs" class="@(hoverContext.Hover ? "primary--text":"")">
+                                                            @project.Name
+                                                        </span>
+                                                    </MHover>
+                                                    <div class="mt-1 regul ar3--text btn d-flex" style="padding:0">
                                                         @{
                                                             string backgroundColor;
-                                                            switch (project.LabelName.ToLower())
+                                                            switch (project.LabelCode.ToLower())
                                                             {
                                                                 case "basicability":
                                                                     backgroundColor = "#37D7AD";
@@ -67,7 +69,9 @@
                                                         <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
                                                             @project.LabelName
                                                         </div>
-                                                        @project.Identity
+                                                        <span class="regular3--text body2">@project.Identity</span>
+                                                        <span class="ml-2 regular3--text body2">|</span>
+                                                        <sapn class="ml-2 regular3--text body2">@T("AppCount"):@apps.Count</sapn>
                                                     </div>
                                                 </div>
                                                 <MSpacer />
@@ -110,7 +114,6 @@
                                             <div class="regular3--text btn">@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                                         </div>
                                     </MExpansionPanelContent>
-                                    <hr class="mx-6" style="background: none repeat scroll 0 0 #E9EDF7; border: thin none; height: 1px;" />
                                 </MExpansionPanel>
                             }
                         </MExpansionPanels>
@@ -171,7 +174,7 @@
                         <MRow NoGutters Class="regular3--text btn">
                             @_projectDetail.Identity
                         </MRow>
-                        <MRow NoGutters Class="mt-4">
+                        <MRow NoGutters Class="mt-4 text-overflow2">
                             @_projectDetail.Description
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Creator")</MRow>
@@ -210,10 +213,10 @@
                 </div>
             </MNavigationDrawer>
 
-            <div class="pl-6" style="width: calc(100% - 300px); display:block;">
-                <div class="rounded-5 pa-6 full-height" style="background:#fff;overflow: hidden;">
+            <div style="width: calc(100% - 300px); display:block;">
+                <div class="rounded-5 pa-6 pt-0 full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-6">
-                        <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo BackgroundColor="#F6F8FD" HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
+                        <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
                             <PrependInnerContent>
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
@@ -230,7 +233,7 @@
                                         app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
                                     }).Wait();
                                     <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                     </MCol>
                                 }
                             }
