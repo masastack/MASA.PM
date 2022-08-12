@@ -53,15 +53,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!string.IsNullOrEmpty(TeamId) && Guid.Parse(TeamId) != _userTeam.Id)
+            if (firstRender)
             {
-                _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
-                var envs = await EnvironmentCaller.GetListAsync();
-                if (envs.Count <= 0)
-                {
-                    NavigationManager.NavigateTo("init", true);
-                }
-
                 await InitDataAsync();
 
                 StateHasChanged();
@@ -71,13 +64,24 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async void HandleLocationChanged(object? sender, LocationChangedEventArgs args)
         {
             _curTab = 0;
-            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
             await InitDataAsync();
 
             await InvokeAsync(StateHasChanged);
         }
 
         private async Task InitDataAsync()
+        {
+            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
+            var envs = await EnvironmentCaller.GetListAsync();
+            if (envs.Count <= 0)
+            {
+                NavigationManager.NavigateTo("init", true);
+            }
+
+            await InitProjectsAndAppsAsync();
+        }
+
+        private async Task InitProjectsAndAppsAsync()
         {
             if (_projectListComponent != null)
             {
@@ -90,6 +94,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 var projectIds = _projects.Select(project => project.Id).ToList();
                 _apps = await AppCaller.GetListByProjectIdAsync(projectIds);
+
                 _projectListComponent.SetApps(_apps);
             }
         }
@@ -131,7 +136,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
-                    await InitDataAsync();
+                    await InitProjectsAndAppsAsync();
                 }
             }
         }

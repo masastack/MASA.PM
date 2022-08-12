@@ -11,6 +11,16 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public bool CanAddApp { get; set; }
 
+        [Parameter]
+        public int EnvironmentClusterId { get; set; }
+
+
+        [Parameter]
+        public int TeamId { get; set; }
+
+        [Parameter]
+        public List<TeamModel> Teams { get; set; } = new();
+
         public Func<Task<List<ProjectDto>>> ProjectDataSource = () => { return Task.FromResult(new List<ProjectDto>()); };
 
         [Inject]
@@ -19,14 +29,32 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
+        private bool _internalCanAddApp;
+        private int _internalEnvironmentClusterId;
+        private int _internalTeamId;
         private List<ProjectDto> _projects = new();
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
         private UserPortraitModel _userInfo = new();
-        private TeamDetailModel _userTeam = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+
+        protected override void OnParametersSet()
+        {
+            if (CanAddApp != _internalCanAddApp && EnvironmentClusterId != _internalEnvironmentClusterId
+                && TeamId != _internalTeamId)
+            {
+                _internalCanAddApp = CanAddApp;
+                _internalEnvironmentClusterId = EnvironmentClusterId;
+                _internalTeamId = TeamId;
+            }
+        }
+
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            return base.SetParametersAsync(parameters);
+        }
 
         public void ClearProjects()
         {
@@ -111,6 +139,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _projects = await ProjectDataSource.Invoke();
             StateHasChanged();
+
             return _projects;
         }
 

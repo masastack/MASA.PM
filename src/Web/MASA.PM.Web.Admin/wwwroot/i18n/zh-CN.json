@@ -55,5 +55,6 @@
   "There are still applications under the current project, which cannot be deleted": "当前项目下还存在应用，不能删除",
   "The Url format is incorrect": "Url格式不正确",
   "The SwaggerUrl format is incorrect": "SwaggerUrl格式不正确",
-  "Environment/Cluster cannot be empty": "环境/集群不能为空"
+  "Environment/Cluster cannot be empty": "环境/集群不能为空",
+  "More": "更多"
 }

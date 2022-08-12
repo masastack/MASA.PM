@@ -63,41 +63,68 @@
             </MExpansionPanelHeader>
             <MExpansionPanelContent>
                 <MRow>
-                    @foreach (var app in apps.OrderByDescending(app => app.ModificationTime).Take(3))
-                    {
-                        <MCol Lg="4" Md="6" Sm="12">
-                            <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                        </MCol>
-                    }
-                    @if (CanAddApp)
-                    {
-                        <MCol Lg="4" Md="6" Sm="12">
-                            <MRow NoGutters>
-                                <MCol Class="pr-2">
-                                    <MButton Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
-                                        <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add App")</span>
-                                    </MButton>
+                    @{
+                        if (CanAddApp)
+                        {
+                            foreach (var app in apps.OrderByDescending(app => app.ModificationTime))
+                            {
+                                <MCol Lg="4" Md="6" Sm="12">
+                                    <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                 </MCol>
-                            </MRow>
-                        </MCol>
+                            }
+                            <MCol Lg="4" Md="6" Sm="12">
+                                <MRow NoGutters>
+                                    <MCol Class="pr-2">
+                                        <MButton Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; border: 2px dashed #E9EDF7;">
+                                            <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add App")</span>
+                                        </MButton>
+                                    </MCol>
+                                </MRow>
+                            </MCol>
+                        }
+                        else
+                        {
+                            foreach (var app in apps.OrderByDescending(app => app.ModificationTime).Take(3))
+                            {
+                                <MCol Lg="4" Md="6" Sm="12">
+                                    <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                </MCol>
+                            }
+                        }
                     }
                 </MRow>
                 <div class="d-flex justify-space-between mt-3">
                     <div>
                         @{
+                            var team = Teams.FirstOrDefault(team => team.Id == project.TeamId) ?? new();
                             <MTooltip Right>
                                 <ActivatorContent>
                                     <MAvatar Size="24" @attributes="@context.Attrs">
-                                        <MImage Src="@_userTeam.Avatar"></MImage>
+                                        <MImage Src="@team.Avatar"></MImage>
                                     </MAvatar>
                                 </ActivatorContent>
                                 <ChildContent>
-                                    <span>@_userTeam.Name</span>
+                                    <span>@team.Name</span>
                                 </ChildContent>
                             </MTooltip>
                         }
                     </div>
-                    <div class="regular3--text btn">@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
+                    @if (CanAddApp)
+                    {
+                        <div class="regular3--text btn">@T("Edit in")@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
+                    }
+                    else
+                    {
+                        <MHover Context="hoverContext">
+                            @{
+                                var mClass = $"{(hoverContext.Hover ? "primary--text" : "regular2--text")}";
+                                <div @onclick="()=>HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@($"hover-pointer btn {mClass}")">
+                                    @T("More")
+                                    <MIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</MIcon>
+                                </div>
+                            }
+                        </MHover>
+                    }
                 </div>
             </MExpansionPanelContent>
         </MExpansionPanel>

@@ -33,7 +33,10 @@
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="overflow:auto;">
-                        <ProjectList @ref="_projectListComponent" OnNameClick="GetProjectDetailAsync"></ProjectList>
+                        <ProjectList 
+                            @ref="_projectListComponent" 
+                            OnNameClick="GetProjectDetailAsync" 
+                            Teams="new List<TeamModel>{ new TeamModel{Id = _userTeam.Id,Name = _userTeam.Name, Avatar = _userTeam.Avatar}}" />
                     </div>
                 </div>
             </div>

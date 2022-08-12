@@ -72,7 +72,7 @@
         </MRow>
         <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
             <div class="rounded-5 mt-3" style="height:calc(100vh - 292px ); overflow:auto;">
-                <ProjectList @ref="_projectListComponent" CanAddApp></ProjectList>
+                <ProjectList @ref="_projectListComponent" CanAddApp Teams="_allTeams"></ProjectList>
             </div>
 
             <MButton Style="border-radius: 10px !important; background-color: #fff !important;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text>
@@ -157,7 +157,7 @@
                         </ItemContent>
                     </MAutocomplete>
                     <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-                    @if (_clusterFormModel.HasValue)
+                @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>

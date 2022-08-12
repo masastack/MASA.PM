@@ -78,6 +78,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _selectedEnvId = envId;
             _clusters = await ClusterCaller.GetListByEnvIdAsync(envId);
+
             if (_clusters.Any())
             {
                 _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
@@ -107,6 +108,16 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (_projects.Any())
             {
                 await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
+            }
+
+            if (_projectListComponent != null)
+            {
+                _projectListComponent.ProjectDataSource = async () =>
+                {
+                    _projects = await ProjectCaller.GetListByEnvClusterIdAsync(envClusterId);
+                    return _projects;
+                };
+                await _projectListComponent.GetProjectListAsync();
             }
 
             return _projects;
