@@ -72,10 +72,9 @@
         </MRow>
         <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
             <div class="rounded-5 mt-3" style="height:calc(100vh - 292px ); overflow:auto;">
-                <ProjectList @ref="_projectListComponent" CanAddApp Teams="_allTeams"></ProjectList>
+                <ProjectList @ref="_projectListComponent" CanAddApp EnvironmentClusterId="_selectEnvClusterId.AsT1" />
             </div>
-
-            <MButton Style="border-radius: 10px !important; background-color: #fff !important;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile Text>
+            <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
                 <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
             </MButton>
         </div>
@@ -157,7 +156,7 @@
                         </ItemContent>
                     </MAutocomplete>
                     <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-                @if (_clusterFormModel.HasValue)
+                    @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>
@@ -179,10 +178,6 @@
             </div>
         </MForm>
     </SSheetDialog>
-
-    <ProjectModal @ref="@_projectModal" EnvironmentClusterId="_selectEnvClusterId.AsT1" Projects="_projects" OnSubmitProjectAfter="GetProjectsByEnvIdAsync" />
-
-    <AppModal @ref="@_appModal" OnSubmitProjectAfter="()=>GetAppByProjectIdsAsync(null)" />
 
     <SSheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
         <MForm Class="full-height" Context="formContext" EnableValidation Model="_addRelationAppModel">

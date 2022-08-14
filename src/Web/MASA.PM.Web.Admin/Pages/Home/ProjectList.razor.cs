@@ -14,14 +14,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public int EnvironmentClusterId { get; set; }
 
-
         [Parameter]
-        public int TeamId { get; set; }
+        public Guid TeamId { get; set; }
 
         [Parameter]
         public List<TeamModel> Teams { get; set; } = new();
-
-        public Func<Task<List<ProjectDto>>> ProjectDataSource = () => { return Task.FromResult(new List<ProjectDto>()); };
 
         [Inject]
         public ProjectCaller ProjectCaller { get; set; } = default!;
@@ -29,10 +26,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
-        private bool _internalCanAddApp;
         private int _internalEnvironmentClusterId;
-        private int _internalTeamId;
-        private List<ProjectDto> _projects = new();
+        private Guid _internalTeamId;
+        public List<ProjectDto> _projects = new();
+        private List<ProjectDto> _backupProjects = new();
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
@@ -40,14 +37,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
-            if (CanAddApp != _internalCanAddApp && EnvironmentClusterId != _internalEnvironmentClusterId
-                && TeamId != _internalTeamId)
+            if (EnvironmentClusterId != _internalEnvironmentClusterId || TeamId != _internalTeamId)
             {
-                _internalCanAddApp = CanAddApp;
                 _internalEnvironmentClusterId = EnvironmentClusterId;
                 _internalTeamId = TeamId;
+
+                await InitDataAsync();
             }
         }
 
@@ -56,38 +53,53 @@ namespace MASA.PM.Web.Admin.Pages.Home
             return base.SetParametersAsync(parameters);
         }
 
-        public void ClearProjects()
-        {
-            _projects.Clear();
-            StateHasChanged();
-        }
-
-        public void SetApps(List<AppDto> app)
-        {
-            _apps = app;
-        }
-
-        private async Task UpdateProjectAsync(int projectId)
-        {
-            var project = await GetProjectAsync(projectId);
-            await ShowProjectModalAsync(new UpdateProjectDto
-            {
-                Identity = project.Identity,
-                LabelCode = project.LabelCode,
-                ProjectId = project.Id,
-                Name = project.Name,
-                TeamId = project.TeamId,
-                Description = project.Description,
-                EnvironmentClusterIds = project.EnvironmentClusterIds
-            });
-        }
-
-        private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
+        public async Task ShowProjectModalAsync(ProjectDetailDto? model = null)
         {
             if (_projectModal != null)
             {
                 await _projectModal.InitDataAsync(model);
             }
+        }
+
+        public async Task SearchProjectsByNameAsync(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                await InitDataAsync();
+            }
+            else
+            {
+                _projects = _backupProjects.Where(project => project.Name.ToLower().Contains(name.ToLower())).ToList();
+            }
+        }
+
+        public async Task InitDataAsync()
+        {
+            if (CanAddApp)
+            {
+                if (EnvironmentClusterId == 0)
+                {
+                    _projects.Clear();
+                    _backupProjects.Clear();
+                }
+                else
+                {
+                    _projects = await ProjectCaller.GetListByEnvClusterIdAsync(EnvironmentClusterId);
+                }
+            }
+            else
+            {
+                _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
+            }
+
+            _backupProjects = new List<ProjectDto>(_projects.ToArray());
+            _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
+        }
+
+        private async Task UpdateProjectAsync(int projectId)
+        {
+            var project = await GetProjectAsync(projectId);
+            await ShowProjectModalAsync(project);
         }
 
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
@@ -135,31 +147,28 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        public async Task<List<ProjectDto>> GetProjectListAsync()
+        private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int> projectIds)
         {
-            _projects = await ProjectDataSource.Invoke();
-            StateHasChanged();
-
-            return _projects;
-        }
-
-        private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int>? projectIds = null)
-        {
-            var newProjectIds = projectIds ?? _projects.Select(p => p.Id);
-
-            _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
+            _apps = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
 
             return _apps;
         }
 
         private async Task OnSubmitProjectAsyncAfter()
         {
-            await GetProjectListAsync();
+            if (EnvironmentClusterId != 0)
+            {
+                _projects = await ProjectCaller.GetListByEnvClusterIdAsync(EnvironmentClusterId);
+            }
+            else
+            {
+                _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
+            }
         }
 
         private async Task OnSubmitAppAsyncAfter()
         {
-            await GetAppByProjectIdsAsync();
+            await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
         }
 
         private async Task HandleProjectNameClick(int projectId)

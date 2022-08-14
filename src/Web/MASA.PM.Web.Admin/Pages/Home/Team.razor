@@ -2,7 +2,7 @@
 @inherits PmCompontentBase
 @inject MasaBlazor MasaBlazor
 
-<MTabs @bind-Value="_curTab" SliderColor="transparent" class="pro-nav remover-ripple">
+<MTabs Value="_curTab" ValueChanged="value=>TabItemChangedAsync(value)" SliderColor="transparent" class="pro-nav remover-ripple">
     <MTab class="text-capitalize pa-0">
         <ChildContent>
             <span class="mtab-tab-line mtab-tab-linear-primary"></span>
@@ -33,10 +33,9 @@
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="overflow:auto;">
-                        <ProjectList 
-                            @ref="_projectListComponent" 
-                            OnNameClick="GetProjectDetailAsync" 
-                            Teams="new List<TeamModel>{ new TeamModel{Id = _userTeam.Id,Name = _userTeam.Name, Avatar = _userTeam.Avatar}}" />
+                        <ProjectList @ref="_projectListComponent"
+                                     OnNameClick="GetProjectDetailAsync"
+                                     TeamId="_userTeam.Id" />
                     </div>
                 </div>
             </div>
@@ -50,7 +49,7 @@
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
                     <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projects.Count
+                        @T("ProjectCount")：@_projectListComponent?._projects.Count
                     </MRow>
                     <MRow NoGutters Class="mt-4 text-body2">
                         @_userTeam.Description
@@ -165,6 +164,6 @@
     </MTabItem>
 </MTabsItems>
 
-<ProjectModal @ref="@_projectModal" Projects="_projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
+<ProjectModal @ref="@_projectModal" Projects="_projectListComponent?._projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 
 <AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />

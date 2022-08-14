@@ -731,3 +731,7 @@ input::-webkit-input-placeholder {
 .project-expansion-panel-header::before {
     content: none !important;
 }
+
+.m-btn--disabled span.emphasis--text {
+    color: rgba(0, 0, 0, 0.26) !important;
+}

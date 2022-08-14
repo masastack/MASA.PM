@@ -31,13 +31,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectDto> _projects = new();
         private List<AppDto> _canRelationApps = new();
         private List<AppDto> _apps = new();
-        private DataModal<UpdateEnvironmentDto> _envFormModel = new();
+        private readonly DataModal<UpdateEnvironmentDto> _envFormModel = new();
         private List<ClusterDto> _allClusters = new();
         private List<EnvironmentDto> _allEnvs = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private EnvironmentDetailDto _envDetail = new();
-        private DataModal<UpdateClusterDto> _clusterFormModel = new();
+        private readonly DataModal<UpdateClusterDto> _clusterFormModel = new();
         private ClusterDetailDto _clusterDetail = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
@@ -45,20 +45,16 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private int _selectAppServiceType;
         private AddRelationAppDto _addRelationAppModel = new();
         private bool _relationAppVisible;
-        private List<string> _colors = new()
+        private readonly List<string> _colors = new()
         {
             "success", "warning", "error", "info", "orange lighten-1",
         };
-        private List<TeamModel> _allTeams = new();
-        private ProjectModal? _projectModal;
-        private AppModal? _appModal;
         private ProjectList? _projectListComponent;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                _allTeams = await AuthClient.TeamService.GetAllAsync();
                 _environments = await EnvironmentCaller.GetListAsync();
                 if (_environments.Any())
                 {
@@ -82,20 +78,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (_clusters.Any())
             {
                 _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-
-                if (_projectListComponent != null)
-                {
-                    _projectListComponent.ProjectDataSource = async () =>
-                    {
-                        _projects = await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
-                        return _projects;
-                    };
-                    await _projectListComponent.GetProjectListAsync();
-                }
             }
             else
             {
-                _projectListComponent?.ClearProjects();
+                _selectEnvClusterId = 0;
             }
 
             return _clusters;
@@ -110,16 +96,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
             }
 
-            if (_projectListComponent != null)
-            {
-                _projectListComponent.ProjectDataSource = async () =>
-                {
-                    _projects = await ProjectCaller.GetListByEnvClusterIdAsync(envClusterId);
-                    return _projects;
-                };
-                await _projectListComponent.GetProjectListAsync();
-            }
-
             return _projects;
         }
 
@@ -130,7 +106,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
 
             var app = _apps.Where(app => app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
-            _projectListComponent?.SetApps(app);
 
             return _apps;
         }
@@ -323,11 +298,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
+        private async Task ShowProjectModalAsync(ProjectDetailDto? model = null)
         {
-            if (_projectModal != null)
+            if (_projectListComponent != null)
             {
-                await _projectModal.InitDataAsync(model);
+                await _projectListComponent.ShowProjectModalAsync(model);
             }
         }
 
