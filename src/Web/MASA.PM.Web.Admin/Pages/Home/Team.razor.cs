@@ -44,12 +44,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
 
-        protected override void OnInitialized()
-        {
-            //NavigationManager.LocationChanged += HandleLocationChanged;
-            //base.OnInitialized();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             if (TeamId != _userTeam.Id.ToString())
