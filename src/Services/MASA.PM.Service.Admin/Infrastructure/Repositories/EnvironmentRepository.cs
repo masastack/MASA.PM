@@ -68,15 +68,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                 throw new UserFriendlyException("环境名称已存在！");
             }
 
-            _dbContext.Environments.Update(new Entities.Environment
-            {
-                Id = model.EnvironmentId,
-                Name = model.Name,
-                Color = model.Color,
-                Description = model.Description,
-                Modifier = MasaUser.UserId,
-                ModificationTime = DateTime.Now
-            });
+            _dbContext.Environments.Update(new Entities.Environment(model.EnvironmentId, model.Name, model.Description, model.Color));
 
             var oldClusterIds = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == model.EnvironmentId).Select(e => e.ClusterId).ToListAsync();
 

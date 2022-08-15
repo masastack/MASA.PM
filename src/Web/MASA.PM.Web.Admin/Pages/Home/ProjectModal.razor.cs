@@ -29,6 +29,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public EventCallback OnSubmitProjectAfter { get; set; }
 
+        [Parameter]
+        public List<int> DisableEnvironmentClusterIds { get; set; } = new();
+
         private DataModal<UpdateProjectDto> _projectFormModel = new();
         private List<TeamModel> _allTeams = new();
         private List<ProjectTypesDto> _projectTypes = new();

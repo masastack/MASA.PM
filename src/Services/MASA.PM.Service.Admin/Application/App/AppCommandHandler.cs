@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Service.Admin.Application.App.Commands;
-
 namespace MASA.PM.Service.Admin.Application.Cluster
 {
     public class AppCommandHandler
@@ -31,11 +29,8 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 ServiceType = appModel.ServiceType,
                 SwaggerUrl = appModel.SwaggerUrl,
                 Url = appModel.Url,
-                Creator = MasaUser.UserId,
-                Modifier = MasaUser.UserId,
                 Identity = appModel.Identity,
-                Description = appModel.Description,
-                IsDeleted = false
+                Description = appModel.Description
             });
 
             var environmentClusterProjectApps = envClusterProjectIds.Select(environmentClusterProjectId => new EnvironmentClusterProjectApp
@@ -81,9 +76,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             appEntity.Name = appModel.Name;
             appEntity.SwaggerUrl = appModel.SwaggerUrl;
             appEntity.Url = appModel.Url;
-            appEntity.Modifier = MasaUser.UserId;
             appEntity.Description = appModel.Description;
-            appEntity.ModificationTime = DateTime.Now;
 
             await _appRepository.UpdateAsync(appEntity);
 

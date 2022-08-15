@@ -34,6 +34,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
         private UserPortraitModel _userInfo = new();
+        private List<int> _disableEnvironmentClusterIds = new();
+        private bool _showProcess;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
@@ -41,10 +43,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (EnvironmentClusterId != _internalEnvironmentClusterId || TeamId != _internalTeamId)
             {
+                _showProcess = true;
                 _internalEnvironmentClusterId = EnvironmentClusterId;
                 _internalTeamId = TeamId;
 
-                await InitDataAsync();
+                try
+                {
+                    await InitDataAsync();
+                }
+                finally
+                {
+                    _showProcess = false;
+                }
             }
         }
 
@@ -99,6 +109,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task UpdateProjectAsync(int projectId)
         {
             var project = await GetProjectAsync(projectId);
+
+            var appEnvironemntClusterIds = _apps.Where(app => app.ProjectId == projectId)
+                .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
+                .Distinct();
+            _disableEnvironmentClusterIds = project.EnvironmentClusterIds.Intersect(appEnvironemntClusterIds).ToList();
             await ShowProjectModalAsync(project);
         }
 

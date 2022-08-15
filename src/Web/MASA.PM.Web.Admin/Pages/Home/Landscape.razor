@@ -71,7 +71,7 @@
             </MButton>
         </MRow>
         <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
-            <div class="rounded-5 mt-3" style="height:calc(100vh - 292px ); overflow:auto;">
+            <div class="rounded-5 mt-3" style="height:calc(100vh - 292px ); overflow: hidden; position: relative;">
                 <ProjectList @ref="_projectListComponent" CanAddApp EnvironmentClusterId="_selectEnvClusterId.AsT1" />
             </div>
             <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
@@ -156,7 +156,7 @@
                         </ItemContent>
                     </MAutocomplete>
                     <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
-                    @if (_clusterFormModel.HasValue)
+                @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>
@@ -178,82 +178,3 @@
             </div>
         </MForm>
     </SSheetDialog>
-
-    <SSheetDialog ValueChanged="RelationAppValueChanged" Value="_relationAppVisible" Title="@T("Add App")" Icon="mdi-circle" IconColor="success">
-        <MForm Class="full-height" Context="formContext" EnableValidation Model="_addRelationAppModel">
-            <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-                <div class="full-height">
-                    <MAutocomplete TItem="AppDto"
-                               TValue="int"
-                               TItemValue="int"
-                               Items="_canRelationApps"
-                               ItemText="r=>r.Name"
-                               ItemValue="r=>r.Id"
-                               Class="mt-6"
-                               Outlined
-                               Value="_addRelationAppModel.AppId"
-                               ValueChanged="RelationAppSelectChange"
-                               Label="@T("Select an existing app")">
-                        <SelectionContent Context="_context">
-                            <MChip Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
-                                @_context.Item.Name
-                            </MChip>
-                        </SelectionContent>
-                    </MAutocomplete>
-                    <MAutocomplete @bind-Value="_addRelationAppModel.EnvironmentClusterIds"
-                               Class="mt-6"
-                               Items="_projectEnvClusters"
-                               ItemText="r=>r.EnvironmentClusterName"
-                               ItemValue="r=>r.Id"
-                               Outlined
-                               Label="@T("Environment/Cluster")"
-                               Multiple>
-                        <SelectionContent Context="_context">
-                            <EnvClusterChip EnvironmentName="@_context.Item.EnvironmentName" ClusterName="@_context.Item.ClusterName" />
-                        </SelectionContent>
-                        <ItemContent>
-                            <MListItemContent>
-                                <div class="d-flex align-center">
-                                    <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div><div class="ml-1">@context.Item.ClusterName</div>
-                                </div>
-                            </MListItemContent>
-                        </ItemContent>
-                    </MAutocomplete>
-                    <MSelect @bind-Value="_selectAppType"
-                         Disabled
-                         Class="mt-6"
-                         Items="Enum<AppTypes>.GetEnumObjectList()"
-                         ItemText="r=>r.Name"
-                         ItemValue="r=>r.Value"
-                         Outlined
-                         Label="@T("App type")">
-                    </MSelect>
-                    <FadeTransition>
-                        <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                            <MSelect @bind-Value="_selectAppServiceType"
-                                 Disabled
-                                 Items="Enum<ServiceTypes>.GetEnumObjectList()"
-                                 ItemText="r=>r.Name"
-                                 ItemValue="r=>r.Value"
-                                 Outlined
-                                 Label="@T("Service type")">
-                            </MSelect>
-                        </ShowTransitionElement>
-                    </FadeTransition>
-                    <STextField Class="mt-6" Disabled Outlined Label="Url" @bind-Value="_appDetail.Url"></STextField>
-                    <FadeTransition>
-                        <ShowTransitionElement Value="@(_selectAppType == (int)AppTypes.Service)" Class="text-center">
-                            <STextField Class="mt-6" Disabled Outlined Label="Swagger Url" @bind-Value="_appDetail.SwaggerUrl"></STextField>
-                        </ShowTransitionElement>
-                    </FadeTransition>
-                    <STextField Class="mt-6" Disabled Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appDetail.Identity"></STextField>
-                    <MTextarea Class="mt-6" Disabled Outlined Label="@T("Cluster description")" @bind-Value="_appDetail.Description"></MTextarea>
-                </div>
-                <div class="d-flex align-end" style="width:100%;">
-                    <MSpacer></MSpacer>
-                    <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitRelationAppAsync(formContext)">@T("Submit")</MButton>
-                </div>
-            </div>
-        </MForm>
-    </SSheetDialog>
-

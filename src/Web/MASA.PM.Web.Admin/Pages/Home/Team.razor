@@ -32,7 +32,7 @@
                         </MTextField>
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
-                    <div style="overflow:auto;">
+                    <div class="rounded-5" style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
                                      OnNameClick="GetProjectDetailAsync"
                                      TeamId="_userTeam.Id" />
@@ -123,7 +123,7 @@
                                 var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                 foreach (var item in envCluster)
                                 {
-                                    <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
                                 }
                             }
                         </div>
@@ -151,9 +151,9 @@
                                     {
                                         app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
                                     }).Wait();
-                                    <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                    </MCol>
+                                        <MCol Lg="4" Md="6" Sm="12">
+                                            <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                        </MCol>
                                 }
                             }
                         </MRow>

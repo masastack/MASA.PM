@@ -21,6 +21,7 @@ builder.Services.AddMasaOpenIdConnect(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
 
 var app = builder.Build();

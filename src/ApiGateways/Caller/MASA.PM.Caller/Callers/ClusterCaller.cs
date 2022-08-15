@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Caller.Callers
 {
-    public class ClusterCaller : HttpClientCallerBase
+    public class ClusterCaller : PmHttpClientCallerBase
     {
         private readonly string _prefix = "/api/v1/cluster";
 
@@ -11,8 +11,6 @@ namespace MASA.PM.Caller.Callers
         {
             Name = nameof(ClusterCaller);
         }
-
-        protected override string BaseAddress { get; set; } = AppSettings.Get("ServiceBaseUrl");
 
         public async Task<List<ClusterDto>> GetListByEnvIdAsync(int envId)
         {

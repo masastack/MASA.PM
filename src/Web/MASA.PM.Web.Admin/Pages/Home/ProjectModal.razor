@@ -49,6 +49,7 @@
                                Class="mt-6"
                                ItemText="r=>r.EnvironmentClusterName"
                                ItemValue="r=>r.Id"
+                               ItemDisabled="@(r=>DisableEnvironmentClusterIds.Contains(r.Id))"
                                Outlined
                                Label="@T("Environment/Cluster")"
                                Multiple>
@@ -84,4 +85,4 @@
                 </div>
             </div>
         </MForm>
-</SSheetDialog>
+    </SSheetDialog>

@@ -4,7 +4,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Environments")]
-    public class Environment : BaseEntity<int, Guid>
+    public class Environment : FullAggregateRoot<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "Environment name is required")]
@@ -20,5 +20,17 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Required(ErrorMessage = "Environment color is required")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Environment color length range is [2-10]")]
         public string Color { get; set; } = "";
+
+        public Environment()
+        {
+        }
+
+        public Environment(int id, string name, string description, string color)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            Color = color;
+        }
     }
 }

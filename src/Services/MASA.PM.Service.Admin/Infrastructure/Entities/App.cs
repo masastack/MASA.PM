@@ -1,17 +1,10 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using MASA.PM.Contracts.Admin.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Apps")]
-    public class App : BaseEntity<int, Guid>
+    public class App : FullAggregateRoot<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "App name is required")]

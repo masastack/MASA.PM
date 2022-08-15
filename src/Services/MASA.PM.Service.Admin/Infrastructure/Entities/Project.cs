@@ -4,7 +4,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Projects")]
-    public class Project : BaseEntity<int, Guid>
+    public class Project : FullAggregateRoot<int, Guid>
     {
         [Comment("Identity")]
         [Required(ErrorMessage = "Project identity is required")]

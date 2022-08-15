@@ -39,12 +39,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private EnvironmentDetailDto _envDetail = new();
         private readonly DataModal<UpdateClusterDto> _clusterFormModel = new();
         private ClusterDetailDto _clusterDetail = new();
-        private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
-        private int _selectAppType;
-        private int _selectAppServiceType;
         private AddRelationAppDto _addRelationAppModel = new();
-        private bool _relationAppVisible;
         private readonly List<string> _colors = new()
         {
             "success", "warning", "error", "info", "orange lighten-1",
@@ -303,61 +299,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (_projectListComponent != null)
             {
                 await _projectListComponent.ShowProjectModalAsync(model);
-            }
-        }
-
-        private async Task GetProjectsByEnvIdAsync()
-        {
-            _projects = await ProjectCaller.GetListByEnvClusterIdAsync(_selectEnvClusterId.AsT1);
-        }
-
-        private async Task ShowRelationAppModalAsync(int projectId)
-        {
-            _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
-            _projectDetail = await ProjectCaller.GetAsync(projectId);
-            _projectEnvClusters = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
-
-            _selectProjectId = projectId;
-            _canRelationApps = await AppCaller.GetListAsync();
-            _canRelationApps.RemoveAll(a => a.EnvironmentClusters.Select(ec => ec.Id).Contains(_selectEnvClusterId.AsT1));
-            _appDetail = new();
-            _selectAppType = 0;
-            _relationAppVisible = true;
-        }
-
-        private void RelationAppSelectChange(int appId)
-        {
-            _appDetail = _canRelationApps.First(app => app.Id == appId);
-            _selectAppType = (int)_appDetail.Type;
-            _selectAppServiceType = (int)_appDetail.ServiceType;
-            _addRelationAppModel.AppId = _appDetail.Id;
-            _addRelationAppModel.EnvironmentClusterIds = new List<int> { _selectEnvClusterId.AsT1 };
-            _addRelationAppModel.EnvironmentClusterIds.AddRange(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id));
-            _addRelationAppModel.ProjectId = _selectProjectId;
-        }
-
-        private async Task SubmitRelationAppAsync(EditContext context)
-        {
-            if (context.Validate())
-            {
-                _addRelationAppModel.EnvironmentClusterIds = _addRelationAppModel.EnvironmentClusterIds.Except(_appDetail.EnvironmentClusters.Select(envCluster => envCluster.Id)).ToList();
-                await AppCaller.AddRelationAppAsync(_addRelationAppModel);
-                await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
-                RelationAppValueChanged(false);
-            }
-        }
-
-        private void RelationAppValueChanged(bool value)
-        {
-            _relationAppVisible = value;
-
-            if (!value)
-            {
-                _canRelationApps = new();
-                _appDetail = new();
-                _addRelationAppModel = new();
-                _selectAppType = 0;
-                _selectAppServiceType = 0;
             }
         }
     }
