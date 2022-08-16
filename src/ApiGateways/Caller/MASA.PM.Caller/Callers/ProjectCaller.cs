@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Caller.Callers
 {
-    public class ProjectCaller : HttpClientCallerBase
+    public class ProjectCaller : PmHttpClientCallerBase
     {
         private readonly string _prefix = "/api/v1/project";
 
@@ -11,8 +11,6 @@ namespace MASA.PM.Caller.Callers
         {
             Name = nameof(ProjectCaller);
         }
-
-        protected override string BaseAddress { get; set; } = AppSettings.Get("ServiceBaseUrl");
 
         public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)
         {

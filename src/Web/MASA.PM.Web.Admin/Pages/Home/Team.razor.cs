@@ -28,14 +28,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
-        private List<ProjectDto> _projects = new();
-        private List<AppDto> _apps = new();
         private string _projectName = "";
         private ProjectDetailDto _projectDetail = new();
-        private List<EnvironmentClusterDto> allEnvClusters = new();
+        private List<EnvironmentClusterDto> _allEnvClusters = new();
         private int _selectProjectId;
         private int _appCount;
         private List<AppDto> _projectApps = new();
+        private List<AppDto> _backupProjectApps = new();
         private string _appName = "";
         private AppDto _appDetail = new();
         private TeamDetailModel _userTeam = new();
@@ -43,60 +42,44 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private UserPortraitModel _userInfo = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+        private ProjectList? _projectListComponent;
 
-        protected override void OnInitialized()
+        protected override async Task OnParametersSetAsync()
         {
-            NavigationManager.LocationChanged += HandleLocationChanged;
-            base.OnInitialized();
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (!string.IsNullOrEmpty(TeamId) && Guid.Parse(TeamId) != _userTeam.Id)
+            if (TeamId != _userTeam.Id.ToString())
             {
-                _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
-                var envs = await EnvironmentCaller.GetListAsync();
-                if (envs.Count <= 0)
-                {
-                    NavigationManager.NavigateTo("init", true);
-                }
-
+                _curTab = 0;
+                _teamDetailDisabled = true;
                 await InitDataAsync();
-
-                StateHasChanged();
             }
-        }
-
-        private async void HandleLocationChanged(object? sender, LocationChangedEventArgs args)
-        {
-            _curTab = 0;
-            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
-            await InitDataAsync();
-
-            await InvokeAsync(StateHasChanged);
         }
 
         private async Task InitDataAsync()
         {
-            _projects = await GetProjectListAsync();
-            var projectIds = _projects.Select(project => project.Id).ToList();
-            _apps = await AppCaller.GetListByProjectIdAsync(projectIds);
-        }
-
-        private async Task<List<ProjectDto>> GetProjectListAsync()
-        {
-            _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { Guid.Parse(TeamId) });
-
-            return _projects;
+            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
+            var envs = await EnvironmentCaller.GetListAsync();
+            if (envs.Count <= 0)
+            {
+                NavigationManager.NavigateTo("init", true);
+            }
         }
 
         private async Task OnSubmitProjectAsyncAfter()
         {
-            if (_curTab == 0)
+            if (_curTab == 1)
             {
-                await GetProjectListAsync();
+                await GetProjectDetailAsync(_selectProjectId);
             }
-            else
+        }
+
+        private async Task TabItemChangedAsync(StringNumber value)
+        {
+            _curTab = value;
+            if (value == 0)
+            {
+                _projectListComponent?.InitDataAsync();
+            }
+            else if (value == 1)
             {
                 await GetProjectDetailAsync(_selectProjectId);
             }
@@ -104,18 +87,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task SearchProject(KeyboardEventArgs args)
         {
-            if (args.Key == "Enter")
+            if (args.Key == "Enter" && _projectListComponent != null)
             {
-                if (!string.IsNullOrWhiteSpace(_projectName))
-                {
-                    _projects = _projects.Where(project => project.Name.ToLower().Contains(_projectName.ToLower())).ToList();
-                }
-                else
-                {
-                    await InitDataAsync();
-                }
+                await _projectListComponent.SearchProjectsByNameAsync(_projectName);
             }
-
         }
 
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
@@ -139,24 +114,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _disableTeamSelect = disableTeamSelect;
             _selectProjectId = projectId;
-            var project = await GetProjectAsync(projectId);
-            await ShowProjectModalAsync(new UpdateProjectDto
-            {
-                Identity = project.Identity,
-                LabelCode = project.LabelCode,
-                ProjectId = project.Id,
-                Name = project.Name,
-                TeamId = project.TeamId,
-                Description = project.Description,
-                EnvironmentClusterIds = project.EnvironmentClusterIds
-            });
-        }
-
-        private async Task ShowProjectModalAsync(UpdateProjectDto? model = null)
-        {
+            await GetProjectAsync(projectId);
             if (_projectModal != null)
             {
-                await _projectModal.InitDataAsync(model);
+                await _projectModal.InitDataAsync(_projectDetail);
+            }
+        }
+
+        private async Task ShowProjectModalAsync(ProjectDetailDto? model = null)
+        {
+            if (_projectListComponent != null)
+            {
+                await _projectListComponent.ShowProjectModalAsync(model);
             }
         }
 
@@ -165,9 +134,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _teamDetailDisabled = false;
             _curTab = 1;
 
-            allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             _selectProjectId = projectId;
-            _projectApps = _apps.Where(app => app.ProjectId == projectId).ToList();
+            await GetAppByProjectIdsAsync();
+            _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             _appCount = _projectApps.Count;
             await GetProjectAsync(projectId);
         }
@@ -178,33 +147,28 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 if (!string.IsNullOrWhiteSpace(_appName))
                 {
-                    _projectApps = _projectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
+                    _projectApps = _backupProjectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
                 }
                 else
                 {
-                    _projectApps = _apps.Where(app => app.ProjectId == _selectProjectId).ToList();
+                    _projectApps = _backupProjectApps;
                 }
             }
         }
 
-        private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int>? projectIds = null)
+        private async Task<List<AppDto>> GetAppByProjectIdsAsync()
         {
-            var newProjectIds = projectIds ?? _projects.Select(p => p.Id);
+            _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
+            _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
 
-            _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
-
-            return _apps;
+            return _projectApps;
         }
 
         private async Task OnSubmitAppAsyncAfter()
         {
-            if (_curTab == 0)
+            await GetAppByProjectIdsAsync();
+            if (_curTab == 1)
             {
-                await GetAppByProjectIdsAsync();
-            }
-            else
-            {
-                _apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
                 await GetProjectDetailAsync(_selectProjectId);
             }
         }

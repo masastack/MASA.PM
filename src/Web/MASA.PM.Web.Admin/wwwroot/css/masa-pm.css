@@ -731,3 +731,11 @@ input::-webkit-input-placeholder {
 .project-expansion-panel-header::before {
     content: none !important;
 }
+
+.m-btn--disabled span.emphasis--text {
+    color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.m-list-item--disabled {
+    background-color: rgb(41 50 59 / 6%) !important;
+}

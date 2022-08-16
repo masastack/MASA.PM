@@ -29,12 +29,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             {
                 Name = e.Name,
                 Description = e.Description,
-                Color = e.Color,
-                Creator = Guid.NewGuid(),
-                CreationTime = DateTime.Now,
-                ModificationTime = DateTime.Now,
-                Modifier = Guid.NewGuid(),
-                IsDeleted = false
+                Color = e.Color
             });
             var envIds = new List<int>();
             foreach (var env in envs)

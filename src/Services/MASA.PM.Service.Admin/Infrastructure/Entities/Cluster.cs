@@ -4,7 +4,7 @@
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("Clusters")]
-    public class Cluster : BaseEntity<int, Guid>
+    public class Cluster : FullAggregateRoot<int, Guid>
     {
         [Comment("Name")]
         [Required(ErrorMessage = "Cluster name is required")]
@@ -15,5 +15,16 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Required(ErrorMessage = "Cluster description is required")]
         [StringLength(255, ErrorMessage = "Cluster description length must be less than 255")]
         public string Description { get; set; } = "";
+
+        public Cluster()
+        {
+        }
+
+        public Cluster(int id, string name, string description)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+        }
     }
 }

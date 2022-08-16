@@ -57,11 +57,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 var cluster = (await _clusterRepository.GetListAsync())
                     .Where(cluster => envCluster.Select(ec => ec.ClusterId).Contains(cluster.Id))
                     .OrderByDescending(cluster => cluster.ModificationTime)
-                    .Select(cluster => new Infrastructure.Entities.Cluster
-                    {
-                        Id = cluster.Id,
-                        Name = cluster.Name
-                    }).ToList();
+                    .Select(cluster => new Infrastructure.Entities.Cluster(cluster.Id, cluster.Name, "")).ToList();
 
                 var result = from c in cluster
                              join ec in envCluster on c.Id equals ec.ClusterId

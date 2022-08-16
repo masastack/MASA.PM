@@ -3,6 +3,15 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+
+builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+{
+    options.Environment = "environment";
+    options.UserName = "name";
+    options.UserId = "sub";
+});
+
 builder.Services.AddDaprClient();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
@@ -12,9 +21,10 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Authority = "";
+    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("Appsettings:IdentityServerUrl");
     options.RequireHttpsMetadata = false;
-    options.Audience = "";
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.MapInboundClaims = false;
 });
 
 #region regist Repository
@@ -36,8 +46,6 @@ if (builder.Environment.IsDevelopment())
         opt.DaprGrpcPort = 3601;
     });
 }
-
-builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
@@ -74,7 +82,7 @@ var app = builder.Services
                         Id = "Bearer"
                     }
                 },
-                new string[] {}
+                Array.Empty<string>()
             }
         });
     })
@@ -90,9 +98,6 @@ var app = builder.Services
         .UseEventBus();
     })
     .AddServices(builder);
-
-//SeedData
-//await app.Seed();
 
 app.UseMasaExceptionHandler();
 

@@ -2,7 +2,7 @@
 @inherits PmCompontentBase
 @inject MasaBlazor MasaBlazor
 
-<MTabs @bind-Value="_curTab" SliderColor="transparent" class="pro-nav remover-ripple">
+<MTabs Value="_curTab" ValueChanged="value=>TabItemChangedAsync(value)" SliderColor="transparent" class="pro-nav remover-ripple">
     <MTab class="text-capitalize pa-0">
         <ChildContent>
             <span class="mtab-tab-line mtab-tab-linear-primary"></span>
@@ -32,91 +32,10 @@
                         </MTextField>
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
-                    <div style="overflow:auto;">
-                        <MExpansionPanels Flat Accordion>
-                            @foreach (var project in _projects)
-                            {
-                                var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
-                                <MExpansionPanel Class="rounded-5 my-3">
-                                    <MExpansionPanelHeader Style="height: 56px;" Class="my-6 project-expansion-panel-header">
-                                        <ChildContent>
-                                            <span style="display:flex;align-items:center;margin-right:10px;">
-                                                <div class="emphasis--text h6">
-                                                    <MHover Context="hoverContext">
-                                                        <span @onclick:stopPropagation @onclick="()=>GetProjectDetailAsync(project.Id)" @attributes="hoverContext.Attrs" class="@(hoverContext.Hover ? "primary--text":"")">
-                                                            @project.Name
-                                                        </span>
-                                                    </MHover>
-                                                    <div class="mt-1 regul ar3--text btn d-flex" style="padding:0">
-                                                        @{
-                                                            string backgroundColor;
-                                                            switch (project.LabelCode.ToLower())
-                                                            {
-                                                                case "basicability":
-                                                                    backgroundColor = "#37D7AD";
-                                                                    break;
-                                                                case "operator":
-                                                                    backgroundColor = "#FFB547";
-                                                                    break;
-                                                                case "datafactory":
-                                                                    backgroundColor = "#5FB9FF";
-                                                                    break;
-                                                                default:
-                                                                    backgroundColor = "#BDBDBD";
-                                                                    break;
-                                                            }
-                                                        }
-                                                        <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px;">
-                                                            @project.LabelName
-                                                        </div>
-                                                        <span class="regular3--text body2">@project.Identity</span>
-                                                        <span class="ml-2 regular3--text body2">|</span>
-                                                        <sapn class="ml-2 regular3--text body2">@T("AppCount"):@apps.Count</sapn>
-                                                    </div>
-                                                </div>
-                                                <MSpacer />
-                                                <div style="display:flex;align-items:center;">
-                                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
-                                                    <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
-                                                </div>
-                                            </span>
-                                        </ChildContent>
-                                        <ActionsContent>
-                                            <MIcon Color="#485585">
-                                                mdi-chevron-down
-                                            </MIcon>
-                                        </ActionsContent>
-                                    </MExpansionPanelHeader>
-                                    <MExpansionPanelContent>
-                                        <MRow>
-                                            @foreach (var app in apps.Take(3))
-                                            {
-                                                <MCol Lg="4" Md="6" Sm="12">
-                                                    <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                                </MCol>
-                                            }
-                                        </MRow>
-                                        <div class="d-flex justify-space-between mt-3">
-                                            <div>
-                                                @{
-                                                    <MTooltip Right>
-                                                        <ActivatorContent>
-                                                            <MAvatar Size="24" @attributes="@context.Attrs">
-                                                                <MImage Src="@_userTeam.Avatar"></MImage>
-                                                            </MAvatar>
-                                                        </ActivatorContent>
-                                                        <ChildContent>
-                                                            <span>@_userTeam.Name</span>
-                                                        </ChildContent>
-                                                    </MTooltip>
-                                                }
-                                            </div>
-                                            <div class="regular3--text btn">@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
-                                        </div>
-                                    </MExpansionPanelContent>
-                                </MExpansionPanel>
-                            }
-                        </MExpansionPanels>
+                    <div class="rounded-5" style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
+                        <ProjectList @ref="_projectListComponent"
+                                     OnNameClick="GetProjectDetailAsync"
+                                     TeamId="_userTeam.Id" />
                     </div>
                 </div>
             </div>
@@ -130,7 +49,7 @@
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
                     <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projects.Count
+                        @T("ProjectCount")：@_projectListComponent?._projects.Count
                     </MRow>
                     <MRow NoGutters Class="mt-4 text-body2">
                         @_userTeam.Description
@@ -201,10 +120,10 @@
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
                         <div style="display:flex; flex-direction:column;align-items:start">
                             @{
-                                var envCluster = allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
+                                var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                 foreach (var item in envCluster)
                                 {
-                                    <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                                        <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
                                 }
                             }
                         </div>
@@ -232,9 +151,9 @@
                                     {
                                         app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
                                     }).Wait();
-                                    <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                    </MCol>
+                                        <MCol Lg="4" Md="6" Sm="12">
+                                            <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                        </MCol>
                                 }
                             }
                         </MRow>
@@ -245,6 +164,6 @@
     </MTabItem>
 </MTabsItems>
 
-<ProjectModal @ref="@_projectModal" Projects="_projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
+<ProjectModal @ref="@_projectModal" Projects="_projectListComponent?._projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 
 <AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />

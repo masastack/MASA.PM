@@ -42,14 +42,11 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         public async Task UpdateClusterAsync(UpdateClusterCommand command)
         {
             var updateClusterModel = command.UpdateClusterModel;
-            await _clusterRepository.UpdateAsync(new Infrastructure.Entities.Cluster
-            {
-                Id = updateClusterModel.ClusterId,
-                Name = updateClusterModel.Name,
-                Description = updateClusterModel.Description,
-                Modifier = MasaUser.UserId,
-                ModificationTime = DateTime.Now
-            });
+            var cluster = await _clusterRepository.GetAsync(updateClusterModel.ClusterId);
+            cluster.Name = updateClusterModel.Name;
+            cluster.Description = updateClusterModel.Description;
+            await _clusterRepository.UpdateAsync(new Infrastructure.Entities.Cluster(
+                updateClusterModel.ClusterId, updateClusterModel.Name, updateClusterModel.Description));
 
             var oldEnvironmentIds = (
                     await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(updateClusterModel.ClusterId)

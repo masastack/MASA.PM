@@ -29,19 +29,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public EventCallback OnSubmitProjectAfter { get; set; }
 
+        [Parameter]
+        public List<int> DisableEnvironmentClusterIds { get; set; } = new();
+
         private DataModal<UpdateProjectDto> _projectFormModel = new();
         private List<TeamModel> _allTeams = new();
         private List<ProjectTypesDto> _projectTypes = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
 
-        public async Task InitDataAsync(UpdateProjectDto? updateProjectDto = null)
+        public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
             _allTeams = await AuthClient.TeamService.GetAllAsync();
             _projectTypes = await ProjectCaller.GetProjectTypesAsync();
             _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
 
-            if (updateProjectDto == null)
+            if (projectDetailDto == null)
             {
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
@@ -53,18 +56,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _projectFormModel.Show(updateProjectDto);
-                await GetProjectAsync(updateProjectDto.ProjectId);
+                _projectDetail = projectDetailDto;
+                _projectFormModel.Show(new UpdateProjectDto
+                {
+                    Identity = _projectDetail.Identity,
+                    LabelCode = _projectDetail.LabelCode,
+                    ProjectId = _projectDetail.Id,
+                    Name = _projectDetail.Name,
+                    TeamId = _projectDetail.TeamId,
+                    Description = _projectDetail.Description,
+                    EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds
+                });
             }
 
             StateHasChanged();
-        }
-
-        public async Task GetProjectAsync(int projectId)
-        {
-            _projectDetail = await ProjectCaller.GetAsync(projectId);
-            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).Name;
-            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
         }
 
         private void ProjectModalValueChanged(bool value)
