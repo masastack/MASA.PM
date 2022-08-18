@@ -32,7 +32,7 @@
                         </MTextField>
                         <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
-                    <div class="rounded-5" style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
+                    <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
                                      OnNameClick="GetProjectDetailAsync"
                                      TeamId="_userTeam.Id" />

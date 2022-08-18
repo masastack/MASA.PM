@@ -1,7 +1,7 @@
 ﻿@inherits PmCompontentBase
 
 <div class="full-height" style="overflow: auto;">
-    <MExpansionPanels Flat Accordion>
+    <MExpansionPanels Flat Accordion @key="@($"{EnvironmentClusterId}{TeamId}")">
         @foreach (var project in _projects)
         {
             var apps = _apps.Where(app => app.ProjectId == project.Id).ToList();
@@ -132,9 +132,14 @@
         }
     </MExpansionPanels>
 </div>
-<MOverlay Value="_showProcess" Absolute Color="#adabab">
+<MOverlay Value="_showProcess" Absolute Color="#fdfdfd">
     <MProgressCircular Width="4" Indeterminate Size="48" Color="primary"></MProgressCircular>
 </MOverlay>
 
-<ProjectModal @ref="@_projectModal" Projects="_projects" DisableEnvironmentClusterIds="_disableEnvironmentClusterIds" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
+<ProjectModal EnvironmentClusterId="_internalEnvironmentClusterId"
+              TeamId="_internalTeamId"
+              @ref="@_projectModal"
+              Projects="_projects"
+              DisableEnvironmentClusterIds="_disableEnvironmentClusterIds"
+              OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 <AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />

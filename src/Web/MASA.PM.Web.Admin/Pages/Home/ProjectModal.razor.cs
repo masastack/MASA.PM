@@ -32,6 +32,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public List<int> DisableEnvironmentClusterIds { get; set; } = new();
 
+        [Parameter]
+        public Guid TeamId { get; set; }
+
         private DataModal<UpdateProjectDto> _projectFormModel = new();
         private List<TeamModel> _allTeams = new();
         private List<ProjectTypesDto> _projectTypes = new();
@@ -48,6 +51,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
+                else
+                    _projectFormModel.Data.EnvironmentClusterIds = _allEnvClusters.Select(envCluster => envCluster.Id).ToList();
+
+                _projectFormModel.Data.TeamId = TeamId;
 
                 if (_projectTypes.Any())
                     _projectFormModel.Data.LabelCode = _projectTypes[0].Code;
