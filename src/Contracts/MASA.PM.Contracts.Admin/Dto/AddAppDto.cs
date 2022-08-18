@@ -17,7 +17,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value?.Trim() ?? "";
         }
 
-        [MinCount(1, ErrorMessage = "15s4d5sds")]
+        [MinCount(1)]
         public List<int> EnvironmentClusterIds { get; set; } = new();
 
         public int ProjectId { get; set; }
