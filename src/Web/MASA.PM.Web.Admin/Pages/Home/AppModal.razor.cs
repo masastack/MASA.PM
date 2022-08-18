@@ -40,6 +40,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (updateAppDto == null)
             {
+                _appFormModel.Data.Type = AppTypes.UI;
+                _appFormModel.Data.EnvironmentClusterIds = _projectEnvClusters.Select(p => p.Id).ToList();
                 _appFormModel.Show();
             }
             else
