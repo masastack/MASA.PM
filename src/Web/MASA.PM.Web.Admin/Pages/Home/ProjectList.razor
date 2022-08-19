@@ -97,7 +97,7 @@
                     <div class="d-flex justify-space-between mt-3">
                         <div>
                             @{
-                                var team = Teams.FirstOrDefault(team => team.Id == project.TeamId) ?? new();
+                                var team = _allTeams.FirstOrDefault(team => team.Id == project.TeamId) ?? new();
                                 <MTooltip Right>
                                     <ActivatorContent>
                                         <MAvatar Size="24" @attributes="@context.Attrs">
