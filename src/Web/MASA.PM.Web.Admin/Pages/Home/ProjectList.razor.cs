@@ -17,9 +17,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public Guid TeamId { get; set; }
 
-        [Parameter]
-        public List<TeamModel> Teams { get; set; } = new();
-
         [Inject]
         public ProjectCaller ProjectCaller { get; set; } = default!;
 
@@ -30,6 +27,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private Guid _internalTeamId;
         public List<ProjectDto> _projects = new();
         private List<ProjectDto> _backupProjects = new();
+        public List<TeamModel> _allTeams = new();
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
@@ -102,6 +100,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
             }
 
+            _allTeams = await AuthClient.TeamService.GetAllAsync();
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
         }
