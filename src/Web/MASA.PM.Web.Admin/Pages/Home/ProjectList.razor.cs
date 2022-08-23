@@ -17,6 +17,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public Guid TeamId { get; set; }
 
+        [Parameter]
+        public EventCallback<int> FetchProjectCount { get; set; }
+
         [Inject]
         public ProjectCaller ProjectCaller { get; set; } = default!;
 
@@ -48,6 +51,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 try
                 {
                     await InitDataAsync();
+
+                    if (FetchProjectCount.HasDelegate)
+                    {
+                        await FetchProjectCount.InvokeAsync(_projects.Count);
+                    }
                 }
                 finally
                 {

@@ -34,6 +34,7 @@
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
+                                     FetchProjectCount="GetProjectCount"
                                      OnNameClick="GetProjectDetailAsync"
                                      TeamId="_userTeam.Id" />
                     </div>
@@ -49,7 +50,7 @@
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
                     <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projectListComponent?._projects.Count
+                        @T("ProjectCount")：@_projectCount
                     </MRow>
                     <MRow NoGutters Class="mt-4 text-body2">
                         @_userTeam.Description

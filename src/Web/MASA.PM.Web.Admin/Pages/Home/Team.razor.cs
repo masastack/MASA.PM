@@ -26,6 +26,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
+        private int _projectCount;
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
         private string _projectName = "";
@@ -62,6 +63,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 NavigationManager.NavigateTo("init", true);
             }
+        }
+
+        private void GetProjectCount(int projectCount)
+        {
+            _projectCount = projectCount;
         }
 
         private async Task OnSubmitProjectAsyncAfter()

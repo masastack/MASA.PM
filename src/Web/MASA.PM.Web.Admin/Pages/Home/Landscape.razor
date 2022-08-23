@@ -47,7 +47,7 @@
                     @foreach (var cluster in _clusters)
                     {
                         StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
-                        <MTab Style="height:40px; max-width:150px;" Value="envClusterId" OnClick="()=>GetProjectByEnvClusterIdAsync(cluster.EnvironmentClusterId)">
+                        <MTab Style="height:40px; max-width:150px;" Value="envClusterId">
                             <MTooltip Top>
                                 <ActivatorContent>
                                     <div class="text-overflow" @attributes="@context.Attrs">@cluster.Name</div>
@@ -72,7 +72,10 @@
         </MRow>
         <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
             <div class="mt-3" style="height:calc(100vh - 292px ); overflow: hidden; position: relative;">
-                <ProjectList @ref="_projectListComponent" CanAddApp EnvironmentClusterId="_selectEnvClusterId.AsT1" />
+                <ProjectList @ref="_projectListComponent"
+                             FetchProjectCount="GetProjectCount"
+                             CanAddApp
+                             EnvironmentClusterId="_selectEnvClusterId.AsT1" />
             </div>
             <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
                 <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
@@ -163,7 +166,7 @@
                         <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_clusterDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
                         <MCol Cols=6>@T("Modifier"): @_clusterDetail.ModifierName</MCol>
                         <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_clusterDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
-                        <MCol Cols=6>@T("ProjectCount")：@_projects.Count</MCol>
+                        <MCol Cols=6>@T("ProjectCount")：@_projectCount</MCol>
                     </MRow>
                 }
             </div>

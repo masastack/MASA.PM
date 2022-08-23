@@ -53,9 +53,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
         public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByEnvIdAsync(int envId)
         {
-            var result = await _dbContext.EnvironmentClusters.Where(environmentCluster => environmentCluster.EnvironmentId == envId).ToListAsync();
+            var result = from environmentCluster in _dbContext.EnvironmentClusters.Where(ec => ec.EnvironmentId == envId)
+                         join cluster in _dbContext.Clusters on environmentCluster.ClusterId equals cluster.Id
+                         select environmentCluster;
 
-            return result;
+            return await result.ToListAsync();
         }
 
         public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByClusterIdAsync(int clusterId)
@@ -72,13 +74,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                     environmentCluster.ClusterId == clusterId &&
                     environmentIds.Contains(environmentCluster.EnvironmentId)
                 ).ToListAsync();
-
-            return result;
-        }
-
-        public async Task<List<EnvironmentCluster>> GetEnvironmentClustersByIds(IEnumerable<int> environmentClusterIds)
-        {
-            var result = await _dbContext.EnvironmentClusters.Where(envCluster => environmentClusterIds.Contains(envCluster.Id)).ToListAsync();
 
             return result;
         }
