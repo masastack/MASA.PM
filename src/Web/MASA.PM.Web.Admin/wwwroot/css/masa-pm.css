@@ -707,6 +707,11 @@ input::-webkit-input-placeholder {
     border-radius: 8px !important;
 }
 
+.cluster-tabs .m-slide-group__content.m-tabs-bar__content {
+    display: flex;
+    align-items: center;
+}
+
 .text-overflow {
     white-space: nowrap;
     text-overflow: ellipsis;
