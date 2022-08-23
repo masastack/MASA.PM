@@ -23,24 +23,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
+        private int _projectCount;
         private StringNumber _selectedEnvId = 0;
         private StringNumber _selectEnvClusterId = 0;
-        private int _selectProjectId;
         private List<EnvironmentDto> _environments = new();
         private List<ClusterDto> _clusters = new();
         private List<ProjectDto> _projects = new();
-        private List<AppDto> _canRelationApps = new();
-        private List<AppDto> _apps = new();
         private readonly DataModal<UpdateEnvironmentDto> _envFormModel = new();
         private List<ClusterDto> _allClusters = new();
         private List<EnvironmentDto> _allEnvs = new();
-        private List<EnvironmentClusterDto> _allEnvClusters = new();
-        private List<EnvironmentClusterDto> _projectEnvClusters = new();
         private EnvironmentDetailDto _envDetail = new();
         private readonly DataModal<UpdateClusterDto> _clusterFormModel = new();
         private ClusterDetailDto _clusterDetail = new();
-        private AppDto _appDetail = new();
-        private AddRelationAppDto _addRelationAppModel = new();
         private readonly List<string> _colors = new()
         {
             "success", "warning", "error", "info", "orange lighten-1",
@@ -81,29 +75,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
 
             return _clusters;
-        }
-
-        private async Task<List<ProjectDto>> GetProjectByEnvClusterIdAsync(int envClusterId)
-        {
-            _selectEnvClusterId = envClusterId;
-            _projects = await ProjectCaller.GetListByEnvClusterIdAsync(envClusterId);
-            if (_projects.Any())
-            {
-                await GetAppByProjectIdsAsync(_projects.Select(project => project.Id));
-            }
-
-            return _projects;
-        }
-
-        private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int>? projectIds = null)
-        {
-            var newProjectIds = projectIds ?? _projects.Select(p => p.Id);
-
-            _apps = await AppCaller.GetListByProjectIdAsync(newProjectIds.ToList());
-
-            var app = _apps.Where(app => app.EnvironmentClusters.Select(envCluster => envCluster.Id).Contains(_selectEnvClusterId.AsT1)).ToList();
-
-            return _apps;
         }
 
         private async Task<EnvironmentDetailDto> GetEnvAsync(int envId)
@@ -278,8 +249,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                     _clusters.Remove(deleteCluster);
                     _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-                    await GetProjectByEnvClusterIdAsync(_clusters[0].EnvironmentClusterId);
-
                     _clusterFormModel.Hide();
                 });
             }
@@ -300,6 +269,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 await _projectListComponent.ShowProjectModalAsync(model);
             }
+        }
+
+        private void GetProjectCount(int projectCount)
+        {
+            _projectCount = projectCount;
         }
     }
 }
