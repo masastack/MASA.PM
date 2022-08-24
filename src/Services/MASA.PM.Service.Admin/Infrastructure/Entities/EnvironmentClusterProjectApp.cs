@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MASA.PM.Service.Admin.Infrastructure.Entities
 {
     [Table("EnvironmentClusterProjectApps")]
@@ -20,5 +14,15 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Comment("App Id")]
         [Range(1, int.MaxValue, ErrorMessage = "App is required")]
         public int AppId { get; set; }
+
+        [Comment("App URL")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "URL length range is [0-255]")]
+        public string AppURL { get; set; } = "";
+
+        [Comment("Swagger URL")]
+        [Column(TypeName = "nvarchar(255)")]
+        [StringLength(255, MinimumLength = 0, ErrorMessage = "Swagger URL length range is [0-255]")]
+        public string AppSwaggerURL { get; set; } = "";
     }
 }

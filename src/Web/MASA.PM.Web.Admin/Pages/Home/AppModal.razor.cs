@@ -36,12 +36,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectEnvClusters = allEnvClusters.Where(envCluster => projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
 
             _appFormModel.Data.ProjectId = ProjectId;
-            _appFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
+            _appFormModel.Data.EnvironmentClusterInfo = new List<(int EnvironmentClusterId, string Url, string SwaggerUrl)>
+            {
+                new(EnvironmentClusterId,"","")
+            };
 
             if (updateAppDto == null)
             {
                 _appFormModel.Data.Type = AppTypes.UI;
-                _appFormModel.Data.EnvironmentClusterIds = _projectEnvClusters.Select(p => p.Id).ToList();
+                _appFormModel.Data.EnvironmentClusterInfo = _projectEnvClusters.Select(p => new ValueTuple<int, string, string>(p.Id, "", "")).ToList();
                 _appFormModel.Show();
             }
             else
@@ -115,7 +118,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
-                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
+                    if (!_appFormModel.Data.EnvironmentClusterInfo.Any())
                     {
                         await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
                         return;

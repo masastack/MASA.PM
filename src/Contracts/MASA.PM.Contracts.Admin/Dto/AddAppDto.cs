@@ -18,7 +18,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         }
 
         [MinCount(1)]
-        public List<int> EnvironmentClusterIds { get; set; } = new();
+        public List<(int EnvironmentClusterId, string Url, string SwaggerUrl)> EnvironmentClusterInfo { get; set; } = new();
 
         public int ProjectId { get; set; }
 

@@ -33,16 +33,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         //public ServiceTypes ServiceType { get; set; }
         public ServiceTypes ServiceType { get; set; }
 
-        [Comment("Url")]
-        [Column(TypeName = "nvarchar(255)")]
-        [StringLength(255, MinimumLength = 0, ErrorMessage = "Url length range is [0-255]")]
-        public string Url { get; set; } = "";
-
-        [Comment("SwaggerUrl")]
-        [Column(TypeName = "nvarchar(255)")]
-        [StringLength(255, MinimumLength = 0, ErrorMessage = "Url length range is [0-255]")]
-        public string SwaggerUrl { get; set; } = "";
-
         [Comment("Description")]
         [Column(TypeName = "nvarchar(255)")]
         [StringLength(255, MinimumLength = 0, ErrorMessage = "Description length range is [0-255]")]

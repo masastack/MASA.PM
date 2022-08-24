@@ -109,10 +109,10 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<int>> GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId)
+        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId)
         {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
-                .Select(ecp => ecp.Id)
+            var result = await _dbContext.EnvironmentClusterProjects
+                .Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
                 .ToListAsync();
 
             return result;
