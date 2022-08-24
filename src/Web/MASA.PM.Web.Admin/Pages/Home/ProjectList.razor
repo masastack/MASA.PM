@@ -140,6 +140,7 @@
               TeamId="_internalTeamId"
               @ref="@_projectModal"
               Projects="_projects"
+              DisableTeamSelect="@(_internalTeamId != Guid.Empty)"
               DisableEnvironmentClusterIds="_disableEnvironmentClusterIds"
               OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 <AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />
