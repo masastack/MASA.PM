@@ -30,7 +30,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Small>mdi-plus </MIcon>@T("Add Project")</MButton>
+                        <MButton Class="rounded-lg" Height="40" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
@@ -141,7 +141,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Height="40" Class="rounded-pill" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Small>mdi-plus </MIcon>@T("Add App")</MButton>
+                        <MButton Height="40" Class="rounded-lg" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add App")</MButton>
                     </div>
                     <div class="full-height" style="margin:0 -24px; overflow:auto;">
                         <MRow Class="mx-3">
