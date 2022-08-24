@@ -33,10 +33,10 @@
                          Label="@T("Service type")">
                         </MSelect>
                     }
-                    <STextField Class="mt-6" Outlined Label="Url" @bind-Value="_appFormModel.Data.Url"></STextField>
+                    <STextField Class="mt-6" Outlined Label="URL" @bind-Value="_appFormModel.Data.Url"></STextField>
                     @if (_appFormModel.Data.Type == AppTypes.Service)
                     {
-                        <STextField Class="mt-6" Outlined Label="Swagger Url" @bind-Value="_appFormModel.Data.SwaggerUrl"></STextField>
+                        <STextField Class="mt-6" Outlined Label="Swagger URL" @bind-Value="_appFormModel.Data.SwaggerUrl"></STextField>
                     }
                     <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
                     <MAutocomplete Class="mt-6" @bind-Value="_appFormModel.Data.EnvironmentClusterIds"

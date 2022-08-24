@@ -42,8 +42,7 @@
     <div class="pl-6 d-flex flex-column" style="width: calc(100% - 242px); overflow: hidden;">
         <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:88px; background:#fff;padding:0 12px;">
             <MCard Style="padding-right: 150px;">
-
-                <MTabs @bind-Value="_selectEnvClusterId" Class="cluster-tabs mt-2" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
+                <MTabs @key="_clusters" @bind-Value="_selectEnvClusterId" Class="cluster-tabs mt-2" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
                     @foreach (var cluster in _clusters)
                     {
                         StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
