@@ -31,19 +31,18 @@
                          Label="@T("Service type")">
                     </MSelect>
                 }
-                <STextField Class="mt-6" Outlined Label="URL" @bind-Value="_appFormModel.Data.Url"></STextField>
-                @if (_appFormModel.Data.Type == AppTypes.Service)
-                {
-                    <STextField Class="mt-6" Outlined Label="Swagger URL" @bind-Value="_appFormModel.Data.SwaggerUrl"></STextField>
-                }
                 <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
-                <MAutocomplete Class="mt-6" @bind-Value="_appFormModel.Data.EnvironmentClusterInfo"
+                <MAutocomplete Class="mt-6" Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
                                ItemText="r=>r.EnvironmentClusterName"
-                               ItemValue="r=>r.Id"
+                               ItemValue="r=> r.Id"
                                Outlined
                                Label="@T("Environment/Cluster")"
-                               Multiple>
+                               Multiple
+                               TItem="EnvironmentClusterDto"
+                               TItemValue="int"
+                               TValue="List<int>"
+                               OnSelectedItemUpdate="OnEnvironmentClusterSelectedItemUpdate">
                     <SelectionContent Context="context">
                         <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
                     </SelectionContent>
@@ -55,6 +54,38 @@
                         </MListItemContent>
                     </ItemContent>
                 </MAutocomplete>
+                @{
+                    foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
+                    {
+                        var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
+                        <STextField Class="mt-6" Outlined Label="URL" @bind-Value="item.Url">
+                            <PrependInnerContent>
+                                <div class="mt-2 d-flex">
+                                    <div class="@($"{environmentCluster.EnvironmentColor}--text text-overflow")">@environmentCluster.EnvironmentName</div>
+                                    <div style="color:#05CD99" class="text-overflow ml-1">@environmentCluster.ClusterName</div>
+                                    <div class="mx-1 regular3--text">|</div>
+                                </div>
+                            </PrependInnerContent>
+                        </STextField>
+                    }
+
+                    @if (_appFormModel.Data.Type == AppTypes.Service)
+                    {
+                        foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
+                        {
+                            var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
+                            <STextField Class="mt-6" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
+                                <PrependInnerContent>
+                                    <div class="mt-2 d-flex">
+                                        <div class="@($"{environmentCluster.EnvironmentColor}--text text-overflow")">@environmentCluster.EnvironmentName</div>
+                                        <div style="color:#05CD99" class="text-overflow ml-1">@environmentCluster.ClusterName</div>
+                                        <div class="mx-1 regular3--text">|</div>
+                                    </div>
+                                </PrependInnerContent>
+                            </STextField>
+                        }
+                    }
+                }
                 <MTextarea Class="mt-6" Outlined Label="@T("App description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
                 @if (_appFormModel.HasValue)
                 {

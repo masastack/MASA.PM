@@ -154,9 +154,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
-                SwaggerUrl = _appDetail.SwaggerUrl,
-                Url = _appDetail.Url,
-                EnvironmentClusterInfo = _appDetail.EnvironmentClusters.Select(envCluster => new ValueTuple<int, string, string>(envCluster.Id, "", "")).ToList()
+                EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster =>
+                {
+                    return new EnvironmentClusterInfo(envCluster.Id, envCluster.AppURL, envCluster.AppSwaggerURL);
+                }).ToList()
             });
         }
 

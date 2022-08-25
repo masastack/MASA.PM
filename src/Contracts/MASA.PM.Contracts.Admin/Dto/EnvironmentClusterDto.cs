@@ -20,5 +20,9 @@ namespace MASA.PM.Contracts.Admin.Dto
                 return $"{EnvironmentName} {ClusterName}";
             }
         }
+
+        public string AppURL { get; set; } = "";
+
+        public string AppSwaggerURL { get; set; } = "";
     }
 }

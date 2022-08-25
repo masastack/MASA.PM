@@ -20,7 +20,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var appModel = command.AppModel;
             var envClusterProjects = await _projectRepository
                 .GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(
-                    appModel.EnvironmentClusterInfo.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
+                    appModel.EnvironmentClusterInfos.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
 
             await _appRepository.IsExistedApp(
                 appModel.Name, appModel.Identity, envClusterProjects.Select(e => e.Id).ToList());
@@ -37,39 +37,17 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             List<EnvironmentClusterProjectApp> environmentClusterProjectApps = new();
             foreach (var envClusterProject in envClusterProjects)
             {
-                var (EnvironmentClusterId, Url, SwaggerUrl) = appModel.EnvironmentClusterInfo.FirstOrDefault(e => e.EnvironmentClusterId == envClusterProject.Id);
+                var envClusterInfo = appModel.EnvironmentClusterInfos.FirstOrDefault(e => e.EnvironmentClusterId == envClusterProject.EnvironmentClusterId) ?? new();
                 environmentClusterProjectApps.Add(new EnvironmentClusterProjectApp
                 {
                     EnvironmentClusterProjectId = envClusterProject.Id,
                     AppId = app.Id,
-                    AppURL = Url,
-                    AppSwaggerURL = SwaggerUrl
+                    AppURL = envClusterInfo.Url,
+                    AppSwaggerURL = envClusterInfo.SwaggerUrl
                 });
             }
 
             await _appRepository.AddEnvironmentClusterProjectAppsAsync(environmentClusterProjectApps);
-        }
-
-        [EventHandler]
-        public async Task AddRelationAppAsync(AddRelationAppCommand command)
-        {
-            var relationApp = command.RelationAppModel;
-
-            var envClusterProjects = await _projectRepository
-                .GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(
-                    relationApp.EnvironmentClusterIds, relationApp.ProjectId);
-            var envClusterProjectApp = new EnvironmentClusterProjectApp
-            {
-                EnvironmentClusterProjectId = envClusterProjects[0].Id,
-                AppId = relationApp.AppId
-            };
-
-            var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsAsync(envClusterProjects[0].Id, relationApp.AppId);
-            if (envClusterProjectApps.Any())
-            {
-                throw new UserFriendlyException("该应用已存在");
-            }
-            await _appRepository.AddEnvironmentClusterProjectAppsAsync(new List<EnvironmentClusterProjectApp> { envClusterProjectApp });
         }
 
         [EventHandler]
@@ -80,7 +58,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 
             var envClusterProjects = await _projectRepository
                 .GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(
-                    appModel.EnvironmentClusterInfo.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
+                    appModel.EnvironmentClusterInfos.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
             if (appEntity.Name != appModel.Name)
             {
                 await _appRepository.IsExistedApp(
@@ -98,13 +76,13 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             List<EnvironmentClusterProjectApp> environmentClusterProjectApps = new();
             foreach (var envClusterProject in envClusterProjects)
             {
-                var (EnvironmentClusterId, Url, SwaggerUrl) = appModel.EnvironmentClusterInfo.FirstOrDefault(e => e.EnvironmentClusterId == envClusterProject.Id);
+                var envClusterInfo = appModel.EnvironmentClusterInfos.FirstOrDefault(e => e.EnvironmentClusterId == envClusterProject.EnvironmentClusterId) ?? new();
                 environmentClusterProjectApps.Add(new EnvironmentClusterProjectApp
                 {
                     EnvironmentClusterProjectId = envClusterProject.Id,
                     AppId = appModel.Id,
-                    AppURL = Url,
-                    AppSwaggerURL = SwaggerUrl
+                    AppURL = envClusterInfo.Url,
+                    AppSwaggerURL = envClusterInfo.SwaggerUrl
                 });
             }
 

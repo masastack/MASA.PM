@@ -8,7 +8,6 @@ namespace MASA.PM.Service.Admin.Services
         public AppService(IServiceCollection services) : base(services)
         {
             App.MapPost("/api/v1/app", AddAsync);
-            App.MapPost("/api/v1/app/envClusterprojectApp", AddEnvClusterProjectApp);
             App.MapGet("/api/v1/app", GetListAsync);
             App.MapPost("/api/v1/projects/app", GetListByProjectIdsAsync);
             App.MapGet("/api/v1/app/{Id}", GetAsync);
@@ -20,12 +19,6 @@ namespace MASA.PM.Service.Admin.Services
         public async Task AddAsync(IEventBus eventBus, AddAppDto model)
         {
             var command = new AddAppCommand(model);
-            await eventBus.PublishAsync(command);
-        }
-
-        public async Task AddEnvClusterProjectApp(IEventBus eventBus, AddRelationAppDto model)
-        {
-            var command = new AddRelationAppCommand(model);
             await eventBus.PublishAsync(command);
         }
 
