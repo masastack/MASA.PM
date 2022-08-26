@@ -116,7 +116,12 @@
                         </div>
                         @if (CanAddApp)
                         {
-                            <div class="regular3--text btn">@T("Edit in")@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
+                            string name = "";
+                            Task.Run(async () =>
+                            {
+                                name = (await GetUserAsync(project.Modifier)).Name;
+                            }).Wait();
+                            <div class="regular3--text btn">@name @T("Edit in")@project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
                         }
                         else
                         {
