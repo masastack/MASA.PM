@@ -135,16 +135,15 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<(int ProjectId, App App)>> GetAppByEnvNameAndProjectIdsAsync(string envName, IEnumerable<int> projectIds)
+        public async Task<List<(int ProjectId, App App, EnvironmentClusterProjectApp EnvironmentClusterProjectApp)>> GetAppByEnvNameAndProjectIdsAsync(string envName, IEnumerable<int> projectIds)
         {
             var result = await (from environmentClusterProjectApp in _dbContext.EnvironmentClusterProjectApps
                                 join environmentClusterProject in _dbContext.EnvironmentClusterProjects.Where(project => projectIds.Contains(project.ProjectId)) on environmentClusterProjectApp.EnvironmentClusterProjectId equals environmentClusterProject.Id
                                 join environmentCluster in _dbContext.EnvironmentClusters on environmentClusterProject.EnvironmentClusterId equals environmentCluster.Id
                                 join environment in _dbContext.Environments.Where(env => env.Name == envName) on environmentCluster.EnvironmentId equals environment.Id
                                 join app in _dbContext.Apps on environmentClusterProjectApp.AppId equals app.Id
-                                select new ValueTuple<int, App>
-                                (environmentClusterProject.ProjectId, app)
-                                )
+                                select new ValueTuple<int, App, EnvironmentClusterProjectApp>
+                                (environmentClusterProject.ProjectId, app, environmentClusterProjectApp))
                                 .ToListAsync();
 
             return result;

@@ -19,7 +19,11 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public string Description { get; set; }
 
-        public AppModel(int id, string name, string identity, int projectId, AppTypes type, ServiceTypes serviceType, string description)
+        public string Url { get; set; }
+
+        public string SwaggerUrl { get; set; }
+
+        public AppModel(int id, string name, string identity, int projectId, AppTypes type, string url, ServiceTypes serviceType, string swaggerUrl, string description)
         {
             Id = id;
             Name = name;
@@ -28,6 +32,8 @@ namespace MASA.PM.Contracts.Admin.Model
             Type = type;
             ServiceType = serviceType;
             Description = description;
+            Url = url;
+            SwaggerUrl = swaggerUrl;
         }
     }
 }
