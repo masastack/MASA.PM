@@ -58,7 +58,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             var deleteEnvironmentClusterIds = oldEnvironmentClusterIds.Except(command.ProjectModel.EnvironmentClusterIds);
             if (deleteEnvironmentClusterIds.Any())
             {
-                var deleteEnvironmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(command.ProjectModel.ProjectId, deleteEnvironmentClusterIds);
+                var deleteEnvironmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsById(deleteEnvironmentClusterIds, command.ProjectModel.ProjectId);
                 await _projectRepository.RemoveEnvironmentClusterProjects(deleteEnvironmentClusterProjects);
             }
 

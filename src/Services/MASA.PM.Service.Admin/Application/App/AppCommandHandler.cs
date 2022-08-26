@@ -19,7 +19,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
         {
             var appModel = command.AppModel;
             var envClusterProjects = await _projectRepository
-                .GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(
+                .GetEnvironmentClusterProjectsById(
                     appModel.EnvironmentClusterInfos.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
 
             await _appRepository.IsExistedApp(
@@ -57,7 +57,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var appEntity = await _appRepository.GetAsync(appModel.Id);
 
             var envClusterProjects = await _projectRepository
-                .GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(
+                .GetEnvironmentClusterProjectsById(
                     appModel.EnvironmentClusterInfos.Select(c => c.EnvironmentClusterId), appModel.ProjectId);
             if (appEntity.Name != appModel.Name)
             {

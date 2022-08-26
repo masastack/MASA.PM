@@ -23,9 +23,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAsync(int projectId);
 
-        Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentClusterIds);
-
-        Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId);
+        Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsById(IEnumerable<int> envClusterIds, int projectId);
 
         Task<List<Project>> GetProjectListByEnvIdAsync(string envName);
 
