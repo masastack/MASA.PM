@@ -31,11 +31,6 @@ namespace MASA.PM.Caller.Callers
             await CallerProvider.PostAsync(_prefix, model);
         }
 
-        public async Task AddRelationAppAsync(AddRelationAppDto model)
-        {
-            await CallerProvider.PostAsync($"{_prefix}/envClusterprojectApp", model);
-        }
-
         public async Task UpdateAsync(UpdateAppDto model)
         {
             await CallerProvider.PutAsync(_prefix, model);

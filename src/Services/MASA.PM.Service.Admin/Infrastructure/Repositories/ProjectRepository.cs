@@ -104,15 +104,17 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
         public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsByProjectIdAndEnvirionmentClusterIds(int projectId, IEnumerable<int> environmentClusterIds)
         {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => ecp.ProjectId == projectId && environmentClusterIds.Contains(ecp.EnvironmentClusterId)).ToListAsync();
+            var result = await _dbContext.EnvironmentClusterProjects
+                .Where(ecp => ecp.ProjectId == projectId && environmentClusterIds.Contains(ecp.EnvironmentClusterId))
+                .ToListAsync();
 
             return result;
         }
 
-        public async Task<List<int>> GetEnvironmentClusterProjectIdsByEnvClusterIdsAndProjectId(IEnumerable<int> envClusterIds, int projectId)
+        public async Task<List<EnvironmentClusterProject>> GetEnvironmentClusterProjectsById(IEnumerable<int> envClusterIds, int projectId)
         {
-            var result = await _dbContext.EnvironmentClusterProjects.Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
-                .Select(ecp => ecp.Id)
+            var result = await _dbContext.EnvironmentClusterProjects
+                .Where(ecp => envClusterIds.Contains(ecp.EnvironmentClusterId) && ecp.ProjectId == projectId)
                 .ToListAsync();
 
             return result;

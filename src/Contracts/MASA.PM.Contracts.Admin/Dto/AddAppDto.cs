@@ -6,9 +6,7 @@ namespace MASA.PM.Contracts.Admin.Dto
     public class AddAppDto
     {
         private string _name = default!;
-        private string _swaggerUrl = "";
 
-        //[RegularExpression(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$", ErrorMessage = "Please enter [Chinese, English、and - _ symbols] ")]
         [Required(ErrorMessage = "App name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "App name length range is [2-50]")]
         public string Name
@@ -18,7 +16,7 @@ namespace MASA.PM.Contracts.Admin.Dto
         }
 
         [MinCount(1)]
-        public List<int> EnvironmentClusterIds { get; set; } = new();
+        public List<EnvironmentClusterInfo> EnvironmentClusterInfos { get; set; } = new();
 
         public int ProjectId { get; set; }
 
@@ -32,15 +30,31 @@ namespace MASA.PM.Contracts.Admin.Dto
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Identity length range is [2-50]")]
         public string Identity { get; set; } = "";
 
-        public string Url { get; set; } = "";
-
-        public string SwaggerUrl
-        {
-            get => _swaggerUrl;
-            set => _swaggerUrl = value?.Trim() ?? "";
-        }
-
         [StringLength(255, ErrorMessage = "App description length must be less than 255")]
         public string Description { get; set; } = "";
+    }
+
+    public record EnvironmentClusterInfo
+    {
+        public int EnvironmentClusterId { get; set; }
+
+        public string Url { get; set; } = "";
+
+        public string SwaggerUrl { get; set; } = "";
+
+        public EnvironmentClusterInfo()
+        {
+        }
+
+        public EnvironmentClusterInfo(int environmentClusterId)
+        {
+            EnvironmentClusterId = environmentClusterId;
+        }
+
+        public EnvironmentClusterInfo(int environmentClusterId, string url, string swaggerUrl) : this(environmentClusterId)
+        {
+            Url = url;
+            SwaggerUrl = swaggerUrl;
+        }
     }
 }

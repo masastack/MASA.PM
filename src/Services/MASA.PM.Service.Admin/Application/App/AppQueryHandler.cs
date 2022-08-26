@@ -24,8 +24,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 Identity = app.Identity,
                 Type = app.Type,
                 ServiceType = app.ServiceType,
-                Url = app.Url,
-                SwaggerUrl = app.SwaggerUrl,
                 Creator = app.Creator,
                 CreationTime = app.CreationTime,
                 ModificationTime = app.ModificationTime,
@@ -34,7 +32,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
 
             if (query.IsHaveEnvironmentClusterInfo)
             {
-                List<(int AppId,
+                List<(EnvironmentClusterProjectApp EnvironmentClusterProjectApp,
                     int ProjectId,
                     string ClusterName,
                     string EnvName,
@@ -64,8 +62,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 Identity = app.Identity,
                 Type = app.Type,
                 ServiceType = app.ServiceType,
-                Url = app.Url,
-                SwaggerUrl = app.SwaggerUrl,
                 Creator = app.Creator,
                 CreationTime = app.CreationTime,
                 ModificationTime = app.ModificationTime,
@@ -80,7 +76,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             {
                 var apps = await _appRepository.GetListByProjectIdAsync(query.ProjectIds);
 
-                List<(int AppId,
+                List<(EnvironmentClusterProjectApp EnvironmentClusterProjectApp,
                     int ProjectId,
                     string ClusterName,
                     string EnvName,
@@ -92,14 +88,16 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     .Where(appProjectEnvCluster => query.ProjectIds.Contains(appProjectEnvCluster.ProjectId))
                     .Select(appProjectEnvCluster => new AppEnvironmentClusterDto
                     {
-                        AppId = appProjectEnvCluster.AppId,
+                        AppId = appProjectEnvCluster.EnvironmentClusterProjectApp.AppId,
                         ProjectId = appProjectEnvCluster.ProjectId,
                         EnvironmentCluster = new EnvironmentClusterDto
                         {
                             Id = appProjectEnvCluster.EnvCluster.Id,
                             EnvironmentName = appProjectEnvCluster.EnvName,
                             EnvironmentColor = appProjectEnvCluster.EnvColor,
-                            ClusterName = appProjectEnvCluster.ClusterName
+                            ClusterName = appProjectEnvCluster.ClusterName,
+                            AppURL = appProjectEnvCluster.EnvironmentClusterProjectApp.AppURL,
+                            AppSwaggerURL = appProjectEnvCluster.EnvironmentClusterProjectApp.AppSwaggerURL
                         }
                     }).ToList();
 
@@ -120,8 +118,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     Identity = appEnvironmentCluster.app.Identity,
                     Type = appEnvironmentCluster.app.Type,
                     ServiceType = appEnvironmentCluster.app.ServiceType,
-                    Url = appEnvironmentCluster.app.Url,
-                    SwaggerUrl = appEnvironmentCluster.app.SwaggerUrl,
                     Creator = appEnvironmentCluster.app.Creator,
                     CreationTime = appEnvironmentCluster.app.CreationTime,
                     ModificationTime = appEnvironmentCluster.app.ModificationTime,
@@ -131,7 +127,9 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                         Id = envCluster.EnvironmentCluster.Id,
                         EnvironmentName = envCluster.EnvironmentCluster.EnvironmentName,
                         EnvironmentColor = envCluster.EnvironmentCluster.EnvironmentColor,
-                        ClusterName = envCluster.EnvironmentCluster.ClusterName
+                        ClusterName = envCluster.EnvironmentCluster.ClusterName,
+                        AppURL = envCluster.EnvironmentCluster.AppURL,
+                        AppSwaggerURL = envCluster.EnvironmentCluster.AppSwaggerURL
                     }).ToList()
                 }).OrderByDescending(app => app.ModificationTime)
                 .ToList();
@@ -147,8 +145,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                     Identity = app.Identity,
                     Type = app.Type,
                     ServiceType = app.ServiceType,
-                    Url = app.Url,
-                    SwaggerUrl = app.SwaggerUrl,
                     Creator = app.Creator,
                     CreationTime = app.CreationTime,
                     ModificationTime = app.ModificationTime,
@@ -170,8 +166,6 @@ namespace MASA.PM.Service.Admin.Application.Cluster
                 Identity = app.Identity,
                 Type = app.Type,
                 ServiceType = app.ServiceType,
-                Url = app.Url,
-                SwaggerUrl = app.SwaggerUrl,
                 Creator = app.Creator,
                 CreationTime = app.CreationTime,
                 ModificationTime = app.ModificationTime,

@@ -164,9 +164,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                             appGroup.App.Identity,
                             project.Id,
                             appGroup.App.Type,
-                            appGroup.App.Url,
                             appGroup.App.ServiceType,
-                            appGroup.App.SwaggerUrl,
                             appGroup.App.Description));
                     }
                 });

@@ -36,12 +36,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectEnvClusters = allEnvClusters.Where(envCluster => projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
 
             _appFormModel.Data.ProjectId = ProjectId;
-            _appFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
 
             if (updateAppDto == null)
             {
                 _appFormModel.Data.Type = AppTypes.UI;
-                _appFormModel.Data.EnvironmentClusterIds = _projectEnvClusters.Select(p => p.Id).ToList();
+                _appFormModel.Data.EnvironmentClusterInfos = _projectEnvClusters.Select(p => new EnvironmentClusterInfo(p.Id)).ToList();
                 _appFormModel.Show();
             }
             else
@@ -90,21 +89,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (context.Validate())
             {
-                if (!string.IsNullOrEmpty(_appFormModel.Data.Url))
-                {
-                    Regex urlRegex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0- 9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
-                    if (!urlRegex.IsMatch(_appFormModel.Data.Url))
-                    {
-                        await PopupService.ToastErrorAsync(T("The Url format is incorrect"));
-                        return;
-                    }
-                }
-                if (!string.IsNullOrEmpty(_appFormModel.Data.SwaggerUrl))
+                foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                 {
                     Regex regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0- 9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
-                    if (!regex.IsMatch(_appFormModel.Data.SwaggerUrl))
+                    if ((!string.IsNullOrEmpty(item.Url) && !regex.IsMatch(item.Url))
+                        || (!string.IsNullOrEmpty(item.SwaggerUrl) && !regex.IsMatch(item.SwaggerUrl)))
                     {
-                        await PopupService.ToastErrorAsync(T("The SwaggerUrl format is incorrect"));
+                        await PopupService.ToastErrorAsync(T("The Url format is incorrect"));
                         return;
                     }
                 }
@@ -115,7 +106,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
-                    if (!_appFormModel.Data.EnvironmentClusterIds.Any())
+                    if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
                     {
                         await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
                         return;
@@ -130,6 +121,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 AppModalValueChanged(false);
+            }
+        }
+
+        private void OnEnvironmentClusterSelectedItemUpdate(EnvironmentClusterDto environmentCluster)
+        {
+            if (_appFormModel.Data.EnvironmentClusterInfos.Any(e => e.EnvironmentClusterId == environmentCluster.Id))
+            {
+                _appFormModel.Data.EnvironmentClusterInfos.RemoveAll(e => e.EnvironmentClusterId == environmentCluster.Id);
+            }
+            else
+            {
+                _appFormModel.Data.EnvironmentClusterInfos.Add(new EnvironmentClusterInfo(environmentCluster.Id));
             }
         }
     }
