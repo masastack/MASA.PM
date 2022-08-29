@@ -38,14 +38,14 @@ foreach (var item in assembly)
 }
 #endregion
 
-//if (builder.Environment.IsDevelopment())
-//{
-//    builder.Services.AddDaprStarter(opt =>
-//    {
-//        opt.DaprHttpPort = 3600;
-//        opt.DaprGrpcPort = 3601;
-//    });
-//}
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDaprStarter(opt =>
+    {
+        opt.DaprHttpPort = 3600;
+        opt.DaprGrpcPort = 3601;
+    });
+}
 
 builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
 {
