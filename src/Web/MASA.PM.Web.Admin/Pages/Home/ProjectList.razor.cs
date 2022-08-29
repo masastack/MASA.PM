@@ -108,6 +108,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
             }
 
+            _projects.ForEach(async project =>
+            {
+                project.ModifierName = (await GetUserAsync(project.Modifier)).Name;
+            });
+
             _allTeams = await AuthClient.TeamService.GetAllAsync();
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());

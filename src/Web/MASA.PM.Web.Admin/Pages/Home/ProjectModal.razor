@@ -3,7 +3,7 @@
 <SSheetDialog @key="@($"project-{_projectFormModel.Visible}")" Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-            <div class="full-height">
+            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
                 <STextField Class="mt-6" Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
                 <MAutocomplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
@@ -60,7 +60,7 @@
                     <ItemContent>
                         <MListItemContent>
                             <div class="d-flex align-center">
-                                <div class="@($"{context.Item.EnvironmentColor}--text")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
+                                <div style="@($"color: {context.Item.EnvironmentColor} !important")">@context.Item.EnvironmentName</div>/<div>@context.Item.ClusterName</div>
                             </div>
                         </MListItemContent>
                     </ItemContent>
@@ -86,4 +86,4 @@
                 </div>
             </div>
         </MForm>
-    </SSheetDialog>
+</SSheetDialog>

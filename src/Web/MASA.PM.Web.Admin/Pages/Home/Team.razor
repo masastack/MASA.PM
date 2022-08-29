@@ -124,7 +124,7 @@
                                 var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
                                 foreach (var item in envCluster)
                                 {
-                                            <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                                    <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
                                 }
                             }
                         </div>
@@ -134,16 +134,16 @@
             </MNavigationDrawer>
 
             <div style="width: calc(100% - 300px); display:block;">
-                <div class="rounded-5 pa-6 pt-0 full-height" style="overflow: hidden;">
+                <div class="pt-0 full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-6">
-                        <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mr-6" Height="40" Flat Dense Solo HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
+                        <MTextField @bind-Value="_appName" OnKeyDown="SearchApp" Class="rounded-2 mx-6" Height="40" Flat Dense Solo HideDetails="@("auto")" Placeholder="@T("Please enter the app name and press enter to query")">
                             <PrependInnerContent>
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
                         <MButton Height="40" Class="rounded-lg" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add App")</MButton>
                     </div>
-                    <div class="full-height" style="margin:0 -24px; overflow:auto;">
+                    <div style="overflow:auto; height: calc(100vh - 256px);">
                         <MRow Class="mx-3">
                             @{
                                 foreach (var app in _projectApps)
@@ -152,9 +152,9 @@
                                     {
                                         app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
                                     }).Wait();
-                                            <MCol Lg="4" Md="6" Sm="12">
-                                                <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                            </MCol>
+                                    <MCol Lg="4" Md="6" Sm="12">
+                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                    </MCol>
                                 }
                             }
                         </MRow>

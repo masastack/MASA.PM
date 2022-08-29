@@ -20,7 +20,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _initLoading;
         private readonly List<string> _colors = new()
         {
-            "success", "warning", "error", "info", "orange lighten-1"
+            "#FF7D00", "#37A7FF", "#FF5252", "#37D7AD", "#FFC46C"
         };
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
