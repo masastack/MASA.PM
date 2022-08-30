@@ -7,6 +7,7 @@
                 <STextField Class="mt-6" Outlined Label="@T("App name")" @bind-Value="_appFormModel.Data.Name"></STextField>
                 <MSelect Value="_appFormModel.Data.Type"
                          ValueChanged="AppTypeValueChanged"
+                         ValueExpression="()=>_appFormModel.Data.Type"
                          Disabled="@(_appFormModel.HasValue)"
                          Class="mt-6"
                          Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
@@ -32,7 +33,8 @@
                     </MSelect>
                 }
                 <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
-                <MAutocomplete Class="mt-6" Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
+                <MAutocomplete Class="mt-6"
+                               Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
                                ItemText="r=>r.EnvironmentClusterName"
                                ItemValue="r=> r.Id"

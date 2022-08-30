@@ -49,6 +49,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (projectDetailDto == null)
             {
+                DisableEnvironmentClusterIds.Clear();
+
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
                 else

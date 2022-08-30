@@ -165,6 +165,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync()
         {
             _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
+            _projectApps.ForEach(async app =>
+            {
+                app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
+            });
             _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
 
             return _projectApps;

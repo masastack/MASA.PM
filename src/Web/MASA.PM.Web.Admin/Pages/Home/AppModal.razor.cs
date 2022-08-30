@@ -106,12 +106,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
-                    if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
-                    {
-                        await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
-                        return;
-                    }
-
                     await AppCaller.UpdateAsync(_appFormModel.Data);
                 }
 
@@ -121,6 +115,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 AppModalValueChanged(false);
+            }
+            else if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
+            {
+                await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
             }
         }
 

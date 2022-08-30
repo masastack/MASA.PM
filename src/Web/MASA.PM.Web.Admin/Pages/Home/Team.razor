@@ -42,7 +42,7 @@
             </div>
 
             <MNavigationDrawer Right Permanent Class="rounded-4" Width="300">
-                <div class="py-4 px-6" style="min-width:300px; display:flex; flex-direction:column; overflow: auto;">
+                <div class="py-4 px-6" style="min-width:300px; display:flex; flex-direction:column;">
                     <MAvatar>
                         <MImage Height="48" Width="48" Src="@_userTeam.Avatar"></MImage>
                     </MAvatar>
@@ -52,29 +52,31 @@
                     <MRow NoGutters Class="mt-1 text-body2">
                         @T("ProjectCount")：@_projectCount
                     </MRow>
-                    <MRow NoGutters Class="mt-4 text-body2">
-                        @_userTeam.Description
-                    </MRow>
-                    <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
-                    @foreach (var item in _userTeam.Admins)
-                    {
-                        <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
-                            <MAvatar Class="mr-3">
-                                <MImage Height="48" Width="48" Src="@item.Avatar"></MImage>
-                            </MAvatar>
-                            @item.Name
+                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
+                        <MRow NoGutters Class="mt-4 text-body2">
+                            @_userTeam.Description
                         </MRow>
-                    }
-                    <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
-                    @foreach (var item in _userTeam.Members)
-                    {
-                        <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
-                            <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
-                                <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
-                            </MAvatar>
-                            @item.Name
-                        </MRow>
-                    }
+                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
+                        @foreach (var item in _userTeam.Admins)
+                        {
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                                <MAvatar Class="mr-3">
+                                    <MImage Height="48" Width="48" Src="@item.Avatar"></MImage>
+                                </MAvatar>
+                                @item.Name
+                            </MRow>
+                        }
+                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
+                        @foreach (var item in _userTeam.Members)
+                        {
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                                <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
+                                    <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
+                                </MAvatar>
+                                @item.Name
+                            </MRow>
+                        }
+                    </div>
                 </div>
             </MNavigationDrawer>
         </div>
@@ -83,7 +85,7 @@
         <div class="d-flex full-height">
             <MNavigationDrawer Right Permanent Class="rounded-4" Width="300">
                 <div style="min-width:300px; padding:16px 24px; display:flex; flex-direction:column; align-items:center; overflow: auto;">
-                    <div style="width:100%;" class="text-body2">
+                    <div style="width:100%; overflow-x: hidden;" class="text-body2">
                         <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
                             <div class="emphasis--text h6 text-overflow" style="width: 85%;">@_projectDetail.Name</div>
                             <MButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId,true)"><MIcon Color="#485585" Size="20">mdi-pencil</MIcon></MButton>
@@ -91,42 +93,43 @@
                         <MRow NoGutters Class="mt-4 regular--text body2">
                             @T("AppCount")：@_appCount
                         </MRow>
-                        <MRow NoGutters Class="regular3--text btn">
+                        <MRow NoGutters Class="regular3--text btn text-overflow">
                             @_projectDetail.Identity
                         </MRow>
-                        <MRow NoGutters Class="mt-4 text-overflow2">
-                            @_projectDetail.Description
-                        </MRow>
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Creator")</MRow>
-                        <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
-                            <MAvatar Class="mr-3" Height="40" Width="40" MinHeight="40" MinWidth="40">
-                                <MImage Height="40" Width="40" Src="@_userInfo.Avatar"></MImage>
-                            </MAvatar>
-                            @_projectDetail.CreatorName
-                        </MRow>
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Participate team")</MRow>
-                        <MRow NoGutters Class="mt-4">
-                            <MTooltip Bottom>
-                                <ActivatorContent>
-                                    <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
-                                        <MImage Height="24" Width="24" Src="@_projectDetail.TeamAvatar"></MImage>
-                                    </MAvatar>
-                                </ActivatorContent>
-                                <ChildContent>
-                                    <span>@_projectDetail.TeamName</span>
-                                </ChildContent>
-                            </MTooltip>
-
-                        </MRow>
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
-                        <div style="display:flex; flex-direction:column;align-items:start">
-                            @{
-                                var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
-                                foreach (var item in envCluster)
-                                {
-                                    <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                        <div class="mt-4" style="overflow-y: auto; height: calc(100vh - 370px);">
+                            <MRow NoGutters Class="text-overflow2">
+                                @_projectDetail.Description
+                            </MRow>
+                            <MRow NoGutters Class="regular3--text btn mt-6">@T("Creator")</MRow>
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                                <MAvatar Class="mr-3" Height="40" Width="40" MinHeight="40" MinWidth="40">
+                                    <MImage Height="40" Width="40" Src="@_userInfo.Avatar"></MImage>
+                                </MAvatar>
+                                @_projectDetail.CreatorName
+                            </MRow>
+                            <MRow NoGutters Class="regular3--text btn mt-6">@T("Participate team")</MRow>
+                            <MRow NoGutters Class="mt-4">
+                                <MTooltip Bottom>
+                                    <ActivatorContent>
+                                        <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
+                                            <MImage Height="24" Width="24" Src="@_projectDetail.TeamAvatar"></MImage>
+                                        </MAvatar>
+                                    </ActivatorContent>
+                                    <ChildContent>
+                                        <span>@_projectDetail.TeamName</span>
+                                    </ChildContent>
+                                </MTooltip>
+                            </MRow>
+                            <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
+                            <div style="display:flex; flex-direction:column;align-items:start">
+                                @{
+                                    var envCluster = _allEnvClusters.Where(envCluster => _projectDetail.EnvironmentClusterIds.Contains(envCluster.Id));
+                                    foreach (var item in envCluster)
+                                    {
+                                                <EnvClusterChip Class="mt-4" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                                    }
                                 }
-                            }
+                            </div>
                         </div>
                     </div>
                     <div style="width:100%; position: fixed; bottom:24px; right: 24px;" class="regular3--text body2 d-flex justify-end">@_projectDetail.CreationTime.ToString(T("$DateTimeFormat"))</div>
@@ -147,11 +150,7 @@
                         <MRow Class="mx-3">
                             @{
                                 foreach (var app in _projectApps)
-                                {
-                                    Task.Run(async () =>
-                                    {
-                                        app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
-                                    }).Wait();
+                                {                                    
                                     <MCol Lg="4" Md="6" Sm="12">
                                         <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                     </MCol>
