@@ -147,8 +147,8 @@
 <SSheetDialog @key="@($"cluster-{_clusterFormModel.Visible}")" ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-                <div class="full-height" style=" overflow-x: hidden; overflow-y: auto;">
-                <STextField Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
+            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
+                <STextField Class="mt-6" Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
                 <MAutocomplete Class="mt-6" @bind-Value="_clusterFormModel.Data.EnvironmentIds"
                                Items="_allEnvs"
                                ItemText="r=>r.Name"

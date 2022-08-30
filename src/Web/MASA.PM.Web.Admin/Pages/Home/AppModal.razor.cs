@@ -39,7 +39,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (updateAppDto == null)
             {
-                _appFormModel.Data.Type = AppTypes.UI;
+                //_appFormModel.Data.Type = AppTypes.UI;
                 _appFormModel.Data.EnvironmentClusterInfos = _projectEnvClusters.Select(p => new EnvironmentClusterInfo(p.Id)).ToList();
                 _appFormModel.Show();
             }
@@ -106,12 +106,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
                 else
                 {
-                    if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
-                    {
-                        await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
-                        return;
-                    }
-
                     await AppCaller.UpdateAsync(_appFormModel.Data);
                 }
 
@@ -121,6 +115,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 }
 
                 AppModalValueChanged(false);
+            }
+            else if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
+            {
+                await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
             }
         }
 

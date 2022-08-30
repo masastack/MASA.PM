@@ -15,7 +15,7 @@ namespace MASA.PM.Contracts.Admin.Dto
             set => _name = value?.Trim() ?? "";
         }
 
-        [MinCount(1)]
+        [MinCount(1, ErrorMessage = "Environment cluster is required")]
         public List<EnvironmentClusterInfo> EnvironmentClusterInfos { get; set; } = new();
 
         public int ProjectId { get; set; }
