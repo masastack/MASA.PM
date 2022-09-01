@@ -719,11 +719,13 @@ input::-webkit-input-placeholder {
 }
 
 .text-overflow2 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical
+    word-break: break-all;
+    overflow: hidden;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
 
 .m-menu__content {
@@ -740,6 +742,10 @@ input::-webkit-input-placeholder {
 
 .m-btn--disabled span.emphasis--text {
     color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.project-list .m-expansion-panel:last-child {
+    margin-bottom: 0 !important;
 }
 
 .m-list-item--disabled {
