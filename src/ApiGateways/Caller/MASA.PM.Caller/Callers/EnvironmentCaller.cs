@@ -14,36 +14,36 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<EnvironmentDetailDto> GetAsync(int Id)
         {
-            var result = await CallerProvider.GetAsync<EnvironmentDetailDto>($"{_prefix}/{Id}");
+            var result = await Caller.GetAsync<EnvironmentDetailDto>($"{_prefix}/{Id}");
 
             return result ?? new();
         }
 
         public async Task InitAsync(InitDto model)
         {
-            await CallerProvider.PostAsync($"{_prefix}/init", model);
+            await Caller.PostAsync($"{_prefix}/init", model);
         }
 
         public async Task<List<EnvironmentDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<EnvironmentDto>>($"{_prefix}");
+            var result = await Caller.GetAsync<List<EnvironmentDto>>($"{_prefix}");
 
             return result ?? new();
         }
 
         public async Task<EnvironmentDto> AddAsync(AddEnvironmentWhitClustersDto model)
         {
-            return await CallerProvider.PostAsync<AddEnvironmentWhitClustersDto, EnvironmentDto>(_prefix, model) ?? new();
+            return await Caller.PostAsync<AddEnvironmentWhitClustersDto, EnvironmentDto>(_prefix, model) ?? new();
         }
 
         public async Task UpdateAsync(UpdateEnvironmentDto model)
         {
-            await CallerProvider.PutAsync(_prefix, model);
+            await Caller.PutAsync(_prefix, model);
         }
 
         public async Task DeleteAsync(int Id)
         {
-            await CallerProvider.DeleteAsync(_prefix, Id);
+            await Caller.DeleteAsync(_prefix, Id);
         }
     }
 }

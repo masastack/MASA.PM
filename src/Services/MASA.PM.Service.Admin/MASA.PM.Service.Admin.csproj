@@ -36,7 +36,7 @@
 		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="0.6.0-preview.9" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0-preview.9" />
-		<PackageReference Include="MASA.Contrib.ReadWriteSpliting.CQRS" Version="0.6.0-preview.3" />
+		<PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="0.6.0-preview.9" />
 		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.6.0-preview.9" />
 		<PackageReference Include="Masa.Utils.Caching.DistributedMemory" Version="0.6.0-preview.9" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.6.0-preview.9" />
