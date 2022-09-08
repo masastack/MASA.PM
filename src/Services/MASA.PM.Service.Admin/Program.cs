@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -47,7 +47,7 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.AddMasaIdentityModel(IdentityType.MultiEnvironment, options =>
+builder.Services.AddMasaIdentityModel(options =>
 {
     options.Environment = "environment";
     options.UserName = "name";
@@ -119,41 +119,3 @@ app.UseEndpoints(endpoints =>
 app.UseHttpsRedirection();
 
 app.Run();
-
-DaprClient GetDaprClient(IServiceCollection services)
-{
-    var daprClient = services.BuildServiceProvider().GetRequiredService<DaprClient>();
-
-    return daprClient;
-}
-
-async Task AddProductionMasaConfigurationAsync(WebApplicationBuilder builder)
-{
-    var daprClient = GetDaprClient(builder.Services);
-    var config = await daprClient.GetSecretAsync("local-secret-store", "Config");
-    var redisHost = config["RedisHost"];
-    var redisPassword = config["RedisPassword"];
-    var redisDB = config["RedisDatabase"];
-    var dccAddress = config["DccManageServiceAddress"];
-    var dccOptions = new DccConfigurationOptions
-    {
-        RedisOptions = new Masa.Utils.Caching.Redis.Models.RedisConfigurationOptions
-        {
-            Servers = new List<Masa.Utils.Caching.Redis.Models.RedisServerOptions>
-            {
-                new(redisHost)
-            },
-            DefaultDatabase = int.Parse(redisDB),
-            Password = redisPassword
-        },
-        ManageServiceAddress = dccAddress
-    };
-    builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc(() => dccOptions, option =>
-    {
-        option.Environment = builder.Configuration[nameof(DccSectionOptions.Environment)];
-        option.Cluster = builder.Configuration[nameof(DccSectionOptions.Cluster)];
-        option.AppId = builder.Configuration[nameof(DccSectionOptions.AppId)];
-        option.ConfigObjects = builder.Configuration.GetSection(nameof(DccSectionOptions.ConfigObjects)).Get<List<string>>();
-        option.Secret = builder.Configuration[nameof(DccSectionOptions.Secret)];
-    }, null));
-}
