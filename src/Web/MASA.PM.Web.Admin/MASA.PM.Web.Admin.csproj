@@ -18,8 +18,8 @@
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="MASA.Blazor" Version="0.6.0-preview.4" />
     <PackageReference Include="Masa.Stack.Components" Version="0.0.117" />
-    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-preview.7" />
-    <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-preview.3" />
+    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-preview.9" />
+    <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-preview.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 

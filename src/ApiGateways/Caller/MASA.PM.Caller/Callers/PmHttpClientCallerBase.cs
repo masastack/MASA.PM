@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Microsoft.Extensions.DependencyInjection;
-
 namespace MASA.PM.Caller.Callers
 {
     public class PmHttpClientCallerBase : HttpClientCallerBase
@@ -16,14 +14,7 @@ namespace MASA.PM.Caller.Callers
 
         protected override IHttpClientBuilder UseHttpClient()
         {
-            return base.CallerOptions.UseHttpClient(delegate (MasaHttpClientBuilder opt)
-            {
-                opt.Name = Name;
-                opt.Configure = (HttpClient client) =>
-                {
-                    client.BaseAddress = new Uri(BaseAddress);
-                };
-            }).AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         }
     }
 }

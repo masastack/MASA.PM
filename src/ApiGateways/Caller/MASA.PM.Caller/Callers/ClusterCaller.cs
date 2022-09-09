@@ -14,45 +14,45 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<List<ClusterDto>> GetListByEnvIdAsync(int envId)
         {
-            var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/{envId}/cluster");
+            var result = await Caller.GetAsync<List<ClusterDto>>($"/api/v1/{envId}/cluster");
 
             return result ?? new();
         }
 
         public async Task<List<ClusterDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<ClusterDto>>($"/api/v1/cluster");
+            var result = await Caller.GetAsync<List<ClusterDto>>($"/api/v1/cluster");
 
             return result ?? new();
         }
 
         public async Task<ClusterDetailDto> GetAsync(int Id)
         {
-            var result = await CallerProvider.GetAsync<ClusterDetailDto>($"{_prefix}/{Id}");
+            var result = await Caller.GetAsync<ClusterDetailDto>($"{_prefix}/{Id}");
 
             return result ?? new();
         }
 
         public async Task<List<EnvironmentClusterDto>> GetEnvironmentClusters()
         {
-            var result = await CallerProvider.GetAsync<List<EnvironmentClusterDto>>($"/api/v1/envClusters");
+            var result = await Caller.GetAsync<List<EnvironmentClusterDto>>($"/api/v1/envClusters");
 
             return result ?? new();
         }
 
         public async Task<ClusterDto> AddAsync(AddClusterWhitEnvironmentsDto model)
         {
-            return await CallerProvider.PostAsync<AddClusterWhitEnvironmentsDto, ClusterDto>(_prefix, model) ?? new();
+            return await Caller.PostAsync<AddClusterWhitEnvironmentsDto, ClusterDto>(_prefix, model) ?? new();
         }
 
         public async Task UpdateAsync(UpdateClusterDto model)
         {
-            await CallerProvider.PutAsync(_prefix, model);
+            await Caller.PutAsync(_prefix, model);
         }
 
         public async Task RemoveAsync(int id)
         {
-            await CallerProvider.DeleteAsync($"{_prefix}/{id}", null);
+            await Caller.DeleteAsync($"{_prefix}/{id}", null);
         }
     }
 }

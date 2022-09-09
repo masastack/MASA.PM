@@ -14,31 +14,31 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<List<AppDto>> GetListAsync()
         {
-            var result = await CallerProvider.GetAsync<List<AppDto>>("/api/v1/app");
+            var result = await Caller.GetAsync<List<AppDto>>("/api/v1/app");
 
             return result ?? new();
         }
 
         public async Task<List<AppDto>> GetListByProjectIdAsync(List<int> projectIds)
         {
-            var result = await CallerProvider.PostAsync<List<int>, List<AppDto>>($"/api/v1/projects/app", projectIds);
+            var result = await Caller.PostAsync<List<int>, List<AppDto>>($"/api/v1/projects/app", projectIds);
 
             return result ?? new();
         }
 
         public async Task AddAsync(AddAppDto model)
         {
-            await CallerProvider.PostAsync(_prefix, model);
+            await Caller.PostAsync(_prefix, model);
         }
 
         public async Task UpdateAsync(UpdateAppDto model)
         {
-            await CallerProvider.PutAsync(_prefix, model);
+            await Caller.PutAsync(_prefix, model);
         }
 
         public async Task RemoveAsync(int id)
         {
-            await CallerProvider.DeleteAsync($"{_prefix}/{id}", null);
+            await Caller.DeleteAsync($"{_prefix}/{id}", null);
         }
     }
 }

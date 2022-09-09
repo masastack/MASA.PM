@@ -14,45 +14,45 @@ namespace MASA.PM.Caller.Callers
 
         public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)
         {
-            var result = await CallerProvider.PostAsync<List<ProjectDto>>($"{_prefix}/teamProjects", teamIds);
+            var result = await Caller.PostAsync<List<ProjectDto>>($"{_prefix}/teamProjects", teamIds);
 
             return result ?? new();
         }
 
         public async Task<List<ProjectDto>> GetListByEnvClusterIdAsync(int environmentClusterId)
         {
-            var result = await CallerProvider.GetAsync<List<ProjectDto>>($"/api/v1/{environmentClusterId}/project");
+            var result = await Caller.GetAsync<List<ProjectDto>>($"/api/v1/{environmentClusterId}/project");
 
             return result ?? new();
         }
 
         public async Task<ProjectDetailDto> GetAsync(int Id)
         {
-            var result = await CallerProvider.GetAsync<ProjectDetailDto>($"{_prefix}/{Id}");
+            var result = await Caller.GetAsync<ProjectDetailDto>($"{_prefix}/{Id}");
 
             return result ?? new();
         }
 
         public async Task<List<ProjectTypesDto>> GetProjectTypesAsync()
         {
-            var result = await CallerProvider.GetAsync<List<ProjectTypesDto>>($"{_prefix}/projectType");
+            var result = await Caller.GetAsync<List<ProjectTypesDto>>($"{_prefix}/projectType");
 
             return result ?? new();
         }
 
         public async Task AddAsync(AddProjectDto model)
         {
-            await CallerProvider.PostAsync(_prefix, model);
+            await Caller.PostAsync(_prefix, model);
         }
 
         public async Task UpdateAsync(UpdateProjectDto model)
         {
-            await CallerProvider.PutAsync(_prefix, model);
+            await Caller.PutAsync(_prefix, model);
         }
 
         public async Task DeleteAsync(int Id)
         {
-            await CallerProvider.DeleteAsync(_prefix, Id);
+            await Caller.DeleteAsync(_prefix, Id);
         }
     }
 }
