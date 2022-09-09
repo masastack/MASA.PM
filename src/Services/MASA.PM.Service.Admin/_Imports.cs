@@ -5,6 +5,7 @@ global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Reflection;
 global using Mapster;
+global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities.Full;
