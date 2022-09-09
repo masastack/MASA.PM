@@ -95,7 +95,10 @@ var app = builder.Services
         options.UseDapr()
         .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connectionString).UseFilter())
         .UseEventLog<PmDbContext>()
-        .UseEventBus();
+        .UseEventBus(eventBusBuilder =>
+        {
+            eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
+        });
     })
     .AddServices(builder);
 
