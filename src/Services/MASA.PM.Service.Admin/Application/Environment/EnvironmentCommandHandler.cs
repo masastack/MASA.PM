@@ -31,11 +31,11 @@ namespace MASA.PM.Service.Admin.Application.Environment
                 Description = e.Description,
                 Color = e.Color
             });
-            var envIds = new List<int>();
+            var envEntitis = new List<Infrastructure.Entities.Environment>();
             foreach (var env in envs)
             {
                 var newEnv = await _environmentRepository.AddAsync(env);
-                envIds.Add(newEnv.Id);
+                envEntitis.Add(newEnv);
             }
 
             //cluster
@@ -44,23 +44,23 @@ namespace MASA.PM.Service.Admin.Application.Environment
                 Name = command.InitModel.ClusterName,
                 Description = command.InitModel.ClusterDescription
             });
-            var envClusters = envIds.Select(envId => new EnvironmentCluster
+            var envClusters = envEntitis.Select(env => new EnvironmentCluster
             {
-                EnvironmentId = envId,
+                EnvironmentId = env.Id,
                 ClusterId = cluster.Id,
             });
-            var envClusetrIds = new List<int>();
+            var envClusetr = new List<EnvironmentCluster>();
             foreach (var envCluster in envClusters)
             {
                 var newEnvCluster = await _environmentRepository.AddEnvironmentClusterAsync(envCluster);
-                envClusetrIds.Add(newEnvCluster.Id);
+                envClusetr.Add(newEnvCluster);
             }
 
             //project
             var projects = SeedData.ProjectApps;
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
-            var appGroups = new List<(int ProjectId, int AppId)>();
+            var appGroups = new List<(int ProjectId, int AppId, string Description)>();
             var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
             foreach (var project in projects)
             {
@@ -70,25 +70,27 @@ namespace MASA.PM.Service.Admin.Application.Environment
                 foreach (var app in project.Apps)
                 {
                     var newApp = await _appRepository.AddAsync(app.Adapt<Infrastructure.Entities.App>());
-                    appGroups.Add((newProject.Id, newApp.Id));
+                    appGroups.Add((newProject.Id, newApp.Id, newApp.Description));
                 }
 
-                foreach (var envClusterId in envClusetrIds)
+                foreach (var envCluster in envClusetr)
                 {
                     var newEnvironmentClusterProject = await _projectRepository.AddEnvironmentClusterProjectAsync(new EnvironmentClusterProject
                     {
-                        EnvironmentClusterId = envClusterId,
+                        EnvironmentClusterId = envCluster.Id,
                         ProjectId = newProject.Id
                     });
 
-                    foreach (var appId in appGroups)
+                    foreach (var app in appGroups)
                     {
-                        if (appId.ProjectId == newProject.Id)
+                        if (app.ProjectId == newProject.Id)
                         {
+                            var envName = envEntitis.Find(env => env.Id == envCluster.EnvironmentId)?.Name.ToLower() ?? "develop";
                             envClusterProjectApps.Add(new EnvironmentClusterProjectApp
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                                AppId = appId.AppId,
+                                AppId = app.AppId,
+                                AppURL = $"https://auth-{envName}.masastack.com"
                             });
                         }
                     }

@@ -713,9 +713,13 @@ input::-webkit-input-placeholder {
 }
 
 .text-overflow {
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    word-break: break-all;
     overflow: hidden;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
 
 .text-overflow2 {
