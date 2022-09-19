@@ -60,7 +60,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             var projects = SeedData.ProjectApps;
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
-            var appGroups = new List<(int ProjectId, int AppId, string Description)>();
+            var appGroups = new List<(int ProjectId, string ProjectDescription, int AppId, string Description)>();
             var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
             foreach (var project in projects)
             {
@@ -70,7 +70,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
                 foreach (var app in project.Apps)
                 {
                     var newApp = await _appRepository.AddAsync(app.Adapt<Infrastructure.Entities.App>());
-                    appGroups.Add((newProject.Id, newApp.Id, newApp.Description));
+                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Description));
                 }
 
                 foreach (var envCluster in envClusetr)
@@ -90,7 +90,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                                 AppId = app.AppId,
-                                AppURL = $"https://auth-{envName}.masastack.com"
+                                AppURL = $"https://{app.ProjectDescription}-{envName}.masastack.com"
                             });
                         }
                     }

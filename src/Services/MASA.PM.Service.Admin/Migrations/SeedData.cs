@@ -13,22 +13,21 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-auth",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "auth",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Auth.Web.Admin",
                         Identity = "masa-auth-web-admin",
-                        Type = AppTypes.UI,
-                        Description = "auth"
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Auth.Service.Admin",
                         Identity = "masa-auth-service-admin",
                         Type = AppTypes.Service,
-                        ServiceType = ServiceTypes.WebAPI,
-                        Description = "auth"
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
@@ -38,6 +37,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-pm",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "pm",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
@@ -61,6 +61,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-dcc",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "dcc",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
@@ -84,6 +85,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-mc",
                 LabelCode="Other",
                 TeamId = Guid.Empty,
+                Description = "mc",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
@@ -107,6 +109,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-scheduler",
                 LabelCode="Other",
                 TeamId = Guid.Empty,
+                Description = "scheduler",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
