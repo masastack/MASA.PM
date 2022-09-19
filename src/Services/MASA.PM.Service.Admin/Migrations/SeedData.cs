@@ -13,20 +13,21 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-auth",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "auth",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Auth.Web.Admin",
                         Identity = "masa-auth-web-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.UI
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Auth.Service.Admin",
                         Identity = "masa-auth-service-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
@@ -36,20 +37,21 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-pm",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "pm",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Pm.Web.Admin",
                         Identity = "masa-pm-web-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.UI
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Pm.Service.Admin",
                         Identity = "masa-pm-service-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
@@ -59,20 +61,21 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-dcc",
                 LabelCode="BasicAbility",
                 TeamId = Guid.Empty,
+                Description = "dcc",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Dcc.Web.Admin",
                         Identity = "masa-dcc-web-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.UI
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Dcc.Service.Admin",
                         Identity = "masa-dcc-service-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
@@ -82,20 +85,21 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-mc",
                 LabelCode="Other",
                 TeamId = Guid.Empty,
+                Description = "mc",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Mc.Web.Admin",
                         Identity = "masa-mc-web-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.UI
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Mc.Service.Admin",
                         Identity = "masa-mc-service-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
@@ -105,27 +109,28 @@ namespace MASA.PM.Service.Admin.Migrations
                 Identity="masa-scheduler",
                 LabelCode="Other",
                 TeamId = Guid.Empty,
+                Description = "scheduler",
                 Apps = new List<AddAppDto>
                 {
                     new AddAppDto
                     {
                         Name = "Masa.Scheduler.Web.Admin",
                         Identity = "masa-scheduler-web-admin",
-                        Type = Contracts.Admin.Enum.AppTypes.UI
+                        Type = AppTypes.UI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Scheduler.Service.Server",
                         Identity = "masa-scheduler-service-server",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     },
                     new AddAppDto
                     {
                         Name = "Masa.Scheduler.Service.Worker",
                         Identity = "masa-scheduler-service-worker",
-                        Type = Contracts.Admin.Enum.AppTypes.Service,
-                        ServiceType = Contracts.Admin.Enum.ServiceTypes.WebAPI
+                        Type = AppTypes.Service,
+                        ServiceType = ServiceTypes.WebAPI
                     }
                 }
             },
