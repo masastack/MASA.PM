@@ -2,7 +2,7 @@
   "$DefaultLanguage": "true",
   "$Text": "中文简体",
   "$DateTimeFormat": "yyyy-MM-dd HH:mm:ss",
-  "Landscape": "全景",
+  "Overview": "全景",
   "Team": "团队",
   "Server error,please contact administrator": "服务异常，请联系管理员",
   "Cancel": "取消",

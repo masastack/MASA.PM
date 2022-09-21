@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
-    public partial class Landscape
+    public partial class Overview
     {
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
