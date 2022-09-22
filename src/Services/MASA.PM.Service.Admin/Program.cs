@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
