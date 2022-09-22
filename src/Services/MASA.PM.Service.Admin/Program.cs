@@ -1,15 +1,22 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
-builder.Services.AddMasaIdentityModel(options =>
+builder.Services.AddMasaIdentity(options =>
 {
-    options.Environment = "environment";
     options.UserName = "name";
     options.UserId = "sub";
+    options.Role = IdentityClaimConsts.ROLES;
+    options.Environment = IdentityClaimConsts.ENVIRONMENT;
+    options.Mapping(nameof(MasaUser.CurrentTeamId), IdentityClaimConsts.CURRENT_TEAM);
+    options.Mapping(nameof(MasaUser.StaffId), IdentityClaimConsts.STAFF);
+    options.Mapping(nameof(MasaUser.Account), IdentityClaimConsts.ACCOUNT);
 });
 
 builder.Services.AddDaprClient();
@@ -47,7 +54,6 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.AddMasaIdentity();
 builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetPublic());
 
 builder.Services.AddDccClient();
