@@ -5,7 +5,7 @@ namespace MASA.PM.Service.Admin.Services
 {
     public class OpenApiService : ServiceBase
     {
-        public OpenApiService(IServiceCollection services) : base(services)
+        public OpenApiService()
         {
             App.MapGet("/open-api/project/{identity}", GetProjectByIdentityAsync);
             App.MapGet("/open-api/app/{identity}", GetAppByIdentityAsync);

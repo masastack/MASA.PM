@@ -114,7 +114,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task SubmitProjectAsync(EditContext context)
+        private async Task SubmitProjectAsync(FormContext context)
         {
             if (context.Validate())
             {

@@ -5,7 +5,7 @@ namespace MASA.PM.Service.Admin.Services
 {
     public class AppService : ServiceBase
     {
-        public AppService(IServiceCollection services) : base(services)
+        public AppService()
         {
             App.MapPost("/api/v1/app", AddAsync);
             App.MapGet("/api/v1/app", GetListAsync);

@@ -7,7 +7,7 @@ namespace MASA.PM.Service.Admin.Services
 {
     public class ProjectService : ServiceBase
     {
-        public ProjectService(IServiceCollection services) : base(services)
+        public ProjectService()
         {
             App.MapPost("/api/v1/project", AddAsync);
             App.MapGet("/api/v1/projects", GetListAsync);
@@ -33,7 +33,7 @@ namespace MASA.PM.Service.Admin.Services
             return query.Result;
         }
 
-        public async Task<List<ProjectDto>> GetListByTeamIds(IEventBus eventBus, List<Guid> teamIds)
+        public async Task<List<ProjectDto>> GetListByTeamIds(IEventBus eventBus, [FromBody] List<Guid> teamIds)
         {
             var query = new ProjectsQuery(null, teamIds);
             await eventBus.PublishAsync(query);

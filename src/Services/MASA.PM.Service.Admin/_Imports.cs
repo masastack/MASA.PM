@@ -12,6 +12,8 @@ global using Masa.BuildingBlocks.Ddd.Domain.Entities.Full;
 global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.BuildingBlocks.ReadWriteSplitting.Cqrs.Commands;
 global using Masa.BuildingBlocks.ReadWriteSplitting.Cqrs.Queries;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Consts;
 global using Masa.BuildingBlocks.StackSdks.Dcc;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 global using Masa.Contrib.Data.Contracts.EFCore;
