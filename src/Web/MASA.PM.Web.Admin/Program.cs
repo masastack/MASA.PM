@@ -15,9 +15,9 @@ builder.WebHost.UseKestrel(option =>
     options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN"));
 });
 
-builder.Services.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"], builder.Configuration["McServiceBaseAddress"]);
+builder.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
 
-builder.Services.AddMasaOpenIdConnect(builder.Configuration);
+builder.Services.AddMasaOpenIdConnect(builder.GetMasaConfiguration().Local);
 
 builder.Services.AddHttpContextAccessor();
 

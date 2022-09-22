@@ -113,7 +113,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _allClusters = await ClusterCaller.GetListAsync();
         }
 
-        private async Task SubmitEnvAsync(EditContext context)
+        private async Task SubmitEnvAsync(FormContext context)
         {
             if (context.Validate())
             {
@@ -207,7 +207,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _allEnvs = await EnvironmentCaller.GetListAsync();
         }
 
-        private async Task SubmitClusterAsync(EditContext context)
+        private async Task SubmitClusterAsync(FormContext context)
         {
             if (context.Validate())
             {

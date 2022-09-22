@@ -47,13 +47,8 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.AddMasaIdentityModel(options =>
-{
-    options.Environment = "environment";
-    options.UserName = "name";
-    options.UserId = "sub";
-});
-builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetDefault()["Appsettings:AuthServiceBaseAddress"]);
+builder.Services.AddMasaIdentity();
+builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetPublic());
 
 builder.Services.AddDccClient();
 

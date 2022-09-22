@@ -46,7 +46,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async void NextStep(EditContext context)
+        private async void NextStep(FormContext context)
         {
             if (context.Validate())
             {
@@ -63,7 +63,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         }
 
-        private async Task InitAsync(EditContext context)
+        private async Task InitAsync(FormContext context)
         {
             if (context.Validate())
             {

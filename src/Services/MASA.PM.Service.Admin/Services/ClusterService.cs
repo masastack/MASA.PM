@@ -8,7 +8,7 @@ namespace MASA.PM.Service.Admin.Services
 {
     public class ClusterService : ServiceBase
     {
-        public ClusterService(IServiceCollection services) : base(services)
+        public ClusterService()
         {
             App.MapPost("/api/v1/cluster", AddAsync);
             App.MapGet("/api/v1/cluster", GetList);
