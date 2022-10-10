@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Stack.Components.Configs;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
     {
-        [Parameter]
-        public string TeamId { get; set; } = default!;
-
         [Inject]
         public IPopupService PopupService { get; set; } = default!;
 
@@ -25,6 +24,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
+
+        [Inject]
+        public GlobalConfig GlobalConfig { get; set; } = default!;
 
         private int _projectCount;
         private StringNumber _curTab = 0;
@@ -45,19 +47,35 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
 
-        protected override async Task OnParametersSetAsync()
+        protected override Task OnInitializedAsync()
         {
-            if (TeamId != _userTeam.Id.ToString())
+            GlobalConfig.OnCurrentTeamChanged += HandleCurrentTeamChanged;
+            return base.OnInitializedAsync();
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
             {
-                _curTab = 0;
-                _teamDetailDisabled = true;
-                await InitDataAsync();
+                HandleCurrentTeamChanged(GlobalConfig.CurrentTeamId);
             }
         }
 
-        private async Task InitDataAsync()
+        private async void HandleCurrentTeamChanged(Guid teamId)
         {
-            _userTeam = await AuthClient.TeamService.GetDetailAsync(Guid.Parse(TeamId)) ?? new();
+            if (teamId != _userTeam.Id)
+            {
+                await TabItemChangedAsync(0);
+                _teamDetailDisabled = true;
+                await InitDataAsync(teamId);
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+
+        private async Task InitDataAsync(Guid teamId)
+        {
+            _userTeam = await AuthClient.TeamService.GetDetailAsync(teamId) ?? new();
             var envs = await EnvironmentCaller.GetListAsync();
             if (envs.Count <= 0)
             {
@@ -213,6 +231,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _appModal.ProjectId = projectId;
                 await _appModal.InitDataAsync(model);
             }
+        }
+
+        public void Dispose()
+        {
+            GlobalConfig.OnCurrentTeamChanged -= HandleCurrentTeamChanged;
         }
     }
 }
