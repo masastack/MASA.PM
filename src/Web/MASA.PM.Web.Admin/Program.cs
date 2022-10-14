@@ -17,7 +17,7 @@ builder.WebHost.UseKestrel(option =>
 
 builder.AddMasaStackComponentsForServer("wwwroot/i18n", builder.Configuration["AuthServiceBaseAddress"]);
 
-builder.Services.AddMasaOpenIdConnect(builder.GetMasaConfiguration().Local);
+builder.Services.AddMasaOpenIdConnect(builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic());
 
 builder.Services.AddHttpContextAccessor();
 

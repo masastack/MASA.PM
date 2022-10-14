@@ -3,7 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
+builder.Services.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Authority = builder.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("Appsettings:IdentityServerUrl");
+    options.Authority = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("Appsettings:IdentityServerUrl");
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
@@ -51,7 +51,7 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.AddAuthClient(builder.GetMasaConfiguration().ConfigurationApi.GetPublic());
+builder.Services.AddAuthClient(builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic());
 
 builder.Services.AddDccClient();
 
@@ -87,7 +87,7 @@ var app = builder.Services
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddIntegrationEventBus<IntegrationEventLogService>(options =>
     {
-        var connectionString = builder.GetMasaConfiguration().ConfigurationApi.GetDefault()
+        var connectionString = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault()
         ["Appsettings:ConnectionStrings:DefaultConnection"];
 
         options.UseDapr()
