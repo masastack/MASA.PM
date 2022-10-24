@@ -95,22 +95,25 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _projectDetail.Id });
             if (apps.Any())
             {
-                await PopupService.ToastErrorAsync(T("There are still applications under the current project, which cannot be deleted"));
+                await PopupService.AlertAsync(T("There are still applications under the current project, which cannot be deleted"), AlertTypes.Error);
             }
             else
             {
                 var deleteProject = Projects.First(project => project.Id == _projectDetail.Id);
-                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteProject.Name}]项目吗？", async (c) =>
-                {
-                    await ProjectCaller.DeleteAsync(_projectDetail.Id);
-
-                    if (OnSubmitProjectAfter.HasDelegate)
+                await PopupService.ConfirmAsync(T("Delete project"),
+                    T("Are you sure you want to delete project \"{ProjectName}\"?").Replace("{ProjectName}", deleteProject.Name),
+                    AlertTypes.Error,
+                    async (c) =>
                     {
-                        await OnSubmitProjectAfter.InvokeAsync();
-                    }
+                        await ProjectCaller.DeleteAsync(_projectDetail.Id);
 
-                    _projectFormModel.Hide();
-                });
+                        if (OnSubmitProjectAfter.HasDelegate)
+                        {
+                            await OnSubmitProjectAfter.InvokeAsync();
+                        }
+
+                        _projectFormModel.Hide();
+                    });
             }
         }
 

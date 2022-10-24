@@ -12,6 +12,7 @@ global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.Service.Caller;
 global using Masa.Stack.Components;
+global using Masa.Stack.Components.Configs;
 global using MASA.PM.Caller.Callers;
 global using MASA.PM.Contracts.Admin.Dto;
 global using MASA.PM.Contracts.Admin.Enum;

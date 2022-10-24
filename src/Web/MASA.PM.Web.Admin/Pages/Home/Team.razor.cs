@@ -1,15 +1,10 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Stack.Components.Configs;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
     {
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
         [Inject]
         public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
 

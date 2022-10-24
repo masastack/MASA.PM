@@ -601,15 +601,6 @@ input::-webkit-input-placeholder {
     min-height: 0px !important;
 }
 
-.m-input__icon.m-input__icon--append {
-    height: 48px !important;
-}
-
-.m-input__append-inner {
-    margin-top: 0 !important;
-}
-
-
 /*Pm*/
 .m-dialog--persistent {
     border-radius: 20px !important;
