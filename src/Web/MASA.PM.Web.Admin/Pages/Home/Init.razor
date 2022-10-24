@@ -1,5 +1,6 @@
 ﻿@page "/init"
 @layout EmptyLayout
+@inherits PmCompontentBase
 
 <div class="header" style="margin:46px 0 0 53px;">
     <img class="hover-pointer" src="/img/mainLayout/logo-en.svg" />
@@ -27,7 +28,7 @@
                             {
                                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
                                     <MCol Cols="9">
-                                        <STextField TextColor="@item.Color" Class="pr-6 mb-4" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></STextField>
+                                        <STextField TextColor="@item.Color" Class="pr-6 mb-6" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></STextField>
                                     </MCol>
                                     <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
                                         <SColorGroup @bind-Value="@item.Color" Colors="_colors"></SColorGroup>

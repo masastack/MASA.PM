@@ -54,7 +54,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     if (_customEnv.Environments.Count(e => e.Name.Equals(item.Name)) > 1)
                     {
-                        await PopupService.ToastErrorAsync("环境名称不允许重复");
+                        await PopupService.AlertAsync(T("The environment name cannot be duplicate"), AlertTypes.Error);
                         return;
                     }
                 }

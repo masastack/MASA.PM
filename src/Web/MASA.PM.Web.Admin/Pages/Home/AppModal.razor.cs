@@ -95,7 +95,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     if ((!string.IsNullOrEmpty(item.Url) && !regex.IsMatch(item.Url))
                         || (!string.IsNullOrEmpty(item.SwaggerUrl) && !regex.IsMatch(item.SwaggerUrl)))
                     {
-                        await PopupService.ToastErrorAsync(T("The Url format is incorrect"));
+                        await PopupService.AlertAsync(T("The Url format is incorrect"), AlertTypes.Error);
                         return;
                     }
                 }
@@ -118,7 +118,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
             {
-                await PopupService.ToastErrorAsync(T("Environment/Cluster cannot be empty"));
+                await PopupService.AlertAsync(T("Environment/Cluster cannot be empty"), AlertTypes.Error);
             }
         }
 

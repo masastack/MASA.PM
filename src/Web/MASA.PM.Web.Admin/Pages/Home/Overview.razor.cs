@@ -230,27 +230,30 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (_clusters.Count <= 1)
             {
-                await PopupService.AlertAsync("集群不能为空", AlertTypes.Error);
+                await PopupService.AlertAsync(T("The cluster can not be empty"), AlertTypes.Error);
             }
             else
             {
                 var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
-                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteCluster.Name}]集群吗？", async (c) =>
-                {
-                    try
+                await PopupService.ConfirmAsync(T("Delete cluster"),
+                    T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
+                    AlertTypes.Error,
+                    async (c) =>
                     {
-                        await ClusterCaller.RemoveAsync(deleteCluster.Id);
-                    }
-                    catch (Exception ex)
-                    {
-                        c.Cancel();
-                        await PopupService.ToastErrorAsync(ex.Message);
-                    }
+                        try
+                        {
+                            await ClusterCaller.RemoveAsync(deleteCluster.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            c.Cancel();
+                            await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
+                        }
 
-                    _clusters.Remove(deleteCluster);
-                    _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-                    _clusterFormModel.Hide();
-                });
+                        _clusters.Remove(deleteCluster);
+                        _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                        _clusterFormModel.Hide();
+                    });
             }
         }
 

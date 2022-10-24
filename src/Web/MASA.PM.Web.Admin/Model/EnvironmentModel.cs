@@ -46,7 +46,7 @@ namespace MASA.PM.UI.Admin.Model
     {
         public EnvClusterModelValidator()
         {
-            RuleFor(o => o.Name).NotEmpty().Matches(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$").WithMessage("Please enter [Chinese, English、and - _ symbols]")
+            RuleFor(o => o.Name).NotEmpty()
                 .Matches(@"^[\u4E00-\u9FA5A-Za-z0-9_-]+$").WithMessage("Please enter [Chinese, English、and - _ symbols]")
                 .MinimumLength(2).MaximumLength(50).WithMessage("environment name length range is [2-50]");
 

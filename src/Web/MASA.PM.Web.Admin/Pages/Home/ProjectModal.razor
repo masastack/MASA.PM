@@ -42,6 +42,7 @@
                          ItemValue="r=>r.Code"
                          Outlined
                          Class="mt-6"
+                         MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Project type")">
                 </MSelect>
                 <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
