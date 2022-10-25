@@ -46,9 +46,9 @@ deploy-dev:
   only:
     - main  
   script:
-    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
-    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n masa-pm-dev
-    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n masa-pm-dev
+    - echo $KUBE_CONFIG_DEV_YDY | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n pm-dev
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n pm-dev
   retry: 2
 
 deploy-test:
@@ -60,9 +60,9 @@ deploy-test:
   only:
     - main  
   script:
-    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
-    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n masa-pm-test
-    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n masa-pm-test
+    - echo $KUBE_CONFIG_DEV_YDY | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n pm-staging
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n pm-staging
   retry: 2
   when: manual
 
