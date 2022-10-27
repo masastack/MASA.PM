@@ -250,7 +250,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
                 await PopupService.ConfirmAsync(T("Delete cluster"),
                     T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
                     AlertTypes.Error,
