@@ -28,7 +28,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private StringNumber _selectEnvClusterId = 0;
         private List<EnvironmentDto> _environments = new();
         private List<ClusterDto> _clusters = new();
-        private List<ProjectDto> _projects = new();
         private readonly DataModal<UpdateEnvironmentDto> _envFormModel = new();
         private List<ClusterDto> _allClusters = new();
         private List<EnvironmentDto> _allEnvs = new();
@@ -139,25 +138,34 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task RemoveEnvAsync()
         {
-            if (_environments.Count <= 1)
+            if (_clusters.Any())
             {
-                await PopupService.AlertAsync("环境不能为空", AlertTypes.Error);
+                await PopupService.AlertAsync(T("There are still clusters under the current environment, which cannot be deleted"), AlertTypes.Error);
+                return;
+            }
+
+            if (!_environments.Any())
+            {
+                await PopupService.AlertAsync(T("The environment can not be empty"), AlertTypes.Error);
             }
             else
             {
                 var envId = _selectedEnvId.AsT1;
                 var deleteEnv = _environments.First(c => c.Id == envId);
 
-                await PopupService.ConfirmAsync("提示", $"确定要删除[{deleteEnv.Name}]环境吗？", async (c) =>
-                {
-                    await EnvironmentCaller.DeleteAsync(envId);
+                await PopupService.ConfirmAsync(T("Delete environment"),
+                    T("Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?")
+                    .Replace("{EnvironmentName}", deleteEnv.Name),
+                    async (c) =>
+                    {
+                        await EnvironmentCaller.DeleteAsync(envId);
 
-                    _environments.Remove(deleteEnv);
-                    _selectedEnvId = _environments[0].Id;
-                    await GetClustersByEnvIdAsync(_environments[0].Id);
+                        _environments.Remove(deleteEnv);
+                        _selectedEnvId = _environments[0].Id;
+                        await GetClustersByEnvIdAsync(_environments[0].Id);
 
-                    _envFormModel.Hide();
-                });
+                        _envFormModel.Hide();
+                    });
             }
         }
 
@@ -228,13 +236,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task RemoveClusterAsync()
         {
-            if (_clusters.Count <= 1)
+            var projects = await ProjectCaller.GetListByEnvClusterIdAsync(_selectedEnvId.AsT1);
+            if (projects.Any())
+            {
+                await PopupService.AlertAsync(T("There are still projects under the current cluster, which cannot be deleted"), AlertTypes.Error);
+                return;
+            }
+
+            var deleteCluster = _clusters.FirstOrDefault(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
+            if (deleteCluster == null)
             {
                 await PopupService.AlertAsync(T("The cluster can not be empty"), AlertTypes.Error);
             }
             else
             {
-                var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
                 await PopupService.ConfirmAsync(T("Delete cluster"),
                     T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
                     AlertTypes.Error,
