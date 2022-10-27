@@ -15,9 +15,9 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />
-    <PackageReference Include="Masa.Stack.Components" Version="0.0.146" />
-    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0-rc.6" />
-    <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0-rc.6" />
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.149" />
+    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0" />
+    <PackageReference Include="Masa.Utils.Security.Authentication.OpenIdConnect" Version="0.6.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 
