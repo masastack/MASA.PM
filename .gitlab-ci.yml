@@ -51,6 +51,35 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n pm-dev
   retry: 2
 
+deploy-dev:
+  stage: deploy-dev
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - main  
+  script:
+    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n masa-pm-dev
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n masa-pm-dev
+  retry: 2
+
+deploy-test-ali:
+  stage: deploy-test
+  tags:
+    - linux-shell
+  before_script:
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
+  only:
+    - main  
+  script:
+    - echo $KUBE_CONFIG_DEV | base64 -d > ./config
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n masa-pm-test
+    - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n masa-pm-test
+  retry: 2
+  when: manual
+
 deploy-test:
   stage: deploy-test
   tags:
