@@ -1,4 +1,6 @@
-﻿<CascadingAuthenticationState>
+﻿@inject TokenProvider TokenProvider
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly"
             AdditionalAssemblies='new List<Assembly>(){ Assembly.Load("Masa.Stack.Components")}'>
         <Found Context="routeData">
@@ -7,8 +9,21 @@
         </Found>
         <NotFound>
             <MApp>
-                <Masa.Stack.Components.Sessions.NotFound />
+                <NotFound />
             </MApp>
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+    [Parameter]
+    public TokenProvider InitialState { get; set; } = null!;
+
+    protected override Task OnInitializedAsync()
+    {
+        TokenProvider.AccessToken = InitialState.AccessToken;
+        TokenProvider.RefreshToken = InitialState.RefreshToken;
+        TokenProvider.IdToken = InitialState.IdToken;
+        return base.OnInitializedAsync();
+    }
+}

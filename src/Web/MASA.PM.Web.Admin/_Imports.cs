@@ -11,6 +11,7 @@ global using Masa.BuildingBlocks.Configuration;
 global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.Service.Caller;
+global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Stack.Components;
 global using Masa.Stack.Components.Configs;
 global using MASA.PM.Caller.Callers;
