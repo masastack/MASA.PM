@@ -250,25 +250,26 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                var deleteCluster = _clusters.First(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
                 await PopupService.ConfirmAsync(T("Delete cluster"),
-                T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
-                AlertTypes.Error,
-                async (c) =>
-                {
-                    try
+                    T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
+                    AlertTypes.Error,
+                    async (c) =>
                     {
-                        await ClusterCaller.RemoveAsync(deleteCluster.Id);
-                    }
-                    catch (Exception ex)
-                    {
-                        c.Cancel();
-                        await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
-                    }
+                        try
+                        {
+                            await ClusterCaller.RemoveAsync(deleteCluster.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            c.Cancel();
+                            await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
+                        }
 
-                    _clusters.Remove(deleteCluster);
-                    _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-                    _clusterFormModel.Hide();
-                });
+                        _clusters.Remove(deleteCluster);
+                        _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                        _clusterFormModel.Hide();
+                    });
             }
         }
 
