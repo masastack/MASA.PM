@@ -51,7 +51,7 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n pm-dev
   retry: 2
 
-deploy-dev:
+deploy-dev-ali:
   stage: deploy-dev
   tags:
     - linux-shell
