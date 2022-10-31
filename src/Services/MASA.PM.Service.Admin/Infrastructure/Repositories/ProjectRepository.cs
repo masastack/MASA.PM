@@ -175,5 +175,15 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                 throw new UserFriendlyException($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
             }
         }
+
+        public async Task<bool> IsExistProjectInCluster(int clusterId)
+        {
+            var result = await (from envCluster in _dbContext.EnvironmentClusters
+                                join envClusterProject in _dbContext.EnvironmentClusterProjects on envCluster.Id equals envClusterProject.EnvironmentClusterId
+                                select envCluster
+                             ).AnyAsync(ec => ec.ClusterId == clusterId);
+
+            return result;
+        }
     }
 }

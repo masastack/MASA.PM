@@ -15,6 +15,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
             App.MapGet("/api/v1/project/{Id}", GetAsync);
             App.MapGet("/api/v1/project/projectType", GetProjectTypes);
+            App.MapGet("/api/v1/project/isExistProjectInCluster/{ClusterId}", IsExistProjectInCluster);
             App.MapPut("/api/v1/project", UpdateAsync);
             App.MapDelete("/api/v1/project", RemoveAsync);
         }
@@ -36,6 +37,14 @@ namespace MASA.PM.Service.Admin.Services
         public async Task<List<ProjectDto>> GetListByTeamIds(IEventBus eventBus, [FromBody] List<Guid> teamIds)
         {
             var query = new ProjectsQuery(null, teamIds);
+            await eventBus.PublishAsync(query);
+
+            return query.Result;
+        }
+
+        public async Task<bool> IsExistProjectInCluster(IEventBus eventBus, int clusterId)
+        {
+            var query = new ProjectByClusterIdQuery(clusterId);
             await eventBus.PublishAsync(query);
 
             return query.Result;

@@ -34,5 +34,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
         Task RemoveEnvironmentClusterProjects(IEnumerable<EnvironmentClusterProject> environmentClusterProjects);
 
         Task IsExistedProjectName(string name, List<int> environmentClusterIds, params int[] excludeProjectIds);
+
+        Task<bool> IsExistProjectInCluster(int clusterId);
     }
 }

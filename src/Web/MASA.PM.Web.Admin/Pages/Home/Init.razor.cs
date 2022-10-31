@@ -27,14 +27,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
-                var defaultColor = _colors.First();
                 _customEnv = new EnvironmentModel()
                 {
                     Environments = new List<EnvModel>
                     {
-                        new EnvModel(0, "Development", "开发环境", defaultColor),
-                        new EnvModel(1, "Staging", "模拟环境", defaultColor),
-                        new EnvModel(2, "Production", "生产环境", defaultColor)
+                        new EnvModel(0, "Development", "开发环境", _colors[0]),
+                        new EnvModel(1, "Staging", "模拟环境", _colors[1]),
+                        new EnvModel(2, "Production", "生产环境", _colors[2])
                     }
                 };
 

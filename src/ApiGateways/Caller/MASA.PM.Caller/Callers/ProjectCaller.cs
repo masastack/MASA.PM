@@ -40,6 +40,13 @@ namespace MASA.PM.Caller.Callers
             return result ?? new();
         }
 
+        public async Task<bool> IsExistProjectInCluster(int clusterId)
+        {
+            var result = await Caller.GetAsync<bool>($"{_prefix}/isExistProjectInCluster/{clusterId}");
+
+            return result;
+        }
+
         public async Task AddAsync(AddProjectDto model)
         {
             await Caller.PostAsync(_prefix, model);
