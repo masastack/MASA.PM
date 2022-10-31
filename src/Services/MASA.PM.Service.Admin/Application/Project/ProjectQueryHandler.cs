@@ -174,5 +174,11 @@ namespace MASA.PM.Service.Admin.Application.Project
 
             query.Result = projectModels;
         }
+
+        [EventHandler]
+        public async Task IsExistProjectInCluster(ProjectByClusterIdQuery query)
+        {
+            query.Result = await _projectRepository.IsExistProjectInCluster(query.ClusterId);
+        }
     }
 }

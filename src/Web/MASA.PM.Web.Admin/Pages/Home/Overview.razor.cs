@@ -236,8 +236,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task RemoveClusterAsync()
         {
-            var projects = await ProjectCaller.GetListByEnvClusterIdAsync(_selectedEnvId.AsT1);
-            if (projects.Any())
+            var clusterId = _clusters.Find(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1)!.Id;
+            var isExistProject = await ProjectCaller.IsExistProjectInCluster(clusterId);
+            if (isExistProject)
             {
                 await PopupService.AlertAsync(T("There are still projects under the current cluster, which cannot be deleted"), AlertTypes.Error);
                 return;
