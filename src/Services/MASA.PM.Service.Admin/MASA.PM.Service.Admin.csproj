@@ -25,28 +25,28 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.6.0" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="0.6.0" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="0.6.0" />
-    <PackageReference Include="Masa.Contrib.Configuration" Version="0.6.0" />
-    <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.Data.Contracts.EFCore" Version="0.6.0" />
-		<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="0.6.0" />
+		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="0.7.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="0.7.0-preview.4" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="0.7.0-preview.4" />
+    <PackageReference Include="Masa.Contrib.Configuration" Version="0.7.0-preview.4" />
+    <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.Data.Contracts.EFCore" Version="0.7.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="0.7.0-preview.4" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
-		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.6.0" />
+		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.7.0-preview.4" />
 		<PackageReference Include="Masa.Utils.Caching.DistributedMemory" Version="0.6.0-preview.13" />
 		<PackageReference Include="Masa.Utils.Caching.Redis" Version="0.6.0-preview.13" />
-		<PackageReference Include="MASA.Utils.Configuration.Json" Version="0.6.0" />
+		<PackageReference Include="MASA.Utils.Configuration.Json" Version="0.7.0-preview.4" />
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.6.0" />
-		<PackageReference Include="Masa.Utils.Exceptions" Version="0.6.0" />
-		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.6.0" />
+		<PackageReference Include="Masa.Utils.Exceptions" Version="0.7.0-preview.4" />
+		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="0.7.0-preview.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
-		<PackageReference Include="MASA.Contrib.Data.UoW.EFCore" Version="0.6.0" />
-		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.6.0" />
+		<PackageReference Include="MASA.Contrib.Data.UoW.EFCore" Version="0.7.0-preview.4" />
+		<PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="0.7.0-preview.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
