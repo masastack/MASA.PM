@@ -50,6 +50,7 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n pm-dev
     - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n pm-dev
   retry: 2
+  when: manual
 
 deploy-dev-ali:
   stage: deploy-dev
@@ -64,6 +65,7 @@ deploy-dev-ali:
     - kubectl --kubeconfig ./config set image deployment/masa-pm-service-admin masa-pm-service-admin=$NEW_IMAGE_PM_DEV -n masa-pm-dev
     - kubectl --kubeconfig ./config set image deployment/masa-pm-ui-admin masa-pm-ui-admin=$NEW_IMAGE_PM_UI_DEV -n masa-pm-dev
   retry: 2
+  when: manual
 
 deploy-test-ali:
   stage: deploy-test
