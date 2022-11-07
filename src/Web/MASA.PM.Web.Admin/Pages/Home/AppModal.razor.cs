@@ -73,7 +73,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task RemoveAppAsync()
         {
-            await PopupService.ConfirmAsync("提示", $"确定要删除[{AppDetail.Name}]应用吗？", async (c) =>
+            var result = await PopupService.ConfirmAsync("提示", $"确定要删除[{AppDetail.Name}]应用吗？");
+
+            if (result)
             {
                 await AppCaller.RemoveAsync(AppDetail.Id);
 
@@ -82,7 +84,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     await OnSubmitProjectAfter.InvokeAsync();
                 }
                 _appFormModel.Hide();
-            });
+            }
         }
 
         private async Task SubmitAppAsync(FormContext context)

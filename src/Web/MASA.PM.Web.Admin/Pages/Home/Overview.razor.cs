@@ -104,8 +104,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _envDetail.ModifierName = (await GetUserAsync(_envDetail.Modifier)).Name;
-                _envDetail.CreatorName = (await GetUserAsync(_envDetail.Creator)).Name;
+                _envDetail.ModifierName = (await GetUserAsync(_envDetail.Modifier)).StaffDislpayName;
+                _envDetail.CreatorName = (await GetUserAsync(_envDetail.Creator)).StaffDislpayName;
                 _envFormModel.Show(model);
             }
 
@@ -153,19 +153,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envId = _selectedEnvId.AsT1;
                 var deleteEnv = _environments.First(c => c.Id == envId);
 
-                await PopupService.ConfirmAsync(T("Delete environment"),
+                var result = await PopupService.ConfirmAsync(T("Delete environment"),
                     T("Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?")
-                    .Replace("{EnvironmentName}", deleteEnv.Name),
-                    async (c) =>
-                    {
-                        await EnvironmentCaller.DeleteAsync(envId);
+                    .Replace("{EnvironmentName}", deleteEnv.Name));
 
-                        _environments.Remove(deleteEnv);
-                        _selectedEnvId = _environments[0].Id;
-                        await GetClustersByEnvIdAsync(_environments[0].Id);
+                if (result)
+                {
+                    await EnvironmentCaller.DeleteAsync(envId);
 
-                        _envFormModel.Hide();
-                    });
+                    _environments.Remove(deleteEnv);
+                    _selectedEnvId = _environments[0].Id;
+                    await GetClustersByEnvIdAsync(_environments[0].Id);
+
+                    _envFormModel.Hide();
+                }
             }
         }
 
@@ -207,8 +208,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).Name;
-                _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).Name;
+                _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).StaffDislpayName;
+                _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).StaffDislpayName;
                 _clusterFormModel.Show(model);
             }
 
@@ -251,25 +252,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                await PopupService.ConfirmAsync(T("Delete cluster"),
+                var result = await PopupService.ConfirmAsync(T("Delete cluster"),
                     T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
-                    AlertTypes.Error,
-                    async (c) =>
-                    {
-                        try
-                        {
-                            await ClusterCaller.RemoveAsync(deleteCluster.Id);
-                        }
-                        catch (Exception ex)
-                        {
-                            c.Cancel();
-                            await PopupService.AlertAsync(ex.Message, AlertTypes.Error);
-                        }
+                    AlertTypes.Error);
 
-                        _clusters.Remove(deleteCluster);
-                        _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
-                        _clusterFormModel.Hide();
-                    });
+                if (result)
+                {
+                    await ClusterCaller.RemoveAsync(deleteCluster.Id);
+
+                    _clusters.Remove(deleteCluster);
+                    _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                    _clusterFormModel.Hide();
+                }
             }
         }
 

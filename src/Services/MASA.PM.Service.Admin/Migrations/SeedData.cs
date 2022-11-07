@@ -135,5 +135,60 @@ namespace MASA.PM.Service.Admin.Migrations
                 }
             },
         };
+
+        public static async Task InitDCCDataAsync(this WebApplicationBuilder builder)
+        {
+            var services = builder.Services.BuildServiceProvider();
+            var configurationApiManage = services.GetRequiredService<IConfigurationApiManage>();
+            string content = @"
+{
+  ""Logging"": {
+    ""LogLevel"": {
+      ""Default"": ""Information"",
+      ""Microsoft"": ""Warning"",
+      ""Microsoft.Hosting.Lifetime"": ""Information""
+    }
+  },
+";
+            string environment = "";
+            if (builder.Environment.IsDevelopment())
+            {
+                content += @"
+""ConnectionStrings"": {
+    ""DefaultConnection"": ""Server=10.10.90.37,30100;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
+  },
+  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
+  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
+}
+";
+            }
+            else if (builder.Environment.EnvironmentName.Equals("Develop"))
+            {
+                content += @"
+""ConnectionStrings"": {
+    ""DefaultConnection"": ""Server=sqlserver-dev-svc.stack,1433;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
+  },
+  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
+  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
+}
+";
+            }
+            else if (builder.Environment.IsStaging())
+            {
+                content += @"
+""ConnectionStrings"": {
+    ""DefaultConnection"": ""Server=sqlserver-test-svc.stack,1433;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
+  },
+  ""AuthServiceBaseAddress"": ""https://auth-service-staging.masastack.com/"",
+  ""IdentityServerUrl"": ""https://sso-staging.masastack.com""
+}
+";
+            }
+
+            await configurationApiManage.AddAsync(environment, "default", "masa-pm-service-admin", new Dictionary<string, string>
+            {
+                {"Appsettings",content }
+            });
+        }
     }
 }

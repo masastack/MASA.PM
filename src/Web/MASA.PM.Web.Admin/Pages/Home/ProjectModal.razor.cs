@@ -100,20 +100,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
             else
             {
                 var deleteProject = Projects.First(project => project.Id == _projectDetail.Id);
-                await PopupService.ConfirmAsync(T("Delete project"),
+                var result = await PopupService.ConfirmAsync(T("Delete project"),
                     T("Are you sure you want to delete project \"{ProjectName}\"?").Replace("{ProjectName}", deleteProject.Name),
-                    AlertTypes.Error,
-                    async (c) =>
+                    AlertTypes.Error);
+
+                if (result)
+                {
+                    await ProjectCaller.DeleteAsync(_projectDetail.Id);
+                    if (OnSubmitProjectAfter.HasDelegate)
                     {
-                        await ProjectCaller.DeleteAsync(_projectDetail.Id);
-
-                        if (OnSubmitProjectAfter.HasDelegate)
-                        {
-                            await OnSubmitProjectAfter.InvokeAsync();
-                        }
-
-                        _projectFormModel.Hide();
-                    });
+                        await OnSubmitProjectAfter.InvokeAsync();
+                    }
+                    _projectFormModel.Hide();
+                }
             }
         }
 

@@ -34,7 +34,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
-        private UserPortraitModel _userInfo = new();
         private List<int> _disableEnvironmentClusterIds = new();
         private bool _showProcess;
         private ProjectModal? _projectModal;
@@ -110,7 +109,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             _projects.ForEach(async project =>
             {
-                project.ModifierName = (await GetUserAsync(project.Modifier)).Name;
+                project.ModifierName = (await GetUserAsync(project.Modifier)).StaffDislpayName;
             });
 
             _allTeams = await AuthClient.TeamService.GetAllAsync();
@@ -133,9 +132,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
 
-            _userInfo = await GetUserAsync(_projectDetail.Creator);
-            _projectDetail.CreatorName = _userInfo.Name;
-            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
+            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).StaffDislpayName;
+            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).StaffDislpayName;
 
             return _projectDetail;
         }
@@ -146,8 +144,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (_appModal != null)
             {
-                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).Name;
-                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).Name;
+                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).StaffDislpayName;
+                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).StaffDislpayName;
                 _appModal.AppDetail = _appDetail;
             }
 
