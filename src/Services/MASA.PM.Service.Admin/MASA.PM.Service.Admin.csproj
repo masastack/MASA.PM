@@ -38,7 +38,6 @@
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="0.7.0-preview.5" />
 		<PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="0.7.0-preview.5" />
 		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="0.7.0-preview.5" />
-		<PackageReference Include="Masa.Utils.Caching.DistributedMemory" Version="0.6.0-preview.13" />
 		<PackageReference Include="MASA.Utils.Configuration.Json" Version="0.7.0-preview.5" />
 		<PackageReference Include="Masa.Utils.Development.Dapr.AspNetCore" Version="0.6.0" />
 		<PackageReference Include="Masa.Utils.Exceptions" Version="0.7.0-preview.5" />
