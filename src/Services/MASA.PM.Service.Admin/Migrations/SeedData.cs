@@ -173,6 +173,17 @@ namespace MASA.PM.Service.Admin.Migrations
 }
 ";
             }
+            else if (builder.Environment.EnvironmentName.Equals("Develop-ydy"))
+            {
+                content += @"
+""ConnectionStrings"": {
+    ""DefaultConnection"": ""10.175.171.201,32679;Database=pm_dev;User Id=ss;Password=Hzss@123;""
+  },
+  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
+  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
+}
+";
+            }
             else if (builder.Environment.IsStaging())
             {
                 content += @"
