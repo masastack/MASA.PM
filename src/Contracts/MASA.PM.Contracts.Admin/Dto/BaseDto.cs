@@ -7,13 +7,13 @@ namespace MASA.PM.Contracts.Admin.Dto
     {
         public Guid Creator { get; set; }
 
-        public string CreatorName { get; set; } = "";
+        public string? CreatorName { get; set; } = "";
 
         public DateTime CreationTime { get; set; }
 
         public Guid Modifier { get; set; }
 
-        public string ModifierName { get; set; } = "";
+        public string? ModifierName { get; set; } = "";
 
         public DateTime ModificationTime { get; set; }
     }

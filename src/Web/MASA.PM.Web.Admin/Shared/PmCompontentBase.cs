@@ -28,11 +28,10 @@ public abstract class PmCompontentBase : ComponentBase
         return I18n.T(key);
     }
 
-    public async Task<UserPortraitModel> GetUserAsync(Guid userId)
+    public async Task<UserModel> GetUserAsync(Guid userId)
     {
-        var users = await AuthClient.UserService.GetUserPortraitsAsync(userId);
-
-        return users.Any() ? users[0] : new();
+        var user = await AuthClient.UserService.FindByIdAsync(userId);
+        return user ?? new();
     }
 }
 

@@ -7,9 +7,9 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.Contrib.Service.Caller.DaprClient" Version="0.7.0-preview.4" />
-		<PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="0.7.0-preview.4" />
-		<PackageReference Include="Masa.Utils.Configuration.Json" Version="0.7.0-preview.4" />
+		<PackageReference Include="Masa.Contrib.Service.Caller.DaprClient" Version="0.7.0-preview.6" />
+		<PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="0.7.0-preview.6" />
+		<PackageReference Include="Masa.Utils.Configuration.Json" Version="0.7.0-preview.6" />
 	</ItemGroup>
 
 	<ItemGroup>

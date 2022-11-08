@@ -15,7 +15,8 @@ namespace MASA.PM.Service.Admin.Infrastructure.Middleware
 
         public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
         {
-            if (_userContext.UserName == "Guest" && @event is ICommand)
+            var user = _userContext.GetUser<MasaUser>();
+            if (user?.Account == "Guest" && @event is ICommand)
             {
                 throw new UserFriendlyException("演示账号禁止操作");
             }

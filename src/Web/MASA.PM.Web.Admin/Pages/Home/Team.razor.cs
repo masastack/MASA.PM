@@ -36,8 +36,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private string _appName = "";
         private AppDto _appDetail = new();
         private TeamDetailModel _userTeam = new();
+        private UserModel _userInfo = new();
         private bool _disableTeamSelect;
-        private UserPortraitModel _userInfo = new();
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
@@ -115,10 +115,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<ProjectDetailDto> GetProjectAsync(int projectId)
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
-
             _userInfo = await GetUserAsync(_projectDetail.Creator);
-            _projectDetail.CreatorName = _userInfo.Name;
-            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).Name;
+            _projectDetail.CreatorName = _userInfo.StaffDislpayName;
+            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).StaffDislpayName;
             var team = await AuthClient.TeamService.GetDetailAsync(_projectDetail.TeamId);
             if (team != null)
             {
@@ -180,7 +179,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
             _projectApps.ForEach(async app =>
             {
-                app.ModifierName = (await GetUserAsync(app.Modifier)).Name;
+                app.ModifierName = (await GetUserAsync(app.Modifier)).StaffDislpayName;
             });
             _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
 
@@ -202,8 +201,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (_appModal != null)
             {
-                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).Name;
-                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).Name;
+                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).StaffDislpayName;
+                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).StaffDislpayName;
                 _appModal.AppDetail = _appDetail;
             }
 
