@@ -140,66 +140,27 @@ namespace MASA.PM.Service.Admin.Migrations
         {
             var services = builder.Services.BuildServiceProvider();
             var configurationApiManage = services.GetRequiredService<IConfigurationApiManage>();
-            string content = @"
-{
-  ""Logging"": {
-    ""LogLevel"": {
-      ""Default"": ""Information"",
-      ""Microsoft"": ""Warning"",
-      ""Microsoft.Hosting.Lifetime"": ""Information""
-    }
-  },
-";
-            string environment = "";
-            if (builder.Environment.IsDevelopment())
-            {
-                content += @"
-""ConnectionStrings"": {
-    ""DefaultConnection"": ""Server=10.10.90.37,30100;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
-  },
-  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
-  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
-}
-";
-            }
-            else if (builder.Environment.EnvironmentName.Equals("Develop"))
-            {
-                content += @"
-""ConnectionStrings"": {
-    ""DefaultConnection"": ""Server=sqlserver-dev-svc.stack,1433;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
-  },
-  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
-  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
-}
-";
-            }
-            else if (builder.Environment.EnvironmentName.Equals("Develop-ydy"))
-            {
-                content += @"
-""ConnectionStrings"": {
-    ""DefaultConnection"": ""10.175.171.201,32679;Database=pm_dev;User Id=ss;Password=Hzss@123;""
-  },
-  ""AuthServiceBaseAddress"": ""https://auth-service-develop.masastack.com/"",
-  ""IdentityServerUrl"": ""https://sso-develop.masastack.com""
-}
-";
-            }
-            else if (builder.Environment.IsStaging())
-            {
-                content += @"
-""ConnectionStrings"": {
-    ""DefaultConnection"": ""Server=sqlserver-test-svc.stack,1433;Database=masa-pm;User Id=sa;Password=p@ssw0rd;""
-  },
-  ""AuthServiceBaseAddress"": ""https://auth-service-staging.masastack.com/"",
-  ""IdentityServerUrl"": ""https://sso-staging.masastack.com""
-}
-";
-            }
-
+            var env = services.GetRequiredService<IWebHostEnvironment>();
+            var environment = builder.Environment.EnvironmentName;
+            var filePath = CombineFilePath(env.ContentRootPath, "appsettings.json", environment);
+            var content = File.ReadAllText(filePath);
             await configurationApiManage.AddAsync(environment, "default", "masa-pm-service-admin", new Dictionary<string, string>
             {
                 {"Appsettings",content }
             });
+        }
+
+        private static string CombineFilePath(string contentRootPath, string fileName, string environment)
+        {
+            string extension = Path.GetExtension(fileName);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var environmentFileName = $"{fileNameWithoutExtension}.{environment}{extension}";
+            var environmentFilePath = Path.Combine(contentRootPath, "Config", environmentFileName);
+            if (File.Exists(environmentFilePath))
+            {
+                return environmentFilePath;
+            }
+            return Path.Combine(contentRootPath, "Config", fileName);
         }
     }
 }
