@@ -10,7 +10,7 @@ namespace MASA.PM.Caller.Callers
 
         }
 
-        protected override string BaseAddress { get; set; } = AppSettings.Get("ServiceBaseUrl");
+        protected override string BaseAddress { get; set; } = AppSettings.Get("PmServiceBaseAddress");
 
         protected override IHttpClientBuilder UseHttpClient()
         {

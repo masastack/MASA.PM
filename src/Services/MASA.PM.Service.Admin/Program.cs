@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Authority = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault().GetValue<string>("Appsettings:IdentityServerUrl");
+    options.Authority = builder.Services.GetMasaConfiguration().Local["IdentityServerUrl"];
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
@@ -51,9 +51,9 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.AddAuthClient(builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic());
-
-builder.Services.AddDccClient();
+var redisOptions = AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig");
+builder.Services.AddAuthClient(builder.Services.GetMasaConfiguration().Local["AuthServiceBaseAddress"], redisOptions);
+builder.Services.AddDccClient(redisOptions);
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -87,11 +87,8 @@ var app = builder.Services
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddIntegrationEventBus<IntegrationEventLogService>(options =>
     {
-        var connectionString = builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault()
-        ["Appsettings:ConnectionStrings:DefaultConnection"];
-
         options.UseDapr()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connectionString).UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseEventLog<PmDbContext>()
         .UseEventBus(eventBusBuilder =>
         {
