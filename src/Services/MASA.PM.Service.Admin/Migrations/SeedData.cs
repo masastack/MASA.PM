@@ -5,6 +5,18 @@ namespace MASA.PM.Service.Admin.Migrations
 {
     public static class SeedData
     {
+        public static async Task MigrateAsync(this IHost host)
+        {
+            await using var scope = host.Services.CreateAsyncScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<PmDbContext>();
+
+            if (context.Database.GetPendingMigrations().Any())
+            {
+                context.Database.Migrate();
+            }
+        }
+
         public static List<AddProjectAppDto> ProjectApps => new()
         {
             new AddProjectAppDto
@@ -135,32 +147,5 @@ namespace MASA.PM.Service.Admin.Migrations
                 }
             },
         };
-
-        public static async Task InitDCCDataAsync(this WebApplicationBuilder builder)
-        {
-            var services = builder.Services.BuildServiceProvider();
-            var configurationApiManage = services.GetRequiredService<IConfigurationApiManage>();
-            var env = services.GetRequiredService<IWebHostEnvironment>();
-            var environment = builder.Environment.EnvironmentName;
-            var filePath = CombineFilePath(env.ContentRootPath, "appsettings.json", environment);
-            var content = File.ReadAllText(filePath);
-            await configurationApiManage.AddAsync(environment, "default", "masa-pm-service-admin", new Dictionary<string, string>
-            {
-                {"Appsettings",content }
-            });
-        }
-
-        private static string CombineFilePath(string contentRootPath, string fileName, string environment)
-        {
-            string extension = Path.GetExtension(fileName);
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            var environmentFileName = $"{fileNameWithoutExtension}.{environment}{extension}";
-            var environmentFilePath = Path.Combine(contentRootPath, "Config", environmentFileName);
-            if (File.Exists(environmentFilePath))
-            {
-                return environmentFilePath;
-            }
-            return Path.Combine(contentRootPath, "Config", fileName);
-        }
     }
 }

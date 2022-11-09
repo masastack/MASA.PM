@@ -4,7 +4,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
-await builder.InitDCCDataAsync();
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -100,6 +99,8 @@ var app = builder.Services
         });
     })
     .AddServices(builder);
+
+await app.MigrateAsync();
 
 app.UseMasaExceptionHandler();
 
