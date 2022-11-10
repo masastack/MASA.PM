@@ -19,7 +19,9 @@ builder.WebHost.UseKestrel(option =>
 builder.AddMasaStackComponentsForServer("wwwroot/i18n",
     builder.Configuration["AuthServiceBaseAddress"],
     builder.Configuration["McServiceBaseAddress"],
-    builder.Configuration["PmServiceBaseAddress"]);
+    builder.Configuration["PmServiceBaseAddress"],
+    AppSettings.GetModel<UserAutoCompleteOptions>("UserAutoComplete"),
+    AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig"));
 
 builder.Services.AddMasaOpenIdConnect(AppSettings.GetModel<MasaOpenIdConnectOptions>("OIDC"));
 
