@@ -13,6 +13,7 @@ global using Masa.Contrib.Service.Caller;
 global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Stack.Components;
 global using Masa.Stack.Components.Configs;
+global using Masa.Stack.Components.UserCenters.Models;
 global using Masa.Utils.Configuration.Json;
 global using Masa.Utils.Security.Authentication.OpenIdConnect;
 global using MASA.PM.Caller.Callers;

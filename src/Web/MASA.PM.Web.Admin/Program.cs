@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
+using Masa.Stack.Components.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,7 +22,9 @@ builder.WebHost.UseKestrel(option =>
 builder.AddMasaStackComponentsForServer("wwwroot/i18n",
     builder.Configuration["AuthServiceBaseAddress"],
     builder.Configuration["McServiceBaseAddress"],
-    builder.Configuration["PmServiceBaseAddress"]);
+    builder.Configuration["PmServiceBaseAddress"],
+    AppSettings.GetModel<UserAutoCompleteOptions>("UserAutoComplete"),
+    AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig"));
 
 builder.Services.AddMasaOpenIdConnect(AppSettings.GetModel<MasaOpenIdConnectOptions>("OIDC"));
 
