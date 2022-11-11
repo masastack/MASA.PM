@@ -17,6 +17,50 @@ namespace MASA.PM.Service.Admin.Migrations
             }
         }
 
+        public static async Task SeedDataAsync(this WebApplicationBuilder builder)
+        {
+            var onLineEnvironmentName = builder.Environment.EnvironmentName;
+            var serviceProvider = builder.Services.BuildServiceProvider();
+            var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+
+            var initDto = new InitDto
+            {
+                ClusterName = "Default",
+                Environments = new List<AddEnvironmentDto> {
+                    new AddEnvironmentDto
+                    {
+                        Name = "Development",
+                        Description="开发环境",
+                        Color = "#FF7D00"
+                    },
+                    new AddEnvironmentDto
+                    {
+                        Name = "Staging",
+                        Description="模拟环境",
+                        Color = "#37A7FF"
+                    },
+                    new AddEnvironmentDto
+                    {
+                        Name = "Production",
+                        Description="生产环境",
+                        Color = "#FF5252"
+                    }
+                }
+            };
+            if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
+            {
+                initDto.Environments.Add(new AddEnvironmentDto
+                {
+                    Name = onLineEnvironmentName,
+                    Description = onLineEnvironmentName,
+                    Color = "#37D7AD"
+                });
+            }
+
+            var command = new InitCommand(initDto);
+            await eventBus.PublishAsync(command);
+        }
+
         public static List<AddProjectAppDto> ProjectApps => new()
         {
             new AddProjectAppDto
