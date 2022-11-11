@@ -22,6 +22,12 @@ namespace MASA.PM.Service.Admin.Migrations
             var onLineEnvironmentName = builder.Environment.EnvironmentName;
             var serviceProvider = builder.Services.BuildServiceProvider();
             var eventBus = serviceProvider.GetRequiredService<IEventBus>();
+            var context = serviceProvider.GetRequiredService<PmDbContext>();
+
+            if (context.Set<Infrastructure.Entities.Environment>().Any())
+            {
+                return;
+            }
 
             var initDto = new InitDto
             {
