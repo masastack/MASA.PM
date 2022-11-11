@@ -98,6 +98,7 @@ var app = builder.Services
     .AddServices(builder);
 
 await app.MigrateAsync();
+await builder.SeedDataAsync();
 
 app.UseMasaExceptionHandler();
 

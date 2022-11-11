@@ -20,6 +20,8 @@ namespace MASA.PM.Service.Admin.Migrations
         public static async Task SeedDataAsync(this WebApplicationBuilder builder)
         {
             var onLineEnvironmentName = builder.Environment.EnvironmentName;
+            var serviceProvider = builder.Services.BuildServiceProvider();
+            var eventBus = serviceProvider.GetRequiredService<IEventBus>();
 
             var initDto = new InitDto
             {
@@ -45,7 +47,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     }
                 }
             };
-            if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName)))
+            if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
             {
                 initDto.Environments.Add(new AddEnvironmentDto
                 {
@@ -55,7 +57,8 @@ namespace MASA.PM.Service.Admin.Migrations
                 });
             }
 
-
+            var command = new InitCommand(initDto);
+            await eventBus.PublishAsync(command);
         }
 
         public static List<AddProjectAppDto> ProjectApps => new()
