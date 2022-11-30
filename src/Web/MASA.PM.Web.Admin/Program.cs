@@ -2,6 +2,10 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
+}
 
 // Add services to the container.
 builder.Services.AddRazorPages();
