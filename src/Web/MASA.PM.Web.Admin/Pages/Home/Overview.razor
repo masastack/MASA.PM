@@ -14,7 +14,7 @@
                     {
                         <MTooltip Left>
                             <ActivatorContent Context="tooltipContext">
-                                <MListItem @attributes="@tooltipContext.Attrs" Style="height: 40px !important;" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
+                                <MListItem @attributes="@tooltipContext.Attrs" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                                     <ItemContent>
                                         <MListItemIcon Class="d-flex align-center mr-0">
                                             <MIcon Color="@env.Color" Size="12">mdi-circle</MIcon>

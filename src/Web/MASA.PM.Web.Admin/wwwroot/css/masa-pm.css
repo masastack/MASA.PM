@@ -612,6 +612,9 @@ input::-webkit-input-placeholder {
 
 .env-list {
     margin: 16px 0 !important;
+    min-height: 40px !important;
+    height: 40px !important;
+    max-height: 40px !important;
 }
 
 .m-list-item-group .env-list.m-list-item--active:not(.m-icon) {
