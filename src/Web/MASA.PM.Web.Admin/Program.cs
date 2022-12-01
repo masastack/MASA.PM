@@ -4,7 +4,7 @@
 var builder = WebApplication.CreateBuilder(args);
 if (!builder.Environment.IsDevelopment())
 {
-    builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
+    builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
 }
 
 // Add services to the container.
