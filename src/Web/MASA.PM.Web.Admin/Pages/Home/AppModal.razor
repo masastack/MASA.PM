@@ -33,7 +33,7 @@
                     </MSelect>
                 }
                 <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
-                <MAutocomplete Class="mt-6"
+                <SAutoComplete Class="mt-6"
                                Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
                                ItemText="r=>r.EnvironmentClusterName"
@@ -55,7 +55,7 @@
                             </div>
                         </MListItemContent>
                     </ItemContent>
-                </MAutocomplete>
+                </SAutoComplete>
                 @{
                     foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                     {

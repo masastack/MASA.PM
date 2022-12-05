@@ -5,7 +5,7 @@
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
                 <STextField Class="mt-6" Outlined Label="@T("Project name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
-                <MAutocomplete @bind-Value="_projectFormModel.Data.TeamId"
+                <SAutoComplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
                                Items="_allTeams"
                                Chips
@@ -34,7 +34,7 @@
                             </MListItemTitle>
                         </MListItemContent>
                     </ItemContent>
-                </MAutocomplete>
+                </SAutoComplete>
                 <STextField Class="mt-6" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></STextField>
                 <MSelect @bind-Value="_projectFormModel.Data.LabelCode"
                          Items="_projectTypes"
@@ -45,7 +45,7 @@
                          MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Project type")">
                 </MSelect>
-                <MAutocomplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
+                <SAutoComplete @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
                                Items="_allEnvClusters"
                                Class="mt-6"
                                ItemText="r=>r.EnvironmentClusterName"
@@ -64,7 +64,7 @@
                             </div>
                         </MListItemContent>
                     </ItemContent>
-                </MAutocomplete>
+                </SAutoComplete>
                 <MTextarea Class="mt-6" Outlined Label="@T("Project description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
                 @if (_projectFormModel.HasValue)
                 {
