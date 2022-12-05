@@ -105,7 +105,7 @@
                     <MButton Height="40" OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
                 }
                 <MSpacer></MSpacer>
-                <MButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</MButton>
+                <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
                 </div>
             </div>
         </MForm>
