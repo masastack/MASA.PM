@@ -10,7 +10,7 @@
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
     height: 5px;
     margin: 5px 0;
 }

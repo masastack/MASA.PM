@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
@@ -58,7 +56,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
-                HandleCurrentTeamChanged(MasaUser.CurrentTeamId);
+                var teamId = GlobalConfig.CurrentTeamId == Guid.Empty ? MasaUser.CurrentTeamId : GlobalConfig.CurrentTeamId;
+                HandleCurrentTeamChanged(teamId);
             }
         }
 

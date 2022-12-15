@@ -8,6 +8,7 @@ global using BlazorComponent;
 global using BlazorComponent.I18n;
 global using Masa.Blazor;
 global using Masa.BuildingBlocks.StackSdks.Auth;
+global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Service.Caller;
