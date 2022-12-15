@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
@@ -23,6 +25,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public GlobalConfig GlobalConfig { get; set; } = default!;
 
+        [Inject]
+        public MasaUser MasaUser { get; set; } = default!;
+
         private int _projectCount;
         private StringNumber _curTab = 0;
         private bool _teamDetailDisabled = true;
@@ -41,6 +46,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
+        private Guid _teamId;
 
         protected override Task OnInitializedAsync()
         {
@@ -52,7 +58,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
-                HandleCurrentTeamChanged(GlobalConfig.CurrentTeamId);
+                HandleCurrentTeamChanged(MasaUser.CurrentTeamId);
             }
         }
 
@@ -60,6 +66,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (teamId != _userTeam.Id)
             {
+                _teamId = teamId;
                 await TabItemChangedAsync(0);
                 _teamDetailDisabled = true;
                 await InitDataAsync(teamId);
