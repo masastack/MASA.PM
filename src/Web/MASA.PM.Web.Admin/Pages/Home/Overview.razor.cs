@@ -154,8 +154,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var deleteEnv = _environments.First(c => c.Id == envId);
 
                 var result = await PopupService.ConfirmAsync(T("Delete environment"),
-                    T("Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?")
-                    .Replace("{EnvironmentName}", deleteEnv.Name));
+                    T("Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?").Replace("{EnvironmentName}",
+                    deleteEnv.Name),
+                    AlertTypes.Error);
 
                 if (result)
                 {
@@ -261,7 +262,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     await ClusterCaller.RemoveAsync(deleteCluster.Id);
 
                     _clusters.Remove(deleteCluster);
-                    _selectEnvClusterId = _clusters[0].EnvironmentClusterId;
+                    _selectEnvClusterId = _clusters.Any() ? _clusters[0].EnvironmentClusterId : 0;
                     _clusterFormModel.Hide();
                 }
             }
