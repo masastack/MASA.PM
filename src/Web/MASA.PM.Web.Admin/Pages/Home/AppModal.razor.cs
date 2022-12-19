@@ -73,7 +73,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task RemoveAppAsync()
         {
-            var result = await PopupService.ConfirmAsync("提示", $"确定要删除[{AppDetail.Name}]应用吗？");
+            var result = await PopupService.ConfirmAsync(
+                $"{T("Delete app")}",
+                $"{T("Are you sure you want to delete AppName \"{AppName}\"?").Replace("{AppName}", AppDetail.Name)}",
+                AlertTypes.Error);
 
             if (result)
             {
