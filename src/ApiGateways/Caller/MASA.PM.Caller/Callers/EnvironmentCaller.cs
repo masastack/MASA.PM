@@ -41,7 +41,7 @@ namespace MASA.PM.Caller.Callers
             await Caller.PutAsync(_prefix, model);
         }
 
-        public async Task DeleteAsync(int Id)
+        public async Task RemoveAsync(int Id)
         {
             await Caller.DeleteAsync(_prefix, Id);
         }

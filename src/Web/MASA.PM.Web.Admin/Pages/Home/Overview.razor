@@ -98,7 +98,7 @@
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween" Align="AlignTypes.Center">
                     <MCol Cols="9">
-                        <STextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Environment name")" @bind-Value="_envFormModel.Data.Name"></STextField>
+                        <STextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Name")" @bind-Value="_envFormModel.Data.Name"></STextField>
                     </MCol>
                     <MCol Cols="3" Align="AlignTypes.Start">
                         <SColorGroup @bind-Value="_envFormModel.Data.Color" Style="margin:24px 0;" Colors="_colors"></SColorGroup>
@@ -120,7 +120,7 @@
                         <MListItemContent>@context.Item.Name</MListItemContent>
                     </ItemContent>
                 </SAutoComplete>
-                <MTextarea Class="mt-6" Outlined Label="@T("Environment description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
+                <MTextarea Class="mt-6" Outlined Label="@T("Description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
                 @if (_envFormModel.HasValue)
                 {
                     <MRow Justify="JustifyTypes.SpaceBetween" Class="pt-3 regular--text" Style="line-height:normal !important;">
@@ -135,7 +135,7 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_envFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                    <MButton Height="40" OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitEnvAsync(formContext)">@(_envFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
@@ -148,7 +148,7 @@
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
-                <STextField Class="mt-6" Outlined Label="@T("Cluster name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
+                <STextField Class="mt-6" Outlined Label="@T("Name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
                 <SAutoComplete Class="mt-6" @bind-Value="_clusterFormModel.Data.EnvironmentIds"
                                Items="_allEnvs"
                                ItemText="r=>r.Name"
@@ -165,7 +165,7 @@
                             <MListItemContent style="@($"color: {context.Item.Color} !important")">@context.Item.Name</MListItemContent>
                         </ItemContent>
                     </SAutoComplete>
-                <MTextarea Class="mt-6" Outlined Label="@T("Cluster description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
+                <MTextarea Class="mt-6" Outlined Label="@T("Description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
                 @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
@@ -180,7 +180,7 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_clusterFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Remove")</MButton>
+                    <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitClusterAsync(formContext)">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</SButton>

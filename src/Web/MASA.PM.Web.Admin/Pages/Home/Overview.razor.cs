@@ -120,10 +120,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     var newEnv = await EnvironmentCaller.AddAsync(_envFormModel.Data);
                     _environments.Add(newEnv);
+                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
                 }
                 else
                 {
                     await EnvironmentCaller.UpdateAsync(_envFormModel.Data);
+                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
 
                     var newEnv = await EnvironmentCaller.GetAsync(_envFormModel.Data.EnvironmentId);
                     var env = _environments.First(e => e.Id == newEnv.Id);
@@ -160,7 +162,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 if (result)
                 {
-                    await EnvironmentCaller.DeleteAsync(envId);
+                    await EnvironmentCaller.RemoveAsync(envId);
+                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     _environments.Remove(deleteEnv);
                     _selectedEnvId = _environments[0].Id;
@@ -224,10 +227,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_clusterFormModel.HasValue)
                 {
                     await ClusterCaller.AddAsync(_clusterFormModel.Data);
+                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
                 }
                 else
                 {
                     await ClusterCaller.UpdateAsync(_clusterFormModel.Data);
+                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
                 }
 
                 await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
@@ -260,6 +265,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await ClusterCaller.RemoveAsync(deleteCluster.Id);
+                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     _clusters.Remove(deleteCluster);
                     _selectEnvClusterId = _clusters.Any() ? _clusters[0].EnvironmentClusterId : 0;

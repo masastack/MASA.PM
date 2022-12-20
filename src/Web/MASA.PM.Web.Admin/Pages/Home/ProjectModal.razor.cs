@@ -108,6 +108,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await ProjectCaller.DeleteAsync(_projectDetail.Id);
+                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+
                     if (OnSubmitProjectAfter.HasDelegate)
                     {
                         await OnSubmitProjectAfter.InvokeAsync();
@@ -124,10 +126,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_projectFormModel.HasValue)
                 {
                     await ProjectCaller.AddAsync(_projectFormModel.Data);
+                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
                 }
                 else
                 {
                     await ProjectCaller.UpdateAsync(_projectFormModel.Data);
+                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
                 }
 
                 if (OnSubmitProjectAfter.HasDelegate)
