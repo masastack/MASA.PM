@@ -106,7 +106,7 @@ docker-build-prd:
   only:
     - tags  
   script:
-    - docker build -f $DOCKER_PM_PATH -t $NEW_IMAGE_PM.
+    - docker build -f $DOCKER_PM_PATH -t $NEW_IMAGE_PM .
     - docker push $NEW_IMAGE_PM
     - docker build -f $DOCKER_UI_PATH -t $NEW_IMAGE_PM_UI .
     - docker push $NEW_IMAGE_PM_UI
