@@ -93,9 +93,13 @@
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @AppDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @AppDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                            <DateTimeZone Value="AppDetail.CreationTime" />
+                        </MCol>
                         <MCol Cols=6>@T("Modifier"): @AppDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @AppDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                            <DateTimeZone Value="AppDetail.ModificationTime" />
+                        </MCol>
                     </MRow>
                 }
             </div>

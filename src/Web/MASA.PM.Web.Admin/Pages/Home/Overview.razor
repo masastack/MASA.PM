@@ -97,7 +97,7 @@
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween" Align="AlignTypes.Center">
-                    <MCol Cols="9">
+                    <MCol Cols="9" Class="pt-1">
                         <STextField TextColor="@_envFormModel.Data.Color" Class="pr-6" Outlined Label="@T("Name")" @bind-Value="_envFormModel.Data.Name"></STextField>
                     </MCol>
                     <MCol Cols="3" Align="AlignTypes.Start">
@@ -125,9 +125,13 @@
                 {
                     <MRow Justify="JustifyTypes.SpaceBetween" Class="pt-3 regular--text" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_envDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_envDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                            <DateTimeZone Value="_envDetail.CreationTime" />
+                        </MCol>
                         <MCol Cols=6>@T("Modifier"):@_envDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_envDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                            <DateTimeZone Value="_envDetail.ModificationTime" />
+                        </MCol>
                         <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
                     </MRow>
                 }
@@ -170,9 +174,13 @@
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): @_clusterDetail.CreationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                            <DateTimeZone Value="_clusterDetail.CreationTime" />
+                        </MCol>
                         <MCol Cols=6>@T("Modifier"): @_clusterDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): @_clusterDetail.ModificationTime.ToString(T("$DateTimeFormat"))</MCol>
+                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                            <DateTimeZone Value="_clusterDetail.ModificationTime" />
+                        </MCol>
                         <MCol Cols=6>@T("ProjectCount")：@_projectCount</MCol>
                     </MRow>
                 }
