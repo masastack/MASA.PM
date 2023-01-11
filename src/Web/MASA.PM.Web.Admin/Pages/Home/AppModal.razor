@@ -23,13 +23,13 @@
                 @if (_appFormModel.Data.Type == AppTypes.Service)
                 {
                     <MSelect Class="mt-6"
-                         @bind-Value="_appFormModel.Data.ServiceType"
-                         Disabled="@(_appFormModel.HasValue)"
-                         Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
-                         ItemText="r=>r.Name"
-                         ItemValue="r=>r.Value"
-                         Outlined
-                         Label="@T("Service type")">
+                    @bind-Value="_appFormModel.Data.ServiceType"
+                             Disabled="@(_appFormModel.HasValue)"
+                             Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
+                             ItemText="r=>r.Name"
+                             ItemValue="r=>r.Value"
+                             Outlined
+                             Label="@T("Service type")">
                     </MSelect>
                 }
                 <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
@@ -44,9 +44,13 @@
                                TItem="EnvironmentClusterDto"
                                TItemValue="int"
                                TValue="List<int>"
-                               OnSelectedItemUpdate="OnEnvironmentClusterSelectedItemUpdate">
+                               ValueChanged="OnEnvironmentClusterSelectedItemUpdate">
                     <SelectionContent Context="context">
-                        <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName" EnvironmentColor="@context.Item.EnvironmentColor" ClusterName="@context.Item.ClusterName" />
+                        <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName"
+                                        EnvironmentColor="@context.Item.EnvironmentColor"
+                                        ClusterName="@context.Item.ClusterName"
+                                        Close
+                                        OnCloseClick="()=>_appFormModel.Data.EnvironmentClusterInfos.Remove(new EnvironmentClusterInfo(context.Item.Id))" />
                     </SelectionContent>
                     <ItemContent>
                         <MListItemContent>
@@ -93,11 +97,13 @@
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @AppDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("CreationTime"):
                             <DateTimeZone Value="AppDetail.CreationTime" />
                         </MCol>
                         <MCol Cols=6>@T("Modifier"): @AppDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("ModificationTime"):
                             <DateTimeZone Value="AppDetail.ModificationTime" />
                         </MCol>
                     </MRow>

@@ -7,7 +7,7 @@
         <div class="d-flex flex-column" style="min-width:242px; align-items:center; overflow: auto; height: calc(100vh - 200px);">
             <MList Width="194">
                 <MListItemGroup Class="rounded-2"
-                                @bind-Value="_selectedEnvId"
+                @bind-Value="_selectedEnvId"
                                 Mandatory
                                 Color="#A3AED0">
                     @foreach (var env in _environments)
@@ -110,9 +110,15 @@
                                ItemValue="r=>r.Id"
                                Outlined
                                Label="@T("Relation cluster")"
+                               Chips
                                Multiple>
                     <SelectionContent Context="_context">
-                        <MChip Outlined Class="text-btn" Small TextColor="sample-green" Color="sample-green-lighten-5">
+                        <MChip Close
+                               OnCloseClick="()=>_envFormModel.Data.ClusterIds.RemoveAll(lusterId=>lusterId == _context.Item.Id)"
+                               Class="text-btn"
+                               Small
+                               TextColor="#05CD99"
+                               Color="#E6FAF5">
                             @_context.Item.Name
                         </MChip>
                     </SelectionContent>
@@ -125,11 +131,13 @@
                 {
                     <MRow Justify="JustifyTypes.SpaceBetween" Class="pt-3 regular--text" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_envDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("CreationTime"):
                             <DateTimeZone Value="_envDetail.CreationTime" />
                         </MCol>
                         <MCol Cols=6>@T("Modifier"):@_envDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("ModificationTime"):
                             <DateTimeZone Value="_envDetail.ModificationTime" />
                         </MCol>
                         <MCol Cols=6>@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
@@ -146,7 +154,7 @@
                 </div>
             </div>
         </MForm>
-    </SSheetDialog>
+</SSheetDialog>
 
 <SSheetDialog @key="@($"cluster-{_clusterFormModel.Visible}")" ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
@@ -159,39 +167,46 @@
                                ItemValue="r=>r.Id"
                                Outlined
                                Label="@T("Relation environment")"
+                               Chips
                                Multiple>
-                        <SelectionContent Context="context">
-                            <MChip Outlined Class="text-btn" Small TextColor=@context.Item.Color Color="sample-green-lighten-5">
-                                @context.Item.Name
-                            </MChip>
-                        </SelectionContent>
-                        <ItemContent>
-                            <MListItemContent style="@($"color: {context.Item.Color} !important")">@context.Item.Name</MListItemContent>
-                        </ItemContent>
-                    </SAutoComplete>
+                    <SelectionContent Context="context">
+                        <ColorChip Class="text-btn"
+                                   Close
+                                   OnCloseClick="()=>_clusterFormModel.Data.EnvironmentIds.RemoveAll(envId=>envId==context.Item.Id)"
+                                   Small
+                                   TextColor="@context.Item.Color">
+                            @context.Item.Name
+                        </ColorChip>
+                    </SelectionContent>
+                    <ItemContent>
+                        <MListItemContent style="@($"color: {context.Item.Color} !important")">@context.Item.Name</MListItemContent>
+                    </ItemContent>
+                </SAutoComplete>
                 <MTextarea Class="mt-6" Outlined Label="@T("Description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
                 @if (_clusterFormModel.HasValue)
                 {
                     <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
                         <MCol Cols=6>@T("Creator"): @_clusterDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("CreationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("CreationTime"):
                             <DateTimeZone Value="_clusterDetail.CreationTime" />
                         </MCol>
                         <MCol Cols=6>@T("Modifier"): @_clusterDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>@T("ModificationTime"): 
+                        <MCol Class="d-flex justify-end" Cols=6>
+                            @T("ModificationTime"):
                             <DateTimeZone Value="_clusterDetail.ModificationTime" />
                         </MCol>
                         <MCol Cols=6>@T("ProjectCount")：@_projectCount</MCol>
                     </MRow>
                 }
-            </div>
-            <div class="d-flex align-end" style="width:100%;">
-                @if (_clusterFormModel.HasValue)
-                {
-                    <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
-                }
-                <MSpacer></MSpacer>
-                <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitClusterAsync(formContext)">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
+        </div>
+        <div class="d-flex align-end" style="width:100%;">
+            @if (_clusterFormModel.HasValue)
+            {
+                <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
+            }
+            <MSpacer></MSpacer>
+            <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitClusterAsync(formContext)">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
             </div>
         </div>
     </MForm>

@@ -15,7 +15,7 @@
                     <div class="mr-3" style="overflow:hidden">
                         @foreach (var item in EnvironmentClusters)
                         {
-                            <EnvClusterChip Style="margin:0 12px 1px 0;" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
+                            <EnvClusterChip Outlined Style="margin:0 12px 1px 0;" EnvironmentName="@item.EnvironmentName" EnvironmentColor="@item.EnvironmentColor" ClusterName="@item.ClusterName" />
                         }
                     </div>
                     @ChildContent
