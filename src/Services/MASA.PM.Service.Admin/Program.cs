@@ -3,9 +3,6 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine("=================");
-Console.WriteLine(builder.Configuration.GetValue<string>("IdentityServerUrl"));
-
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
