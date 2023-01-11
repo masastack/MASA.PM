@@ -41,7 +41,7 @@
                                 </div>
                             }
                         }
-                        <MButton Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">下一步</MButton>
+                        <MButton Height="40" Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">下一步</MButton>
                     </MForm>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
@@ -50,7 +50,7 @@
                         <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                         <div class="d-flex justify-end">
                             <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
-                            <MButton Height="40" Width=100 Class="rounded-pill" Color="primary" OnClick="()=>InitAsync(context)" Loading="_initLoading">提交</MButton>
+                            <SButton Small OnClick="()=>InitAsync(context)" Loading="_initLoading">提交</SButton>
                         </div>
                     </MForm>
                 </MStepperContent>

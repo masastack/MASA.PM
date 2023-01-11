@@ -130,15 +130,20 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private void OnEnvironmentClusterSelectedItemUpdate(EnvironmentClusterDto environmentCluster)
+        private void OnEnvironmentClusterSelectedItemUpdate(List<int> values)
         {
-            if (_appFormModel.Data.EnvironmentClusterInfos.Any(e => e.EnvironmentClusterId == environmentCluster.Id))
+            var oldValues = _appFormModel.Data.EnvironmentClusterInfos.Select(envCluster => envCluster.EnvironmentClusterId);
+            var insertValue = values.Except(oldValues).SingleOrDefault();
+            var removeValue = oldValues.Except(values).SingleOrDefault();
+
+            if (insertValue != default)
             {
-                _appFormModel.Data.EnvironmentClusterInfos.RemoveAll(e => e.EnvironmentClusterId == environmentCluster.Id);
+                _appFormModel.Data.EnvironmentClusterInfos.Add(new EnvironmentClusterInfo(insertValue));
             }
-            else
+
+            if (removeValue != default)
             {
-                _appFormModel.Data.EnvironmentClusterInfos.Add(new EnvironmentClusterInfo(environmentCluster.Id));
+                _appFormModel.Data.EnvironmentClusterInfos.Remove(new EnvironmentClusterInfo(removeValue));
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿<MChip Small Outlined Class="@Class" Style="@Style">
+﻿<MChip Small Class="@Class" Outlined="@Outlined" TextColor="@EnvironmentColor" Color="@(Color ?? GenRgba(EnvironmentColor,0.2f))" Style="@Style" Close="@Close" OnCloseClick="OnCloseClick">
     <div style="@($"color: {EnvironmentColor} !important")" class="text-overflow">@EnvironmentName</div>
     <div class="ml-1"></div>
     <div style="color:#05CD99;" class="text-overflow">@ClusterName</div>
@@ -6,7 +6,13 @@
 
 @code {
     [Parameter]
+    public bool Outlined { get; set; }
+
+    [Parameter]
     public string Class { get; set; } = "";
+
+    [Parameter]
+    public string? Color { get; set; }
 
     [Parameter]
     public string Style { get; set; } = "";
@@ -19,4 +25,20 @@
 
     [Parameter]
     public string ClusterName { get; set; } = "";
+
+    [Parameter]
+    public bool Close { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnCloseClick { get; set; }
+
+    private static string GenRgba(string hex, float opacity)
+    {
+        var color = System.Drawing.ColorTranslator.FromHtml(hex);
+        var r = Convert.ToInt16(color.R);
+        var g = Convert.ToInt16(color.G);
+        var b = Convert.ToInt16(color.B);
+
+        return $"rgba({r},{g},{b},{opacity})";
+    }
 }
