@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Data.UoW;
+using Masa.BuildingBlocks.Dispatcher.IntegrationEvents;
+
 var builder = WebApplication.CreateBuilder(args);
 
 if (!builder.Environment.IsDevelopment())
@@ -90,11 +93,11 @@ var app = builder.Services
         });
     })
     .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
-    .AddIntegrationEventBus<IntegrationEventLogService>(options =>
+    .AddIntegrationEventBus(options =>
     {
         options.UseDapr()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseEventLog<PmDbContext>()
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
