@@ -50,7 +50,7 @@
                                         EnvironmentColor="@context.Item.EnvironmentColor"
                                         ClusterName="@context.Item.ClusterName"
                                         Close
-                                        OnCloseClick="()=>_appFormModel.Data.EnvironmentClusterInfos.Remove(new EnvironmentClusterInfo(context.Item.Id))" />
+                                        OnCloseClick="()=>_appFormModel.Data.EnvironmentClusterInfos.RemoveAll(ec=>ec.EnvironmentClusterId == context.Item.Id)" />
                     </SelectionContent>
                     <ItemContent>
                         <MListItemContent>

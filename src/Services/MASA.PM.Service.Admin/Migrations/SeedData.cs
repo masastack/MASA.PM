@@ -292,7 +292,7 @@ namespace MASA.PM.Service.Admin.Migrations
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                                 AppId = app.AppId,
-                                AppURL = $"https://{app.ProjectDescription}-{envName}.masastack.com"
+                                AppURL = masaStackConfig.GetDomain("http", project.Name, app.Description)
                             });
                         }
                     }
@@ -359,6 +359,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 Type = appType,
                 Identity = appIdentity,
                 Name = name,
+                Description = type
             };
 
             return app;
