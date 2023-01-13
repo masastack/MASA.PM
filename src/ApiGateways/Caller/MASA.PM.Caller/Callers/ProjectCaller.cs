@@ -7,7 +7,9 @@ namespace MASA.PM.Caller.Callers
     {
         private readonly string _prefix = "/api/v1/project";
 
-        public ProjectCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ProjectCaller(
+            IServiceProvider serviceProvider,
+            PMApiGatewayOptions options) : base(serviceProvider, options)
         {
             Name = nameof(ProjectCaller);
         }

@@ -14,7 +14,6 @@ global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Stack.Components;
 global using Masa.Stack.Components.Configs;
 global using Masa.Stack.Components.Extensions.OpenIdConnect;
-global using Masa.Utils.Configuration.Json;
 global using MASA.PM.Caller.Callers;
 global using MASA.PM.Contracts.Admin.Dto;
 global using MASA.PM.Contracts.Admin.Enum;

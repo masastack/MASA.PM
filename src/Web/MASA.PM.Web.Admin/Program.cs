@@ -52,7 +52,9 @@ builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<HttpClientAuthorizationDelegatingHandler>();
-builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
+//builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
+
+builder.Services.AddPMApiGateways(c => c.PMServiceAddress = masaStackConfig.GetPmServiceDomain());
 
 var app = builder.Build();
 

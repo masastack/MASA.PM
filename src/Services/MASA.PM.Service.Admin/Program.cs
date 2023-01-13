@@ -74,7 +74,7 @@ var redisOptions = new RedisConfigurationOptions
 builder.Services.AddAuthClient(masaStackConfig.GetAuthServiceDomain(), redisOptions);
 builder.Services.AddDccClient(redisOptions);
 
-var connstr = masaStackConfig.GetConnectionString("pm_dev");
+var connstr = masaStackConfig.GetConnectionString("pm");
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()

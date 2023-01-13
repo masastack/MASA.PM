@@ -5,12 +5,14 @@ namespace MASA.PM.Caller.Callers
 {
     public class PmHttpClientCallerBase : HttpClientCallerBase
     {
-        public PmHttpClientCallerBase(IServiceProvider serviceProvider) : base(serviceProvider)
+        public PmHttpClientCallerBase(
+            IServiceProvider serviceProvider,
+            PMApiGatewayOptions options) : base(serviceProvider)
         {
-
+            BaseAddress = options.PMServiceAddress;
         }
 
-        protected override string BaseAddress { get; set; } = AppSettings.Get("PmServiceBaseAddress");
+        protected override string BaseAddress { get; set; }
 
         protected override IHttpClientBuilder UseHttpClient()
         {
