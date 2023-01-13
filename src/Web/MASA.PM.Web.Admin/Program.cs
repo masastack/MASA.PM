@@ -1,13 +1,17 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Stack.Components.Extensions.OpenIdConnect;
+using Masa.Contrib.StackSdks.Config;
+using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
 }
+
+builder.Services.AddMasaStackConfig();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -32,13 +36,18 @@ builder.WebHost.UseKestrel(option =>
     });
 });
 
-builder.AddMasaStackComponentsForServer("wwwroot/i18n",
-    builder.Configuration["AuthServiceBaseAddress"],
-    builder.Configuration["McServiceBaseAddress"],
-    builder.Configuration["PmServiceBaseAddress"],
-    AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig"));
+builder.AddMasaStackComponentsForServer("wwwroot/i18n");
 
-builder.Services.AddMasaOpenIdConnect(AppSettings.GetModel<MasaOpenIdConnectOptions>("OIDC"));
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = masaStackConfig.GetSsoDomain(),
+    ClientId = masaStackConfig.GetServiceId("auth", "ui"),
+    Scopes = new List<string> { "offline_access" }
+};
+
+IdentityModelEventSource.ShowPII = true;
+
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 
 builder.Services.AddHttpContextAccessor();
 

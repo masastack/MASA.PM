@@ -29,7 +29,8 @@
 		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="0.7.0-preview.20" />
 		<PackageReference Include="Masa.Contrib.Exceptions" Version="0.7.0-preview.20" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="0.7.0-preview.20" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="0.7.0-preview.20" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="0.7.0-preview.23" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="0.7.0-preview.22" />
     <PackageReference Include="Masa.Contrib.Configuration" Version="0.7.0-preview.20" />
     <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="0.7.0-preview.20" />
 		<PackageReference Include="MASA.Contrib.Data.Contracts.EFCore" Version="0.7.0-preview.9" />

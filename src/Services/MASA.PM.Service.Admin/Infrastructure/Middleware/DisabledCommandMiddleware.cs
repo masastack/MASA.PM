@@ -7,16 +7,18 @@ namespace MASA.PM.Service.Admin.Infrastructure.Middleware
     where TEvent : notnull, IEvent
     {
         readonly IUserContext _userContext;
+        readonly IMasaStackConfig _masaStackConfig;
 
-        public DisabledCommandMiddleware(IUserContext userContext)
+        public DisabledCommandMiddleware(IUserContext userContext, IMasaStackConfig masaStackConfig)
         {
             _userContext = userContext;
+            _masaStackConfig = masaStackConfig;
         }
 
         public override async Task HandleAsync(TEvent @event, EventHandlerDelegate next)
         {
             var user = _userContext.GetUser<MasaUser>();
-            if (user?.Account == "Guest" && @event is ICommand)
+            if (_masaStackConfig.IsDemo || user?.Account == "Guest" && @event is ICommand)
             {
                 throw new UserFriendlyException("演示账号禁止操作");
             }
