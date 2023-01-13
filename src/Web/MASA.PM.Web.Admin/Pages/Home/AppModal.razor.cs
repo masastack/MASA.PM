@@ -143,7 +143,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (removeValue != default)
             {
-                _appFormModel.Data.EnvironmentClusterInfos.Remove(new EnvironmentClusterInfo(removeValue));
+                _appFormModel.Data.EnvironmentClusterInfos.RemoveAll(ec => ec.EnvironmentClusterId == removeValue);
             }
         }
     }
