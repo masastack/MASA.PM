@@ -1,8 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿
+@inherits LayoutComponentBase
 @inject GlobalConfig GlobalConfig
+@inject IMasaStackConfig MasaStackConfig
 
 <SLayout OnErrorAsync="OnError"
-         AppId="masa-pm-web-admin"
+         AppId="@MasaStackConfig.GetUiId("pm")"
          TeamRouteFormat="team"
          Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
          MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
