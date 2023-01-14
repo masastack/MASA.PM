@@ -5,7 +5,6 @@ global using System.Reflection;
 global using Masa.Contrib.Service.Caller.HttpClient;
 global using Masa.Utils.Configuration.Json;
 global using MASA.PM.Caller;
-global using MASA.PM.Caller.Callers;
 global using MASA.PM.Contracts.Admin.Dto;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Http;

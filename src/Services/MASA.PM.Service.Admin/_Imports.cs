@@ -21,6 +21,7 @@ global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Configuration.ConfigurationApi.Dcc.Options;
 global using Masa.Contrib.Dispatcher.Events;
 global using Masa.Contrib.StackSdks.Config;
+global using Masa.Contrib.StackSdks.Tsc;
 global using MASA.PM.Contracts.Admin.Dto;
 global using MASA.PM.Contracts.Admin.Enum;
 global using MASA.PM.Service.Admin.Application.App.Commands;

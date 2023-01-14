@@ -2,14 +2,24 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMasaStackConfig();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
 {
-    builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
+    builder.Services.AddObservable(builder.Logging, () =>
+    {
+        return new MasaObservableOptions
+        {
+            ServiceNameSpace = builder.Environment.EnvironmentName,
+            ServiceVersion = masaStackConfig.Version,
+            ServiceName = masaStackConfig.GetServerId("pm")
+        };
+    }, () =>
+    {
+        return masaStackConfig.OtlpUrl;
+    }, true);
 }
-
-builder.Services.AddMasaStackConfig();
-var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 DccOptions dccOptions = masaStackConfig.GetDccMiniOptions<DccOptions>();
 builder.Services.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc(dccOptions));
@@ -74,7 +84,6 @@ var redisOptions = new RedisConfigurationOptions
 builder.Services.AddAuthClient(masaStackConfig.GetAuthServiceDomain(), redisOptions);
 builder.Services.AddDccClient(redisOptions);
 
-var connstr = masaStackConfig.GetConnectionString("pm");
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
@@ -110,7 +119,7 @@ var app = builder.Services
 
         options.UseDapr()
         .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connstr).UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("pm")).UseFilter())
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));

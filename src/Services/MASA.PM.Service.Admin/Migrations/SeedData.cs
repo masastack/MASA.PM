@@ -292,7 +292,7 @@ namespace MASA.PM.Service.Admin.Migrations
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                                 AppId = app.AppId,
-                                AppURL = masaStackConfig.GetDomain("http", project.Name, app.Description)
+                                AppURL = masaStackConfig.GetUIDomain("http", project.Name, app.Description)
                             });
                         }
                     }
@@ -305,12 +305,16 @@ namespace MASA.PM.Service.Admin.Migrations
         public static List<AddProjectAppDto> GetProjectApps(IMasaStackConfig masaStackConfig)
         {
             var allServer = masaStackConfig.GetAllServer();
+            var allUI = masaStackConfig.GetAllUI();
+            var allService = allServer.Union(allUI).ToList().GroupBy(s => s.Key)
+                .Select(g => new { g.Key, Value = g.SelectMany(a => a.Value).ToList() }).ToList();
+
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
             var teamId = Guid.Empty;
             var labelCode = "Other";
-            foreach (var server in allServer)
+            foreach (var service in allService)
             {
-                var project = server.Key;
+                var project = service.Key;
 
                 AddProjectAppDto projectApp = new AddProjectAppDto
                 {
@@ -321,10 +325,10 @@ namespace MASA.PM.Service.Admin.Migrations
                     Description = project
                 };
 
-                var apps = server.Value;
-                foreach (var item in apps.ToList())
+                var apps = service.Value;
+                foreach (var app in apps)
                 {
-                    projectApp.Apps.Add(GenAppDto(item));
+                    projectApp.Apps.Add(GenAppDto(app));
                 }
 
                 projectApps.Add(projectApp);
