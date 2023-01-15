@@ -137,11 +137,10 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 var newProject = await projectRepository.AddAsync(project.Adapt<Infrastructure.Entities.Project>());
                 projectIds.Add(newProject.Id);
-
                 foreach (var app in project.Apps)
                 {
                     var newApp = await appRepository.AddAsync(app.Adapt<Infrastructure.Entities.App>());
-                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Identity));
+                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Description));
                 }
 
                 foreach (var envCluster in envClusetr)
@@ -190,7 +189,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     Identity = project,
                     LabelCode = GetLabel(project),
                     TeamId = teamId,
-                    Description = ""
+                    Description = project
                 };
 
                 var apps = service.Value;
