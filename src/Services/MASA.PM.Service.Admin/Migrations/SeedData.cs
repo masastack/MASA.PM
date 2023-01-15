@@ -37,18 +37,18 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 ClusterName = masaStackConfig.Cluster,
                 Environments = new List<AddEnvironmentDto> {
-                    new AddEnvironmentDto
-                    {
-                        Name = "Development",
-                        Description="开发环境",
-                        Color = "#FF7D00"
-                    },
-                    new AddEnvironmentDto
-                    {
-                        Name = "Staging",
-                        Description="模拟环境",
-                        Color = "#37A7FF"
-                    },
+                    //new AddEnvironmentDto
+                    //{
+                    //    Name = "Development",
+                    //    Description="开发环境",
+                    //    Color = "#FF7D00"
+                    //},
+                    //new AddEnvironmentDto
+                    //{
+                    //    Name = "Staging",
+                    //    Description="模拟环境",
+                    //    Color = "#37A7FF"
+                    //},
                     new AddEnvironmentDto
                     {
                         Name = "Production",
@@ -141,7 +141,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 foreach (var app in project.Apps)
                 {
                     var newApp = await appRepository.AddAsync(app.Adapt<Infrastructure.Entities.App>());
-                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Description));
+                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Identity));
                 }
 
                 foreach (var envCluster in envClusetr)
@@ -161,7 +161,7 @@ namespace MASA.PM.Service.Admin.Migrations
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                                 AppId = app.AppId,
-                                AppURL = masaStackConfig.GetUIDomain("http", project.Name, app.Description)
+                                AppURL = masaStackConfig.GetUIDomain("http", project.Name.ToLower(), app.Description)
                             });
                         }
                     }
@@ -180,7 +180,6 @@ namespace MASA.PM.Service.Admin.Migrations
 
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
             var teamId = Guid.Empty;
-            var labelCode = "Other";
             foreach (var service in allService)
             {
                 var project = service.Key;
@@ -189,7 +188,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 {
                     Name = project.ToUpper(),
                     Identity = project,
-                    LabelCode = labelCode,
+                    LabelCode = GetLabel(project),
                     TeamId = teamId,
                     Description = ""
                 };
@@ -204,6 +203,22 @@ namespace MASA.PM.Service.Admin.Migrations
             }
 
             return projectApps;
+        }
+
+        private static string GetLabel(string projectIdentity)
+        {
+            //temporary hard code
+            var labelDictionary = new Dictionary<string, string>() {
+                {MasaStackConstant.PM,"Operator" },
+                {MasaStackConstant.DCC,"Operator" },
+                {MasaStackConstant.ALERT,"Operator" },
+                {MasaStackConstant.MC,"Operator" },
+                {MasaStackConstant.TSC,"Operator" },
+                {MasaStackConstant.AUTH,"BasicAbility" },
+                {MasaStackConstant.SCHEDULER,"BasicAbility" }
+            };
+            labelDictionary.TryGetValue(projectIdentity, out string? label);
+            return label ?? "Other";
         }
 
         private static AddAppDto GenAppDto(KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
