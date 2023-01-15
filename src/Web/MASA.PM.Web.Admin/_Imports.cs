@@ -10,6 +10,7 @@ global using Masa.Blazor;
 global using Masa.BuildingBlocks.StackSdks.Auth;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
+global using Masa.BuildingBlocks.StackSdks.Config;
 global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
 global using Masa.Contrib.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Tsc;

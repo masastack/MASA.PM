@@ -13,7 +13,7 @@ if (!builder.Environment.IsDevelopment())
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetServerId("pm")
+            ServiceName = masaStackConfig.GetServerId(MasaStackConstant.PM)
         };
     }, () =>
     {

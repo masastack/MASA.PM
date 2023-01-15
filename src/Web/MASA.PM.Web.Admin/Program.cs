@@ -14,7 +14,7 @@ if (!builder.Environment.IsDevelopment())
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetUiId("pm")
+            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.PM)
         };
     }, () =>
     {
@@ -50,7 +50,7 @@ builder.AddMasaStackComponentsForServer("wwwroot/i18n");
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
     Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetUiId("pm"),
+    ClientId = masaStackConfig.GetWebId(MasaStackConstant.PM),
     Scopes = new List<string> { "offline_access" }
 };
 
