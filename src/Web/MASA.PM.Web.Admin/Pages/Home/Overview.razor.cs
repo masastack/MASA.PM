@@ -110,6 +110,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
 
             _allClusters = await ClusterCaller.GetListAsync();
+            if (_allClusters.Any())
+            {
+                _envFormModel.Data.ClusterIds.Add(_allClusters.First().Id);
+            }
         }
 
         private async Task SubmitEnvAsync(FormContext context)
