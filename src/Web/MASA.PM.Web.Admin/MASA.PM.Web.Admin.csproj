@@ -15,8 +15,8 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="0.7.0-preview.20" />
-    <PackageReference Include="Masa.Stack.Components" Version="0.0.199" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="1.0.0-preview.8" />
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.225" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 

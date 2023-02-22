@@ -9,7 +9,6 @@ namespace MASA.PM.Caller.Callers
 
         public EnvironmentCaller(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Name = nameof(EnvironmentCaller);
         }
 
         public async Task<EnvironmentDetailDto> GetAsync(int Id)

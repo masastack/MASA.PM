@@ -9,7 +9,6 @@ namespace MASA.PM.Caller.Callers
 
         public ClusterCaller(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Name = nameof(ClusterCaller);
         }
 
         public async Task<List<ClusterDto>> GetListByEnvIdAsync(int envId)
