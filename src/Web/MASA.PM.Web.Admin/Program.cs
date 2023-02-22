@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Stack.Components.Extensions.OpenIdConnect;
-
 var builder = WebApplication.CreateBuilder(args);
 if (!builder.Environment.IsDevelopment())
 {
@@ -43,7 +41,7 @@ builder.Services.AddMasaOpenIdConnect(AppSettings.GetModel<MasaOpenIdConnectOpti
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<HttpClientAuthorizationDelegatingHandler>();
-builder.Services.AddCaller(Assembly.Load("MASA.PM.Caller"));
+builder.Services.AddAutoRegistrationCaller(Assembly.Load("MASA.PM.Caller"));
 
 var app = builder.Build();
 

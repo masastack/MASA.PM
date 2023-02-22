@@ -9,7 +9,6 @@ namespace MASA.PM.Caller.Callers
 
         public AppCaller(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Name = nameof(AppCaller);
         }
 
         public async Task<List<AppDto>> GetListAsync()
