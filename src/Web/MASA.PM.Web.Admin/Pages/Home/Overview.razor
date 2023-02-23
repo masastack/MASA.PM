@@ -94,7 +94,7 @@
 
 </div>
 
-<SSheetDialog @key="@($"env-{_envFormModel.Visible}")" ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Icon="mdi-circle" IconColor="success">
+<SSheetDialog ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_envFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
@@ -158,7 +158,7 @@
         </MForm>
 </SSheetDialog>
 
-<SSheetDialog @key="@($"cluster-{_clusterFormModel.Visible}")" ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
+<SSheetDialog ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">

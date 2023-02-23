@@ -1,6 +1,6 @@
 ﻿@inherits PmCompontentBase
 
-<SSheetDialog @key="@($"project-{_projectFormModel.Visible}")" Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
+<SSheetDialog Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
             <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
