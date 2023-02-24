@@ -2,7 +2,9 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddMasaStackConfig();
+
+DccOptions dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
+await builder.Services.AddMasaStackConfigAsync(dccOptions, true);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
@@ -20,10 +22,6 @@ if (!builder.Environment.IsDevelopment())
         return masaStackConfig.OtlpUrl;
     }, true);
 }
-
-DccOptions dccOptions = masaStackConfig.GetDccMiniOptions<DccOptions>();
-builder.Services.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc(dccOptions));
-
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -113,13 +111,12 @@ var app = builder.Services
             }
         });
     })
-    .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddIntegrationEventBus(options =>
     {
-
+        var connStr = masaStackConfig.GetConnectionString("pm_dev");
         options.UseDapr()
         .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(masaStackConfig.GetConnectionString("pm")).UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));

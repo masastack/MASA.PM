@@ -51,8 +51,8 @@ namespace MASA.PM.Service.Admin.Migrations
                     //},
                     new AddEnvironmentDto
                     {
-                        Name = "Production",
-                        Description="生产环境",
+                        Name = masaStackConfig.Environment,
+                        Description= masaStackConfig.Environment + "环境",
                         Color = "#FF5252"
                     }
                 }

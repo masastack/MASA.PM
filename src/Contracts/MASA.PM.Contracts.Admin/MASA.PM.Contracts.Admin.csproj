@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Masa.Utils.Data.DataAnnotations" Version="0.7.0-preview.28" />
+    <PackageReference Include="Masa.Utils.Data.DataAnnotations" Version="1.0.0-preview.10" />
   </ItemGroup>
 
 </Project>

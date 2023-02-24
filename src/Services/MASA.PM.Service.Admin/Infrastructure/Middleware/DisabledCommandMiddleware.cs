@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Infrastructure.Middleware
 {
-    public class DisabledCommandMiddleware<TEvent> : Middleware<TEvent>
+    public class DisabledCommandMiddleware<TEvent> : EventMiddleware<TEvent>
     where TEvent : notnull, IEvent
     {
         readonly IUserContext _userContext;

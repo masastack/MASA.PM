@@ -7,11 +7,11 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPMApiGateways(this IServiceCollection services, Action<PMApiGatewayOptions>? configure = null)
     {
-        var options = new PMApiGatewayOptions("http://localhost:18002/");
+        var options = new PMApiGatewayOptions("http://localhost:19401/");
 
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddCaller(Assembly.Load("MASA.PM.Caller"));
+        services.AddAutoRegistrationCaller(Assembly.Load("MASA.PM.Caller"));
 
         return services;
     }

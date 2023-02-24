@@ -11,7 +11,6 @@ namespace MASA.PM.Caller.Callers
             IServiceProvider serviceProvider,
             PMApiGatewayOptions options) : base(serviceProvider, options)
         {
-            Name = nameof(ClusterCaller);
         }
 
         public async Task<List<ClusterDto>> GetListByEnvIdAsync(int envId)

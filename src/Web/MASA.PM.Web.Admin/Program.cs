@@ -3,7 +3,29 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMasaStackConfig();
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+builder.Services.AddScoped<TokenProvider>();
+
+builder.WebHost.UseKestrel(option =>
+{
+    option.ConfigureHttpsDefaults(options =>
+    {
+        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TLS_NAME")))
+        {
+            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
+        }
+        else
+        {
+            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
+        }
+        options.CheckCertificateRevocation = false;
+    });
+});
+
+builder.Services.AddHttpContextAccessor();
+builder.AddMasaStackComponentsForServer();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
@@ -23,29 +45,6 @@ if (!builder.Environment.IsDevelopment())
 }
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-builder.Services.AddScoped<TokenProvider>();
-
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
-
-builder.WebHost.UseKestrel(option =>
-{
-    option.ConfigureHttpsDefaults(options =>
-    {
-        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TLS_NAME")))
-        {
-            options.ServerCertificate = new X509Certificate2(Path.Combine("Certificates", "7348307__lonsid.cn.pfx"), "cqUza0MN");
-        }
-        else
-        {
-            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-        }
-        options.CheckCertificateRevocation = false;
-    });
-});
-
-builder.AddMasaStackComponentsForServer("wwwroot/i18n");
 
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
@@ -55,12 +54,7 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 };
 
 IdentityModelEventSource.ShowPII = true;
-
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddScoped<HttpClientAuthorizationDelegatingHandler>();
 
 builder.Services.AddPMApiGateways(c => c.PMServiceAddress = masaStackConfig.GetPmServiceDomain());
 

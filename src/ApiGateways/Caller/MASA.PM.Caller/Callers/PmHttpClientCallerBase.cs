@@ -13,10 +13,5 @@ namespace MASA.PM.Caller.Callers
         }
 
         protected override string BaseAddress { get; set; }
-
-        protected override IHttpClientBuilder UseHttpClient()
-        {
-            return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-        }
     }
 }

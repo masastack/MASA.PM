@@ -11,7 +11,6 @@ namespace MASA.PM.Caller.Callers
             IServiceProvider serviceProvider,
             PMApiGatewayOptions options) : base(serviceProvider, options)
         {
-            Name = nameof(ProjectCaller);
         }
 
         public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)

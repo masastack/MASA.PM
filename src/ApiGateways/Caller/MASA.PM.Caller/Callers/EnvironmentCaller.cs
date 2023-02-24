@@ -11,7 +11,6 @@ namespace MASA.PM.Caller.Callers
             IServiceProvider serviceProvider,
             PMApiGatewayOptions options) : base(serviceProvider, options)
         {
-            Name = nameof(EnvironmentCaller);
         }
 
         public async Task<EnvironmentDetailDto> GetAsync(int Id)
