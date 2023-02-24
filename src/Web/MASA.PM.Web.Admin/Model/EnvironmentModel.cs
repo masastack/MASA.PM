@@ -20,6 +20,8 @@ namespace MASA.PM.UI.Admin.Model
 
         public int Index { get; set; }
 
+        public bool Disabled { get; set; }
+
         public EnvModel(int index, string name, string description, string color)
         {
             Index = index;

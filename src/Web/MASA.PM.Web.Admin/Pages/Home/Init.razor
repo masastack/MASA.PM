@@ -30,7 +30,7 @@
                             {
                                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
                                     <MCol Cols="9">
-                                        <STextField TextColor="@item.Color" Class="pr-6 mb-6" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></STextField>
+                                        <STextField Disabled="@item.Disabled" TextColor="@item.Color" Class="pr-6 mb-6" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></STextField>
                                     </MCol>
                                     <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
                                         <SColorGroup @bind-Value="@item.Color" Colors="_colors"></SColorGroup>
@@ -48,7 +48,7 @@
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
                     <MForm Model="_initModel" EnableValidation>
-                        <STextField Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></STextField>
+                        <STextField Disabled Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></STextField>
                         <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                         <div class="d-flex justify-end">
                             <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>

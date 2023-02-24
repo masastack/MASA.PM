@@ -7,7 +7,9 @@ namespace MASA.PM.Caller.Callers
     {
         private readonly string _prefix = "/api/v1/cluster";
 
-        public ClusterCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ClusterCaller(
+            IServiceProvider serviceProvider,
+            PMApiGatewayOptions options) : base(serviceProvider, options)
         {
         }
 
