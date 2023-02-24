@@ -9,7 +9,6 @@ namespace MASA.PM.Caller.Callers
 
         public ProjectCaller(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Name = nameof(ProjectCaller);
         }
 
         public async Task<List<ProjectDto>> GetListByTeamIdsAsync(IEnumerable<Guid> teamIds)

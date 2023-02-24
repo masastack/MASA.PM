@@ -7,14 +7,8 @@ namespace MASA.PM.Caller.Callers
     {
         public PmHttpClientCallerBase(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-
         }
 
         protected override string BaseAddress { get; set; } = AppSettings.Get("PmServiceBaseAddress");
-
-        protected override IHttpClientBuilder UseHttpClient()
-        {
-            return base.UseHttpClient().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-        }
     }
 }

@@ -92,7 +92,6 @@ var app = builder.Services
             }
         });
     })
-    .AddTransient(typeof(IMiddleware<>), typeof(LogMiddleware<>))
     .AddIntegrationEventBus(options =>
     {
         options.UseDapr()
