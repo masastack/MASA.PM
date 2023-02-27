@@ -109,12 +109,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_appFormModel.HasValue)
                 {
                     await AppCaller.AddAsync(_appFormModel.Data);
-                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
+                    await PopupService.AlertAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await AppCaller.UpdateAsync(_appFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
+                    await PopupService.AlertAsync(T("Edit succeeded"), AlertTypes.Success);
                 }
 
                 if (OnSubmitProjectAfter.HasDelegate)
