@@ -1,17 +1,27 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.BuildingBlocks.Data.UoW;
-using Masa.BuildingBlocks.Dispatcher.IntegrationEvents;
-
 var builder = WebApplication.CreateBuilder(args);
+
+DccOptions dccOptions = builder.Configuration.GetSection("DccOptions").Get<DccOptions>();
+await builder.Services.AddMasaStackConfigAsync(dccOptions, true);
+var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
 {
-    builder.Services.AddObservable(builder.Logging, builder.Configuration, false);
+    builder.Services.AddObservable(builder.Logging, () =>
+    {
+        return new MasaObservableOptions
+        {
+            ServiceNameSpace = builder.Environment.EnvironmentName,
+            ServiceVersion = masaStackConfig.Version,
+            ServiceName = masaStackConfig.GetServerId(MasaStackConstant.PM)
+        };
+    }, () =>
+    {
+        return masaStackConfig.OtlpUrl;
+    }, true);
 }
-
-builder.Services.AddMasaConfiguration(configurationBuilder => configurationBuilder.UseDcc());
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -33,7 +43,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.Authority = builder.Services.GetMasaConfiguration().Local["IdentityServerUrl"];
+    options.Authority = masaStackConfig.GetSsoDomain();
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
@@ -59,8 +69,17 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-var redisOptions = AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig");
-builder.Services.AddAuthClient(builder.Services.GetMasaConfiguration().Local["AuthServiceBaseAddress"], redisOptions);
+var redisModel = masaStackConfig.RedisModel ?? new();
+var redisOptions = new RedisConfigurationOptions
+{
+    Servers = new List<RedisServerOptions>
+    {
+        new RedisServerOptions(redisModel.RedisHost,redisModel.RedisPort)
+    },
+    Password = redisModel.RedisPassword,
+    DefaultDatabase = redisModel.RedisDb
+};
+builder.Services.AddAuthClient(masaStackConfig.GetAuthServiceDomain(), redisOptions);
 builder.Services.AddDccClient(redisOptions);
 
 var app = builder.Services
@@ -94,9 +113,10 @@ var app = builder.Services
     })
     .AddIntegrationEventBus(options =>
     {
+        var connStr = masaStackConfig.GetConnectionString("pm_dev");
         options.UseDapr()
         .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer().UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
         .UseEventBus(eventBusBuilder =>
         {
             eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
@@ -105,7 +125,10 @@ var app = builder.Services
     .AddServices(builder);
 
 await app.MigrateAsync();
-await builder.SeedDataAsync();
+if (masaStackConfig.IsDemo)
+{
+    await builder.SeedDataAsync(masaStackConfig);
+}
 
 app.UseMasaExceptionHandler();
 
@@ -115,7 +138,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

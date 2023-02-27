@@ -9,16 +9,19 @@ namespace MASA.PM.Service.Admin.Application.Environment
         private readonly IClusterRepository _clusterRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IAppRepository _appRepository;
+        private readonly IMasaStackConfig _masaStackConfig;
 
         public EnvironmentCommandHandler(IEnvironmentRepository environmentRepository,
             IClusterRepository clusterRepository,
             IProjectRepository projectRepository,
-            IAppRepository appRepository)
+            IAppRepository appRepository,
+            IMasaStackConfig masaStackConfig)
         {
             _environmentRepository = environmentRepository;
             _clusterRepository = clusterRepository;
             _projectRepository = projectRepository;
             _appRepository = appRepository;
+            _masaStackConfig = masaStackConfig;
         }
 
         [EventHandler]
@@ -57,7 +60,7 @@ namespace MASA.PM.Service.Admin.Application.Environment
             }
 
             //project
-            var projects = SeedData.ProjectApps;
+            var projects = SeedData.GetProjectApps(_masaStackConfig);
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
             var appGroups = new List<(int ProjectId, string ProjectDescription, int AppId, string Description)>();

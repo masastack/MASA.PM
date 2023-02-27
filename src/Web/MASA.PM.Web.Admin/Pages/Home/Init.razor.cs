@@ -14,6 +14,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public NavigationManager NavigationManager { get; set; } = default!;
 
+        [Inject]
+        IMasaStackConfig MasaStackConfig { get; set; } = default!;
+
         private EnvironmentModel _customEnv = new();
         private int _step = 1;
         private InitDto _initModel = new();
@@ -27,6 +30,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (firstRender)
             {
+                var environments = new List<EnvModel>
+                {
+                    new EnvModel(0, "Development", "开发环境", _colors[0]),
+                    new EnvModel(1, "Staging", "模拟环境", _colors[1]),
+                    new EnvModel(2, "Production", "生产环境", _colors[2])
+                };
                 _customEnv = new EnvironmentModel()
                 {
                     Environments = new List<EnvModel>
@@ -36,6 +45,30 @@ namespace MASA.PM.Web.Admin.Pages.Home
                         new EnvModel(2, "Production", "生产环境", _colors[2])
                     }
                 };
+
+                _customEnv = new EnvironmentModel();
+                if (!string.IsNullOrWhiteSpace(MasaStackConfig.Environment))
+                {
+                    var defaultEnv = environments
+                        .FirstOrDefault(e => e.Name.ToLower() == MasaStackConfig.Environment.ToLower());
+
+                    if (defaultEnv != null)
+                    {
+                        environments.RemoveAll(e => e.Index == defaultEnv.Index);
+                        _customEnv.Environments.Add(new EnvModel(0, defaultEnv.Name, defaultEnv.Description, defaultEnv.Color));
+                    }
+                    else
+                    {
+                        _customEnv.Environments.Add(new EnvModel(0, MasaStackConfig.Environment, MasaStackConfig.Environment, _colors[2]));
+                    }
+
+                    _customEnv.Environments.AddRange(environments);
+                }
+                else
+                {
+                    _customEnv.Environments.AddRange(environments);
+                }
+                _initModel.ClusterName = MasaStackConfig.Cluster;
 
                 var envs = await EnvironmentCaller.GetListAsync();
                 if (envs.Count > 0)
