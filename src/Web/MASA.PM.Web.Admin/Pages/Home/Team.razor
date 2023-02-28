@@ -152,13 +152,11 @@
                     </div>
                     <div style="overflow:auto; height: calc(100vh - 256px);">
                         <MRow Class="mx-3">
-                            @{
-                                foreach (var app in _projectApps)
-                                {
-                                    <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                    </MCol>
-                                }
+                            @foreach (var app in _projectApps)
+                            {
+                                <MCol Lg="4" Md="6" Sm="12">
+                                    <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                </MCol>
                             }
                         </MRow>
                     </div>
