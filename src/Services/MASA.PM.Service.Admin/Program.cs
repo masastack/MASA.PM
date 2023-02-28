@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Utils.Configuration.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 await builder.Services.AddMasaStackConfigAsync(true);
@@ -112,7 +114,7 @@ var app = builder.Services
     })
     .AddIntegrationEventBus(options =>
     {
-        var connStr = masaStackConfig.GetConnectionString("pm_dev");
+        var connStr = masaStackConfig.GetConnectionString(AppSettings.Get("DBName"));
         options.UseDapr()
         .UseEventLog<PmDbContext>()
         .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
