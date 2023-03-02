@@ -3,7 +3,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-await builder.Services.AddMasaStackConfigAsync(true);
+await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())

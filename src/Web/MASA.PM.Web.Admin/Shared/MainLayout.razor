@@ -17,6 +17,6 @@
 
     async Task OnError(Exception exception)
     {
-        await PopupService.AlertAsync(exception.Message, AlertTypes.Error);
+        await PopupService.EnqueueSnackbarAsync(exception.Message, AlertTypes.Error);
     }
 }

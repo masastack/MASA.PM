@@ -95,7 +95,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _projectDetail.Id });
             if (apps.Any())
             {
-                await PopupService.AlertAsync(T("There are still applications under the current project, which cannot be deleted"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("There are still applications under the current project, which cannot be deleted"), AlertTypes.Error);
             }
             else
             {
@@ -108,7 +108,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await ProjectCaller.DeleteAsync(_projectDetail.Id);
-                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     if (OnSubmitProjectAfter.HasDelegate)
                     {
@@ -126,12 +126,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_projectFormModel.HasValue)
                 {
                     await ProjectCaller.AddAsync(_projectFormModel.Data);
-                    await PopupService.AlertAsync(T("Add succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await ProjectCaller.UpdateAsync(_projectFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Edit succeeded"), AlertTypes.Success);
                 }
 
                 if (OnSubmitProjectAfter.HasDelegate)

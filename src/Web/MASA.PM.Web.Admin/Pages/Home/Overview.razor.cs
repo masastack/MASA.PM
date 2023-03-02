@@ -120,12 +120,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     var newEnv = await EnvironmentCaller.AddAsync(_envFormModel.Data);
                     _environments.Add(newEnv);
-                    await PopupService.AlertAsync(T("Add succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await EnvironmentCaller.UpdateAsync(_envFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Edit succeeded"), AlertTypes.Success);
 
                     var newEnv = await EnvironmentCaller.GetAsync(_envFormModel.Data.EnvironmentId);
                     var env = _environments.First(e => e.Id == newEnv.Id);
@@ -142,13 +142,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             if (_clusters.Any())
             {
-                await PopupService.AlertAsync(T("There are still clusters under the current environment, which cannot be deleted"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("There are still clusters under the current environment, which cannot be deleted"), AlertTypes.Error);
                 return;
             }
 
             if (!_environments.Any())
             {
-                await PopupService.AlertAsync(T("The environment can not be empty"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("The environment can not be empty"), AlertTypes.Error);
             }
             else
             {
@@ -163,7 +163,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await EnvironmentCaller.RemoveAsync(envId);
-                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     _environments.Remove(deleteEnv);
                     _selectedEnvId = _environments[0].Id;
@@ -227,12 +227,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_clusterFormModel.HasValue)
                 {
                     await ClusterCaller.AddAsync(_clusterFormModel.Data);
-                    await PopupService.AlertAsync(T("Add succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await ClusterCaller.UpdateAsync(_clusterFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Edit succeeded"), AlertTypes.Success);
                 }
 
                 await GetClustersByEnvIdAsync(_selectedEnvId.AsT1);
@@ -247,14 +247,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var isExistProject = await ProjectCaller.IsExistProjectInCluster(clusterId);
             if (isExistProject)
             {
-                await PopupService.AlertAsync(T("There are still projects under the current cluster, which cannot be deleted"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("There are still projects under the current cluster, which cannot be deleted"), AlertTypes.Error);
                 return;
             }
 
             var deleteCluster = _clusters.FirstOrDefault(c => c.EnvironmentClusterId == _selectEnvClusterId.AsT1);
             if (deleteCluster == null)
             {
-                await PopupService.AlertAsync(T("The cluster can not be empty"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("The cluster can not be empty"), AlertTypes.Error);
             }
             else
             {
@@ -265,7 +265,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await ClusterCaller.RemoveAsync(deleteCluster.Id);
-                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     _clusters.Remove(deleteCluster);
                     _selectEnvClusterId = _clusters.Any() ? _clusters[0].EnvironmentClusterId : 0;

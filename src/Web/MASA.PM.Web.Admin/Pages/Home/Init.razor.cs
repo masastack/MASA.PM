@@ -86,7 +86,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 {
                     if (_customEnv.Environments.Count(e => e.Name.Equals(item.Name)) > 1)
                     {
-                        await PopupService.AlertAsync(T("The environment name cannot be duplicate"), AlertTypes.Error);
+                        await PopupService.EnqueueSnackbarAsync(T("The environment name cannot be duplicate"), AlertTypes.Error);
                         return;
                     }
                 }
@@ -111,12 +111,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     }).ToList();
                     await EnvironmentCaller.InitAsync(_initModel);
 
-                    await PopupService.AlertAsync("初始化完成！", AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync("初始化完成！", AlertTypes.Success);
                     NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
                 catch (Exception ex)
                 {
-                    await PopupService.AlertAsync(ex);
+                    await PopupService.EnqueueSnackbarAsync(ex.Message);
                 }
                 finally
                 {
