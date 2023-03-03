@@ -9,7 +9,8 @@ namespace MASA.PM.Caller.Callers
 
         public EnvironmentCaller(
             IServiceProvider serviceProvider,
-            PMApiGatewayOptions options) : base(serviceProvider, options)
+            TokenProvider tokenProvider,
+            PMApiGatewayOptions options) : base(serviceProvider, tokenProvider, options)
         {
         }
 
