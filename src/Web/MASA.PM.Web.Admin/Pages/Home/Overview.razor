@@ -44,7 +44,7 @@
                 </MListItemGroup>
             </MList>
         </div>
-		<MButton OnClick="()=>ShowEnvModalAsync()" Width="194" Tile Text Class="m-btn-add m-btn-add-environment">
+		<MButton OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Width="194" Tile Text Class="m-btn-add m-btn-add-environment">
             <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
         </MButton>
     </MNavigationDrawer>
@@ -75,7 +75,7 @@
                     }
                 </MTabs>
             </MCard>
-			<MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add m-btn-add-cluster">
+            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add m-btn-add-cluster" Style="height: 54px;">
                 <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
             </MButton>
         </MRow>
