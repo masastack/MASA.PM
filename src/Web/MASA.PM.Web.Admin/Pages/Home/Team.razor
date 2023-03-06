@@ -68,10 +68,10 @@
                                 @item.DisplayName
                             </MRow>
                         }
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6" Style="margin-bottom:16px;">@T("Members")</MRow>
                         @foreach (var item in _userTeam.Members)
                         {
-                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2" Style="margin-bottom:12px;">
                                 <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
                                     <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
                                 </MAvatar>
