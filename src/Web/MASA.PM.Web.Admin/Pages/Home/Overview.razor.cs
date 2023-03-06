@@ -36,7 +36,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ClusterDetailDto _clusterDetail = new();
         private readonly List<string> _colors = new()
         {
-            "#FF7D00", "#37A7FF", "#FF5252", "#37D7AD", "#FFC46C",
+            "#FF7D00", "#37A7FF", "#FF5252", "#05CD99", "#FFC46C",
         };
         private ProjectList? _projectListComponent;
 
