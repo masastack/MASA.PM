@@ -149,7 +149,9 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_envFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveEnvAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
+                    <MButton OnClick="RemoveEnvAsync" Left Icon Color="#FF5252" Depressed Class="delete-btn">
+                        <MIcon>mdi-delete</MIcon>
+                    </MButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitEnvAsync(formContext)">@(_envFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
@@ -205,7 +207,9 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_clusterFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveClusterAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
+                    <MButton OnClick="RemoveClusterAsync" Left Icon Color="#FF5252" Depressed Class="delete-btn">
+                        <MIcon>mdi-delete</MIcon>
+                    </MButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitClusterAsync(formContext)">@(_clusterFormModel.HasValue ? T("Save") : T("Submit"))</SButton>

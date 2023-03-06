@@ -442,18 +442,22 @@ input::-webkit-input-placeholder {
     border-radius: 8px;
     border: 2px dashed #e9edf7;
 }
-.m-btn-add:hover {
-    background: #f6f8fd !important;
-}
-.m-btn-add:active {
-    background: #e9edf7 !important;
-}
+
+    .m-btn-add:hover {
+        background: #f6f8fd !important;
+    }
+
+    .m-btn-add:active {
+        background: #e9edf7 !important;
+    }
+
 .m-btn-add-environment {
     position: fixed;
     left: 24px;
     right: 24px;
     bottom: 24px;
 }
+
 .m-btn-add-cluster {
     position: fixed;
     right: 48px;
@@ -461,4 +465,13 @@ input::-webkit-input-placeholder {
 /* SSelect selected background-color */
 .m-input .m-input__control .m-select__selections .m-chip {
     background-color: #f6f8fd !important;
+}
+
+
+.delete-btn:hover {
+    color: #FF8A80 !important;
+}
+
+.delete-btn:active {
+    color: #B71C1C !important;
 }

@@ -112,7 +112,9 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_appFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveAppAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
+                    <MButton OnClick="RemoveAppAsync" Left Icon Color="#FF5252" Depressed Class="delete-btn">
+                        <MIcon>mdi-delete</MIcon>
+                    </MButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
