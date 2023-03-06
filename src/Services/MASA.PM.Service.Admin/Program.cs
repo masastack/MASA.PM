@@ -21,6 +21,11 @@ if (!builder.Environment.IsDevelopment())
         return masaStackConfig.OtlpUrl;
     }, true);
 }
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
+    .AddDbContextCheck<PmDbContext>();
+
+builder.Services.AddStackMiddleware();
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -78,8 +83,9 @@ var redisOptions = new RedisConfigurationOptions
     Password = redisModel.RedisPassword,
     DefaultDatabase = redisModel.RedisDb
 };
-builder.Services.AddAuthClient(masaStackConfig.GetAuthServiceDomain(), redisOptions);
-builder.Services.AddDccClient(redisOptions);
+builder.Services
+    .AddAuthClient(masaStackConfig.GetAuthServiceDomain(), redisOptions)
+    .AddDccClient(redisOptions);
 
 var app = builder.Services
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -116,10 +122,7 @@ var app = builder.Services
         options.UseDapr()
         .UseEventLog<PmDbContext>()
         .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
-        .UseEventBus(eventBusBuilder =>
-        {
-            eventBusBuilder.UseMiddleware(typeof(DisabledCommandMiddleware<>));
-        });
+        .UseEventBus();
     })
     .AddServices(builder);
 
@@ -139,6 +142,8 @@ app.UseSwaggerUI();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAddStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
