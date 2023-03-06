@@ -24,6 +24,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.7" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="1.0.0-preview.15" />
 		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="1.0.0-preview.15" />
@@ -41,6 +42,7 @@
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="1.0.0-preview.15" />
 		<PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="1.0.0-preview.15" />
 		<PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="1.0.0-preview.15" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="1.0.0-preview.15" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="1.0.0-preview.15" />
 		<PackageReference Include="MASA.Utils.Configuration.Json" Version="1.0.0-preview.15" />
 		<PackageReference Include="Masa.Utils.Extensions.Enums" Version="1.0.0-preview.15" />
