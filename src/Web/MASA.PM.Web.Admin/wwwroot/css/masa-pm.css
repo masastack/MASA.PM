@@ -467,11 +467,10 @@ input::-webkit-input-placeholder {
     background-color: #f6f8fd !important;
 }
 
-
-.delete-btn:hover {
-    color: #FF8A80 !important;
+.light-blue-color {
+    color: #485585 !important;
+}
+.translucency-blue-color {
+    color: #A3AED0 !important;
 }
 
-.delete-btn:active {
-    color: #B71C1C !important;
-}
