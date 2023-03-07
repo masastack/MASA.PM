@@ -470,3 +470,14 @@ input::-webkit-input-placeholder {
 .m-input .m-input__control .m-select__selections .m-chip {
     background-color: #f6f8fd !important;
 }
+
+.m-btn-add-project {
+}
+
+    .m-btn-add-project:hover {
+        background-color: #6946FF !important;
+    }
+
+    .m-btn-add-project:active {
+        background-color: #3613CC !important;
+    }
