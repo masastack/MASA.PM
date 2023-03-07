@@ -311,9 +311,7 @@ input::-webkit-input-placeholder {
 
 .env-list {
     margin: 16px 0 !important;
-    min-height: 40px !important;
-    height: 40px !important;
-    max-height: 40px !important;
+    height: 48px !important;
 }
 
 .m-list-item-group .env-list.m-list-item--active:not(.m-icon) {
@@ -481,3 +479,13 @@ input::-webkit-input-placeholder {
     .m-btn-add-project:active {
         background-color: #3613CC !important;
     }
+.env-list:hover {
+    background-color: #F6F8FD;
+}
+.cluster-tabs .m-tab {
+    height: 48px;
+    max-width: 150px;
+}
+.m-card-wrap {
+    padding: 8px;
+}

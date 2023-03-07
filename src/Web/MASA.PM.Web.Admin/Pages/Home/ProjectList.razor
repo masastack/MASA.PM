@@ -75,7 +75,7 @@
                             {
                                 foreach (var app in apps)
                                 {
-                                    <MCol Lg="4" Md="6" Sm="12">
+                                    <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
                                         <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                     </MCol>
                                 }
@@ -93,7 +93,7 @@
                             {
                                 foreach (var app in apps.Take(3))
                                 {
-                                    <MCol Lg="4" Md="6" Sm="12">
+                                    <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
                                         <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                     </MCol>
                                 }
