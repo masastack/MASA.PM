@@ -1,15 +1,15 @@
 ﻿@inherits PmCompontentBase
 
-<SSheetDialog EnableDomReload ValueChanged="AppModalValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))" Icon="mdi-circle" IconColor="success">
+<SSimpleModal ValueChanged="AppModalValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))" Width="770" Height="@(_appFormModel.HasValue ? 1051:881)">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_appFormModel.Data">
-        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
+        <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
             <div class="full-height mb-2" style="overflow-x: hidden; overflow-y: auto;">
-                <STextField Class="mt-6" Outlined Label="@T("Name")" @bind-Value="_appFormModel.Data.Name"></STextField>
+                <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_appFormModel.Data.Name"></STextField>
                 <MSelect Value="_appFormModel.Data.Type"
                          ValueChanged="AppTypeValueChanged"
                          ValueExpression="()=>_appFormModel.Data.Type"
                          Disabled="@(_appFormModel.HasValue)"
-                         Class="mt-6"
+                         Class="mt-9"
                          Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Value"
@@ -22,7 +22,7 @@
                 </MSelect>
                 @if (_appFormModel.Data.Type == AppTypes.Service)
                 {
-                    <MSelect Class="mt-6"
+                    <MSelect Class="mt-9"
                     @bind-Value="_appFormModel.Data.ServiceType"
                              Disabled="@(_appFormModel.HasValue)"
                              Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
@@ -32,8 +32,8 @@
                              Label="@T("Service type")">
                     </MSelect>
                 }
-                <STextField Class="mt-6" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
-                <SAutoComplete Class="mt-6"
+                <STextField Class="mt-9" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
+                <SAutoComplete Class="mt-9"
                                Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
                                ItemText="r=>r.EnvironmentClusterName"
@@ -64,7 +64,7 @@
                     foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                     {
                         var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
-                        <STextField Class="mt-6" Outlined Label="URL" @bind-Value="item.Url">
+                        <STextField Class="mt-9" Outlined Label="URL" @bind-Value="item.Url">
                             <PrependInnerContent>
                                 <div class="mt-2 d-flex">
                                     <div style="@($"color: {environmentCluster.EnvironmentColor} !important")" class="text-overflow">@environmentCluster.EnvironmentName</div>
@@ -80,7 +80,7 @@
                         foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                         {
                             var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
-                            <STextField Class="mt-6" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
+                            <STextField Class="mt-9" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
                                 <PrependInnerContent>
                                     <div class="mt-2 d-flex">
                                         <div style="@($"color: {environmentCluster.EnvironmentColor} !important")" class="text-overflow">@environmentCluster.EnvironmentName</div>
@@ -92,17 +92,19 @@
                         }
                     }
                 }
-                <MTextarea Class="mt-6" Outlined Label="@T("Description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
+                <MTextarea Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
                 @if (_appFormModel.HasValue)
                 {
-                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @AppDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>
+                    <MRow Class="mt-2">
+                        <MCol Cols=6 Class="light-blue-color">@T("Creator"): @AppDetail.CreatorName</MCol>
+                        <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
                             @T("CreationTime"):
                             <DateTimeZone Value="AppDetail.CreationTime" />
                         </MCol>
-                        <MCol Cols=6>@T("Modifier"): @AppDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>
+                    </MRow>
+                    <MRow Class="mt-6">
+                        <MCol Cols=6 Class="light-blue-color">@T("Modifier"): @AppDetail.ModifierName</MCol>
+                        <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
                             @T("ModificationTime"):
                             <DateTimeZone Value="AppDetail.ModificationTime" />
                         </MCol>
@@ -112,13 +114,11 @@
             <div class="d-flex align-end" style="width:100%;">
                 @if (_appFormModel.HasValue)
                 {
-                    <MButton OnClick="RemoveAppAsync" Left Icon Color="#FF5252" Depressed Class="delete-btn">
-                        <MIcon>mdi-delete</MIcon>
-                    </MButton>
+                    <SDeleteButton OnClick="RemoveAppAsync"></SDeleteButton>
                 }
                 <MSpacer></MSpacer>
-                <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
+                <SButton Height="56" Class="rounded-pill" Color="primary" Width="140" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
                 </div>
             </div>
         </MForm>
-    </SSheetDialog>
+    </SSimpleModal>
