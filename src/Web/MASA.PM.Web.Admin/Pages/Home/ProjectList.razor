@@ -28,6 +28,7 @@
                                 }
                                 <div class="mt-1 regul ar3--text btn d-flex" style="padding:0">
                                     @{
+                                        string paddingStyle = "0 4px";
                                         string backgroundColor;
                                         switch (project.LabelCode.ToLower())
                                         {
@@ -41,11 +42,12 @@
                                                 backgroundColor = "#5FB9FF";
                                                 break;
                                             default:
-                                                backgroundColor = "#BDBDBD";
+                                                backgroundColor = "#A3AED0";
+                                                paddingStyle = "0 12px";
                                                 break;
                                         }
                                     }
-                                    <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:0 4px; height: fit-content;">
+                                    <div class="d-flex justify-center mr-2" style="border-radius:6px; color:#fff; background-color:@backgroundColor; padding:@paddingStyle; height: fit-content;">
                                         @project.LabelName
                                     </div>
                                     <span class="regular3--text body2">@project.Identity</span>

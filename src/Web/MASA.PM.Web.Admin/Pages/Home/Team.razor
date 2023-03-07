@@ -32,7 +32,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Class="rounded-lg" Height="40" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add Project")</MButton>
+                        <MButton Class="rounded-lg m-btn-add-project" Ripple="false" Height="40" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
@@ -68,10 +68,10 @@
                                 @item.DisplayName
                             </MRow>
                         }
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6 mb-4">@T("Members")</MRow>
                         @foreach (var item in _userTeam.Members)
                         {
-                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2 mb-3">
                                 <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
                                     <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
                                 </MAvatar>
