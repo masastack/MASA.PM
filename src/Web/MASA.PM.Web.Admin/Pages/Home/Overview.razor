@@ -94,7 +94,7 @@
 
 </div>
 
-<SSimpleModal ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Width="770" Height="@(_envFormModel.HasValue ?788:632)">
+<SSimpleModal ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Width="770">
     <DeleteContent>
     </DeleteContent>
     <SaveContent>
@@ -102,7 +102,7 @@
     <ChildContent>
         <MForm Class="full-height" Context="formContext" EnableValidation Model="_envFormModel.Data">
              <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
-            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
+            <div class="full-height" style="overflow: hidden;">
                 <STextField TextColor="@_envFormModel.Data.Color" Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_envFormModel.Data.Name"></STextField>
                 <div class="mt-9">
                         <span style="color:#1B2559;font-size:14px;font-weight: 700;">@T("Select Color")</span>
@@ -152,7 +152,7 @@
                     </MRow>
                 }
             </div>
-            <div class="d-flex align-end" style="width:100%;">
+            <div class="d-flex align-end mt-9" style="width:100%;">
                 @if (_envFormModel.HasValue)
                 {
                     <SDeleteButton OnClick="RemoveEnvAsync"></SDeleteButton>
@@ -165,7 +165,7 @@
     </ChildContent>
 </SSimpleModal>
 
-<SSimpleModal ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Width="770" Height="@(_clusterFormModel.HasValue ? 677:521)">
+<SSimpleModal ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Width="770">
     <DeleteContent>
     </DeleteContent>
     <SaveContent>
@@ -173,7 +173,7 @@
     <ChildContent>
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%;overflow: hidden;">
-            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
+            <div class="full-height" style="overflow: hidden;">
                 <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
                 <SAutoComplete Class="mt-9" @bind-Value="_clusterFormModel.Data.EnvironmentIds"
                                Items="_allEnvs"
@@ -218,7 +218,7 @@
                     </MRow>
                 }
             </div>
-            <div class="d-flex align-end" style="width:100%;">
+            <div class="d-flex align-end mt-9" style="width:100%;">
                 @if (_clusterFormModel.HasValue)
                 {
                     <SDeleteButton OnClick="RemoveClusterAsync"></SDeleteButton>

@@ -1,9 +1,9 @@
 ﻿@inherits PmCompontentBase
 
-<SSimpleModal Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Width="770" Height="@(_projectFormModel.HasValue ? 903:773)">
+<SSimpleModal Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Width="770">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
-            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
+            <div class="full-height" style="overflow: hidden;">
                 <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
                 <SAutoComplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
@@ -89,7 +89,7 @@
                     </MRow>
                 }
             </div>
-            <div class="d-flex align-end" style="width:100%;">
+            <div class="d-flex align-end mt-9" style="width:100%;">
                 @if (_projectFormModel.HasValue)
                 {
                     <SDeleteButton OnClick="RemoveProjectAsync"></SDeleteButton>
