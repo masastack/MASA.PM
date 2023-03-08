@@ -1,15 +1,15 @@
 ﻿@inherits PmCompontentBase
 
-<SSheetDialog EnableDomReload Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Icon="mdi-circle" IconColor="success">
+<SSimpleModal Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Width="770">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
-        <div class="d-flex flex-column" style="width:100%; height:100%; padding: 48px 228px; overflow: hidden;">
-            <div class="full-height" style="overflow-x: hidden; overflow-y: auto;">
-                <STextField Class="mt-6" Outlined Label="@T("Name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
+        <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
+            <div class="full-height" style="overflow: hidden;">
+                <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
                 <SAutoComplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
                                Items="_allTeams"
                                Chips
-                               Class="mt-6"
+                               Class="mt-9"
                                Outlined
                                Label="@T("Team")"
                                ItemText="r=>r.Name"
@@ -35,19 +35,19 @@
                         </MListItemContent>
                     </ItemContent>
                 </SAutoComplete>
-                <STextField Class="mt-6" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></STextField>
+                <STextField Class="mt-9" Disabled="@(_projectFormModel.HasValue)" Outlined Label="ID" @bind-Value="_projectFormModel.Data.Identity"></STextField>
                 <SSelect @bind-Value="_projectFormModel.Data.LabelCode"
                          Items="_projectTypes"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Code"
                          Outlined
-                         Class="mt-6"
+                         Class="mt-9"
                          MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Type")">
                 </SSelect>
                 <SSelect @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
                                Items="_allEnvClusters"
-                               Class="mt-6"
+                               Class="mt-9"
                                ItemText="r=>r.EnvironmentClusterName"
                                ItemValue="r=>r.Id"
                                ItemDisabled="@(r=>DisableEnvironmentClusterIds.Contains(r.Id))"
@@ -70,33 +70,35 @@
                         </MListItemContent>
                     </ItemContent>
                 </SSelect>
-                <MTextarea Class="mt-6" Outlined Label="@T("Description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
+                <MTextarea Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_projectFormModel.Data.Description"></MTextarea>
                 @if (_projectFormModel.HasValue)
                 {
-                    <MRow Class="pt-3" Justify="JustifyTypes.SpaceBetween" Style="line-height:normal !important;">
-                        <MCol Cols=6>@T("Creator"): @_projectDetail.CreatorName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>
+                    <MRow Class="mt-2">
+                        <MCol Cols=6 Class="light-blue-color">@T("Creator"): @_projectDetail.CreatorName</MCol>
+                        <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
                             @T("CreationTime"):
                             <DateTimeZone Value="_projectDetail.CreationTime" />
                         </MCol>
-                        <MCol Cols=6>@T("Modifier"): @_projectDetail.ModifierName</MCol>
-                        <MCol Class="d-flex justify-end" Cols=6>
+                    </MRow>
+                    <MRow Class="mt-6">
+                        <MCol Cols=6 Class="light-blue-color">@T("Modifier"): @_projectDetail.ModifierName</MCol>
+                        <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
                             @T("ModificationTime"):
                             <DateTimeZone Value="_projectDetail.ModificationTime" />
                         </MCol>
                     </MRow>
                 }
             </div>
-            <div class="d-flex align-end" style="width:100%;">
+            <div class="d-flex align-end mt-9" style="width:100%;">
                 @if (_projectFormModel.HasValue)
                 {
-                    <MButton Height="40" OnClick="RemoveProjectAsync" Width=100 Class="rounded-pill" Text Color="red" Style="float:left;">@T("Delete")</MButton>
+                    <SDeleteButton OnClick="RemoveProjectAsync"></SDeleteButton>
                 }
                 <MSpacer></MSpacer>
-                <SButton Height="40" Class="rounded-pill" Color="primary" Width="100" OnClick="()=>SubmitProjectAsync(formContext)">
+                <SButton Height="56" Class="rounded-pill" Color="primary" Width="140" OnClick="()=>SubmitProjectAsync(formContext)">
                     @(_projectFormModel.HasValue ? T("Save") : T("Submit"))
                 </SButton>
             </div>
         </div>
     </MForm>
-</SSheetDialog>
+</SSimpleModal>

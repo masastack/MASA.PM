@@ -471,7 +471,11 @@ input::-webkit-input-placeholder {
     background-color: #f6f8fd !important;
 }
 
-.m-btn-add-project {
+.light-blue-color {
+    color: #485585 !important;
+}
+.translucency-blue-color {
+    color: #A3AED0 !important;
 }
 
     .m-btn-add-project:hover {

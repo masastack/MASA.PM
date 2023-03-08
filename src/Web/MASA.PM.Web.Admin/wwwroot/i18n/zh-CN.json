@@ -77,5 +77,6 @@
   "Delete environment": "删除环境",
   "Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?": "确定要删除环境\"{EnvironmentName}\"环境吗？",
   "Delete app": "删除应用",
-  "Are you sure you want to delete AppName \"{AppName}\"?": "确定要删除App“{AppName}”吗？"
+  "Are you sure you want to delete AppName \"{AppName}\"?": "确定要删除App“{AppName}”吗？",
+  "Select Color": "选择颜色"
 }
