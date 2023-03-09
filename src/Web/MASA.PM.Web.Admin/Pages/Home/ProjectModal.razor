@@ -50,7 +50,7 @@
                                Class="mt-9"
                                ItemText="r=>r.EnvironmentClusterName"
                                ItemValue="r=>r.Id"
-                               ItemDisabled="@(r=>DisableEnvironmentClusterIds.Contains(r.Id))"
+                               ItemDisabled="@(r=>DisableEnvironmentClusterIds?.Contains(r.Id) == true)"
                                Outlined
                                Chips
                                Label="@T("Environment/Cluster")"
@@ -59,7 +59,7 @@
                         <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName"
                                         EnvironmentColor="@context.Item.EnvironmentColor"
                                         ClusterName="@context.Item.ClusterName"
-                                        Close="@(!DisableEnvironmentClusterIds.Contains(context.Item.Id))"
+                                        Close="@(DisableEnvironmentClusterIds?.Contains(context.Item.Id) == false)"
                                         OnCloseClick="()=>_projectFormModel.Data.EnvironmentClusterIds.RemoveAll(id=>id==context.Item.Id)" />
                     </SelectionContent>
                     <ItemContent>
