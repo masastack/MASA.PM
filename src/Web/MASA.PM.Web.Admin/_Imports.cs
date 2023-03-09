@@ -26,3 +26,4 @@ global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 global using Microsoft.IdentityModel.Logging;
+global using Force.DeepCloner;

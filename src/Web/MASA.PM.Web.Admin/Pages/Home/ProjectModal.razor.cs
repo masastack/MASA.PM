@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Force.DeepCloner;
-using Newtonsoft.Json;
-
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class ProjectModal
