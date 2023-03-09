@@ -310,10 +310,8 @@ input::-webkit-input-placeholder {
 }
 
 .env-list {
-    margin: 16px 0 !important;
-    min-height: 40px !important;
-    height: 40px !important;
-    max-height: 40px !important;
+    margin: 4px 0 !important;
+    height: 48px !important;
 }
 
 .m-list-item-group .env-list.m-list-item--active:not(.m-icon) {
@@ -374,9 +372,9 @@ input::-webkit-input-placeholder {
     border-radius: 8px !important;
 }
 
-    .cluster-tab-active i.m-icon.m-icon.mdi.mdi-pencil {
-        color: #fff !important;
-    }
+.cluster-tab-active i.m-icon.m-icon.mdi.mdi-pencil {
+    color: #fff !important;
+}
 
 .cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover {
     background: #F6F8FD !important;
@@ -384,9 +382,9 @@ input::-webkit-input-placeholder {
     color: #1B2559 !important;
 }
 
-    .cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover .m-icon {
-        color: #1B2559 !important;
-    }
+.cluster-tabs .m-tab:not(.m-tab--active.cluster-tab-active):hover .m-icon {
+    color: #1B2559 !important;
+}
 
 .cluster-tabs .m-tab::before {
     border-radius: 8px !important;
@@ -447,13 +445,13 @@ input::-webkit-input-placeholder {
     border: 2px dashed #e9edf7;
 }
 
-    .m-btn-add:hover {
-        background: #f6f8fd !important;
-    }
+.m-btn-add:hover {
+    background: #f6f8fd !important;
+}
 
-    .m-btn-add:active {
-        background: #e9edf7 !important;
-    }
+.m-btn-add:active {
+    background: #e9edf7 !important;
+}
 
 .m-btn-add-environment {
     position: fixed;
@@ -478,10 +476,22 @@ input::-webkit-input-placeholder {
     color: #A3AED0 !important;
 }
 
-    .m-btn-add-project:hover {
-        background-color: #6946FF !important;
-    }
+.m-btn-add-project:hover {
+    background-color: #6946FF !important;
+}
 
-    .m-btn-add-project:active {
-        background-color: #3613CC !important;
-    }
+.m-btn-add-project:active {
+    background-color: #3613CC !important;
+}
+.env-list:hover {
+    background-color: #F6F8FD;
+}
+
+.cluster-tabs .m-tab {
+    height: 48px;
+    max-width: 150px;
+}
+
+.m-card-wrap {
+    padding: 8px;
+}
