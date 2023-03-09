@@ -30,7 +30,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public EventCallback OnSubmitProjectAfter { get; set; }
 
         [Parameter]
-        public List<int> DisableEnvironmentClusterIds { get; set; }
+        public List<int>? DisableEnvironmentClusterIds { get; set; }
 
         [Parameter]
         public Guid TeamId { get; set; }
@@ -49,7 +49,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (projectDetailDto == null)
             {
-                DisableEnvironmentClusterIds.Clear();
+                DisableEnvironmentClusterIds = null;
 
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
