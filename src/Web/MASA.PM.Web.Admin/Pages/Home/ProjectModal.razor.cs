@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Force.DeepCloner;
+using Newtonsoft.Json;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class ProjectModal
@@ -40,6 +43,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectTypesDto> _projectTypes = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
+        private List<int> _cloneEnvironmentClusterIds = new();
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
@@ -66,6 +70,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             else
             {
                 _projectDetail = projectDetailDto;
+
+                _cloneEnvironmentClusterIds = _projectDetail.EnvironmentClusterIds.DeepClone();
+
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
@@ -74,7 +81,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     Name = _projectDetail.Name,
                     TeamId = _projectDetail.TeamId,
                     Description = _projectDetail.Description,
-                    EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds
+                    EnvironmentClusterIds = _cloneEnvironmentClusterIds
                 });
             }
 
