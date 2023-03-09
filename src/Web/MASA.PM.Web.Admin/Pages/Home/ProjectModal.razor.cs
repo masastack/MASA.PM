@@ -40,7 +40,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectTypesDto> _projectTypes = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
-        private List<int> _cloneEnvironmentClusterIds = new();
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
@@ -66,9 +65,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _projectDetail = projectDetailDto;
-
-                _cloneEnvironmentClusterIds = _projectDetail.EnvironmentClusterIds.DeepClone();
+                _projectDetail = projectDetailDto.DeepClone();
 
                 _projectFormModel.Show(new UpdateProjectDto
                 {
@@ -78,7 +75,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     Name = _projectDetail.Name,
                     TeamId = _projectDetail.TeamId,
                     Description = _projectDetail.Description,
-                    EnvironmentClusterIds = _cloneEnvironmentClusterIds
+                    EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds
                 });
             }
 
