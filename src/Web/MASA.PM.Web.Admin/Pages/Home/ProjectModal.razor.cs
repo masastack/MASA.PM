@@ -30,7 +30,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public EventCallback OnSubmitProjectAfter { get; set; }
 
         [Parameter]
-        public List<int> DisableEnvironmentClusterIds { get; set; } = new();
+        public List<int> DisableEnvironmentClusterIds { get; set; }
 
         [Parameter]
         public Guid TeamId { get; set; }
@@ -65,6 +65,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                if (DisableEnvironmentClusterIds == null)
+                {
+                    DisableEnvironmentClusterIds = (await AppCaller.GetListByProjectIdAsync(new List<int>() { projectDetailDto.Id }))
+                        .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
+                        .Distinct()
+                        .ToList();
+                }
+
                 _projectDetail = projectDetailDto;
                 _projectFormModel.Show(new UpdateProjectDto
                 {

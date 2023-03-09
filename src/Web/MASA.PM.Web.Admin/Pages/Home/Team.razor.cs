@@ -45,6 +45,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
         private Guid _teamId;
+        private List<int> _disableEnvironmentClusterIds = new();
 
         protected override Task OnInitializedAsync()
         {
