@@ -485,3 +485,15 @@ input::-webkit-input-placeholder {
     .m-btn-add-project:active {
         background-color: #3613CC !important;
     }
+
+.scrollbar-base::-webkit-scrollbar-thumb{
+  background: #A3AED0;
+  opacity: 0.5;
+  border-status: 4px;
+}    
+.scrollbar-4::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-8::-webkit-scrollbar {
+  width: 8px;
+}

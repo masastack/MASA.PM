@@ -1,6 +1,6 @@
 ﻿@inherits PmCompontentBase
 
-<div class="full-height project-list" style="overflow: auto;">
+<div class="full-height project-list scrollbar-base scrollbar-8" style="overflow: auto;">
     <MExpansionPanels Flat Accordion @key="@($"{EnvironmentClusterId}{TeamId}")">
         @foreach (var project in _projects)
         {

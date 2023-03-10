@@ -51,11 +51,11 @@
                     <MRow NoGutters Class="mt-6">
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
-                    <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projectCount
+                    <MRow NoGutters Class="mt-1 text-body2 light-blue-color">
+                        @T("ProjectCount")：<b>@_projectCount</b>
                     </MRow>
-                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
-                        <MRow NoGutters Class="mt-4 text-body2">
+                    <div class="scrollbar-base scrollbar-4" style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
+                        <MRow NoGutters Class="mt-4 text-body2 light-blue-color">
                             @_userTeam.Description
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
