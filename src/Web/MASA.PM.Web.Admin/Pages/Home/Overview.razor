@@ -58,7 +58,7 @@
                             @foreach (var cluster in _clusters)
                             {
                                 StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
-                                <MTab Style="max-width:150px;" Value="envClusterId">
+                                <MTab Value="envClusterId">
                                     <MTooltip Top>
                                     <ActivatorContent>
                                         <div class="text-overflow" @attributes="@context.Attrs">@cluster.Name</div>
