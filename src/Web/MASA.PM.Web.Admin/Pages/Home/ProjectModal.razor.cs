@@ -71,6 +71,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     .ToList();
 
                 _projectDetail = projectDetailDto;
+                _projectDetail = projectDetailDto.DeepClone();
+
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
