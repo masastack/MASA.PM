@@ -45,21 +45,18 @@
                          MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Type")">
                 </SSelect>
-                <SSelect @bind-Value="_projectFormModel.Data.EnvironmentClusterIds"
-                               Items="_allEnvClusters"
-                               Class="mt-9"
-                               ItemText="r=>r.EnvironmentClusterName"
-                               ItemValue="r=>r.Id"
-                               ItemDisabled="@(r=>DisableEnvironmentClusterIds.Contains(r.Id))"
-                               Outlined
-                               Chips
-                               Label="@T("Environment/Cluster")"
-                               Multiple>
+                <SSelect @bind-Value="_projectFormModel.Data.EnvironmentClusterIds" Chips Multiple Outlined
+                         Items="_allEnvClusters"
+                         Class="mt-9"
+                         ItemText="r=>r.EnvironmentClusterName"
+                         ItemValue="r=>r.Id"
+                         ItemDisabled="@(r=>_disableEnvironmentClusterIds.Contains(r.Id))"
+                         Label="@T("Environment/Cluster")">
                     <SelectionContent Context="context">
                         <EnvClusterChip EnvironmentName="@context.Item.EnvironmentName"
                                         EnvironmentColor="@context.Item.EnvironmentColor"
                                         ClusterName="@context.Item.ClusterName"
-                                        Close="@(!DisableEnvironmentClusterIds.Contains(context.Item.Id))"
+                                        Close="@(!_disableEnvironmentClusterIds.Contains(context.Item.Id))"
                                         OnCloseClick="()=>_projectFormModel.Data.EnvironmentClusterIds.RemoveAll(id=>id==context.Item.Id)" />
                     </SelectionContent>
                     <ItemContent>

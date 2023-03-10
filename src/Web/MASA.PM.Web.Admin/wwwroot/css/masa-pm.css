@@ -495,3 +495,15 @@ input::-webkit-input-placeholder {
 .m-card-wrap {
     padding: 8px;
 }
+
+.scrollbar-base::-webkit-scrollbar-thumb{
+  background: #A3AED0;
+  opacity: 0.5;
+  border-status: 4px;
+}    
+.scrollbar-4::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-8::-webkit-scrollbar {
+  width: 8px;
+}
