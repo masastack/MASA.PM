@@ -4,94 +4,97 @@
 <PageTitle>@T("Overview")</PageTitle>
 
 <div class="d-flex full-height">
-
-    <MNavigationDrawer Permanent Class="rounded-4" Width="242" Style="height: calc(100vh - 120px); overflow: hidden;">
-        <div class="d-flex flex-column" style="min-width:242px; align-items:center; overflow: auto; height: calc(100vh - 200px);">
-            <MList Width="194">
-                <MListItemGroup Class="rounded-2"
-                                @bind-Value="_selectedEnvId"
-                                            Mandatory
-                                Color="#A3AED0">
-                    @foreach (var env in _environments)
-                    {
-                        <MTooltip Left>
-                        <ActivatorContent Context="tooltipContext">
-                            <MListItem @attributes="@tooltipContext.Attrs" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
-                                <ItemContent>
-                                    <MListItemIcon Class="d-flex align-center mr-0">
-                                        <MIcon Color="@env.Color" Size="12">mdi-circle</MIcon>
-                                    </MListItemIcon>
-                                    <MListItemContent>
-                                        <MListItemTitle>@env.Name</MListItemTitle>
-                                    </MListItemContent>
-
-                                    @if (context.Active)
-                                        {
-                                            <MListItemIcon Class="d-flex align-center">
-                                                <MButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
-                                                <MIcon Size="18" Class="pencil">mdi-pencil</MIcon>
-                                                </MButton>
-                                                </MListItemIcon>
-                                        }
-                                    </ItemContent>
-                                </MListItem>
-                            </ActivatorContent>
-                            <ChildContent>
-                                <span>@env.Name</span>
-                            </ChildContent>
-                        </MTooltip>
-                    }
-                </MListItemGroup>
-            </MList>
-        </div>
-        <MButton OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Width="194" Tile Text Class="m-btn-add m-btn-add-environment">
-            <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
-        </MButton>
-    </MNavigationDrawer>
-
-    <div class="pl-6 d-flex flex-column" style="width: calc(100% - 242px); overflow: hidden;">
-        <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:88px; background:#fff;padding:0 12px;">
-            <MCard Style="padding-right: 150px;">
-                <MTabs @key="_clusters" @bind-Value="_selectEnvClusterId" Class="cluster-tabs" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
-                    @foreach (var cluster in _clusters)
-                    {
-                        StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
-                        <MTab Style="height:40px; max-width:150px;" Value="envClusterId">
-                            <MTooltip Top>
-                            <ActivatorContent>
-                                <div class="text-overflow" @attributes="@context.Attrs">@cluster.Name</div>
-                            </ActivatorContent>
-                            <ChildContent>
-                                <span>@cluster.Name</span>
-                            </ChildContent>
-                        </MTooltip>
-                        @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
+    <MRow>
+        <MCol Cols="2">
+            <MNavigationDrawer Permanent Class="rounded-4" Style="height: calc(100vh - 120px); overflow: hidden;;width:100%">
+                <div class="d-flex flex-column" style="align-items:center; overflow: auto; height: calc(100vh - 200px);">
+                    <MList Class="pl-4 pr-4" style="width:100%">
+                        <MListItemGroup Class="rounded-2"
+                            @bind-Value="_selectedEnvId"
+                            Mandatory
+                            Color="#A3AED0">
+                            @foreach (var env in _environments)
                             {
-                                <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
-                                <MIcon Size="18">mdi-pencil</MIcon>
-                                </MButton>
-                            }
-                        </MTab>
-                    }
-                </MTabs>
-            </MCard>
-            <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add m-btn-add-cluster" Style="height: 54px;">
-                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
-            </MButton>
-        </MRow>
-        <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
-            <div class="mt-3" style="height:calc(100vh - 292px ); overflow: hidden; position: relative;">
-                <ProjectList @ref="_projectListComponent"
-                             FetchProjectCount="GetProjectCount"
-                                              CanAddApp
-                             EnvironmentClusterId="_selectEnvClusterId.AsT1" />
-            </div>
-            <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
-                <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
-            </MButton>
-        </div>
-    </div>
+                                <MTooltip Left>
+                                <ActivatorContent Context="tooltipContext">
+                                    <MListItem @attributes="@tooltipContext.Attrs" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
+                                        <ItemContent>
+                                            <MListItemIcon Class="d-flex align-center mr-0">
+                                                <MIcon Color="@env.Color" Size="12">mdi-circle</MIcon>
+                                            </MListItemIcon>
+                                            <MListItemContent>
+                                                <MListItemTitle>@env.Name</MListItemTitle>
+                                            </MListItemContent>
 
+                                            @if (context.Active)
+                                            {
+                                                <MListItemIcon Class="d-flex align-center">
+                                                    <MButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
+                                                        <MIcon Size="18" Class="pencil">mdi-pencil</MIcon>
+                                                    </MButton>
+                                                </MListItemIcon>
+                                            }
+                                            </ItemContent>
+                                        </MListItem>
+                                    </ActivatorContent>
+                                    <ChildContent>
+                                        <span>@env.Name</span>
+                                    </ChildContent>
+                                </MTooltip>
+                            }
+                        </MListItemGroup>
+                    </MList>
+                </div>
+                <MButton OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Width="194" Tile Text Class="m-btn-add m-btn-add-environment">
+                    <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
+                </MButton>
+            </MNavigationDrawer>
+        </MCol>
+        <MCol Cols="10">
+            <div class="d-flex flex-column" style="overflow: hidden;">
+                <MRow NoGutters Align="AlignTypes.Center" Class="env-toolbar rounded-5" Style="height:88px; background:#fff;padding:0 12px;">
+                    <MCard Style="padding-right: 150px;">
+                        <MTabs @key="_clusters" @bind-Value="_selectEnvClusterId" Class="cluster-tabs" BackgroundColor="#fff" ShowArrows="@(true)" ActiveClass="cluster-tab-active" HideSlider>
+                            @foreach (var cluster in _clusters)
+                            {
+                                StringNumber envClusterId = (StringNumber)cluster.EnvironmentClusterId;
+                                <MTab Style="max-width:150px;" Value="envClusterId">
+                                    <MTooltip Top>
+                                    <ActivatorContent>
+                                        <div class="text-overflow" @attributes="@context.Attrs">@cluster.Name</div>
+                                    </ActivatorContent>
+                                    <ChildContent>
+                                        <span>@cluster.Name</span>
+                                    </ChildContent>
+                                </MTooltip>
+                                @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
+                                {
+                                    <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
+                                        <MIcon Size="18">mdi-pencil</MIcon>
+                                    </MButton>
+                                }
+                                </MTab>
+                            }
+                        </MTabs>
+                    </MCard>
+                    <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add m-btn-add-cluster" Style="height: 54px;">
+                        <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
+                    </MButton>
+                </MRow>
+                <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
+                    <div class="mt-3" style="height:calc(100vh - 292px ); overflow: hidden; position: relative;">
+                        <ProjectList @ref="_projectListComponent"
+                            FetchProjectCount="GetProjectCount"
+                            CanAddApp
+                            EnvironmentClusterId="_selectEnvClusterId.AsT1" />
+                    </div>
+                    <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
+                        <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
+                    </MButton>
+                </div>
+            </div>
+        </MCol>
+    </MRow>
 </div>
 
 <SSimpleModal ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Width="770">
