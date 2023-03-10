@@ -8,9 +8,9 @@
                 <SAutoComplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
                                Items="_allTeams"
-                                          Chips
+                               Chips
                                Class="mt-9"
-                                          Outlined
+                               Outlined
                                Label="@T("Team")"
                                ItemText="r=>r.Name"
                                ItemValue="r=>r.Id">
@@ -40,7 +40,7 @@
                          Items="_projectTypes"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Code"
-                              Outlined
+                         Outlined
                          Class="mt-9"
                          MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Type")">
