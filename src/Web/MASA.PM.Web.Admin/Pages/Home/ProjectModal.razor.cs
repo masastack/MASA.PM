@@ -65,6 +65,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                DisableEnvironmentClusterIds = (await AppCaller.GetListByProjectIdAsync(new List<int>() { projectDetailDto.Id }))
+                    .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
+                    .Distinct()
+                    .ToList();
+
+                _projectDetail = projectDetailDto;
                 _projectDetail = projectDetailDto.DeepClone();
 
                 _projectFormModel.Show(new UpdateProjectDto
