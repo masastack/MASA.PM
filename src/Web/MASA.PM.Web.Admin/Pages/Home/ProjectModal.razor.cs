@@ -30,9 +30,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public EventCallback OnSubmitProjectAfter { get; set; }
 
         [Parameter]
-        public List<int> DisableEnvironmentClusterIds { get; set; } = new();
-
-        [Parameter]
         public Guid TeamId { get; set; }
 
         private DataModal<UpdateProjectDto> _projectFormModel = new();
@@ -40,6 +37,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectTypesDto> _projectTypes = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
+        private List<int> _disableEnvironmentClusterIds = new();
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
@@ -49,7 +47,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (projectDetailDto == null)
             {
-                DisableEnvironmentClusterIds.Clear();
+                _disableEnvironmentClusterIds.Clear();
 
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
@@ -65,7 +63,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                _disableEnvironmentClusterIds = (await AppCaller.GetListByProjectIdAsync(new List<int>() { projectDetailDto.Id }))
+                    .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
+                    .Distinct()
+                    .ToList();
+
                 _projectDetail = projectDetailDto;
+                _projectDetail = projectDetailDto.DeepClone();
+
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
