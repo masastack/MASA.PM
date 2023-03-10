@@ -7,9 +7,10 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.Contrib.Service.Caller.DaprClient" Version="1.0.0-preview.8" />
-		<PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="1.0.0-preview.8" />
-		<PackageReference Include="Masa.Utils.Configuration.Json" Version="1.0.0-preview.8" />
+		<PackageReference Include="Masa.Contrib.Service.Caller.DaprClient" Version="1.0.0-preview.15" />
+		<PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="1.0.0-preview.15" />
+		<PackageReference Include="Masa.Utils.Configuration.Json" Version="1.0.0-preview.15" />
+    <PackageReference Include="Masa.Contrib.Service.Caller.Authentication.OpenIdConnect" Version="1.0.0-preview.15" />
 	</ItemGroup>
 
 	<ItemGroup>

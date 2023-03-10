@@ -7,7 +7,10 @@ namespace MASA.PM.Caller.Callers
     {
         private readonly string _prefix = "/api/v1/env";
 
-        public EnvironmentCaller(IServiceProvider serviceProvider) : base(serviceProvider)
+        public EnvironmentCaller(
+            IServiceProvider serviceProvider,
+            TokenProvider tokenProvider,
+            PMApiGatewayOptions options) : base(serviceProvider, tokenProvider, options)
         {
         }
 

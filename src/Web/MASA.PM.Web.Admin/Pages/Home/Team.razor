@@ -32,7 +32,7 @@
                                 <MIcon Size=16 Class="mr-2 neutral-lighten-1--text">mdi-magnify</MIcon>
                             </PrependInnerContent>
                         </MTextField>
-                        <MButton Class="rounded-lg" Height="40" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add Project")</MButton>
+                        <MButton Class="rounded-lg m-btn-add-project" Ripple="false" Height="40" Color="primary" OnClick="()=>ShowProjectModalAsync()"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add Project")</MButton>
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
@@ -51,11 +51,11 @@
                     <MRow NoGutters Class="mt-6">
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
-                    <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projectCount
+                    <MRow NoGutters Class="mt-1 text-body2 light-blue-color">
+                        @T("ProjectCount")：<b>@_projectCount</b>
                     </MRow>
-                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
-                        <MRow NoGutters Class="mt-4 text-body2">
+                    <div class="scrollbar-base scrollbar-4" style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
+                        <MRow NoGutters Class="mt-4 text-body2 light-blue-color">
                             @_userTeam.Description
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
@@ -68,10 +68,10 @@
                                 @item.DisplayName
                             </MRow>
                         }
-                        <MRow NoGutters Class="regular3--text btn mt-6">@T("Members")</MRow>
+                        <MRow NoGutters Class="regular3--text btn mt-6 mb-4">@T("Members")</MRow>
                         @foreach (var item in _userTeam.Members)
                         {
-                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2">
+                            <MRow Align="AlignTypes.Center" NoGutters Class="mt-4 text-body2 mb-3">
                                 <MAvatar Height="40" Width="40" MinHeight="40" MinWidth="40" Class="mr-3">
                                     <MImage Height="40" Width="40" Src="@item.Avatar"></MImage>
                                 </MAvatar>
@@ -152,13 +152,11 @@
                     </div>
                     <div style="overflow:auto; height: calc(100vh - 256px);">
                         <MRow Class="mx-3">
-                            @{
-                                foreach (var app in _projectApps)
-                                {
-                                    <MCol Lg="4" Md="6" Sm="12">
-                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")}{app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                    </MCol>
-                                }
+                            @foreach (var app in _projectApps)
+                            {
+                                <MCol Lg="4" Md="6" Sm="12">
+                                    <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                </MCol>
                             }
                         </MRow>
                     </div>

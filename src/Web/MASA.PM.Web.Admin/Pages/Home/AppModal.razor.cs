@@ -81,7 +81,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (result)
             {
                 await AppCaller.RemoveAsync(AppDetail.Id);
-                await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+                await PopupService.EnqueueSnackbarAsync(T("Delete succeeded"), AlertTypes.Success);
 
                 if (OnSubmitProjectAfter.HasDelegate)
                 {
@@ -101,7 +101,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     if ((!string.IsNullOrEmpty(item.Url) && !regex.IsMatch(item.Url))
                         || (!string.IsNullOrEmpty(item.SwaggerUrl) && !regex.IsMatch(item.SwaggerUrl)))
                     {
-                        await PopupService.AlertAsync(T("The Url format is incorrect"), AlertTypes.Error);
+                        await PopupService.EnqueueSnackbarAsync(T("The Url format is incorrect"), AlertTypes.Error);
                         return;
                     }
                 }
@@ -109,12 +109,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_appFormModel.HasValue)
                 {
                     await AppCaller.AddAsync(_appFormModel.Data);
-                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await AppCaller.UpdateAsync(_appFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Edit succeeded"), AlertTypes.Success);
                 }
 
                 if (OnSubmitProjectAfter.HasDelegate)
@@ -126,7 +126,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else if (!_appFormModel.Data.EnvironmentClusterInfos.Any())
             {
-                await PopupService.AlertAsync(T("Environment/Cluster cannot be empty"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("Environment/Cluster cannot be empty"), AlertTypes.Error);
             }
         }
 

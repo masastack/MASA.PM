@@ -25,12 +25,12 @@ public abstract class PmCompontentBase : ComponentBase
 
     public string T(string key)
     {
-        return I18n.T(key);
+        return I18n.T(key) ?? "";
     }
 
     public async Task<UserModel> GetUserAsync(Guid userId)
     {
-        var user = await AuthClient.UserService.FindByIdAsync(userId);
+        var user = await AuthClient.UserService.GetByIdAsync(userId);
         return user ?? new();
     }
 }

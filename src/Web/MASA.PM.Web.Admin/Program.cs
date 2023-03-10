@@ -2,17 +2,11 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddObservable(builder.Logging, builder.Configuration, true);
-}
 
-// Add services to the container.
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 builder.Services.AddScoped<TokenProvider>();
-
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 builder.WebHost.UseKestrel(option =>
 {
@@ -30,18 +24,39 @@ builder.WebHost.UseKestrel(option =>
     });
 });
 
-builder.AddMasaStackComponentsForServer("wwwroot/i18n",
-    builder.Configuration["AuthServiceBaseAddress"],
-    builder.Configuration["McServiceBaseAddress"],
-    builder.Configuration["PmServiceBaseAddress"],
-    AppSettings.GetModel<RedisConfigurationOptions>("RedisConfig"));
-
-builder.Services.AddMasaOpenIdConnect(AppSettings.GetModel<MasaOpenIdConnectOptions>("OIDC"));
-
 builder.Services.AddHttpContextAccessor();
+builder.AddMasaStackComponentsForServer();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
 
-builder.Services.AddScoped<HttpClientAuthorizationDelegatingHandler>();
-builder.Services.AddAutoRegistrationCaller(Assembly.Load("MASA.PM.Caller"));
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddObservable(builder.Logging, () =>
+    {
+        return new MasaObservableOptions
+        {
+            ServiceNameSpace = builder.Environment.EnvironmentName,
+            ServiceVersion = masaStackConfig.Version,
+            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.PM)
+        };
+    }, () =>
+    {
+        return masaStackConfig.OtlpUrl;
+    }, true);
+}
+
+// Add services to the container.
+
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = masaStackConfig.GetSsoDomain(),
+    ClientId = masaStackConfig.GetWebId(MasaStackConstant.PM),
+    Scopes = new List<string> { "offline_access" }
+};
+
+IdentityModelEventSource.ShowPII = true;
+builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
+
+builder.Services.AddPMApiGateways(c => c.PMServiceAddress = masaStackConfig.GetPmServiceDomain());
 
 var app = builder.Build();
 

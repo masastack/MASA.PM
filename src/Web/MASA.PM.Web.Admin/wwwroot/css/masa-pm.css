@@ -47,6 +47,10 @@
         border-radius: 10px !important;
     }
 
+.m-chip .m-chip__content {
+    padding: 2px 8px;
+}
+
 .m-card__text {
     padding: 16px 24px;
     height: 100%;
@@ -435,4 +439,61 @@ input::-webkit-input-placeholder {
 
 .m-list-item--disabled {
     background-color: rgb(41 50 59 / 6%) !important;
+}
+
+/* add button */
+.m-btn-add {
+    border-radius: 8px;
+    border: 2px dashed #e9edf7;
+}
+
+    .m-btn-add:hover {
+        background: #f6f8fd !important;
+    }
+
+    .m-btn-add:active {
+        background: #e9edf7 !important;
+    }
+
+.m-btn-add-environment {
+    position: fixed;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+}
+
+.m-btn-add-cluster {
+    position: fixed;
+    right: 48px;
+}
+/* SSelect selected background-color */
+.m-input .m-input__control .m-select__selections .m-chip {
+    background-color: #f6f8fd !important;
+}
+
+.light-blue-color {
+    color: #485585 !important;
+}
+.translucency-blue-color {
+    color: #A3AED0 !important;
+}
+
+    .m-btn-add-project:hover {
+        background-color: #6946FF !important;
+    }
+
+    .m-btn-add-project:active {
+        background-color: #3613CC !important;
+    }
+
+.scrollbar-base::-webkit-scrollbar-thumb{
+  background: #A3AED0;
+  opacity: 0.5;
+  border-status: 4px;
+}    
+.scrollbar-4::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-8::-webkit-scrollbar {
+  width: 8px;
 }

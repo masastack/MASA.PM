@@ -30,9 +30,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public EventCallback OnSubmitProjectAfter { get; set; }
 
         [Parameter]
-        public List<int> DisableEnvironmentClusterIds { get; set; } = new();
-
-        [Parameter]
         public Guid TeamId { get; set; }
 
         private DataModal<UpdateProjectDto> _projectFormModel = new();
@@ -40,6 +37,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<ProjectTypesDto> _projectTypes = new();
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
+        private List<int> _disableEnvironmentClusterIds = new();
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
@@ -49,7 +47,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (projectDetailDto == null)
             {
-                DisableEnvironmentClusterIds.Clear();
+                _disableEnvironmentClusterIds.Clear();
 
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
@@ -65,7 +63,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
+                _disableEnvironmentClusterIds = (await AppCaller.GetListByProjectIdAsync(new List<int>() { projectDetailDto.Id }))
+                    .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
+                    .Distinct()
+                    .ToList();
+
                 _projectDetail = projectDetailDto;
+                _projectDetail = projectDetailDto.DeepClone();
+
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
@@ -95,7 +100,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             var apps = await AppCaller.GetListByProjectIdAsync(new List<int> { _projectDetail.Id });
             if (apps.Any())
             {
-                await PopupService.AlertAsync(T("There are still applications under the current project, which cannot be deleted"), AlertTypes.Error);
+                await PopupService.EnqueueSnackbarAsync(T("There are still applications under the current project, which cannot be deleted"), AlertTypes.Error);
             }
             else
             {
@@ -108,7 +113,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (result)
                 {
                     await ProjectCaller.DeleteAsync(_projectDetail.Id);
-                    await PopupService.AlertAsync(T("Delete succeeded"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Delete succeeded"), AlertTypes.Success);
 
                     if (OnSubmitProjectAfter.HasDelegate)
                     {
@@ -126,12 +131,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 if (!_projectFormModel.HasValue)
                 {
                     await ProjectCaller.AddAsync(_projectFormModel.Data);
-                    await PopupService.AlertAsync(T("Add successed"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Add succeeded"), AlertTypes.Success);
                 }
                 else
                 {
                     await ProjectCaller.UpdateAsync(_projectFormModel.Data);
-                    await PopupService.AlertAsync(T("Edit successed"), AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Edit succeeded"), AlertTypes.Success);
                 }
 
                 if (OnSubmitProjectAfter.HasDelegate)
