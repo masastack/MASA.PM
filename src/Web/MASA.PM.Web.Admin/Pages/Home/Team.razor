@@ -51,11 +51,11 @@
                     <MRow NoGutters Class="mt-6">
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
-                    <MRow NoGutters Class="mt-1 text-body2">
-                        @T("ProjectCount")：@_projectCount
+                    <MRow NoGutters Class="mt-1 text-body2 light-blue-color">
+                        @T("ProjectCount")：<b>@_projectCount</b>
                     </MRow>
-                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
-                        <MRow NoGutters Class="mt-4 text-body2">
+                    <div class="scrollbar-base scrollbar-4" style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
+                        <MRow NoGutters Class="mt-4 text-body2 light-blue-color">
                             @_userTeam.Description
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn mt-6">@T("Admin")</MRow>
@@ -154,7 +154,7 @@
                         <MRow Class="mx-3">
                             @foreach (var app in _projectApps)
                             {
-                                <MCol Lg="4" Md="6" Sm="12">
+                                <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
                                     <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
                                 </MCol>
                             }

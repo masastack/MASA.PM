@@ -34,7 +34,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
-        private List<int> _disableEnvironmentClusterIds = new();
         private bool _showProcess;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
@@ -121,10 +120,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             var project = await GetProjectAsync(projectId);
 
-            var appEnvironemntClusterIds = _apps.Where(app => app.ProjectId == projectId)
-                .SelectMany(app => app.EnvironmentClusters.Select(ec => ec.Id))
-                .Distinct();
-            _disableEnvironmentClusterIds = project.EnvironmentClusterIds.Intersect(appEnvironemntClusterIds).ToList();
             await ShowProjectModalAsync(project);
         }
 
