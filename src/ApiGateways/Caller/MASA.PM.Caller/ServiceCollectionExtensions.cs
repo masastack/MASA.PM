@@ -7,11 +7,21 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPMApiGateways(this IServiceCollection services, Action<PMApiGatewayOptions>? configure = null)
     {
-        var options = new PMApiGatewayOptions("http://localhost:19401/");
-
+        var options = new PMApiGatewayOptions();
         configure?.Invoke(options);
         services.AddSingleton(options);
-        services.AddAutoRegistrationCaller(Assembly.Load("MASA.PM.Caller"));
+
+        services.AddStackCaller(Assembly.Load("MASA.PM.Caller"), serviceProvider =>
+        {
+            return new TokenProvider();
+        }, jwtTokenValidatorOptions =>
+        {
+            jwtTokenValidatorOptions.AuthorityEndpoint = options.AuthorityEndpoint;
+        }, clientRefreshTokenOptions =>
+        {
+            clientRefreshTokenOptions.ClientId = options.ClientId;
+            clientRefreshTokenOptions.ClientSecret = options.ClientSecret;
+        });
 
         return services;
     }

@@ -3,9 +3,6 @@
 
 global using System.Net.Http.Headers;
 global using System.Reflection;
-global using Masa.Contrib.Service.Caller.Authentication.OpenIdConnect;
-global using Masa.Contrib.Service.Caller.HttpClient;
+global using Masa.Contrib.StackSdks.Caller;
 global using MASA.PM.Caller;
 global using MASA.PM.Contracts.Admin.Dto;
-global using Microsoft.AspNetCore.Authentication;
-global using Microsoft.AspNetCore.Http;

@@ -5,11 +5,12 @@ namespace MASA.PM.Caller
 {
     public class PMApiGatewayOptions
     {
-        public string PMServiceAddress { get; set; }
+        public string PMServiceAddress { get; set; } = string.Empty;
 
-        public PMApiGatewayOptions(string url)
-        {
-            PMServiceAddress = url;
-        }
+        public string AuthorityEndpoint { get; set; } = string.Empty;
+
+        public string ClientId { get; set; } = string.Empty;
+
+        public string ClientSecret { get; set; } = string.Empty;
     }
 }

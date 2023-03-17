@@ -21,9 +21,6 @@ if (!builder.Environment.IsDevelopment())
         return masaStackConfig.OtlpUrl;
     }, true);
 }
-builder.Services.AddHealthChecks()
-    .AddCheck("self", () => HealthCheckResult.Healthy("A healthy result."))
-    .AddDbContextCheck<PmDbContext>();
 
 builder.Services.AddStackMiddleware();
 
@@ -143,7 +140,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAddStackMiddleware();
+
+app.UseStackMiddleware();
 
 app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
