@@ -3,10 +3,13 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+builder.AddMasaStackComponentsForServer();
+var masaStackConfig = builder.Services.GetMasaStackConfig();
+
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-builder.Services.AddScoped<TokenProvider>();
 
 builder.WebHost.UseKestrel(option =>
 {
@@ -24,10 +27,14 @@ builder.WebHost.UseKestrel(option =>
     });
 });
 
-builder.Services.AddHttpContextAccessor();
-builder.AddMasaStackComponentsForServer();
-var masaStackConfig = builder.Services.GetMasaStackConfig();
+MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
+{
+    Authority = masaStackConfig.GetSsoDomain(),
+    ClientId = masaStackConfig.GetWebId(MasaStackConstant.PM),
+    Scopes = new List<string> { "offline_access" }
+};
 
+string pmDerviceAddress = masaStackConfig.GetPmServiceDomain();
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddObservable(builder.Logging, () =>
@@ -42,21 +49,20 @@ if (!builder.Environment.IsDevelopment())
     {
         return masaStackConfig.OtlpUrl;
     }, true);
+
+    pmDerviceAddress = "http://localhost:19401";
 }
-
-// Add services to the container.
-
-MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
-{
-    Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetWebId(MasaStackConstant.PM),
-    Scopes = new List<string> { "offline_access" }
-};
 
 IdentityModelEventSource.ShowPII = true;
 builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 
-builder.Services.AddPMApiGateways(c => c.PMServiceAddress = masaStackConfig.GetPmServiceDomain());
+builder.Services.AddPMApiGateways(option =>
+{
+    option.PMServiceAddress = pmDerviceAddress;
+    option.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
+    option.ClientId = masaOpenIdConnectOptions.ClientId;
+    option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
+});
 
 var app = builder.Build();
 
