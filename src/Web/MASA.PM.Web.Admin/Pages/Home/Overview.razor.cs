@@ -110,10 +110,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _envFormModel.Show(model);
             }
 
-            if (_envForm is not null)
-            {
-                _envForm.Reset();
-            }
+            _envForm?.Reset();
             _allClusters = await ClusterCaller.GetListAsync();
         }
 
@@ -184,10 +181,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _envFormModel.Visible = value;
             if (!value)
             {
-                if (_envForm is not null)
-                {
-                    _envForm.Reset();
-                }
+                _envForm?.Reset();
                 _envFormModel.Data = new();
             }
         }
