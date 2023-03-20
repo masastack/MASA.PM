@@ -34,7 +34,7 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
     Scopes = new List<string> { "offline_access" }
 };
 
-string pmDerviceAddress = masaStackConfig.GetPmServiceDomain();
+string pmServiceAddress = masaStackConfig.GetPmServiceDomain();
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddObservable(builder.Logging, () =>
@@ -49,8 +49,10 @@ if (!builder.Environment.IsDevelopment())
     {
         return masaStackConfig.OtlpUrl;
     }, true);
-
-    pmDerviceAddress = "http://localhost:19401";
+}
+else
+{
+    pmServiceAddress = "http://localhost:19401";
 }
 
 IdentityModelEventSource.ShowPII = true;
@@ -58,7 +60,7 @@ builder.Services.AddMasaOpenIdConnect(masaOpenIdConnectOptions);
 
 builder.Services.AddPMApiGateways(option =>
 {
-    option.PMServiceAddress = pmDerviceAddress;
+    option.PMServiceAddress = pmServiceAddress;
     option.AuthorityEndpoint = masaOpenIdConnectOptions.Authority;
     option.ClientId = masaOpenIdConnectOptions.ClientId;
     option.ClientSecret = masaOpenIdConnectOptions.ClientSecret;
