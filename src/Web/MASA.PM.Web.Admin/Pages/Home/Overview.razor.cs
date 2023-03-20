@@ -39,6 +39,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             "#FF7D00", "#37A7FF", "#FF5252", "#05CD99", "#FFC46C",
         };
         private ProjectList? _projectListComponent;
+        private MForm? _envForm;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -109,6 +110,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _envFormModel.Show(model);
             }
 
+            _envForm?.Reset();
             _allClusters = await ClusterCaller.GetListAsync();
         }
 
@@ -179,6 +181,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _envFormModel.Visible = value;
             if (!value)
             {
+                _envForm?.Reset();
                 _envFormModel.Data = new();
             }
         }
