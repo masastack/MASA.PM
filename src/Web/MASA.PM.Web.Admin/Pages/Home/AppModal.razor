@@ -3,14 +3,14 @@
 <SSimpleModal ValueChanged="AppModalValueChanged" Value="_appFormModel.Visible" Title="@(_appFormModel.HasValue ? T("Edit App"):T("Add App"))" Width="770">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_appFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
-            <div class="full-height mb-2" style="overflow: hidden;">
+            <div class="full-height mb-2  pr-5" style="overflow: auto;">
                 <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_appFormModel.Data.Name"></STextField>
                 <MSelect Value="_appFormModel.Data.Type"
                          ValueChanged="AppTypeValueChanged"
                          ValueExpression="()=>_appFormModel.Data.Type"
                          Disabled="@(_appFormModel.HasValue)"
                          Class="mt-9"
-                         Items="Enum<AppTypes>.GetEnumObjectList<AppTypes>()"
+                         Items="EnumUtil.GetEnumList<AppTypes>()"
                          ItemText="r=>r.Name"
                          ItemValue="r=>r.Value"
                          TItem="EnumObject<AppTypes>"
@@ -23,9 +23,9 @@
                 @if (_appFormModel.Data.Type == AppTypes.Service)
                 {
                     <MSelect Class="mt-9"
-                    @bind-Value="_appFormModel.Data.ServiceType"
+                             @bind-Value="_appFormModel.Data.ServiceType"
                              Disabled="@(_appFormModel.HasValue)"
-                             Items="Enum<ServiceTypes>.GetEnumObjectList<ServiceTypes>()"
+                             Items="EnumUtil.GetList<ServiceTypes>()"
                              ItemText="r=>r.Name"
                              ItemValue="r=>r.Value"
                              Outlined
@@ -118,7 +118,7 @@
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="56" Class="rounded-pill" Color="primary" Width="140" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>
-                </div>
             </div>
-        </MForm>
-    </SSimpleModal>
+        </div>
+    </MForm>
+</SSimpleModal>

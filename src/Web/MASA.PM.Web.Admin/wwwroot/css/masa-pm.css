@@ -16,9 +16,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    margin: 5px 0;
-    border-radius: 15px;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(170 168 168)), color-stop(0.72, rgb(170 168 168)), color-stop(0.86, rgb(170 168 168)));
+    background: #A3AED0;
+    opacity: 0.5;
+    border-radius: 4px;
 }
 
 /*组件样式全局修改start*/
@@ -498,7 +498,7 @@ input::-webkit-input-placeholder {
 .scrollbar-base::-webkit-scrollbar-thumb{
   background: #A3AED0;
   opacity: 0.5;
-  border-status: 4px;
+  border-radius: 4px;
 }    
 .scrollbar-4::-webkit-scrollbar {
   width: 4px;

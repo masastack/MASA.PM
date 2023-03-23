@@ -1,6 +1,6 @@
 ﻿@inherits PmCompontentBase
 
-<div class="full-height project-list scrollbar-base scrollbar-8" style="overflow: auto;">
+<div class="full-height project-list scrollbar-base scrollbar-8 rounded-5" style="overflow: auto;">
     <MExpansionPanels Flat Accordion @key="@($"{EnvironmentClusterId}{TeamId}")">
         @foreach (var project in _projects)
         {
@@ -138,7 +138,7 @@
         }
     </MExpansionPanels>
 </div>
-<MOverlay Value="_showProcess" Absolute Color="#fdfdfd">
+<MOverlay Class="rounded-5" Value="_showProcess" Absolute Color="#fdfdfd" Opacity="1">
     <MProgressCircular Width="4" Indeterminate Size="48" Color="primary"></MProgressCircular>
 </MOverlay>
 
