@@ -40,6 +40,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         };
         private ProjectList? _projectListComponent;
         private MForm? _envForm;
+        private MForm? _clusterForm;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -281,7 +282,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _clusterFormModel.Visible = value;
             if (!value)
             {
-                _clusterFormModel.Data = new();
+                _clusterForm?.Reset();
+                _clusterFormModel.Hide();
             }
         }
 
