@@ -8,6 +8,7 @@
                 <MSelect Value="_appFormModel.Data.Type"
                          ValueChanged="AppTypeValueChanged"
                          ValueExpression="()=>_appFormModel.Data.Type"
+                         HideDetails="true"
                          Disabled="@(_appFormModel.HasValue)"
                          Class="mt-9"
                          Items="EnumUtil.GetEnumList<AppTypes>()"
@@ -25,7 +26,8 @@
                     <MSelect Class="mt-9"
                              @bind-Value="_appFormModel.Data.ServiceType"
                              Disabled="@(_appFormModel.HasValue)"
-                             Items="EnumUtil.GetList<ServiceTypes>()"
+                             HideDetails="true"
+                             Items="EnumUtil.GetEnumList<ServiceTypes>()"
                              ItemText="r=>r.Name"
                              ItemValue="r=>r.Value"
                              Outlined
