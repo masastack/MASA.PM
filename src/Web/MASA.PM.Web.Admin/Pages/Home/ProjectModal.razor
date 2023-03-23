@@ -3,7 +3,7 @@
 <SSimpleModal Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Width="770">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
         <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
-            <div class="full-height" style="overflow: hidden;">
+            <div class="full-height pr-5" style="overflow: auto;">
                 <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_projectFormModel.Data.Name"></STextField>
                 <SAutoComplete @bind-Value="_projectFormModel.Data.TeamId"
                                Disabled="DisableTeamSelect"
