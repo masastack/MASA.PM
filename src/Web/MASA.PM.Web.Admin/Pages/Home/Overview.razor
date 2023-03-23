@@ -167,7 +167,7 @@
 
 <SSimpleModal ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Width="770">
     <ChildContent>
-        <MForm Class="full-height" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
+        <MForm Class="full-height" @ref="_clusterForm" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
             <div class="d-flex flex-column" style="width:100%; height:100%;overflow: hidden;">
                 <div class="full-height" style="overflow: hidden;">
                     <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_clusterFormModel.Data.Name"></STextField>
