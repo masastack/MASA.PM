@@ -1,7 +1,12 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using FluentValidation;
+
 var builder = WebApplication.CreateBuilder(args);
+
+ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
+GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();

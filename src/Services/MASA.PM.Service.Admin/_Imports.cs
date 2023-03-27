@@ -41,3 +41,4 @@ global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.OpenApi.Models;
 global using AppModel = MASA.PM.Contracts.Admin.Model.AppModel;
 global using ProjectModel = MASA.PM.Contracts.Admin.Model.ProjectModel;
+global using FluentValidation.Resources;
