@@ -34,7 +34,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<AppDto> _apps = new();
         private ProjectDetailDto _projectDetail = new();
         private AppDto _appDetail = new();
-        private bool _showProcess;
+        private bool _showProcess = true;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
 
