@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
-using Masa.BuildingBlocks.Globalization.I18n;
-
 namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 {
     public class EnvironmentRepository : IEnvironmentRepository
