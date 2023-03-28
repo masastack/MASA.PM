@@ -52,7 +52,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     new AddEnvironmentDto
                     {
                         Name = masaStackConfig.Environment,
-                        Description= masaStackConfig.Environment + "环境",
+                        Description= masaStackConfig.Environment + "Environment",
                         Color = "#FF5252"
                     }
                 }

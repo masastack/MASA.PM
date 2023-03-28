@@ -2,7 +2,7 @@
 @layout EmptyLayout
 @inherits PmCompontentBase
 
-<PageTitle>初始化</PageTitle>
+<PageTitle>@T("Initialization")</PageTitle>
 
 <div class="header" style="margin:46px 0 0 53px;">
     <img class="hover-pointer" src="/img/mainLayout/logo-en.svg" />
@@ -10,15 +10,15 @@
 
 <div class="body mt-2">
     <div style="width:684px;" class="mx-auto my-auto">
-        <MCardTitle Class="emphasis--text h6 neutral-lighten-1--text">MASA PM 初始化</MCardTitle>
+        <MCardTitle Class="emphasis--text h6 neutral-lighten-1--text">MASA PM @T("Initialization")</MCardTitle>
         <MStepper Value="_step" Elevation=0>
             <MStepperHeader Style="box-shadow:none !important">
                 <MStepperStep Step="1" Complete="_step>1">
-                    环境
+                    @T("Environment")
                 </MStepperStep>
                 <MDivider></MDivider>
                 <MStepperStep Step="2">
-                    集群
+                    @T("Cluster")
                 </MStepperStep>
             </MStepperHeader>
 
@@ -30,28 +30,28 @@
                             {
                                 <MRow NoGutters Justify="JustifyTypes.SpaceBetween">
                                     <MCol Cols="9">
-                                        <STextField Disabled="@item.Disabled" TextColor="@item.Color" Class="pr-6 mb-6" Style="margin-top:9px;" @bind-Value="item.Name" Label="环境名称" Outlined></STextField>
+                                        <STextField Disabled="@item.Disabled" TextColor="@item.Color" Class="pr-6 mb-6" Style="margin-top:9px;" @bind-Value="item.Name" Label="@T("Environment name")" Outlined></STextField>
                                     </MCol>
                                     <MCol Cols="3" Align="AlignTypes.Center" Class="pb-3">
                                         <SColorGroup @bind-Value="@item.Color" Colors="_colors"></SColorGroup>
                                     </MCol>
                                 </MRow>
-                                <MTextarea Outlined Label="环境描述" @bind-Value="item.Description"></MTextarea>
+                                <MTextarea Outlined Label="@T("Environment description")" @bind-Value="item.Description"></MTextarea>
                                 <div class="d-flex justify-end mb-6 mr-1">
                                     <MIcon Disabled="@(_customEnv.Environments.Count == 1)" OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
                                     <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
                                 </div>
                             }
                         }
-                        <MButton Height="40" Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">下一步</MButton>
+                        <MButton Height="40" Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">@T("Next step")</MButton>
                     </MForm>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
                     <MForm Model="_initModel" EnableValidation>
-                        <STextField Disabled Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="集群名称" Outlined></STextField>
-                        <MTextarea Outlined Label="集群描述" @bind-Value="_initModel.ClusterDescription"></MTextarea>
+                        <STextField Disabled Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="@T("Cluster name")" Outlined></STextField>
+                        <MTextarea Outlined Label="@T("Cluster description")" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                         <div class="d-flex justify-end">
-                            <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">上一步</MButton>
+                            <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">@T("Previous step")</MButton>
                             <SButton Small OnClick="()=>InitAsync(context)" Loading="_initLoading">提交</SButton>
                         </div>
                     </MForm>

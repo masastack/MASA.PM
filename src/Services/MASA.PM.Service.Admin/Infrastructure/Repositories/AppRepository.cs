@@ -1,22 +1,25 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Globalization.I18n;
+
 namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 {
     public class AppRepository : IAppRepository
     {
         private readonly PmDbContext _dbContext;
-
-        public AppRepository(PmDbContext dbContext)
+        private readonly II18n<DefaultResource> _i18N;
+        public AppRepository(PmDbContext dbContext, II18n<DefaultResource> i18N)
         {
             _dbContext = dbContext;
+            _i18N = i18N;
         }
 
         public async Task<App> AddAsync(App app)
         {
             if (_dbContext.Apps.Any(e => e.Name == app.Name))
             {
-                throw new UserFriendlyException("应用名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Application name already exists!"));
             }
 
             await _dbContext.Apps.AddAsync(app);
@@ -65,14 +68,14 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         {
             var app = await _dbContext.Apps.FindAsync(Id);
 
-            return app ?? throw new UserFriendlyException("应用信息不存在！");
+            return app ?? throw new UserFriendlyException(_i18N.T("Application information does not exist!"));
         }
 
         public async Task<App> GetByIdenityAsync(string identity)
         {
             var app = await _dbContext.Apps.FirstOrDefaultAsync(app => app.Identity == identity);
 
-            return app ?? throw new UserFriendlyException("应用信息不存在！");
+            return app ?? throw new UserFriendlyException(_i18N.T("Application information does not exist!"));
         }
 
         public async Task<List<App>> GetByAppTypesAsync(List<AppTypes> appTypes)
@@ -174,7 +177,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
             if (result != null)
             {
-                throw new UserFriendlyException($"应用名或ID已存在！");
+                throw new UserFriendlyException(_i18N.T("Application name or ID already exists!"));
             }
         }
     }

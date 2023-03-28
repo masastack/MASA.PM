@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using FluentValidation;
-
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -28,6 +26,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddStackMiddleware();
+builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -154,5 +153,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
+
+app.UseI18n();
 
 app.Run();

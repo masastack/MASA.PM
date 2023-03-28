@@ -6,17 +6,18 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
     public class ClusterRepository : IClusterRepository
     {
         private readonly PmDbContext _dbContext;
-
-        public ClusterRepository(PmDbContext dbContext)
+        private readonly II18n<DefaultResource> _i18N;
+        public ClusterRepository(PmDbContext dbContext, II18n<DefaultResource> i18N)
         {
             _dbContext = dbContext;
+            _i18N = i18N;
         }
 
         public async Task<Cluster> AddAsync(Cluster cluster)
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower()))
             {
-                throw new UserFriendlyException("集群名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Cluster name already exists!"));
             }
 
             await _dbContext.Clusters.AddAsync(cluster);
@@ -40,7 +41,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
             if (result == null)
             {
-                throw new UserFriendlyException("集群不存在！");
+                throw new UserFriendlyException(_i18N.T("Cluster does not exist!"));
             }
 
             return result;
@@ -93,7 +94,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         {
             if (_dbContext.Clusters.Any(e => e.Name.ToLower() == cluster.Name.ToLower() && e.Id != cluster.Id))
             {
-                throw new UserFriendlyException("集群名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Cluster name already exists!"));
             }
 
             _dbContext.Clusters.Update(cluster);
@@ -114,7 +115,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             var cluster = await _dbContext.Clusters.FirstOrDefaultAsync(c => c.Id == Id);
             if (cluster == null)
             {
-                throw new UserFriendlyException("集群不存在！");
+                throw new UserFriendlyException(_i18N.T("Cluster does not exist!"));
             }
 
             _dbContext.Clusters.Remove(cluster);
