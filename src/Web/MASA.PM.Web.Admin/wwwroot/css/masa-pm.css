@@ -47,10 +47,6 @@
         border-radius: 10px !important;
     }
 
-.m-chip .m-chip__content {
-    padding: 2px 8px;
-}
-
 .m-card__text {
     padding: 16px 24px;
     height: 100%;
