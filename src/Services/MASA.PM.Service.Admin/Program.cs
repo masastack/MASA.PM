@@ -3,6 +3,9 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
+GlobalValidationOptions.SetDefaultCulture("zh-CN");
+
 await builder.Services.AddMasaStackConfigAsync();
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
@@ -23,6 +26,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddStackMiddleware();
+builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -149,5 +153,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapSubscribeHandler();
 });
 app.UseHttpsRedirection();
+
+app.UseI18n();
 
 app.Run();

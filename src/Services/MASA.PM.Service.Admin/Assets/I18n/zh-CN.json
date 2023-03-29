@@ -1,0 +1,19 @@
+{
+  "$DefaultLanguage": "true",
+  "$Text": "中文简体",
+  "Demo Account Prohibited Operations": "演示账号禁止操作",
+  "Application name already exists!": "应用名称已存在!",
+  "Application information does not exist!": "应用信息不存在!",
+  "Application name or ID already exists!": "应用名或ID已存在!",
+  "Cluster name already exists!": "集群名称已存在!",
+  "Cluster does not exist!": "集群不存在!",
+  "Environment name already exists!": "环境名称已存在!",
+  "Environment does not exist!": "环境不存在!",
+  "Environment cannot be empty!": "环境不允许为空!",
+  "Project name already exists!": "项目名称已存在!",
+  "Project ID already exists!": "项目ID已存在!",
+  "Project does not exist!": "项目不存在!",
+  "The project name [{name}] already exists in the environment [{EnvironmentName}]/environment [{ClusterName}]!": "项目名[{name}]已在环境[{EnvironmentName}]/环境[{ClusterName}]中存在!",
+  "Environment": "环境",
+  "Environment Name": "环境名称"
+}

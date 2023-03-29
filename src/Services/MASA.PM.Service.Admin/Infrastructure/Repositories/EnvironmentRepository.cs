@@ -6,17 +6,19 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
     public class EnvironmentRepository : IEnvironmentRepository
     {
         private readonly PmDbContext _dbContext;
+        private readonly II18n<DefaultResource> _i18N;
 
-        public EnvironmentRepository(PmDbContext dbContext)
+        public EnvironmentRepository(PmDbContext dbContext, II18n<DefaultResource> i18N)
         {
             _dbContext = dbContext;
+            _i18N = i18N;
         }
 
         public async Task<Entities.Environment> AddAsync(Entities.Environment environment)
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == environment.Name.ToLower()))
             {
-                throw new UserFriendlyException("环境名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Environment name already exists!"));
             }
 
             await _dbContext.Environments.AddAsync(environment);
@@ -55,7 +57,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
             if (result == null)
             {
-                throw new UserFriendlyException("环境不存在！");
+                throw new UserFriendlyException(_i18N.T("Environment does not exist!"));
             }
 
             return result;
@@ -65,7 +67,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         {
             if (_dbContext.Environments.Any(e => e.Name.ToLower() == model.Name.ToLower() && e.Id != model.EnvironmentId))
             {
-                throw new UserFriendlyException("环境名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Environment name already exists!"));
             }
 
             _dbContext.Environments.Update(new Entities.Environment(model.EnvironmentId, model.Name, model.Description, model.Color));
@@ -99,13 +101,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             var envCount = await _dbContext.EnvironmentClusters.CountAsync();
             if (envCount <= 1)
             {
-                throw new UserFriendlyException("环境不允许为空！");
+                throw new UserFriendlyException(_i18N.T("Environment cannot be empty!"));
             }
 
             var environment = await _dbContext.Environments.FirstOrDefaultAsync(env => env.Id == Id);
             if (environment == null)
             {
-                throw new UserFriendlyException("环境不存在！");
+                throw new UserFriendlyException(_i18N.T("Environment does not exist!"));
             }
             //var environmentClusters = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == environment.Id).ToListAsync();
             //var environmentClusterIds = environmentClusters.Select(e => e.Id);

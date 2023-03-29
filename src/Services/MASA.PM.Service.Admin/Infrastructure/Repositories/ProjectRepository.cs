@@ -6,21 +6,22 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly PmDbContext _dbContext;
-
-        public ProjectRepository(PmDbContext dbContext)
+        private readonly II18n<DefaultResource> _i18N;
+        public ProjectRepository(PmDbContext dbContext, II18n<DefaultResource> i18N)
         {
             _dbContext = dbContext;
+            _i18N = i18N;
         }
 
         public async Task<Project> AddAsync(Project project)
         {
             if (_dbContext.Projects.Any(p => p.Name == project.Name))
             {
-                throw new UserFriendlyException("项目名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Project name already exists!"));
             }
             if (_dbContext.Projects.Any(p => p.Identity == project.Identity))
             {
-                throw new UserFriendlyException("项目ID已存在！");
+                throw new UserFriendlyException(_i18N.T("Project ID already exists!"));
             }
 
             await _dbContext.Projects.AddAsync(project);
@@ -58,7 +59,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             var project = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
             if (project == null)
             {
-                throw new UserFriendlyException("项目不存在！");
+                throw new UserFriendlyException(_i18N.T("Project does not exist!"));
             }
 
             _dbContext.Projects.Remove(project);
@@ -78,14 +79,14 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         {
             var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Id == Id);
 
-            return result ?? throw new UserFriendlyException("项目不存在！");
+            return result ?? throw new UserFriendlyException(_i18N.T("Project does not exist!"));
         }
 
         public async Task<Project> GetByIdentityAsync(string identity)
         {
             var result = await _dbContext.Projects.FirstOrDefaultAsync(project => project.Identity == identity);
 
-            return result ?? throw new UserFriendlyException("项目不存在！");
+            return result ?? throw new UserFriendlyException(_i18N.T("Project does not exist!"));
         }
 
         public async Task<List<Project>> GetListAsync()
@@ -150,7 +151,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
         {
             if (_dbContext.Projects.Any(e => e.Name.ToLower() == project.Name.ToLower() && e.Id != project.Id))
             {
-                throw new UserFriendlyException("项目名称已存在！");
+                throw new UserFriendlyException(_i18N.T("Project name already exists!"));
             }
 
             _dbContext.Projects.Update(project);
@@ -172,7 +173,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
             if (result != null)
             {
-                throw new UserFriendlyException($"项目名[{name}]已在环境[{result.EnvironmentName}]/环境[{result.ClusterName}]中存在！");
+                string message = _i18N.T("The project name [{name}] already exists in the environment [{EnvironmentName}]/environment [{ClusterName}]!")
+                    .Replace("{name}", name)
+                    .Replace("{EnvironmentName}", result.EnvironmentName)
+                    .Replace("{ClusterName}", result.ClusterName);
+                throw new UserFriendlyException(message);
             }
         }
 

@@ -32,17 +32,17 @@ namespace MASA.PM.Web.Admin.Pages.Home
             {
                 var environments = new List<EnvModel>
                 {
-                    new EnvModel(0, "Development", "开发环境", _colors[0]),
-                    new EnvModel(1, "Staging", "模拟环境", _colors[1]),
-                    new EnvModel(2, "Production", "生产环境", _colors[2])
+                    new EnvModel(0, "Development", T("Development environment"), _colors[0]),
+                    new EnvModel(1, "Staging", T("Simulation environment"), _colors[1]),
+                    new EnvModel(2, "Production", T("Production environment"), _colors[2])
                 };
                 _customEnv = new EnvironmentModel()
                 {
                     Environments = new List<EnvModel>
                     {
-                        new EnvModel(0, "Development", "开发环境", _colors[0]),
-                        new EnvModel(1, "Staging", "模拟环境", _colors[1]),
-                        new EnvModel(2, "Production", "生产环境", _colors[2])
+                        new EnvModel(0, "Development", T("Development environment"), _colors[0]),
+                        new EnvModel(1, "Staging", T("Simulation environment"), _colors[1]),
+                        new EnvModel(2, "Production", T("Production environment"), _colors[2])
                     }
                 };
 
@@ -111,7 +111,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     }).ToList();
                     await EnvironmentCaller.InitAsync(_initModel);
 
-                    await PopupService.EnqueueSnackbarAsync("初始化完成！", AlertTypes.Success);
+                    await PopupService.EnqueueSnackbarAsync(T("Initialization completed!"), AlertTypes.Success);
                     NavigationManager.NavigateTo(GlobalVariables.DefaultRoute, true);
                 }
                 catch (Exception ex)

@@ -78,5 +78,14 @@
   "Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?": "确定要删除环境\"{EnvironmentName}\"环境吗？",
   "Delete app": "删除应用",
   "Are you sure you want to delete AppName \"{AppName}\"?": "确定要删除App“{AppName}”吗？",
-  "Select Color": "选择颜色"
+  "Select Color": "选择颜色",
+  "Next step": "下一步",
+  "Previous step": "上一步",
+  "Environment": "环境",
+  "Cluster": "集群",
+  "Initialization": "初始化",
+  "Development environment": "开发环境",
+  "Simulation environment": "模拟环境",
+  "Production environment": "生产环境",
+  "Initialization completed!": "初始化完成!",
 }
