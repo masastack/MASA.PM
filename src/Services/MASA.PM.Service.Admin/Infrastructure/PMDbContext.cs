@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Infrastructure
 {
-    public class PmDbContext : MasaDbContext
+    public class PmDbContext : MasaDbContext<PmDbContext>
     {
         public PmDbContext(MasaDbContextOptions<PmDbContext> options) : base(options)
         {
