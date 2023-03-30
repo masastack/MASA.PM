@@ -1,4 +1,4 @@
-﻿@inherits PmCompontentBase
+﻿@inherits PmComponentBase
 
 <SSimpleModal Value="_projectFormModel.Visible" ValueChanged="ProjectModalValueChanged" Title="@(_projectFormModel.HasValue ? $"{T("Edit Project")}":$"{T("Add Project")}")" Width="770">
     <MForm Class="full-height" Context="formContext" EnableValidation Model="_projectFormModel.Data">
