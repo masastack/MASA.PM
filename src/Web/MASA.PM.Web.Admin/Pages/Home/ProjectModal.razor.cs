@@ -38,6 +38,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private List<EnvironmentClusterDto> _allEnvClusters = new();
         private ProjectDetailDto _projectDetail = new();
         private List<int> _disableEnvironmentClusterIds = new();
+        private MForm? _form;
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
@@ -91,7 +92,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _projectFormModel.Visible = value;
             if (!value)
             {
-                _projectFormModel.Data = new();
+                _form?.Reset();
+                _projectFormModel.Hide();
             }
         }
 

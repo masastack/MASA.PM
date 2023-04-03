@@ -23,11 +23,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
         private readonly DataModal<UpdateAppDto> _appFormModel = new();
         private List<EnvironmentClusterDto> _projectEnvClusters = new();
+        private MForm? _form;
 
         public async Task InitDataAsync(UpdateAppDto? updateAppDto = null)
         {
@@ -58,7 +56,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (!value)
             {
                 AppDetail = new();
-                _appFormModel.Data = new();
+                _form?.Reset();
+                _appFormModel.Hide();
             }
         }
 
