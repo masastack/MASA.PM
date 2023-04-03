@@ -105,17 +105,20 @@
                         <div class="d-flex justify-space-between mt-3">
                             <div>
                                 @{
-                                    var team = _allTeams.FirstOrDefault(team => team.Id == project.TeamId) ?? new();
-                                    <MTooltip Right>
-                                        <ActivatorContent>
-                                            <MAvatar Size="24" @attributes="@context.Attrs">
-                                                <MImage Src="@team.Avatar"></MImage>
-                                            </MAvatar>
-                                        </ActivatorContent>
-                                        <ChildContent>
-                                            <span>@team.Name</span>
-                                        </ChildContent>
-                                    </MTooltip>
+                                    var team = _allTeams.FirstOrDefault(team => team.Id == project.TeamId);
+                                    if (team != null)
+                                    {
+                                        <MTooltip Right>
+                                            <ActivatorContent>
+                                                <MAvatar Size="24" @attributes="@context.Attrs">
+                                                    <MImage Src="@team.Avatar"></MImage>
+                                                </MAvatar>
+                                            </ActivatorContent>
+                                            <ChildContent>
+                                                <span>@team.Name</span>
+                                            </ChildContent>
+                                        </MTooltip>
+                                    }
                                 }
                             </div>
                             @if (CanAddApp)
