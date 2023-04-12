@@ -95,13 +95,22 @@ namespace MASA.PM.Service.Admin.Migrations
             IProjectRepository projectRepository,
             IAppRepository appRepository)
         {
+            var defaultUserId = masaStackConfig.GetDefaultUserId();
+            var defaultTeamId = masaStackConfig.GetDefaultTeamId();
+
             //environment
-            var envs = initDto.Environments.Select(e => new Infrastructure.Entities.Environment
+            var envs = initDto.Environments.Select(e =>
             {
-                Name = e.Name,
-                Description = e.Description,
-                Color = e.Color
+                var env = new Infrastructure.Entities.Environment
+                {
+                    Name = e.Name,
+                    Description = e.Description,
+                    Color = e.Color
+                };
+                env.SetCreatorAndModifier(defaultUserId);
+                return env;
             });
+
             var envEntitis = new List<Infrastructure.Entities.Environment>();
             foreach (var env in envs)
             {
@@ -110,11 +119,14 @@ namespace MASA.PM.Service.Admin.Migrations
             }
 
             //cluster
-            var cluster = await clusterRepository.AddAsync(new Infrastructure.Entities.Cluster
+            var cluster = new Cluster
             {
                 Name = initDto.ClusterName,
                 Description = initDto.ClusterDescription
-            });
+            };
+            cluster.SetCreatorAndModifier(defaultUserId);
+            await clusterRepository.AddAsync(cluster);
+
             var envClusters = envEntitis.Select(env => new EnvironmentCluster
             {
                 EnvironmentId = env.Id,
@@ -128,18 +140,25 @@ namespace MASA.PM.Service.Admin.Migrations
             }
 
             //project
-            var projects = SeedData.GetProjectApps(masaStackConfig);
+            var projects = GetProjectApps(masaStackConfig);
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
             var appGroups = new List<(int ProjectId, string ProjectDescription, int AppId, string Description)>();
             var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
             foreach (var project in projects)
             {
-                var newProject = await projectRepository.AddAsync(project.Adapt<Infrastructure.Entities.Project>());
+                var projectEntity = project.Adapt<Project>();
+                projectEntity.TeamId = defaultTeamId;
+                projectEntity.SetCreatorAndModifier(defaultUserId);
+                var newProject = await projectRepository.AddAsync(projectEntity);
+
                 projectIds.Add(newProject.Id);
                 foreach (var app in project.Apps)
                 {
-                    var newApp = await appRepository.AddAsync(app.Adapt<Infrastructure.Entities.App>());
+                    var appEntity = app.Adapt<App>();
+                    appEntity.SetCreatorAndModifier(defaultUserId);
+                    var newApp = await appRepository.AddAsync(appEntity);
+
                     appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Description));
                 }
 
