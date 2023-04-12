@@ -20,6 +20,12 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         {
         }
 
+        public void SetCreatorAndModifier(Guid userId)
+        {
+            Creator = userId;
+            Modifier = userId;
+        }
+
         public Cluster(int id, string name, string description)
         {
             Id = id;

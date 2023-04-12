@@ -28,5 +28,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         [Column(TypeName = "nvarchar(255)")]
         [StringLength(255, MinimumLength = 0, ErrorMessage = "Description length range is [0-255]")]
         public string Description { get; set; } = "";
+
+        public void SetCreatorAndModifier(Guid userId)
+        {
+            Creator = userId;
+            Modifier = userId;
+        }
     }
 }
