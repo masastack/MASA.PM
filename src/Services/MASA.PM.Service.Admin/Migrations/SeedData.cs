@@ -200,11 +200,11 @@ namespace MASA.PM.Service.Admin.Migrations
             var teamId = Guid.Empty;
             foreach (var service in allService)
             {
-                var project = service.Key;
+                var project = string.Concat(service.Key[..1].ToUpper(), service.Key.AsSpan(1));
 
                 AddProjectAppDto projectApp = new AddProjectAppDto
                 {
-                    Name = project.ToUpper(),
+                    Name = project,
                     Identity = project,
                     LabelCode = GetLabel(project),
                     TeamId = teamId,
