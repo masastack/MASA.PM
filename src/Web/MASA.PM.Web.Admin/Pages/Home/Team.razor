@@ -151,14 +151,21 @@
                         <MButton Height="40" Class="rounded-lg" Color="primary" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><MIcon Class="mr-1" Small>mdi-plus </MIcon>@T("Add App")</MButton>
                     </div>
                     <div style="overflow:auto; height: calc(100vh - 256px);">
-                        <MRow Class="mx-3">
-                            @foreach (var app in _projectApps)
-                            {
-                                <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
-                                    <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
-                                </MCol>
-                            }
-                        </MRow>
+                        @if(_projectApps.Any())
+                        {
+                            <MRow Class="mx-3">
+                                @foreach (var app in _projectApps)
+                                {
+                                    <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
+                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.CreationTime.Humanize(utcDate:false,culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters"></AppCard>
+                                    </MCol>
+                                }
+                            </MRow>
+                        }
+                        else
+                        {
+                            <SEmptyPlaceholder Class="ml-5" Style="width: calc(100% - 20px);" />                                
+                        }
                     </div>
                 </div>
             </div>

@@ -131,6 +131,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private void OnEnvironmentClusterSelectedItemUpdate(List<int> values)
         {
+            if (!_appFormModel.Visible) return;
+
             var oldValues = _appFormModel.Data.EnvironmentClusterInfos.Select(envCluster => envCluster.EnvironmentClusterId);
             var insertValue = values.Except(oldValues).SingleOrDefault();
             var removeValue = oldValues.Except(values).SingleOrDefault();
