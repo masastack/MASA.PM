@@ -38,8 +38,12 @@
                                 </MRow>
                                 <MTextarea Outlined Label="@T("Environment description")" @bind-Value="item.Description"></MTextarea>
                                 <div class="d-flex justify-end mb-6 mr-1">
-                                    <MIcon Disabled="@(_customEnv.Environments.Count == 1)" OnClick="()=>RemoveEnvComponent(item.Index)" Class="hover-pointer mr-3">mdi-minus-box-outline</MIcon>
-                                    <MIcon OnClick="()=>AddEnvComponent(item.Index)" Class="hover-pointer">mdi-plus-box</MIcon>
+                                    <MButton Class="mr-3" Icon Disabled="@(_customEnv.Environments.Count == 1)" OnClick="()=>RemoveEnvComponent(item.Index)">
+                                        <SIcon>mdi-minus-box-outline</SIcon>
+                                    </MButton>
+                                    <MButton Class="mr-3" Icon OnClick="()=>AddEnvComponent(item.Index)">
+                                        <SIcon>mdi-plus-box</SIcon>
+                                    </MButton>
                                 </div>
                             }
                         }

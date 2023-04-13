@@ -59,15 +59,15 @@
                                 </div>
                                 <MSpacer />
                                 <div style="display:flex;align-items:center;">
-                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><MIcon Size="20" Color="#485585">mdi-pencil</MIcon></MButton>
+                                    <MButton Icon StopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><SIcon Size="20" Color="#485585">mdi-pencil</SIcon></MButton>
                                     <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                 </div>
                             </span>
                         </ChildContent>
                         <ActionsContent>
-                            <MIcon Color="#485585">
+                            <SIcon Color="#485585">
                                 mdi-chevron-down
-                            </MIcon>
+                            </SIcon>
                         </ActionsContent>
                     </MExpansionPanelHeader>
                     <MExpansionPanelContent>
@@ -85,7 +85,7 @@
                                         <MRow NoGutters>
                                             <MCol Class="pr-2">
                                                 <MButton Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border-radius: 20px; border: 2px dashed #E9EDF7;">
-                                                    <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add App")</span>
+                                                    <SIcon Left>mdi-plus</SIcon><span class="emphasis--text">@T("Add App")</span>
                                                 </MButton>
                                             </MCol>
                                         </MRow>
@@ -132,7 +132,7 @@
                                         var mClass = $"{(hoverContext.Hover ? "primary--text" : "regular2--text")}";
                                         <div @onclick="()=>HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@($"hover-pointer btn {mClass}")">
                                             @T("More")
-                                            <MIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</MIcon>
+                                            <SIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</SIcon>
                                         </div>
                                     }
                                 </MHover>
