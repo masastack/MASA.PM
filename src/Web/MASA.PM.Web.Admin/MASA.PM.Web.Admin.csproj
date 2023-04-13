@@ -15,11 +15,11 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="6.1.0-preview.1" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="1.0.0-preview.28" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Config" Version="1.0.0-preview.28" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="1.0.0-preview.28" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Stack.Components" Version="0.0.316" />
-    <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="1.0.0-preview.28" />
+    <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 
