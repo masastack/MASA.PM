@@ -9,7 +9,7 @@ namespace MASA.PM.Service.Admin.Infrastructure
         {
             ChangeTracker.LazyLoadingEnabled = false;
             ChangeTracker.AutoDetectChangesEnabled = false;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         protected override void OnModelCreatingExecuting(ModelBuilder modelBuilder)

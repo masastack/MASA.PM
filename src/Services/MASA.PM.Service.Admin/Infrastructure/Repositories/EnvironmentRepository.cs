@@ -70,7 +70,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                 throw new UserFriendlyException(_i18N.T("Environment name already exists!"));
             }
 
-            _dbContext.Environments.Update(new Entities.Environment(model.EnvironmentId, model.Name, model.Description, model.Color));
+            var environment = await _dbContext.Environments.FindAsync(model.EnvironmentId)
+                ?? throw new UserFriendlyException(_i18N.T("Environment does not exist!"));
+
+            environment.Name = model.Name;
+            environment.Description = model.Description;
+            environment.Color = model.Color;
+            _dbContext.Environments.Update(environment);
 
             var oldClusterIds = await _dbContext.EnvironmentClusters.Where(e => e.EnvironmentId == model.EnvironmentId).Select(e => e.ClusterId).ToListAsync();
 

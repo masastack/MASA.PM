@@ -25,12 +25,12 @@ namespace MASA.PM.Service.Admin.Application.Project
                 Description = command.ProjectModel.Description,
                 TeamId = command.ProjectModel.TeamId,
             };
-            var newPeoject = await _projectRepository.AddAsync(project);
+            var newProject = await _projectRepository.AddAsync(project);
 
             var environmentClusterProjects = command.ProjectModel.EnvironmentClusterIds.Select(environmentClusterId => new EnvironmentClusterProject
             {
                 EnvironmentClusterId = environmentClusterId,
-                ProjectId = newPeoject.Id
+                ProjectId = newProject.Id
             });
 
             await _projectRepository.AddEnvironmentClusterProjectsAsync(environmentClusterProjects);
