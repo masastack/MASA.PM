@@ -43,7 +43,7 @@
                                 </div>
                             }
                         }
-                        <MButton Height="40" Width=100 Class="rounded-pill" Style="float:right;" Color="primary" OnClick="()=>NextStep(context)">@T("Next step")</MButton>
+                        <SButton Height="40" Width=100 Style="float:right;" OnClick="()=>NextStep(context)">@T("Next step")</SButton>
                     </MForm>
                 </MStepperContent>
                 <MStepperContent Style="padding-top:12px !important;" Step="2">
@@ -51,7 +51,7 @@
                         <STextField Disabled Class="mt-2 mb-6" @bind-Value="_initModel.ClusterName" Label="@T("Cluster name")" Outlined></STextField>
                         <MTextarea Outlined Label="@T("Cluster description")" @bind-Value="_initModel.ClusterDescription"></MTextarea>
                         <div class="d-flex justify-end">
-                            <MButton Height="40" Width=100 Outlined Color="primary" Class="text-btn rounded-pill mr-6" OnClick="()=>_step=1">@T("Previous step")</MButton>
+                            <SButton Height="40" Width=100 Outlined Class="text-btn mr-6" OnClick="()=>_step=1">@T("Previous step")</SButton>
                             <SButton Small OnClick="()=>InitAsync(context)" Loading="_initLoading">提交</SButton>
                         </div>
                     </MForm>
