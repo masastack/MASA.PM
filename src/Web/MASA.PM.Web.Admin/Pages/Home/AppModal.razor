@@ -35,7 +35,7 @@
                              Label="@T("Service type")">
                     </MSelect>
                 }
-                <STextField Class="mt-9" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@T("If dapr is selected, the app identity format is recommended: app-id,divided by -")" @bind-Value="_appFormModel.Data.Identity"></STextField>
+                <STextField Class="mt-9" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@(_appFormModel.Data.ServiceType==ServiceTypes.Dapr ? T("If dapr is selected, the app identity format is recommended: app-id,divided by -") : "")" @bind-Value="_appFormModel.Data.Identity"></STextField>
                 <SAutoComplete Class="mt-9"
                                Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
