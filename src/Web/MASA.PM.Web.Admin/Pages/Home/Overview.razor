@@ -29,9 +29,9 @@
                                             @if (context.Active)
                                             {
                                                     <MListItemIcon Class="d-flex align-center mt-3">
-                                                    <MButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
+                                                    <SButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
                                                         <MIcon Size="18" Class="pencil">mdi-pencil</MIcon>
-                                                    </MButton>
+                                                    </SButton>
                                                 </MListItemIcon>
                                             }
                                             </ItemContent>
@@ -45,9 +45,9 @@
                         </MListItemGroup>
                     </MList>
                 </div>
-                <MButton OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Width="194" Tile Text Class="m-btn-add m-btn-add-environment">
+                <SButton Color="" BorderRadiusClass="m-btn-add" OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Tile Text Class="m-btn-add-environment">
                     <MIcon Left>mdi-plus</MIcon> <span class="emphasis--text">@T("Add Environment")</span>
-                </MButton>
+                </SButton>
             </MNavigationDrawer>
         </MCol>
         <MCol Cols="10">
@@ -69,17 +69,17 @@
                                 </MTooltip>
                                 @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                                 {
-                                    <MButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
+                                    <SButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
                                         <MIcon Size="18">mdi-pencil</MIcon>
-                                    </MButton>
+                                    </SButton>
                                 }
                                 </MTab>
                             }
                         </MTabs>
                     </MCard>
-                    <MButton OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add m-btn-add-cluster" Style="height: 54px;">
+                    <SButton Color="" BorderRadiusClass="m-btn-add" OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add-cluster" Style="height: 54px;">
                         <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Cluster")</span>
-                    </MButton>
+                    </SButton>
                 </MRow>
                 <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
                     <div class="mt-3" style="height:calc(100vh - 292px ); overflow: hidden; position: relative;">
@@ -88,9 +88,9 @@
                             CanAddApp
                             EnvironmentClusterId="_selectEnvClusterId.AsT1" />
                     </div>
-                    <MButton Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
+                    <SButton Color="fill" Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
                         <MIcon Left>mdi-plus</MIcon><span class="emphasis--text">@T("Add Project")</span>
-                    </MButton>
+                    </SButton>
                 </div>
             </div>
         </MCol>
