@@ -110,9 +110,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
         }
 
-        private async Task SearchProject(KeyboardEventArgs args)
+        private async Task SearchProject()
         {
-            if (args.Key == "Enter" && _projectListComponent != null)
+            if (_projectListComponent != null)
             {
                 await _projectListComponent.SearchProjectsByNameAsync(_projectName);
             }
@@ -165,18 +165,15 @@ namespace MASA.PM.Web.Admin.Pages.Home
             await GetProjectAsync(projectId);
         }
 
-        private void SearchApp(KeyboardEventArgs args)
+        private void SearchApp()
         {
-            if (args.Key == "Enter")
+            if (!string.IsNullOrWhiteSpace(_appName))
             {
-                if (!string.IsNullOrWhiteSpace(_appName))
-                {
-                    _projectApps = _backupProjectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
-                }
-                else
-                {
-                    _projectApps = _backupProjectApps;
-                }
+                _projectApps = _backupProjectApps.Where(app => app.Name.ToLower().Contains(_appName.ToLower())).ToList();
+            }
+            else
+            {
+                _projectApps = _backupProjectApps;
             }
         }
 
