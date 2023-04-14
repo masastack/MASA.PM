@@ -3,13 +3,13 @@
 
 namespace MASA.PM.Service.Admin.Infrastructure
 {
-    public class PmDbContext : MasaDbContext
+    public class PmDbContext : MasaDbContext<PmDbContext>
     {
         public PmDbContext(MasaDbContextOptions<PmDbContext> options) : base(options)
         {
             ChangeTracker.LazyLoadingEnabled = false;
             ChangeTracker.AutoDetectChangesEnabled = false;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         protected override void OnModelCreatingExecuting(ModelBuilder modelBuilder)

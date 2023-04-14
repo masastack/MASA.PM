@@ -25,6 +25,12 @@ namespace MASA.PM.Service.Admin.Infrastructure.Entities
         {
         }
 
+        public void SetCreatorAndModifier(Guid userId)
+        {
+            Creator = userId;
+            Modifier = userId;
+        }
+
         public Environment(int id, string name, string description, string color)
         {
             Id = id;

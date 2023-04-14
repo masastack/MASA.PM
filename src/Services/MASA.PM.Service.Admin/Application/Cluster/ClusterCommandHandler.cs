@@ -45,8 +45,7 @@ namespace MASA.PM.Service.Admin.Application.Cluster
             var cluster = await _clusterRepository.GetAsync(updateClusterModel.ClusterId);
             cluster.Name = updateClusterModel.Name;
             cluster.Description = updateClusterModel.Description;
-            await _clusterRepository.UpdateAsync(new Infrastructure.Entities.Cluster(
-                updateClusterModel.ClusterId, updateClusterModel.Name, updateClusterModel.Description));
+            await _clusterRepository.UpdateAsync(cluster);
 
             var oldEnvironmentIds = (
                     await _clusterRepository.GetEnvironmentClustersByClusterIdAsync(updateClusterModel.ClusterId)
