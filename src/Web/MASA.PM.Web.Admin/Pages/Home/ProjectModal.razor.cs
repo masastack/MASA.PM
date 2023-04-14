@@ -107,7 +107,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             else
             {
                 var deleteProject = Projects.First(project => project.Id == _projectDetail.Id);
-                var result = await PopupService.ConfirmAsync(T("Delete project"),
+                var result = await PopupService.SimpleConfirmAsync(T("Delete project"),
                     T("Are you sure you want to delete project \"{ProjectName}\"?").Replace("{ProjectName}",
                     deleteProject.Name),
                     AlertTypes.Error);

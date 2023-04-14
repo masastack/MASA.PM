@@ -157,7 +157,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 var envId = _selectedEnvId.AsT1;
                 var deleteEnv = _environments.First(c => c.Id == envId);
 
-                var result = await PopupService.ConfirmAsync(T("Delete environment"),
+                var result = await PopupService.SimpleConfirmAsync(T("Delete environment"),
                     T("Are you sure you want to delete EnvironmentName \"{EnvironmentName}\"?").Replace("{EnvironmentName}",
                     deleteEnv.Name),
                     AlertTypes.Error);
@@ -261,7 +261,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                var result = await PopupService.ConfirmAsync(T("Delete cluster"),
+                var result = await PopupService.SimpleConfirmAsync(T("Delete cluster"),
                     T("Are you sure you want to delete cluster \"{ClusterName}\"?").Replace("{ClusterName}", deleteCluster.Name),
                     AlertTypes.Error);
 
