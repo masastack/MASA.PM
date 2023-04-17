@@ -20,7 +20,7 @@
                                     <MListItem @attributes="@tooltipContext.Attrs" Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                                         <ItemContent>
                                             <MListItemIcon Class="d-flex align-center mr-0 mt-3">
-                                                <MIcon Color="@env.Color" Size="12">mdi-circle</MIcon>
+                                                <SIcon Color="@env.Color" Size="12">mdi-circle</SIcon>
                                             </MListItemIcon>
                                             <MListItemContent>
                                                 <MListItemTitle>@env.Name</MListItemTitle>
