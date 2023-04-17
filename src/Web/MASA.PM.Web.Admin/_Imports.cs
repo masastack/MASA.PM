@@ -16,6 +16,7 @@ global using Masa.Contrib.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Tsc;
 global using Masa.Stack.Components;
 global using Masa.Stack.Components.Configs;
+global using Masa.Stack.Components.Extensions;
 global using Masa.Stack.Components.Extensions.OpenIdConnect;
 global using MASA.PM.Caller.Callers;
 global using MASA.PM.Contracts.Admin.Dto;
