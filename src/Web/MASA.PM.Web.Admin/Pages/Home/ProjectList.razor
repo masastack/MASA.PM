@@ -65,9 +65,9 @@
                             </span>
                         </ChildContent>
                         <ActionsContent>
-                            <MIcon Color="#485585">
+                            <SIcon Color="#485585">
                                 mdi-chevron-down
-                            </MIcon>
+                            </SIcon>
                         </ActionsContent>
                     </MExpansionPanelHeader>
                     <MExpansionPanelContent>
@@ -132,7 +132,7 @@
                                         var mClass = $"{(hoverContext.Hover ? "primary--text" : "regular2--text")}";
                                         <div @onclick="()=>HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@($"hover-pointer btn {mClass}")">
                                             @T("More")
-                                            <MIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</MIcon>
+                                            <SIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</SIcon>
                                         </div>
                                     }
                                 </MHover>
