@@ -49,7 +49,7 @@
   "App type": "应用类型",
   "Service type": "服务类型",
   "App identity": "应用标识",
-  "If dapr is selected, the app identity format is recommended: app-id,divided by -": "若选择Dapr，应用标识格式建议：app-id，用 - 来划分",
+  "If dapr is selected, the app identity format is recommended: App-ID, divided by -": "若选择Dapr，应用标识格式建议：App-ID，用 - 来划分",
   "App description": "应用描述",
   "Please enter the project name and press enter to query": "请输入项目名称，按回车进行查询",
   "Team name": "团队名称",
