@@ -119,7 +119,7 @@ var app = builder.Services
     })
     .AddIntegrationEventBus(options =>
     {
-        var connStr = masaStackConfig.GetConnectionString(AppSettings.Get("DBName"));
+        var connStr = masaStackConfig.GetConnectionString(MasaStackConstant.PM);
         options.UseDapr()
         .UseEventLog<PmDbContext>()
         .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
