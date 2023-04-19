@@ -5,7 +5,7 @@
         <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
             <div class="full-height mb-2 pr-5" style="overflow: auto;">
                 <STextField Class="mt-1" Outlined Label="@T("Name")" @bind-Value="_appFormModel.Data.Name"></STextField>
-                <MSelect Value="_appFormModel.Data.Type"
+                <SSelect Value="_appFormModel.Data.Type"
                          ValueChanged="AppTypeValueChanged"
                          ValueExpression="()=>_appFormModel.Data.Type"
                          HideDetails="true"
@@ -20,10 +20,10 @@
                          Outlined
                          MenuProps="p=>{p.OffsetY = true;}"
                          Label="@T("Type")">
-                </MSelect>
+                </SSelect>
                 @if (_appFormModel.Data.Type == AppTypes.Service)
                 {
-                    <MSelect Class="mt-9"
+                    <SSelect Class="mt-9"
                              @bind-Value="_appFormModel.Data.ServiceType"
                              Disabled="@(_appFormModel.HasValue)"
                              HideDetails="true"
@@ -33,9 +33,9 @@
                              Outlined
                              MenuProps="p=>{p.OffsetY = true;}"
                              Label="@T("Service type")">
-                    </MSelect>
-                    }
-                    <STextField Class="mt-9" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@(_appFormModel.Data.ServiceType==ServiceTypes.Dapr ? T("DAPRAPPNameSuggest") : "")" @bind-Value="_appFormModel.Data.Identity"></STextField>
+                    </SSelect>
+                }
+                <STextField Class="mt-9" Disabled="@(_appFormModel.HasValue)" Outlined Label="ID" Placeholder="@(_appFormModel.Data.ServiceType==ServiceTypes.Dapr ? T("DAPRAPPNameSuggest") : "")" @bind-Value="_appFormModel.Data.Identity"></STextField>
                 <SAutoComplete Class="mt-9"
                                Value="_appFormModel.Data.EnvironmentClusterInfos.Select(e=>e.EnvironmentClusterId).ToList()"
                                Items="_projectEnvClusters"
@@ -67,7 +67,7 @@
                     foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                     {
                         var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
-                        <STextField Class="mt-9" Outlined Label="URL" @bind-Value="item.Url">
+                        <STextField @key="@environmentCluster.EnvironmentClusterName" Class="mt-9" Outlined Label="URL" @bind-Value="item.Url">
                             <PrependInnerContent>
                                 <div class="mt-2 d-flex">
                                     <div style="@($"color: {environmentCluster.EnvironmentColor} !important")" class="text-overflow">@environmentCluster.EnvironmentName</div>
@@ -83,7 +83,7 @@
                         foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                         {
                             var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
-                            <STextField Class="mt-9" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
+                            <STextField @key="@environmentCluster.EnvironmentClusterName" Class="mt-9" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
                                 <PrependInnerContent>
                                     <div class="mt-2 d-flex">
                                         <div style="@($"color: {environmentCluster.EnvironmentColor} !important")" class="text-overflow">@environmentCluster.EnvironmentName</div>
