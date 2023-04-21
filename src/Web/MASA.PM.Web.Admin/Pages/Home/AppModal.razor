@@ -83,7 +83,7 @@
                         foreach (var item in _appFormModel.Data.EnvironmentClusterInfos)
                         {
                             var environmentCluster = _projectEnvClusters.Find(p => p.Id == item.EnvironmentClusterId) ?? new();
-                            <STextField @key="@environmentCluster.EnvironmentClusterName" Class="mt-9" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
+                            <STextField @key="@("service:"+ environmentCluster.EnvironmentClusterName)" Class="mt-9" Outlined Label="SwaggerURL" @bind-Value="item.SwaggerUrl">
                                 <PrependInnerContent>
                                     <div class="mt-2 d-flex">
                                         <div style="@($"color: {environmentCluster.EnvironmentColor} !important")" class="text-overflow">@environmentCluster.EnvironmentName</div>
