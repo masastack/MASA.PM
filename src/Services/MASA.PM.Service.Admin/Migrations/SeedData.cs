@@ -254,7 +254,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 appType = AppTypes.Service;
 
             }
-            else if (type == "job" || type == "work")
+            else if (type == "job" || type == "worker")
             {
                 appType = AppTypes.Job;
             }
@@ -264,8 +264,7 @@ namespace MASA.PM.Service.Admin.Migrations
                 ServiceType = ServiceTypes.WebAPI,
                 Type = appType,
                 Identity = appIdentity,
-                Name = name,
-                Description = type
+                Name = name
             };
 
             return app;
