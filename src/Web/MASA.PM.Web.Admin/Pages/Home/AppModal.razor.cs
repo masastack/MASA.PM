@@ -29,6 +29,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         public async Task InitDataAsync(UpdateAppDto? updateAppDto = null)
         {
+            _form?.Reset();
             var allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             var projectDetail = await ProjectCaller.GetAsync(ProjectId);
             _projectEnvClusters = allEnvClusters.Where(envCluster => projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
@@ -56,8 +57,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             if (!value)
             {
                 AppDetail = new();
-                _form?.Reset();
-                _appFormModel.Hide();
+                _appFormModel.Hide();                
             }
         }
 
