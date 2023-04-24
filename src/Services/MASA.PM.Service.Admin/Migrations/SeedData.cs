@@ -179,7 +179,7 @@ namespace MASA.PM.Service.Admin.Migrations
                             {
                                 EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                                 AppId = app.AppId,
-                                AppURL = masaStackConfig.GetUIDomain("http", project.Name.ToLower(), app.Description)
+                                AppURL = masaStackConfig.GetDomain(project.Name.ToLower(), app.Description)
                             });
                         }
                     }
@@ -191,29 +191,39 @@ namespace MASA.PM.Service.Admin.Migrations
 
         public static List<AddProjectAppDto> GetProjectApps(IMasaStackConfig masaStackConfig)
         {
-            var allServer = masaStackConfig.GetAllServer();
-            var allUI = masaStackConfig.GetAllUI();
-            var allService = allServer.Union(allUI).ToList().GroupBy(s => s.Key)
-                .Select(g => new { g.Key, Value = g.SelectMany(a => a.Value).ToList() }).ToList();
+            var masaStack = masaStackConfig.GetMasaStack();
 
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
             var teamId = Guid.Empty;
-            foreach (var service in allService)
+            foreach (var service in masaStack)
             {
-                var project = string.Concat(service.Key[..1].ToUpper(), service.Key.AsSpan(1));
+                if (service == null)
+                {
+                    continue;
+                }
+
+                if (service["id"] == null)
+                {
+                    continue;
+                }
+
+                var id = service["id"]!.ToString();
 
                 AddProjectAppDto projectApp = new AddProjectAppDto
                 {
-                    Name = project,
-                    Identity = project,
-                    LabelCode = GetLabel(project),
+                    Name = service["name"]?.ToString() ?? "",
+                    Identity = id,
+                    LabelCode = GetLabel(id),
                     TeamId = teamId,
-                    Description = project
+                    Description = id
                 };
 
-                var apps = service.Value;
-                foreach (var app in apps)
+                foreach (var app in service.AsObject())
                 {
+                    if (app.Key == "id" || app.Key == "name")
+                    {
+                        continue;
+                    }
                     projectApp.Apps.Add(GenAppDto(app));
                 }
 
@@ -242,14 +252,12 @@ namespace MASA.PM.Service.Admin.Migrations
         private static AddAppDto GenAppDto(KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
         {
             var type = keyValuePair.Key.ToLower();
-            var appIdentity = keyValuePair.Value!.ToString();
-            var name = keyValuePair.Value.ToString().ToName();
             AppTypes appType = AppTypes.UI;
-            if (type == "ui" || type == "sso")
+            if (type == "web" || type == "sso")
             {
                 appType = AppTypes.UI;
             }
-            else if (type == "server")
+            else if (type == "service")
             {
                 appType = AppTypes.Service;
 
@@ -263,8 +271,8 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 ServiceType = ServiceTypes.WebAPI,
                 Type = appType,
-                Identity = appIdentity,
-                Name = name
+                Identity = keyValuePair.Value?["id"]?.ToString() ?? "",
+                Name = keyValuePair.Value?["name"]?.ToString() ?? ""
             };
 
             return app;
