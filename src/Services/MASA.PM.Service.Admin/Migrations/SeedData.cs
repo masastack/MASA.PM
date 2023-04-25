@@ -209,7 +209,8 @@ namespace MASA.PM.Service.Admin.Migrations
                     Name = service["name"]?.ToString() ?? "",
                     Identity = id,
                     LabelCode = GetLabel(id),
-                    TeamId = masaStackConfig.GetDefaultTeamId()
+                    TeamId = masaStackConfig.GetDefaultTeamId(),
+                    Description = ""
                 };
 
                 foreach (var app in service.AsObject())
@@ -266,7 +267,8 @@ namespace MASA.PM.Service.Admin.Migrations
                 ServiceType = ServiceTypes.WebAPI,
                 Type = appType,
                 Identity = keyValuePair.Value?["id"]?.ToString() ?? "",
-                Name = keyValuePair.Value?["name"]?.ToString() ?? ""
+                Name = keyValuePair.Value?["name"]?.ToString() ?? "",
+                Description = ""
             };
 
             return app;
