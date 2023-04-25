@@ -190,7 +190,6 @@ namespace MASA.PM.Service.Admin.Migrations
             var masaStack = masaStackConfig.GetMasaStack();
 
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
-            var teamId = Guid.Empty;
             foreach (var service in masaStack)
             {
                 if (service == null)
@@ -210,7 +209,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     Name = service["name"]?.ToString() ?? "",
                     Identity = id,
                     LabelCode = GetLabel(id),
-                    TeamId = teamId
+                    TeamId = masaStackConfig.GetDefaultTeamId()
                 };
 
                 foreach (var app in service.AsObject())
