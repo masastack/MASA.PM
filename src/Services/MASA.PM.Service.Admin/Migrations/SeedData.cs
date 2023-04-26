@@ -143,11 +143,10 @@ namespace MASA.PM.Service.Admin.Migrations
             var projects = GetProjectApps(masaStackConfig);
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
-            var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string AppIdentity)>();
-
 
             foreach (var project in projects)
             {
+                var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string AppIdentity)>();
                 var projectEntity = project.Adapt<Project>();
                 projectEntity.TeamId = defaultTeamId;
                 projectEntity.SetCreatorAndModifier(defaultUserId);
@@ -174,15 +173,12 @@ namespace MASA.PM.Service.Admin.Migrations
                     var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
                     foreach (var app in appGroups)
                     {
-                        if (app.ProjectId == newProject.Id)
+                        envClusterProjectApps.Add(new EnvironmentClusterProjectApp
                         {
-                            envClusterProjectApps.Add(new EnvironmentClusterProjectApp
-                            {
-                                EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                                AppId = app.AppId,
-                                AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
-                            });
-                        }
+                            EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
+                            AppId = app.AppId,
+                            AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
+                        });
                     }
                     await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
                 }

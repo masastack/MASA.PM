@@ -49,6 +49,7 @@
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="MASA.Contrib.Data.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <PrivateAssets>all</PrivateAssets>
