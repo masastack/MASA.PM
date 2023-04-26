@@ -145,6 +145,7 @@ namespace MASA.PM.Service.Admin.Migrations
             var envClusterProject = new List<EnvironmentClusterProject>();
             var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string AppIdentity)>();
             var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
+
             foreach (var project in projects)
             {
                 var projectEntity = project.Adapt<Project>();
@@ -172,12 +173,16 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     foreach (var app in appGroups)
                     {
-                        envClusterProjectApps.Add(new EnvironmentClusterProjectApp
+                        if (app.ProjectId == newProject.Id)
                         {
-                            EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                            AppId = app.AppId,
-                            AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
-                        });
+                            await Console.Out.WriteLineAsync($"========={project.Identity}----{app.AppIdentity}=========");
+                            envClusterProjectApps.Add(new EnvironmentClusterProjectApp
+                            {
+                                EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
+                                AppId = app.AppId,
+                                AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
+                            });
+                        }
                     }
                 }
             }
