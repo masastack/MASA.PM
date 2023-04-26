@@ -174,12 +174,15 @@ namespace MASA.PM.Service.Admin.Migrations
                     var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
                     foreach (var app in appGroups)
                     {
-                        envClusterProjectApps.Add(new EnvironmentClusterProjectApp
+                        if (app.ProjectId == newProject.Id)
                         {
-                            EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                            AppId = app.AppId,
-                            AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
-                        });
+                            envClusterProjectApps.Add(new EnvironmentClusterProjectApp
+                            {
+                                EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
+                                AppId = app.AppId,
+                                AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
+                            });
+                        }
                     }
                     await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
                 }
