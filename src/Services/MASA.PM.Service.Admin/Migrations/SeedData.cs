@@ -144,7 +144,7 @@ namespace MASA.PM.Service.Admin.Migrations
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
             var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string AppIdentity)>();
-            var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
+
 
             foreach (var project in projects)
             {
@@ -171,23 +171,21 @@ namespace MASA.PM.Service.Admin.Migrations
                         ProjectId = newProject.Id
                     });
 
+                    var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
                     foreach (var app in appGroups)
                     {
-                        if (app.ProjectId == newProject.Id)
+                        envClusterProjectApps.Add(new EnvironmentClusterProjectApp
                         {
-                            await Console.Out.WriteLineAsync($"========={project.Identity}----{app.AppIdentity}=========");
-                            envClusterProjectApps.Add(new EnvironmentClusterProjectApp
-                            {
-                                EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                                AppId = app.AppId,
-                                AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
-                            });
-                        }
+                            EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
+                            AppId = app.AppId,
+                            AppURL = masaStackConfig.GetDomain(project.Identity, app.AppIdentity)
+                        });
                     }
+                    await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
                 }
             }
 
-            await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
+
         }
 
         public static List<AddProjectAppDto> GetProjectApps(IMasaStackConfig masaStackConfig)

@@ -138,10 +138,7 @@ var app = builder.Services
     .AddServices(builder);
 
 await app.MigrateAsync();
-if (masaStackConfig.IsDemo)
-{
-    await builder.SeedDataAsync(masaStackConfig);
-}
+await builder.SeedDataAsync(masaStackConfig);
 
 app.UseMasaExceptionHandler();
 
