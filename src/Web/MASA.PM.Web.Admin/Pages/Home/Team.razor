@@ -28,7 +28,7 @@
                 <div class="full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-3">
                         <SSearch @bind-Value="_projectName" BackgroundColor="white" Class="mr-6" MaxWidth="0" Height="40" Dense OnEnter="SearchProject" Placeholder="@T("Please enter the project name and press enter to query")" />
-                        <SButton BorderRadiusClass="rounded-lg" Class="m-btn-add-project" Ripple="false" Height="40" OnClick="()=>ShowProjectModalAsync()"><SIcon Class="mr-1" Small>mdi-plus </SIcon>@T("Add Project")</SButton>
+                        <SButton BorderRadiusClass="rounded-lg" Class="m-btn-add-project" Ripple="false" Height="40" OnClick="()=>ShowProjectModalAsync()"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add Project")</SButton>
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
@@ -140,7 +140,7 @@
                 <div class="pt-0 full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-6">
                         <SSearch @bind-Value="_appName" BackgroundColor="white" Class="mx-6" MaxWidth="0" Height="40" Dense OnEnter="SearchApp" Placeholder="@T("Please enter the app name and press enter to query")" />
-                        <SButton Height="40" BorderRadiusClass="rounded-lg" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><SIcon Class="mr-1" Small>mdi-plus </SIcon>@T("Add App")</SButton>
+                        <SButton Height="40" BorderRadiusClass="rounded-lg" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add App")</SButton>
                     </div>
                     <div style="overflow:auto; height: calc(100vh - 256px);">
                         @if(_projectApps.Any())
