@@ -48,7 +48,7 @@
                         <div class="emphasis--text h6">@_userTeam.Name</div>
                     </MRow>
                     <MRow NoGutters Class="mt-1 text-body2 light-blue-color">
-                        @T("ProjectCount")：<b>@_projectCount</b>
+                        @T("ProjectCount"):&nbsp;<b>@_projectCount</b>
                     </MRow>
                     <div class="scrollbar-base scrollbar-4" style="overflow-x: hidden; overflow-y: auto; height: calc(100vh - 354px);">
                         <MRow NoGutters Class="mt-4 text-body2 light-blue-color">
@@ -89,7 +89,7 @@
                             <SButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId,true)"><SIcon Color="#485585" Size="20">mdi-pencil</SIcon></SButton>
                         </MRow>
                         <MRow NoGutters Class="mt-4 regular--text body2">
-                            @T("AppCount")：@_appCount
+                            @T("AppCount"): @_appCount
                         </MRow>
                         <MRow NoGutters Class="regular3--text btn text-overflow">
                             @_projectDetail.Identity

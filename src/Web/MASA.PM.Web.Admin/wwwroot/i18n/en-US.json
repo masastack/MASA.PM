@@ -1,5 +1,10 @@
 {
   "$Text": "English",
   "$DateTimeFormat": "MM/dd/yyyy HH:mm:ss",
-  "DAPRAPPNameSuggest": "If dapr is selected, the app identity format is recommended: App-ID, divided by -"
+  "DAPRAPPNameSuggest": "If dapr is selected, the app identity format is recommended: App-ID, divided by -",
+  "CreationTime": "Creation time",
+  "ModificationTime": "Modification time",
+  "ClusterCount": "Cluster count",
+  "ProjectCount": "Project count",
+  "AppCount": "App count"
 }
