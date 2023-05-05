@@ -297,17 +297,22 @@ input::-webkit-input-placeholder {
 }
 
 /*Pm*/
+.env-list {
+    margin: 8px 0 !important;
+    height: 48px !important;
+    line-height: 48px;
+}
+
 .env-list .m-list-item__title {
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-    line-height: 28px;
     color: #A3AED0;
 }
 
-.env-list {
-    margin: 8px 0 !important;
+.env-list .m-list-item__content {    
     height: 48px !important;
+    padding: 0;
 }
 
 .m-list-item-group .env-list.m-list-item--active:not(.m-icon) {
