@@ -104,7 +104,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
         public async Task RemoveAsync(int Id)
         {
-            var envCount = await _dbContext.EnvironmentClusters.CountAsync();
+            var envCount = await _dbContext.Environments.CountAsync();
             if (envCount <= 1)
             {
                 throw new UserFriendlyException(_i18N.T("Environment cannot be empty!"));
