@@ -141,6 +141,7 @@ namespace MASA.PM.Service.Admin.Migrations
 
             //project
             var projects = GetProjectApps(masaStackConfig);
+
             var projectIds = new List<int>();
             var envClusterProject = new List<EnvironmentClusterProject>();
 
@@ -196,36 +197,36 @@ namespace MASA.PM.Service.Admin.Migrations
             var masaStack = masaStackConfig.GetMasaStack();
 
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
-            foreach (var service in masaStack)
+            foreach (var project in masaStack)
             {
-                if (service == null)
+                if (project == null)
                 {
                     continue;
                 }
 
-                if (service["id"] == null)
+                if (project["id"] == null)
                 {
                     continue;
                 }
 
-                var id = service["id"]!.ToString();
-
+                var id = project["id"]!.ToString();
+                MasaStack.MasaStackIdNamePairs.TryGetValue(id, out var name);
                 AddProjectAppDto projectApp = new AddProjectAppDto
                 {
-                    Name = service["name"]?.ToString() ?? "",
+                    Name = name ?? "",
                     Identity = id,
                     LabelCode = GetLabel(id),
                     TeamId = masaStackConfig.GetDefaultTeamId(),
                     Description = ""
                 };
 
-                foreach (var app in service.AsObject())
+                foreach (var app in project.AsObject())
                 {
-                    if (app.Key == "id" || app.Key == "name")
+                    if (app.Key == "id")
                     {
                         continue;
                     }
-                    projectApp.Apps.Add(GenAppDto(app));
+                    projectApp.Apps.Add(GenAppDto(id, app));
                 }
 
                 projectApps.Add(projectApp);
@@ -236,21 +237,11 @@ namespace MASA.PM.Service.Admin.Migrations
 
         private static string GetLabel(string projectIdentity)
         {
-            //temporary hard code
-            var labelDictionary = new Dictionary<string, string>() {
-                {MasaStackConstant.PM,"Operator" },
-                {MasaStackConstant.DCC,"Operator" },
-                {MasaStackConstant.ALERT,"Operator" },
-                {MasaStackConstant.MC,"Operator" },
-                {MasaStackConstant.TSC,"Operator" },
-                {MasaStackConstant.AUTH,"BasicAbility" },
-                {MasaStackConstant.SCHEDULER,"BasicAbility" }
-            };
-            labelDictionary.TryGetValue(projectIdentity, out string? label);
+            MasaStack.MasaStackIdLabelPairs.TryGetValue(projectIdentity, out string? label);
             return label ?? "Other";
         }
 
-        private static AddAppDto GenAppDto(KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
+        private static AddAppDto GenAppDto(string projectId, KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
         {
             var type = keyValuePair.Key.ToLower();
             AppTypes appType = AppTypes.UI;
@@ -273,11 +264,24 @@ namespace MASA.PM.Service.Admin.Migrations
                 ServiceType = ServiceTypes.WebAPI,
                 Type = appType,
                 Identity = keyValuePair.Value?["id"]?.ToString() ?? "",
-                Name = keyValuePair.Value?["name"]?.ToString() ?? "",
+                Name = $"{ToTitle(projectId)} {ToTitle(type)}",//
                 Description = ""
             };
 
             return app;
+
+            string ToTitle(string value)
+            {
+                if (value.Length > 3 || value.Equals(MasaStackConstant.WEB))
+                {
+                    value = new CultureInfo("en-US", false).TextInfo.ToTitleCase(value);
+                }
+                else
+                {
+                    value = value.ToUpper();
+                }
+                return value;
+            }
         }
     }
 }
