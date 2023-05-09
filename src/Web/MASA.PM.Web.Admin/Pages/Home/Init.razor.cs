@@ -5,7 +5,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Init
     {
-
         [Inject]
         public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
 
