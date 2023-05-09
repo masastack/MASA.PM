@@ -35,18 +35,12 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 string pmServiceAddress = masaStackConfig.GetPmServiceDomain();
 if (!builder.Environment.IsDevelopment())
 {
-    builder.Services.AddObservable(builder.Logging, () =>
+    builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
     {
-        return new MasaObservableOptions
-        {
-            ServiceNameSpace = builder.Environment.EnvironmentName,
-            ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetWebId(MasaStackConstant.PM)
-        };
-    }, () =>
-    {
-        return masaStackConfig.OtlpUrl;
-    }, true);
+        ServiceNameSpace = builder.Environment.EnvironmentName,
+        ServiceVersion = masaStackConfig.Version,
+        ServiceName = masaStackConfig.GetWebId(MasaStackConstant.PM)
+    }, () => masaStackConfig.OtlpUrl, true);
 }
 else
 {

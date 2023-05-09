@@ -14,9 +14,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
 
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
         [Parameter]
         public List<ProjectDto> Projects { get; set; } = new();
 
