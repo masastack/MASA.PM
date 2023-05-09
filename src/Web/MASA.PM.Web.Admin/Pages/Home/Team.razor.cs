@@ -18,13 +18,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         public AppCaller AppCaller { get; set; } = default!;
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
         public GlobalConfig GlobalConfig { get; set; } = default!;
-
-        [Inject]
-        public MasaUser MasaUser { get; set; } = default!;
 
         private int _projectCount;
         private StringNumber _curTab = 0;

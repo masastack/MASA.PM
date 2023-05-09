@@ -5,8 +5,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Overview
     {
-        [Inject]
-        public IPopupService PopupService { get; set; } = default!;
 
         [Inject]
         public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
@@ -19,9 +17,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         [Inject]
         public AppCaller AppCaller { get; set; } = default!;
-
-        [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
 
         private int _projectCount;
         private StringNumber _selectedEnvId = 0;
