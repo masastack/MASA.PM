@@ -34,6 +34,8 @@ namespace MASA.PM.Service.Admin.Infrastructure
             modelBuilder.Entity<App>()
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
+
+            modelBuilder.ApplyConfiguration(new IntegrationEventLogEntityTypeConfiguration());
         }
 
         public DbSet<Entities.Environment> Environments { get; set; } = default!;

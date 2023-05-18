@@ -108,7 +108,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             _projects.ForEach(async project =>
             {
-                project.ModifierName = (await GetUserAsync(project.Modifier)).StaffDislpayName;
+                project.ModifierName = (await GetUserAsync(project.Modifier)).StaffDisplayName;
             });
 
             _allTeams = await AuthClient.TeamService.GetAllAsync();
@@ -127,8 +127,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
         {
             _projectDetail = await ProjectCaller.GetAsync(projectId);
 
-            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).StaffDislpayName;
-            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).StaffDislpayName;
+            _projectDetail.CreatorName = (await GetUserAsync(_projectDetail.Creator)).StaffDisplayName;
+            _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).StaffDisplayName;
 
             return _projectDetail;
         }
@@ -139,8 +139,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
             if (_appModal != null)
             {
-                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).StaffDislpayName;
-                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).StaffDislpayName;
+                _appDetail.CreatorName = (await GetUserAsync(_appDetail.Creator)).StaffDisplayName;
+                _appDetail.ModifierName = (await GetUserAsync(_appDetail.Modifier)).StaffDisplayName;
                 _appModal.AppDetail = _appDetail;
             }
 
