@@ -100,8 +100,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _envDetail.ModifierName = (await GetUserAsync(_envDetail.Modifier)).StaffDislpayName;
-                _envDetail.CreatorName = (await GetUserAsync(_envDetail.Creator)).StaffDislpayName;
+                _envDetail.ModifierName = (await GetUserAsync(_envDetail.Modifier)).StaffDisplayName;
+                _envDetail.CreatorName = (await GetUserAsync(_envDetail.Creator)).StaffDisplayName;
                 _envFormModel.Show(model);
             }
 
@@ -209,8 +209,8 @@ namespace MASA.PM.Web.Admin.Pages.Home
             }
             else
             {
-                _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).StaffDislpayName;
-                _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).StaffDislpayName;
+                _clusterDetail.ModifierName = (await GetUserAsync(_clusterDetail.Modifier)).StaffDisplayName;
+                _clusterDetail.CreatorName = (await GetUserAsync(_clusterDetail.Creator)).StaffDisplayName;
                 _clusterFormModel.Show(model);
             }
 

@@ -146,9 +146,11 @@ namespace MASA.PM.Service.Admin.Migrations
                 return env;
             });
 
+            var environmentIds = new List<int>();
             foreach (var env in environments)
             {
                 var newEnv = await environmentRepository.AddAsync(env);
+                environmentIds.Add(newEnv.Id);
             }
 
             //cluster
@@ -160,9 +162,9 @@ namespace MASA.PM.Service.Admin.Migrations
             cluster.SetCreatorAndModifier(defaultUserId);
             await clusterRepository.AddAsync(cluster);
 
-            var envClusters = environments.Select(env => new EnvironmentCluster
+            var envClusters = environmentIds.Select(envId => new EnvironmentCluster
             {
-                EnvironmentId = env.Id,
+                EnvironmentId = envId,
                 ClusterId = cluster.Id,
             });
             foreach (var envCluster in envClusters)
@@ -175,7 +177,6 @@ namespace MASA.PM.Service.Admin.Migrations
         public static List<AddProjectAppDto> GetProjectApps(IMasaStackConfig masaStackConfig)
         {
             var masaStack = masaStackConfig.GetMasaStack();
-
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
             foreach (var project in masaStack)
             {
@@ -238,7 +239,6 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 appType = AppTypes.Job;
             }
-
             var app = new AddAppDto
             {
                 ServiceType = ServiceTypes.WebAPI,

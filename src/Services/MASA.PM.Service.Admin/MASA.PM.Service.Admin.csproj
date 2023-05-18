@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="MASA.BuildingBlocks.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
@@ -39,7 +39,7 @@
     <PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Dapr.AspNetCore" Version="1.5.0" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
     <PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
