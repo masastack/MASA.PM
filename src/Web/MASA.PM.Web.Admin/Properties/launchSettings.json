@@ -19,7 +19,7 @@
         "ENVIRONMENT": "Development",
         "ADMIN_PWD": "admin_pwd",
         "DCC_SECRET": "masastack.com",
-        "SUFFIX_IDENTITY": "dev"
+        "SUFFIX_IDENTITY": "develop"
       },
       "applicationUrl": "http://localhost:19400",
       "dotnetRunMessages": true
