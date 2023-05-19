@@ -28,7 +28,7 @@
                                     @if (context.Active)
                                     {
                                         <MListItemIcon Class="d-flex align-center mt-3">
-                                            <SButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
+                                                <SButton OnClickStopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
                                                 <SIcon Size="18" Class="pencil" IsDefaultToolTip="false">mdi-pencil</SIcon>
                                             </SButton>
                                         </MListItemIcon>
@@ -63,7 +63,7 @@
                                 </MTooltip>
                                 @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                                 {
-                                    <SButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
+                                        <SButton OnClickStopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
                                         <SIcon Size="18" IsDefaultToolTip="false">mdi-pencil</SIcon>
                                     </SButton>
                                 }
