@@ -7,9 +7,9 @@ services:
       context: .
       dockerfile: src/Services/MASA.PM.Service.Admin/Dockerfile
 
-  masa.pm.ui.admin:
+  masa.pm.web.admin:
     image: ${DOCKER_REGISTRY-}masapmuiadmin
     build:
       context: .
-      dockerfile: src/UI/MASA.PM.UI.Admin/Dockerfile
+      dockerfile: src/Web/MASA.PM.Web.Admin/Dockerfile
 
