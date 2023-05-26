@@ -15,7 +15,12 @@ variables:
 
   NEW_IMAGE_PM: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-pm-service-admin:$CI_COMMIT_TAG
   NEW_IMAGE_PM_UI: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-pm-ui-admin:$CI_COMMIT_TAG
-
+  
+  NAMESPACE_DEV: masastack-dev
+  NAMESPACE_TEST: masastack-test
+  NAMESPACE_STAGING: masastack-staging
+  NAMESPACE_PRD: masastack
+  
 docker-dev:
   stage: docker-dev
   tags:
