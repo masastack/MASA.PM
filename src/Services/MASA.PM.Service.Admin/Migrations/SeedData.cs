@@ -28,125 +28,60 @@ namespace MASA.PM.Service.Admin.Migrations
             var projectRepository = serviceProvider.GetRequiredService<IProjectRepository>();
             var appRepository = serviceProvider.GetRequiredService<IAppRepository>();
 
-            if (context.Set<Infrastructure.Entities.Environment>().Any())
+            if (!context.Set<Infrastructure.Entities.Environment>().Any())
             {
-                return;
-            }
 
-            var initDto = new InitDto
-            {
-                ClusterName = masaStackConfig.Cluster,
-                Environments = new List<AddEnvironmentDto> {
-                    //new AddEnvironmentDto
-                    //{
-                    //    Name = "Development",
-                    //    Description="开发环境",
-                    //    Color = "#FF7D00"
-                    //},
-                    //new AddEnvironmentDto
-                    //{
-                    //    Name = "Staging",
-                    //    Description="模拟环境",
-                    //    Color = "#37A7FF"
-                    //},
-                    new AddEnvironmentDto
+                var initDto = new InitDto
+                {
+                    ClusterName = masaStackConfig.Cluster,
+                    Environments = new List<AddEnvironmentDto>
                     {
-                        Name = masaStackConfig.Environment,
-                        Description= masaStackConfig.Environment + "Environment",
-                        Color = "#FF5252"
+                        new AddEnvironmentDto
+                        {
+                            Name = masaStackConfig.Environment,
+                            Description = masaStackConfig.Environment,
+                            Color = "#FF5252"
+                        }
                     }
+                };
+
+                if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
+                {
+                    initDto.Environments.Add(new AddEnvironmentDto
+                    {
+                        Name = onLineEnvironmentName,
+                        Description = onLineEnvironmentName,
+                        Color = "#37D7AD"
+                    });
                 }
-            };
 
-            if (!initDto.Environments.Any(e => e.Name.ToLower() == masaStackConfig.Environment.ToLower()))
-            {
-                initDto.Environments.Add(new AddEnvironmentDto
-                {
-                    Name = masaStackConfig.Environment,
-                    Description = masaStackConfig.Environment,
-                    Color = "#FF5252"
-                });
+                await InitEnvironmentAndClusterAsync(initDto, masaStackConfig, environmentRepository, clusterRepository);
             }
 
-            if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
+            if (!context.Set<Project>().Any())
             {
-                initDto.Environments.Add(new AddEnvironmentDto
-                {
-                    Name = onLineEnvironmentName,
-                    Description = onLineEnvironmentName,
-                    Color = "#37D7AD"
-                });
+                var envClusetrIds = context.Set<EnvironmentCluster>().Select(ec => ec.Id).ToList();
+                await InitProjectAndAppAsync(masaStackConfig, projectRepository, appRepository, envClusetrIds);
             }
-
-            await InitAsync(
-                initDto,
-                masaStackConfig,
-                environmentRepository,
-                clusterRepository,
-                projectRepository,
-                appRepository);
         }
 
-        public static async Task InitAsync(
-            InitDto initDto,
+        static async Task InitProjectAndAppAsync(
             IMasaStackConfig masaStackConfig,
-            IEnvironmentRepository environmentRepository,
-            IClusterRepository clusterRepository,
             IProjectRepository projectRepository,
-            IAppRepository appRepository)
+            IAppRepository appRepository,
+            List<int> envClusetrIds)
         {
             var defaultUserId = masaStackConfig.GetDefaultUserId();
             var defaultTeamId = masaStackConfig.GetDefaultTeamId();
 
-            //environment
-            var envs = initDto.Environments.Select(e =>
-            {
-                var env = new Infrastructure.Entities.Environment
-                {
-                    Name = e.Name,
-                    Description = e.Description,
-                    Color = e.Color
-                };
-                env.SetCreatorAndModifier(defaultUserId);
-                return env;
-            });
-
-            var envEntitis = new List<Infrastructure.Entities.Environment>();
-            foreach (var env in envs)
-            {
-                var newEnv = await environmentRepository.AddAsync(env);
-                envEntitis.Add(newEnv);
-            }
-
-            //cluster
-            var cluster = new Cluster
-            {
-                Name = initDto.ClusterName,
-                Description = initDto.ClusterDescription
-            };
-            cluster.SetCreatorAndModifier(defaultUserId);
-            await clusterRepository.AddAsync(cluster);
-
-            var envClusters = envEntitis.Select(env => new EnvironmentCluster
-            {
-                EnvironmentId = env.Id,
-                ClusterId = cluster.Id,
-            });
-            var envClusetr = new List<EnvironmentCluster>();
-            foreach (var envCluster in envClusters)
-            {
-                var newEnvCluster = await environmentRepository.AddEnvironmentClusterAsync(envCluster);
-                envClusetr.Add(newEnvCluster);
-            }
-
             //project
             var projects = GetProjectApps(masaStackConfig);
+
             var projectIds = new List<int>();
-            var envClusterProject = new List<EnvironmentClusterProject>();
-            var appGroups = new List<(int ProjectId, string ProjectDescription, int AppId, string Description)>();
-            var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
+
             foreach (var project in projects)
             {
+                var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string App)>();
                 var projectEntity = project.Adapt<Project>();
                 projectEntity.TeamId = defaultTeamId;
                 projectEntity.SetCreatorAndModifier(defaultUserId);
@@ -159,62 +94,120 @@ namespace MASA.PM.Service.Admin.Migrations
                     appEntity.SetCreatorAndModifier(defaultUserId);
                     var newApp = await appRepository.AddAsync(appEntity);
 
-                    appGroups.Add((newProject.Id, newProject.Description, newApp.Id, newApp.Description));
+                    appGroups.Add((newProject.Id, newProject.Identity, newApp.Id, newApp.Type switch
+                    {
+                        AppTypes.Service => MasaStackConstant.SERVICE,
+                        AppTypes.UI => MasaStackConstant.WEB,
+                        _ => ""
+                    }));
                 }
 
-                foreach (var envCluster in envClusetr)
+                foreach (var envClusetrId in envClusetrIds)
                 {
                     var newEnvironmentClusterProject = await projectRepository.AddEnvironmentClusterProjectAsync(new EnvironmentClusterProject
                     {
-                        EnvironmentClusterId = envCluster.Id,
+                        EnvironmentClusterId = envClusetrId,
                         ProjectId = newProject.Id
                     });
 
+                    var envClusterProjectApps = new List<EnvironmentClusterProjectApp>();
                     foreach (var app in appGroups)
                     {
-                        if (app.ProjectId == newProject.Id)
+                        envClusterProjectApps.Add(new EnvironmentClusterProjectApp
                         {
-                            var envName = envEntitis.Find(env => env.Id == envCluster.EnvironmentId)?.Name.ToLower() ?? "develop";
-                            envClusterProjectApps.Add(new EnvironmentClusterProjectApp
-                            {
-                                EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
-                                AppId = app.AppId,
-                                AppURL = masaStackConfig.GetUIDomain("http", project.Name.ToLower(), app.Description)
-                            });
-                        }
+                            EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
+                            AppId = app.AppId,
+                            AppURL = masaStackConfig.GetDomain(project.Identity, app.App)
+                        });
                     }
+                    await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
                 }
             }
-
-            await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
         }
+
+        public static async Task InitEnvironmentAndClusterAsync(
+            InitDto initDto,
+            IMasaStackConfig masaStackConfig,
+            IEnvironmentRepository environmentRepository,
+            IClusterRepository clusterRepository)
+        {
+            var defaultUserId = masaStackConfig.GetDefaultUserId();
+
+            //environment
+            var environments = initDto.Environments.Select(e =>
+            {
+                var env = new Infrastructure.Entities.Environment
+                {
+                    Name = e.Name,
+                    Description = e.Description,
+                    Color = e.Color
+                };
+                env.SetCreatorAndModifier(defaultUserId);
+                return env;
+            });
+
+            var environmentIds = new List<int>();
+            foreach (var env in environments)
+            {
+                var newEnv = await environmentRepository.AddAsync(env);
+                environmentIds.Add(newEnv.Id);
+            }
+
+            //cluster
+            var cluster = new Cluster
+            {
+                Name = initDto.ClusterName,
+                Description = initDto.ClusterDescription
+            };
+            cluster.SetCreatorAndModifier(defaultUserId);
+            await clusterRepository.AddAsync(cluster);
+
+            var envClusters = environmentIds.Select(envId => new EnvironmentCluster
+            {
+                EnvironmentId = envId,
+                ClusterId = cluster.Id,
+            });
+            foreach (var envCluster in envClusters)
+            {
+                var newEnvCluster = await environmentRepository.AddEnvironmentClusterAsync(envCluster);
+            }
+        }
+
 
         public static List<AddProjectAppDto> GetProjectApps(IMasaStackConfig masaStackConfig)
         {
-            var allServer = masaStackConfig.GetAllServer();
-            var allUI = masaStackConfig.GetAllUI();
-            var allService = allServer.Union(allUI).ToList().GroupBy(s => s.Key)
-                .Select(g => new { g.Key, Value = g.SelectMany(a => a.Value).ToList() }).ToList();
-
+            var masaStack = masaStackConfig.GetMasaStack();
             List<AddProjectAppDto> projectApps = new List<AddProjectAppDto>();
-            var teamId = Guid.Empty;
-            foreach (var service in allService)
+            foreach (var project in masaStack)
             {
-                var project = string.Concat(service.Key[..1].ToUpper(), service.Key.AsSpan(1));
+                if (project == null)
+                {
+                    continue;
+                }
 
+                if (project["id"] == null)
+                {
+                    continue;
+                }
+
+                var id = project["id"]!.ToString();
+                MasaStack.MasaStackIdNamePairs.TryGetValue(id, out var name);
                 AddProjectAppDto projectApp = new AddProjectAppDto
                 {
-                    Name = project,
-                    Identity = project,
-                    LabelCode = GetLabel(project),
-                    TeamId = teamId,
-                    Description = project
+                    Name = name ?? "",
+                    Identity = id,
+                    LabelCode = GetLabel(id),
+                    TeamId = masaStackConfig.GetDefaultTeamId(),
+                    Description = ""
                 };
 
-                var apps = service.Value;
-                foreach (var app in apps)
+                foreach (var app in project.AsObject())
                 {
-                    projectApp.Apps.Add(GenAppDto(app));
+                    if (app.Key == "id")
+                    {
+                        continue;
+                    }
+                    projectApp.Apps.Add(GenAppDto(id, app));
                 }
 
                 projectApps.Add(projectApp);
@@ -225,31 +218,19 @@ namespace MASA.PM.Service.Admin.Migrations
 
         private static string GetLabel(string projectIdentity)
         {
-            //temporary hard code
-            var labelDictionary = new Dictionary<string, string>() {
-                {MasaStackConstant.PM,"Operator" },
-                {MasaStackConstant.DCC,"Operator" },
-                {MasaStackConstant.ALERT,"Operator" },
-                {MasaStackConstant.MC,"Operator" },
-                {MasaStackConstant.TSC,"Operator" },
-                {MasaStackConstant.AUTH,"BasicAbility" },
-                {MasaStackConstant.SCHEDULER,"BasicAbility" }
-            };
-            labelDictionary.TryGetValue(projectIdentity, out string? label);
+            MasaStack.MasaStackIdLabelPairs.TryGetValue(projectIdentity, out string? label);
             return label ?? "Other";
         }
 
-        private static AddAppDto GenAppDto(KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
+        private static AddAppDto GenAppDto(string projectId, KeyValuePair<string, System.Text.Json.Nodes.JsonNode?> keyValuePair)
         {
             var type = keyValuePair.Key.ToLower();
-            var appIdentity = keyValuePair.Value!.ToString();
-            var name = keyValuePair.Value.ToString().ToName();
             AppTypes appType = AppTypes.UI;
-            if (type == "ui" || type == "sso")
+            if (type == "web" || type == "sso")
             {
                 appType = AppTypes.UI;
             }
-            else if (type == "server")
+            else if (type == "service")
             {
                 appType = AppTypes.Service;
 
@@ -258,16 +239,29 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 appType = AppTypes.Job;
             }
-
             var app = new AddAppDto
             {
                 ServiceType = ServiceTypes.WebAPI,
                 Type = appType,
-                Identity = appIdentity,
-                Name = name
+                Identity = keyValuePair.Value?["id"]?.ToString() ?? "",
+                Name = $"{ToTitle(projectId)} {ToTitle(type)}",//
+                Description = ""
             };
 
             return app;
+
+            string ToTitle(string value)
+            {
+                if (value.Length > 3 || value.Equals(MasaStackConstant.WEB))
+                {
+                    value = new CultureInfo("en-US", false).TextInfo.ToTitleCase(value);
+                }
+                else
+                {
+                    value = value.ToUpper();
+                }
+                return value;
+            }
         }
     }
 }

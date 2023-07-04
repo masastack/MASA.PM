@@ -3,6 +3,7 @@
 
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Globalization;
 global using System.Reflection;
 global using FluentValidation;
 global using FluentValidation.Resources;
@@ -21,6 +22,7 @@ global using Masa.BuildingBlocks.StackSdks.Config;
 global using Masa.BuildingBlocks.StackSdks.Dcc;
 global using Masa.Contrib.Caching.Distributed.StackExchangeRedis;
 global using Masa.Contrib.Dispatcher.Events;
+global using Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore;
 global using Masa.Contrib.StackSdks.Config;
 global using Masa.Contrib.StackSdks.Middleware;
 global using Masa.Contrib.StackSdks.Tsc;
@@ -38,6 +40,7 @@ global using MASA.PM.Service.Admin.Migrations;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.OpenApi.Models;
 global using AppModel = MASA.PM.Contracts.Admin.Model.AppModel;
 global using ProjectModel = MASA.PM.Contracts.Admin.Model.ProjectModel;

@@ -17,7 +17,7 @@ if (!builder.Environment.IsDevelopment())
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetServerId(MasaStackConstant.PM)
+            ServiceName = masaStackConfig.GetServiceId(MasaStackConstant.PM)
         };
     }, () =>
     {
@@ -52,6 +52,16 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters.ValidateAudience = false;
     options.MapInboundClaims = false;
+
+    options.BackchannelHttpHandler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (
+            sender,
+            certificate,
+            chain,
+            sslPolicyErrors) =>
+        { return true; }
+    };
 });
 
 #region regist Repository
@@ -69,8 +79,8 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDaprStarter(opt =>
     {
-        opt.DaprHttpPort = 3600;
-        opt.DaprGrpcPort = 3601;
+        opt.DaprHttpPort = 3607;
+        opt.DaprGrpcPort = 3608;
     });
 }
 
@@ -128,10 +138,7 @@ var app = builder.Services
     .AddServices(builder);
 
 await app.MigrateAsync();
-if (masaStackConfig.IsDemo)
-{
-    await builder.SeedDataAsync(masaStackConfig);
-}
+await builder.SeedDataAsync(masaStackConfig);
 
 app.UseMasaExceptionHandler();
 

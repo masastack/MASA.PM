@@ -18,7 +18,7 @@
                                 <MListItem Class="rounded-2 env-list" Value="env.Id" Dense OnClick="@(()=>GetClustersByEnvIdAsync(env.Id))">
                                 <ItemContent>
                                     <MListItemIcon Class="d-flex align-center mr-0 mt-3">
-                                        <SIcon Color="@env.Color" Size="12">mdi-circle</SIcon>
+                                        <SIcon Color="@env.Color" Size="12" IsDefaultToolTip="false">mdi-circle</SIcon>
                                     </MListItemIcon>
                                     <MListItemContent>
                                         <MListItemTitle>  
@@ -28,8 +28,8 @@
                                     @if (context.Active)
                                     {
                                         <MListItemIcon Class="d-flex align-center mt-3">
-                                            <SButton StopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
-                                                <SIcon Size="18" Class="pencil">mdi-pencil</SIcon>
+                                                <SButton OnClickStopPropagation Icon OnClick="()=>UpdateEnvAsync(env.Id)">
+                                                <SIcon Size="18" Class="pencil" IsDefaultToolTip="false">mdi-pencil</SIcon>
                                             </SButton>
                                         </MListItemIcon>
                                     }
@@ -40,7 +40,7 @@
                     </MList>
                 </div>
                 <SButton Color="" BorderRadiusClass="m-btn-add" OnClick="()=>ShowEnvModalAsync()" Style="height: 54px;" Tile Text Class="m-btn-add-environment">
-                    <SIcon Left>mdi-plus</SIcon> <span class="emphasis--text">@T("Add Environment")</span>
+                    <SIcon Left IsDefaultToolTip="false">mdi-plus</SIcon> <span class="emphasis--text">@T("Add Environment")</span>
                 </SButton>
             </MNavigationDrawer>
         </MCol>
@@ -63,8 +63,8 @@
                                 </MTooltip>
                                 @if (cluster.EnvironmentClusterId == _selectEnvClusterId.AsT1)
                                 {
-                                    <SButton StopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
-                                        <SIcon Size="18">mdi-pencil</SIcon>
+                                        <SButton OnClickStopPropagation Icon OnClick="()=>UpdateClusterAsync(cluster.Id)">
+                                        <SIcon Size="18" IsDefaultToolTip="false">mdi-pencil</SIcon>
                                     </SButton>
                                 }
                                 </MTab>
@@ -72,7 +72,7 @@
                         </MTabs>
                     </MCard>
                     <SButton Color="" BorderRadiusClass="m-btn-add" OnClick="()=>ShowClusterModalAsync()" Tile Text Class="m-btn-add-cluster" Style="height: 54px;">
-                        <SIcon Left>mdi-plus</SIcon><span class="emphasis--text">@T("Add Cluster")</span>
+                        <SIcon Left IsDefaultToolTip="false">mdi-plus</SIcon><span class="emphasis--text">@T("Add Cluster")</span>
                     </SButton>
                 </MRow>
                 <div class="d-flex flex-column justify-space-between" style="height: calc(100vh - 208px); overflow:hidden;">
@@ -83,7 +83,7 @@
                             EnvironmentClusterId="_selectEnvClusterId.AsT1" />
                     </div>
                     <SButton Color="fill" Disabled=@(!_clusters.Any() || !_environments.Any()) Style="border-radius: 10px !important; background-color: #fff;" Height="54" OnClick="()=>ShowProjectModalAsync()" Tile>
-                        <SIcon Left>mdi-plus</SIcon><span class="emphasis--text">@T("Add Project")</span>
+                        <SIcon Left IsDefaultToolTip="false">mdi-plus</SIcon><span class="emphasis--text">@T("Add Project")</span>
                     </SButton>
                 </div>
             </div>
@@ -91,7 +91,7 @@
     </MRow>
 </div>
 
-<SSimpleModal ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}":$"{T("Add Environment")}")" Width="770">
+<SSimpleModal ValueChanged="EnvModalValueChanged" Value="_envFormModel.Visible" Title="@(_envFormModel.HasValue ? $"{T("Edit Environment")}" : $"{T("Add Environment")}")" Width="770">
     <ChildContent>
         <MForm @ref="_envForm" Class="full-height" Context="formContext" EnableValidation Model="_envFormModel.Data">
              <div class="d-flex flex-column" style="width:100%; height:100%; overflow: hidden;">
@@ -128,21 +128,21 @@
                 @if (_envFormModel.HasValue)
                 {
                     <MRow Class="mt-2">
-                        <MCol Cols=6 Class="light-blue-color">@T("Creator"):@_envDetail.CreatorName</MCol>
+                        <MCol Cols=6 Class="light-blue-color">@T("Creator"): @_envDetail.CreatorName</MCol>
                         <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
-                            @T("CreationTime"):
+                            @T("CreationTime"):&nbsp;
                             <DateTimeZone Value="_envDetail.CreationTime" />
                         </MCol>
                     </MRow>
                     <MRow Class="mt-6">
-                        <MCol Cols=6 Class="light-blue-color">@T("Modifier"):@_envDetail.ModifierName</MCol>
+                        <MCol Cols=6 Class="light-blue-color">@T("Modifier"): @_envDetail.ModifierName</MCol>
                         <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
-                            @T("ModificationTime"):
+                            @T("ModificationTime"):&nbsp;
                             <DateTimeZone Value="_envDetail.ModificationTime" />
                         </MCol>
                     </MRow>
                     <MRow Class="mt-6">
-                        <MCol Cols=6 Class="light-blue-color">@T("ClusterCount")：@_envFormModel.Data.ClusterIds?.Count</MCol>
+                        <MCol Cols=6 Class="light-blue-color">@T("ClusterCount"): @_envFormModel.Data.ClusterIds?.Count</MCol>
                     </MRow>
                 }
             </div>
@@ -159,7 +159,7 @@
     </ChildContent>
 </SSimpleModal>
 
-<SSimpleModal ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}":$"{T("Add Cluster")}")" Width="770">
+<SSimpleModal ValueChanged="ClusterModalValueChanged" Value="_clusterFormModel.Visible" Title="@(_clusterFormModel.HasValue ? $"{T("Edit Cluster")}" : $"{T("Add Cluster")}")" Width="770">
     <ChildContent>
         <MForm Class="full-height" @ref="_clusterForm" Context="formContext" EnableValidation Model="_clusterFormModel.Data">
             <div class="d-flex flex-column" style="width:100%; height:100%;overflow: hidden;">
@@ -192,19 +192,19 @@
                         <MRow Class="mt-2">
                             <MCol Cols=6 Class="light-blue-color">@T("Creator"): @_clusterDetail.CreatorName</MCol>
                             <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
-                                @T("CreationTime"):
+                                @T("CreationTime"):&nbsp;
                                 <DateTimeZone Value="_clusterDetail.CreationTime" />
                             </MCol>
                         </MRow>
                         <MRow Class="mt-6">
                             <MCol Cols=6 Class="light-blue-color">@T("Modifier"): @_clusterDetail.ModifierName</MCol>
                             <MCol Class="d-flex justify-end translucency-blue-color" Cols=6>
-                                @T("ModificationTime"):
+                                @T("ModificationTime"):&nbsp;
                                 <DateTimeZone Value="_clusterDetail.ModificationTime" />
                             </MCol>
                         </MRow>
                         <MRow Class="mt-6">
-                            <MCol Cols=6 Class="light-blue-color">@T("ProjectCount")：@_projectCount</MCol>
+                            <MCol Cols=6 Class="light-blue-color">@T("ProjectCount"): @_projectCount</MCol>
                         </MRow>
                     }
                 </div>

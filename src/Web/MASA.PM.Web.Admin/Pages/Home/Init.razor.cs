@@ -6,20 +6,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
     public partial class Init
     {
         [Inject]
-        public IPopupService PopupService { get; set; } = default!;
-
-        [Inject]
         public EnvironmentCaller EnvironmentCaller { get; set; } = default!;
-
-        [Inject]
-        public NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
-        IMasaStackConfig MasaStackConfig { get; set; } = default!;
 
         private EnvironmentModel _customEnv = new();
         private int _step = 1;
-        private InitDto _initModel = new();
+        private readonly InitDto _initModel = new();
         private bool _initLoading;
         private readonly List<string> _colors = new()
         {
