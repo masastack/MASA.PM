@@ -7,23 +7,23 @@ public static class MasaStack
 {
     public static Dictionary<string, string> MasaStackIdNamePairs => new Dictionary<string, string>
     {
-        { MasaStackConstant.PM, "MASA PM" },
-        { MasaStackConstant.DCC, "MASA DCC" },
-        { MasaStackConstant.AUTH,"MASA Auth" },
-        { MasaStackConstant.MC, "MASA MC" },
-        { MasaStackConstant.ALERT, "MASA Alert" },
-        { MasaStackConstant.SCHEDULER, "MASA Scheduler" },
-        { MasaStackConstant.TSC, "MASA TSC" }
+        { MasaStackProject.PM.Name, "MASA PM" },
+        { MasaStackProject.DCC.Name, "MASA DCC" },
+        { MasaStackProject.Auth.Name,"MASA Auth" },
+        { MasaStackProject.MC.Name, "MASA MC" },
+        { MasaStackProject.Alert.Name, "MASA Alert" },
+        { MasaStackProject.Scheduler.Name, "MASA Scheduler" },
+        { MasaStackProject.TSC.Name, "MASA TSC" }
     };
 
     public static Dictionary<string, string> MasaStackIdLabelPairs => new Dictionary<string, string>
     {
-        { MasaStackConstant.PM, "Operator" },
-        { MasaStackConstant.DCC, "Operator" },
-        { MasaStackConstant.ALERT, "Operator" },
-        { MasaStackConstant.MC, "Operator" },
-        { MasaStackConstant.TSC, "Operator" },
-        { MasaStackConstant.AUTH, "BasicAbility" },
-        { MasaStackConstant.SCHEDULER, "BasicAbility" }
+        { MasaStackProject.PM.Name, "Operator" },
+        { MasaStackProject.DCC.Name, "Operator" },
+        { MasaStackProject.Alert.Name, "Operator" },
+        { MasaStackProject.MC.Name, "Operator" },
+        { MasaStackProject.TSC.Name, "Operator" },
+        { MasaStackProject.Auth.Name, "BasicAbility" },
+        { MasaStackProject.Scheduler.Name, "BasicAbility" }
     };
 }

@@ -6,7 +6,7 @@ ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 builder.Services.AddHttpContextAccessor();
-builder.AddMasaStackComponentsForServer();
+await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.PM);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
@@ -28,7 +28,7 @@ if (!builder.Environment.IsDevelopment())
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
     Authority = masaStackConfig.GetSsoDomain(),
-    ClientId = masaStackConfig.GetWebId(MasaStackConstant.PM),
+    ClientId = masaStackConfig.GetWebId(MasaStackProject.PM),
     Scopes = new List<string> { "offline_access" }
 };
 
@@ -39,7 +39,7 @@ if (!builder.Environment.IsDevelopment())
     {
         ServiceNameSpace = builder.Environment.EnvironmentName,
         ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetWebId(MasaStackConstant.PM)
+        ServiceName = masaStackConfig.GetWebId(MasaStackProject.PM)
     }, () => masaStackConfig.OtlpUrl, true);
 }
 else
