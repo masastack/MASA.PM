@@ -96,8 +96,8 @@ namespace MASA.PM.Service.Admin.Migrations
 
                     appGroups.Add((newProject.Id, newProject.Identity, newApp.Id, newApp.Type switch
                     {
-                        AppTypes.Service => MasaStackConstant.SERVICE,
-                        AppTypes.UI => MasaStackConstant.WEB,
+                        AppTypes.Service => MasaStackApp.Service.Name,
+                        AppTypes.UI => MasaStackApp.WEB.Name,
                         _ => ""
                     }));
                 }
@@ -117,7 +117,7 @@ namespace MASA.PM.Service.Admin.Migrations
                         {
                             EnvironmentClusterProjectId = newEnvironmentClusterProject.Id,
                             AppId = app.AppId,
-                            AppURL = masaStackConfig.GetDomain(project.Identity, app.App)
+                            AppURL = masaStackConfig.GetDomain(new MasaStackProject(default, project.Identity), new MasaStackApp(default, app.App))
                         });
                     }
                     await appRepository.AddEnvironmentClusterProjectAppsAsync(envClusterProjectApps);
@@ -252,7 +252,7 @@ namespace MASA.PM.Service.Admin.Migrations
 
             string ToTitle(string value)
             {
-                if (value.Length > 3 || value.Equals(MasaStackConstant.WEB))
+                if (value.Length > 3 || value.Equals(MasaStackApp.WEB.Name))
                 {
                     value = new CultureInfo("en-US", false).TextInfo.ToTitleCase(value);
                 }
