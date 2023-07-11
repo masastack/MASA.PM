@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
-await builder.Services.AddMasaStackConfigAsync();
+await builder.Services.AddMasaStackConfigAsync(MasaStackProject.PM, MasaStackApp.Service);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 if (!builder.Environment.IsDevelopment())
@@ -17,7 +17,7 @@ if (!builder.Environment.IsDevelopment())
         {
             ServiceNameSpace = builder.Environment.EnvironmentName,
             ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetServiceId(MasaStackConstant.PM)
+            ServiceName = masaStackConfig.GetServiceId(MasaStackProject.PM)
         };
     }, () =>
     {
@@ -129,7 +129,7 @@ var app = builder.Services
     })
     .AddIntegrationEventBus(options =>
     {
-        var connStr = masaStackConfig.GetConnectionString(MasaStackConstant.PM);
+        var connStr = masaStackConfig.GetConnectionString(MasaStackProject.PM.Name);
         options.UseDapr()
         .UseEventLog<PmDbContext>()
         .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
