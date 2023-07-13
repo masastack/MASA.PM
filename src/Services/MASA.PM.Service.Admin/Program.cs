@@ -3,8 +3,6 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-var conn = builder.Configuration.GetConnectionString("DefaultConnection");
-
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
@@ -134,7 +132,7 @@ var app = builder.Services
         var connStr = masaStackConfig.GetConnectionString(MasaStackProject.PM.Name);
         options.UseDapr()
         .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(conn).UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
         .UseEventBus();
     })
     .AddServices(builder);
