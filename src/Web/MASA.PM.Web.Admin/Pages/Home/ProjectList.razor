@@ -104,7 +104,8 @@
                         <div class="d-flex justify-space-between mt-3">
                             <div>
                                 @{
-                                    var team = _allTeams.FirstOrDefault(team => team.Id == project.TeamId);
+                                    var teamId = project.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment && c.ProjectId == project.Id)?.TeamId;
+                                    var team = _allTeams.FirstOrDefault(team => team.Id == teamId);
                                     if (team != null)
                                     {
                                         <MTooltip Right>
@@ -152,6 +153,7 @@
 </MOverlay>
 
 <ProjectModal EnvironmentClusterId="_internalEnvironmentClusterId"
+              Environment="@Environment"
               TeamId="_internalTeamId"
               @ref="@_projectModal"
               Projects="_projects"

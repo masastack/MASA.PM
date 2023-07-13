@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Authentication.Identity;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class Team
@@ -19,6 +21,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         [Inject]
         public GlobalConfig GlobalConfig { get; set; } = default!;
+
+        [Inject]
+        public IMultiEnvironmentUserContext MultiEnvironmentUserContext { get; set; } = default!;
 
         private int _projectCount;
         private StringNumber _curTab = 0;
@@ -39,6 +44,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
         private Guid _teamId;
+        private TeamDetailModel _teamDetail = new();
 
         protected override Task OnInitializedAsync()
         {
@@ -118,12 +124,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _userInfo = await GetUserAsync(_projectDetail.Creator);
             _projectDetail.CreatorName = _userInfo.StaffDisplayName;
             _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).StaffDisplayName;
-            var team = await AuthClient.TeamService.GetDetailAsync(_projectDetail.TeamId);
-            if (team != null)
-            {
-                _projectDetail.TeamAvatar = team.Avatar;
-                _projectDetail.TeamName = team.Name;
-            }
+
+            var teamId = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == MultiEnvironmentUserContext.Environment && c.ProjectId == _projectDetail.Id)?.TeamId ?? Guid.Empty;
+            _teamDetail = await AuthClient.TeamService.GetDetailAsync(teamId) ?? new();
 
             return _projectDetail;
         }

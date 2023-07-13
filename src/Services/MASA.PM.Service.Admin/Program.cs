@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
+var conn = builder.Configuration["ConnectionStrings:DefaultConnection"];
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
@@ -132,7 +133,7 @@ var app = builder.Services
         var connStr = masaStackConfig.GetConnectionString(MasaStackProject.PM.Name);
         options.UseDapr()
         .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
+        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(conn).UseFilter())
         .UseEventBus();
     })
     .AddServices(builder);

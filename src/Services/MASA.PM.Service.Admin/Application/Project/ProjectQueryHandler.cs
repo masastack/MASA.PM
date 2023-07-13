@@ -8,12 +8,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         private readonly IProjectRepository _projectRepository;
         private readonly IAppRepository _appRepository;
         private readonly IDccClient _dccClient;
+        private IMultiEnvironmentUserContext _multiEnvironmentUserContext;
 
-        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient)
+        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient, IMultiEnvironmentUserContext multiEnvironmentUserContext)
         {
             _projectRepository = projectRepository;
             _appRepository = appRepository;
             _dccClient = dccClient;
+            _multiEnvironmentUserContext = multiEnvironmentUserContext;
         }
 
         [EventHandler]
@@ -21,6 +23,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var projectEntity = await _projectRepository.GetAsync(query.ProjectId);
             var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
+            var projectTeams = await _projectRepository.GetProjectTeamByProjectId(query.ProjectId);
             query.Result = new ProjectDetailDto
             {
                 Id = projectEntity.Id,
@@ -28,7 +31,12 @@ namespace MASA.PM.Service.Admin.Application.Project
                 LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
-                TeamId = projectEntity.TeamId,
+                EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                {
+                    EnvironmentName = c.EnvironmentName,
+                    TeamId = c.TeamId,
+                    ProjectId = c.ProjectId
+                }).ToList(),
                 EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
                 CreationTime = projectEntity.CreationTime,
                 Creator = projectEntity.Creator,
@@ -42,6 +50,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var projectEntity = await _projectRepository.GetByIdentityAsync(query.identity);
             var environmentCluster = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(projectEntity.Id);
+            var projectTeams = await _projectRepository.GetProjectTeamByProjectId(projectEntity.Id);
             query.Result = new ProjectDetailDto
             {
                 Id = projectEntity.Id,
@@ -49,7 +58,12 @@ namespace MASA.PM.Service.Admin.Application.Project
                 LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
-                TeamId = projectEntity.TeamId,
+                EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                {
+                    EnvironmentName = c.EnvironmentName,
+                    TeamId = c.TeamId,
+                    ProjectId = c.ProjectId
+                }).ToList(),
                 EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
                 CreationTime = projectEntity.CreationTime,
                 Creator = projectEntity.Creator,
@@ -65,12 +79,18 @@ namespace MASA.PM.Service.Admin.Application.Project
             if (query.EnvironmentClusterId.HasValue)
             {
                 var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
+                var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
-                    TeamId = project.TeamId,
+                    EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                    {
+                        EnvironmentName = c.EnvironmentName,
+                        TeamId = c.TeamId,
+                        ProjectId = c.ProjectId
+                    }).ToList(),
                     LabelCode = project.LabelCode,
                     LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                     Description = project.Description,
@@ -82,13 +102,18 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
             else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                var projects = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds);
+                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, _multiEnvironmentUserContext.Environment ?? "");
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
                     Identity = project.Identity,
                     Name = project.Name,
-                    TeamId = project.TeamId,
+                    EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                    {
+                        EnvironmentName = c.EnvironmentName,
+                        TeamId = c.TeamId,
+                        ProjectId = c.ProjectId
+                    }).ToList(),
                     LabelCode = project.LabelCode,
                     LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                     Description = project.Description,
@@ -109,13 +134,19 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var projectTypes = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
             var projects = await _projectRepository.GetListAsync();
+            var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
 
             query.Result = projects.Select(project => new ProjectDto
             {
                 Id = project.Id,
                 Identity = project.Identity,
                 Name = project.Name,
-                TeamId = project.TeamId,
+                EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                {
+                    EnvironmentName = c.EnvironmentName,
+                    TeamId = c.TeamId,
+                    ProjectId = c.ProjectId
+                }).ToList(),
                 LabelCode = project.LabelCode,
                 LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                 Description = project.Description,
@@ -142,6 +173,7 @@ namespace MASA.PM.Service.Admin.Application.Project
         {
             var projects = await _projectRepository.GetProjectListByEnvIdAsync(query.EnvName);
             var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
+            var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
 
             List<ProjectModel> projectModels = projects.Select(
                 project => new ProjectModel(
@@ -149,7 +181,12 @@ namespace MASA.PM.Service.Admin.Application.Project
                     project.Identity,
                     project.Name,
                     project.LabelCode,
-                    project.TeamId)
+                    projectTeams.Select(c => new EnvironmentProjectTeamDto
+                    {
+                        EnvironmentName = c.EnvironmentName,
+                        TeamId = c.TeamId,
+                        ProjectId = c.ProjectId
+                    }).ToList())
                 ).ToList();
 
             projectModels.ForEach(project =>

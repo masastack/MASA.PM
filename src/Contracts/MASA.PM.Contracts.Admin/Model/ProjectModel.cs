@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.PM.Contracts.Admin.Dto;
+
 namespace MASA.PM.Contracts.Admin.Model
 {
     public class ProjectModel
@@ -13,17 +15,17 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public string LabelCode { get; set; }
 
-        public Guid TeamId { get; set; }
+        public List<EnvironmentProjectTeamDto> EnvironmentProjectTeams { get; set; } = new();
 
         public List<AppModel> Apps { get; set; } = new();
 
-        public ProjectModel(int id, string identity, string name, string labelCode, Guid teamId)
+        public ProjectModel(int id, string identity, string name, string labelCode, List<EnvironmentProjectTeamDto> environmentProjectTeams)
         {
             Id = id;
             Identity = identity;
             Name = name;
             LabelCode = labelCode;
-            TeamId = teamId;
+            EnvironmentProjectTeams = environmentProjectTeams;
         }
     }
 }

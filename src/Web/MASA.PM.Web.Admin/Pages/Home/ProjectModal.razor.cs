@@ -29,6 +29,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public Guid TeamId { get; set; }
 
+        [Parameter]
+        public string Environment { get; set; } = string.Empty;
+
+
         private DataModal<UpdateProjectDto> _projectFormModel = new();
         private List<TeamModel> _allTeams = new();
         private List<ProjectTypesDto> _projectTypes = new();
@@ -39,13 +43,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
-            _allTeams = await AuthClient.TeamService.GetAllAsync();
+            try
+            {
+                _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
+            }
+            catch (Exception) { }
             _projectTypes = await ProjectCaller.GetProjectTypesAsync();
             _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
 
             if (projectDetailDto == null)
             {
                 _disableEnvironmentClusterIds.Clear();
+                _projectFormModel.Data.EnvironmentName = Environment;
 
                 if (EnvironmentClusterId != 0)
                     _projectFormModel.Data.EnvironmentClusterIds = new List<int> { EnvironmentClusterId };
@@ -66,18 +75,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     .Distinct()
                     .ToList();
 
-                _projectDetail = projectDetailDto;
                 _projectDetail = projectDetailDto.DeepClone();
 
+                var teamId = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment && c.ProjectId == _projectDetail.Id)?.TeamId ?? Guid.Empty;
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
                     LabelCode = _projectDetail.LabelCode,
                     ProjectId = _projectDetail.Id,
                     Name = _projectDetail.Name,
-                    TeamId = _projectDetail.TeamId,
+                    TeamId = teamId,
                     Description = _projectDetail.Description,
-                    EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds
+                    EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds,
+                    EnvironmentName = Environment
                 });
             }
 
