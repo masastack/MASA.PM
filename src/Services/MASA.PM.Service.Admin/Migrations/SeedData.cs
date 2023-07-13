@@ -83,9 +83,15 @@ namespace MASA.PM.Service.Admin.Migrations
             {
                 var appGroups = new List<(int ProjectId, string ProjectIdentity, int AppId, string App)>();
                 var projectEntity = project.Adapt<Project>();
-                projectEntity.TeamId = defaultTeamId;
                 projectEntity.SetCreatorAndModifier(defaultUserId);
                 var newProject = await projectRepository.AddAsync(projectEntity);
+
+                var environmentProjectTeam = new EnvironmentProjectTeam
+                {
+                    TeamId = defaultTeamId,
+                    ProjectId = newProject.Id,
+                    EnvironmentName = masaStackConfig.Environment,
+                };
 
                 projectIds.Add(newProject.Id);
                 foreach (var app in project.Apps)

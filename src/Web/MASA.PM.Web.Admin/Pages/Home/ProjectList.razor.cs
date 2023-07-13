@@ -20,6 +20,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
         [Parameter]
         public EventCallback<int> FetchProjectCount { get; set; }
 
+        [Parameter]
+        public string Environment { get; set; } = string.Empty;
+
         [Inject]
         public ProjectCaller ProjectCaller { get; set; } = default!;
 
@@ -111,7 +114,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 project.ModifierName = (await GetUserAsync(project.Modifier)).StaffDisplayName;
             });
 
-            _allTeams = await AuthClient.TeamService.GetAllAsync();
+            _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
         }

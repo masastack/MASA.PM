@@ -32,9 +32,10 @@
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
-                            FetchProjectCount="GetProjectCount"
-                            OnNameClick="GetProjectDetailAsync"
-                            TeamId="_teamId" />
+                                     Environment="@MultiEnvironmentUserContext.Environment"
+                                     FetchProjectCount="GetProjectCount"
+                                     OnNameClick="GetProjectDetailAsync"
+                                     TeamId="_teamId" />
                     </div>
                 </div>
             </div>
@@ -110,11 +111,11 @@
                                 <MTooltip Bottom>
                                     <ActivatorContent>
                                         <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
-                                            <MImage Height="24" Width="24" Src="@_projectDetail.TeamAvatar"></MImage>
+                                            <MImage Height="24" Width="24" Src="@_teamDetail.Avatar"></MImage>
                                         </MAvatar>
                                     </ActivatorContent>
                                     <ChildContent>
-                                        <span>@_projectDetail.TeamName</span>
+                                        <span>@_teamDetail.Name</span>
                                     </ChildContent>
                                 </MTooltip>
                             </MRow>

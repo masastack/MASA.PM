@@ -11,7 +11,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task<EnvironmentClusterProject> AddEnvironmentClusterProjectAsync(EnvironmentClusterProject environmentClusterProject);
 
-        Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds);
+        Task<(List<Project>, List<EnvironmentProjectTeam>)> GetListByTeamIdsAsync(List<Guid> teamIds, string environment);
 
         Task<Project> GetAsync(int Id);
 
@@ -36,5 +36,13 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
         Task IsExistedProjectName(string name, List<int> environmentClusterIds, params int[] excludeProjectIds);
 
         Task<bool> IsExistProjectInCluster(int clusterId);
+
+        Task AddEnvironemtProjectTeamAsync(EnvironmentProjectTeam environmentProjectTeam);
+
+        Task RemoveEnvironemtProjectTeamAsync(int projectId, string environemntName);
+
+        Task<List<EnvironmentProjectTeam>> GetProjectTeamByProjectId(int projectId);
+
+        Task<List<EnvironmentProjectTeam>> GetProjectTeamByProjectIds(IEnumerable<int> projectIds);
     }
 }
