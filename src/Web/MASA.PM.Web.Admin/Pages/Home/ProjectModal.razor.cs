@@ -43,11 +43,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         public async Task InitDataAsync(ProjectDetailDto? projectDetailDto = null)
         {
-            try
-            {
-                _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
-            }
-            catch (Exception) { }
+            _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _projectTypes = await ProjectCaller.GetProjectTypesAsync();
             _allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
 

@@ -114,12 +114,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 project.ModifierName = (await GetUserAsync(project.Modifier)).StaffDisplayName;
             });
 
-            try
-            {
-                _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
-            }
-            catch (Exception) { }
-
+            _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
         }
