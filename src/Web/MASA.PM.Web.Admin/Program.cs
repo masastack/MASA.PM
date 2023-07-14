@@ -33,16 +33,7 @@ MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 };
 
 string pmServiceAddress = masaStackConfig.GetPmServiceDomain();
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
-    {
-        ServiceNameSpace = builder.Environment.EnvironmentName,
-        ServiceVersion = masaStackConfig.Version,
-        ServiceName = masaStackConfig.GetWebId(MasaStackProject.PM)
-    }, () => masaStackConfig.OtlpUrl, true);
-}
-else
+if (builder.Environment.IsDevelopment())
 {
     pmServiceAddress = "http://localhost:19401";
 }
