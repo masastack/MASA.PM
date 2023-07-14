@@ -32,5 +32,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         [StringLength(255, ErrorMessage = "Project description length must be less than 255")]
         public string Description { get; set; } = "";
+
+        [Required]
+        public string EnvironmentName { get; set; } = "";
     }
 }

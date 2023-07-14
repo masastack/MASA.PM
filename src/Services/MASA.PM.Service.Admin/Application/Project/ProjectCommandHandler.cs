@@ -23,7 +23,6 @@ namespace MASA.PM.Service.Admin.Application.Project
                 LabelCode = command.ProjectModel.LabelCode,
                 Name = command.ProjectModel.Name,
                 Description = command.ProjectModel.Description,
-                TeamId = command.ProjectModel.TeamId,
             };
             var newProject = await _projectRepository.AddAsync(project);
 
@@ -44,7 +43,6 @@ namespace MASA.PM.Service.Admin.Application.Project
             project.LabelCode = command.ProjectModel.LabelCode;
             project.Name = command.ProjectModel.Name;
             project.Description = command.ProjectModel.Description;
-            project.TeamId = command.ProjectModel.TeamId;
 
             await _projectRepository.UpdateAsync(project);
 
@@ -73,6 +71,14 @@ namespace MASA.PM.Service.Admin.Application.Project
                     ProjectId = command.ProjectModel.ProjectId
                 }));
             }
+
+            await _projectRepository.RemoveEnvironemtProjectTeamAsync(command.ProjectModel.ProjectId, command.ProjectModel.EnvironmentName);
+            await _projectRepository.AddEnvironemtProjectTeamAsync(new EnvironmentProjectTeam
+            {
+                ProjectId = command.ProjectModel.ProjectId,
+                TeamId = command.ProjectModel.TeamId,
+                EnvironmentName = command.ProjectModel.EnvironmentName
+            });
         }
 
         [EventHandler]

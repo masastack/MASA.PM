@@ -47,11 +47,17 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             return environmentClusterProject;
         }
 
-        public async Task<List<Project>> GetListByTeamIdsAsync(List<Guid> teamIds)
+        public async Task<(List<Project>, List<EnvironmentProjectTeam>)> GetListByTeamIdsAsync(List<Guid> teamIds, string environment)
         {
-            var result = await _dbContext.Projects.Where(project => teamIds.Contains(project.TeamId)).ToListAsync();
+            var projectTeams = (await _dbContext.EnvironmentProjectTeams
+                .Where(c => teamIds.Contains(c.TeamId) && environment.Equals(c.EnvironmentName))
+                .ToListAsync())
+                .DistinctBy(c => new { c.ProjectId, c.TeamId })
+                .ToList();
 
-            return result;
+            var projects = await _dbContext.Projects.Where(project => projectTeams.Select(c => c.ProjectId).Contains(project.Id)).ToListAsync();
+
+            return new ValueTuple<List<Project>, List<EnvironmentProjectTeam>>(projects, projectTeams);
         }
 
         public async Task RemoveAsync(int Id)
@@ -189,6 +195,41 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                              ).AnyAsync(ec => ec.ClusterId == clusterId);
 
             return result;
+        }
+
+
+        public async Task AddEnvironemtProjectTeamAsync(EnvironmentProjectTeam environmentProjectTeam)
+        {
+            await _dbContext.EnvironmentProjectTeams.AddAsync(environmentProjectTeam);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveEnvironemtProjectTeamAsync(int projectId, string environemntName)
+        {
+            var envProjectTeam = await _dbContext.EnvironmentProjectTeams.FirstOrDefaultAsync(c => c.ProjectId == projectId && c.EnvironmentName == environemntName);
+            if (envProjectTeam != null)
+            {
+                _dbContext.EnvironmentProjectTeams.Remove(envProjectTeam);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<List<EnvironmentProjectTeam>> GetProjectTeamByProjectId(int projectId)
+        {
+            var projectTeams = await _dbContext.EnvironmentProjectTeams
+                .Where(c => c.ProjectId == projectId)
+                .ToListAsync();
+
+            return projectTeams;
+        }
+
+        public async Task<List<EnvironmentProjectTeam>> GetProjectTeamByProjectIds(IEnumerable<int> projectIds)
+        {
+            var projectTeams = await _dbContext.EnvironmentProjectTeams
+                .Where(c => projectIds.Contains(c.ProjectId))
+                .ToListAsync();
+
+            return projectTeams;
         }
     }
 }

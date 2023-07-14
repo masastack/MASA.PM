@@ -1,12 +1,14 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-namespace MASA.PM.Service.Admin.Application.Project.Queries
+namespace MASA.PM.Contracts.Admin.Dto
 {
-    public record ProjectQuery() : Query<ProjectDetailDto>
+    public class EnvironmentProjectTeamDto
     {
-        public override ProjectDetailDto Result { get; set; } = new ProjectDetailDto();
-
         public int ProjectId { get; set; }
+
+        public string EnvironmentName { get; set; } = "";
+
+        public Guid TeamId { get; set; }
     }
 }

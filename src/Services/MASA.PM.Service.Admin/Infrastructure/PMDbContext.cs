@@ -35,6 +35,9 @@ namespace MASA.PM.Service.Admin.Infrastructure
                 .Property(t => t.ModificationTime)
                 .HasDefaultValueSql("SYSDATETIME()");
 
+            modelBuilder.Entity<EnvironmentProjectTeam>()
+                .HasKey(t => new { t.ProjectId, t.TeamId, t.EnvironmentName });
+
             modelBuilder.ApplyConfiguration(new IntegrationEventLogEntityTypeConfiguration());
         }
 
@@ -51,5 +54,7 @@ namespace MASA.PM.Service.Admin.Infrastructure
         public DbSet<EnvironmentClusterProjectApp> EnvironmentClusterProjectApps { get; set; } = default!;
 
         public DbSet<App> Apps { get; set; } = default!;
+
+        public DbSet<EnvironmentProjectTeam> EnvironmentProjectTeams { get; set; } = default!;
     }
 }

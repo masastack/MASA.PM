@@ -8,6 +8,7 @@ global using System.Reflection;
 global using FluentValidation;
 global using FluentValidation.Resources;
 global using Mapster;
+global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.BuildingBlocks.Data.UoW;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.Ddd.Domain.Entities.Full;
