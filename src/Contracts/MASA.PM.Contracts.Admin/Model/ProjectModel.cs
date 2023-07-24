@@ -13,17 +13,17 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public string LabelCode { get; set; }
 
-        public List<EnvironmentProjectTeamDto> EnvironmentProjectTeams { get; set; } = new();
+        public Guid TeamId { get; set; }
 
         public List<AppModel> Apps { get; set; } = new();
 
-        public ProjectModel(int id, string identity, string name, string labelCode, List<EnvironmentProjectTeamDto> environmentProjectTeams)
+        public ProjectModel(int id, string identity, string name, string labelCode, Guid teamId)
         {
             Id = id;
             Identity = identity;
             Name = name;
             LabelCode = labelCode;
-            EnvironmentProjectTeams = environmentProjectTeams;
+            TeamId = teamId;
         }
     }
 }

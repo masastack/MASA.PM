@@ -44,7 +44,7 @@
     <PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Tsc" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Utils.Configuration.Json" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />

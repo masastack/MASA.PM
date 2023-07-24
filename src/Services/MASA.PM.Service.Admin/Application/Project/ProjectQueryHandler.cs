@@ -174,6 +174,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             var projects = await _projectRepository.GetProjectListByEnvIdAsync(query.EnvName);
             var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
             var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
+            projectTeams = projectTeams.Where(c => c.EnvironmentName.ToLower() == query.EnvName.ToLower()).ToList();
 
             List<ProjectModel> projectModels = projects.Select(
                 project => new ProjectModel(
@@ -181,12 +182,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                     project.Identity,
                     project.Name,
                     project.LabelCode,
-                    projectTeams.Select(c => new EnvironmentProjectTeamDto
-                    {
-                        EnvironmentName = c.EnvironmentName,
-                        TeamId = c.TeamId,
-                        ProjectId = c.ProjectId
-                    }).ToList())
+                    projectTeams.FirstOrDefault(c => c.ProjectId == project.Id)?.TeamId ?? Guid.Empty)
                 ).ToList();
 
             projectModels.ForEach(project =>
