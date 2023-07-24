@@ -3,7 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Application.Project.Queries
 {
-    public record ProjectsQuery(int? EnvironmentClusterId, List<Guid>? TeamIds) : Query<List<ProjectDto>>
+    public record ProjectsQuery(int? EnvironmentClusterId, List<Guid>? TeamIds, string? Environment = null) : Query<List<ProjectDto>>
     {
         public override List<ProjectDto> Result { get; set; } = new List<ProjectDto>();
     }

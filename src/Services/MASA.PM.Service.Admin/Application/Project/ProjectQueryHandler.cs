@@ -102,7 +102,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
             else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, _multiEnvironmentUserContext.Environment ?? "");
+                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, query.Environment ?? _multiEnvironmentUserContext.Environment ?? "");
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
