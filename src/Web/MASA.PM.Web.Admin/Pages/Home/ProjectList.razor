@@ -123,7 +123,7 @@
                             </div>
                             @if (CanAddApp)
                             {
-                                <div class="regular3--text btn">@project.ModifierName @T("Edit in") @project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
+                                <div class="regular3--text btn">@project.ModifierName @T("Edit in") @project.ModificationTime.Humanize(culture:I18n.Culture)</div>
                             }
                             else
                             {
