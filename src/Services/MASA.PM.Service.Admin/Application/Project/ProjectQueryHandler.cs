@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.BuildingBlocks.Isolation;
+
 namespace MASA.PM.Service.Admin.Application.Project
 {
     public class ProjectQueryHandler
@@ -8,14 +10,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         private readonly IProjectRepository _projectRepository;
         private readonly IAppRepository _appRepository;
         private readonly IDccClient _dccClient;
-        private IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+        private IMultiEnvironmentContext _multiEnvironmentContext;
 
-        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient, IMultiEnvironmentUserContext multiEnvironmentUserContext)
+        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient, IMultiEnvironmentContext multiEnvironmentContext)
         {
             _projectRepository = projectRepository;
             _appRepository = appRepository;
             _dccClient = dccClient;
-            _multiEnvironmentUserContext = multiEnvironmentUserContext;
+            _multiEnvironmentContext = multiEnvironmentContext;
         }
 
         [EventHandler]
@@ -102,7 +104,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
             else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, _multiEnvironmentUserContext.Environment ?? "");
+                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, query.Environment ?? _multiEnvironmentContext.CurrentEnvironment ?? "");
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
