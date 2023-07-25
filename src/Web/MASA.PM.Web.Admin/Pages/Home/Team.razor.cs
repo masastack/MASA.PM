@@ -214,7 +214,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
-                EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster => new EnvironmentClusterInfo(envCluster.Id)).ToList()
+                EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster => new EnvironmentClusterInfo(envCluster.Id, envCluster.AppURL, envCluster.AppSwaggerURL)).ToList()
             });
         }
 
