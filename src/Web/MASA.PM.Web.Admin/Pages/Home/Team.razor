@@ -166,6 +166,6 @@
     </MTabItem>
 </MTabsItems>
 
-<ProjectModal @ref="@_projectModal" Projects="_projectListComponent?._projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
+<ProjectModal @ref="@_projectModal" Environment="@MultiEnvironmentUserContext.Environment" Projects="_projectListComponent?._projects" DisableTeamSelect="_disableTeamSelect" OnSubmitProjectAfter="OnSubmitProjectAsyncAfter" />
 
 <AppModal @ref="@_appModal" OnSubmitProjectAfter="OnSubmitAppAsyncAfter" />
