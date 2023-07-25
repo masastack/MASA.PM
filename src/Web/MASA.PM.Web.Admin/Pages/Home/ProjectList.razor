@@ -83,7 +83,7 @@
                                     <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
                                         <MRow NoGutters>
                                             <MCol>
-                                            <SButton Color="" BorderRadiusClass="rounded-3" Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px dashed #E9EDF7;">
+                                                <SButton Color="" BorderRadiusClass="rounded-3" Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px dashed #E9EDF7;">
                                                     <SIcon Left IsDefaultToolTip="false">mdi-plus</SIcon><span class="emphasis--text">@T("Add App")</span>
                                                 </SButton>
                                             </MCol>
@@ -123,7 +123,7 @@
                             </div>
                             @if (CanAddApp)
                             {
-                                <div class="regular3--text btn">@project.ModifierName @T("Edit in") @project.ModificationTime.Humanize(utcDate: false, culture:I18n.Culture)</div>
+                                <div class="regular3--text btn">@project.ModifierName @T("Edit in") @project.ModificationTime.Humanize(culture:I18n.Culture)</div>
                             }
                             else
                             {
