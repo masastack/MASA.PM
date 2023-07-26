@@ -11,7 +11,7 @@ namespace MASA.PM.Service.Admin.Services
             App.MapGet("/open-api/app/{identity}", GetAppByIdentityAsync);
             App.MapPost("/open-api/app/by-types", GetListByTypesAsync);
             App.MapGet("/open-api/projectwithapps/{envName}", GetListByEnvName);
-            App.MapGet("/open-api/project/teamProjects/{environment}", GetListByTeamIds);
+            App.MapPost("/open-api/project/teamProjects/{environment}", GetListByTeamIds);
         }
 
         public async Task<ProjectDetailDto> GetProjectByIdentityAsync(IEventBus eventBus, string identity)
