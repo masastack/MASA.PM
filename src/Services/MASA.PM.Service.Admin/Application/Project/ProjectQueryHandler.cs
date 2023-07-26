@@ -8,14 +8,14 @@ namespace MASA.PM.Service.Admin.Application.Project
         private readonly IProjectRepository _projectRepository;
         private readonly IAppRepository _appRepository;
         private readonly IDccClient _dccClient;
-        private IMultiEnvironmentUserContext _multiEnvironmentUserContext;
+        private readonly string _environment;
 
-        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient, IMultiEnvironmentUserContext multiEnvironmentUserContext)
+        public ProjectQueryHandler(IProjectRepository projectRepository, IAppRepository appRepository, IDccClient dccClient, IMultiEnvironmentUserContext multiEnvironmentUserContext, IMasaStackConfig masaStackConfig)
         {
             _projectRepository = projectRepository;
             _appRepository = appRepository;
             _dccClient = dccClient;
-            _multiEnvironmentUserContext = multiEnvironmentUserContext;
+            _environment = multiEnvironmentUserContext.Environment ?? masaStackConfig.Environment;
         }
 
         [EventHandler]
@@ -31,7 +31,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
-                TeamId = projectTeams.FirstOrDefault(t => t.EnvironmentName == _multiEnvironmentUserContext.Environment)?.TeamId ?? Guid.Empty,
+                TeamId = projectTeams.FirstOrDefault(t => t.EnvironmentName == _environment)?.TeamId ?? Guid.Empty,
                 EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
                 {
                     EnvironmentName = c.EnvironmentName,
@@ -103,7 +103,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
             else if (query.TeamIds != null && query.TeamIds.Any())
             {
-                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, query.Environment ?? _multiEnvironmentUserContext.Environment ?? "");
+                (List<Infrastructure.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, query.Environment ?? _environment);
                 query.Result = projects.Select(project => new ProjectDto
                 {
                     Id = project.Id,
