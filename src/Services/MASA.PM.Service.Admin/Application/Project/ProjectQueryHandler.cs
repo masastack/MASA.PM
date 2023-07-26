@@ -31,6 +31,7 @@ namespace MASA.PM.Service.Admin.Application.Project
                 LabelCode = projectEntity.LabelCode,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
+                TeamId = projectTeams.FirstOrDefault(t => t.EnvironmentName == _multiEnvironmentUserContext.Environment)?.TeamId ?? Guid.Empty,
                 EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
                 {
                     EnvironmentName = c.EnvironmentName,
