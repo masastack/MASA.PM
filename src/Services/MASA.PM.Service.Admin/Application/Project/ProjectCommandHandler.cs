@@ -33,6 +33,13 @@ namespace MASA.PM.Service.Admin.Application.Project
             });
 
             await _projectRepository.AddEnvironmentClusterProjectsAsync(environmentClusterProjects);
+
+            await _projectRepository.AddEnvironemtProjectTeamAsync(new EnvironmentProjectTeam
+            {
+                EnvironmentName = command.ProjectModel.EnvironmentName,
+                TeamId = command.ProjectModel.TeamId,
+                ProjectId = newProject.Id
+            });
         }
 
         [EventHandler]
