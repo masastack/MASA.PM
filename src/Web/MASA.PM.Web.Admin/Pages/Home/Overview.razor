@@ -125,7 +125,7 @@
                         <MListItemContent>@context.Item.Name</MListItemContent>
                     </ItemContent>
                 </SAutoComplete>
-                <MTextarea Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
+                <MTextarea NoResize Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_envFormModel.Data.Description"></MTextarea>
                 @if (_envFormModel.HasValue)
                 {
                     <MRow Class="mt-2">
@@ -187,7 +187,7 @@
                             <MListItemContent style="@($"color: {context.Item.Color} !important")">@context.Item.Name</MListItemContent>
                         </ItemContent>
                     </SAutoComplete>
-                        <MTextarea Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
+                    <MTextarea Class="mt-9" Height="121" NoResize Outlined Label="@T("Description")" @bind-Value="_clusterFormModel.Data.Description"></MTextarea>
                     @if (_clusterFormModel.HasValue)
                     {
                         <MRow Class="mt-2">
