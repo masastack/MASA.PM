@@ -2,7 +2,7 @@ stages:
   - docker-dev
   - deploy-dev
   - deploy-test
-  - deploy-staging
+  #- deploy-staging
   - docker-prd
   - deploy-prd
 
@@ -44,7 +44,7 @@ deploy-dev:
   only:
     - main
   script:
-    - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
+    - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
     - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_DEV
@@ -56,25 +56,25 @@ deploy-test:
   only:
     - main
   script:
-    - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
+    - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
     - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_TEST
     - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_TEST
   retry: 2
   when: manual
 
-deploy-staging:
-  stage: deploy-staging
-  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
-  only:
-    - main
-  script:
-    - echo $KUBE_CONFIG_MASA_YDY | base64 -d > ./config
-    - echo $CI_PIPELINE_ID
-    - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_STAGING
-    - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_STAGING
-  retry: 2
-  when: manual
+# deploy-staging:
+#   stage: deploy-staging
+#   image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
+#   only:
+#     - main
+#   script:
+#     - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
+#     - echo $CI_PIPELINE_ID
+#     - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_STAGING
+#     - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_STAGING
+#   retry: 2
+#   when: manual
 
 docker-prd:
   stage: docker-prd
