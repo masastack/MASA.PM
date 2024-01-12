@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		power.ps1 = power.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MASA.PM.Web.Docs", "src\Web\MASA.PM.Web.Docs\MASA.PM.Web.Docs.csproj", "{B10EB74D-1D73-45EE-9656-8AADAFAE565E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,14 @@ Global
 		{875A21C7-7199-4B7E-BAE0-77351556462A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{875A21C7-7199-4B7E-BAE0-77351556462A}.Release|x86.ActiveCfg = Release|Any CPU
 		{875A21C7-7199-4B7E-BAE0-77351556462A}.Release|x86.Build.0 = Release|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Debug|x86.Build.0 = Debug|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Release|x86.ActiveCfg = Release|Any CPU
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +111,7 @@ Global
 		{88AD0A79-5286-4C1C-8A58-AAC9E6870CCD} = {92F40AFA-8416-40BE-9893-D35E1924C69D}
 		{1A0D1DE9-8CD6-4C4D-8DEA-709BA651B3C3} = {88AD0A79-5286-4C1C-8A58-AAC9E6870CCD}
 		{875A21C7-7199-4B7E-BAE0-77351556462A} = {F3986DD3-0372-4929-B72A-09D93196541E}
+		{B10EB74D-1D73-45EE-9656-8AADAFAE565E} = {F3986DD3-0372-4929-B72A-09D93196541E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B83BA2BA-19E5-41FB-A92A-16A03DA229E4}

@@ -4,17 +4,26 @@
 
 <SLayout OnErrorAsync="OnError"
          TeamRouteFormat="team"
+         WhiteUris="whiteUris"
          Logo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png"
          MiniLogo="https://cdn.masastack.com/stack/images/logo/MASAStack/logo.png">
     @Body
 </SLayout>
 
 @code {
+
+    private static readonly List<string> whiteUris = new()
+    {
+        "/docs/*"
+    };
+
     [Inject]
+
     public IPopupService PopupService { get; set; } = default!;
 
     async Task OnError(Exception exception)
     {
         await PopupService.EnqueueSnackbarAsync(exception.Message, AlertTypes.Error);
     }
+
 }

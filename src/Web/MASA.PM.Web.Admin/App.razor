@@ -1,8 +1,9 @@
-﻿@inject TokenProvider TokenProvider
+﻿@using MASA.PM.Web.Docs.Pages
+@inject TokenProvider TokenProvider
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly"
-            AdditionalAssemblies='new List<Assembly>(){ Assembly.Load("Masa.Stack.Components")}'>
+            AdditionalAssemblies='new List<Assembly>(){ Assembly.Load("Masa.Stack.Components"), typeof(Docs).Assembly}'>
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Masa.Stack.Components" Version="0.0.421" />
     <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
@@ -22,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ApiGateways\Caller\MASA.PM.Caller\MASA.PM.Caller.csproj" />
     <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
+    <ProjectReference Include="..\MASA.PM.Web.Docs\MASA.PM.Web.Docs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.437" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1"/>
+    <PackageReference Include="NGitLab" Version="6.45.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.24"/>
+  </ItemGroup>
+
+</Project>

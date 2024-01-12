@@ -1,0 +1,116 @@
+.docs-new-form {
+  padding: 24px;
+  border-radius: 16px;
+  background-color: #FFFFFF;
+}
+
+.docs-new-form > div {
+  margin-bottom: 16px !important;
+}
+
+.docs-new-form > div:last-child {
+  margin-bottom: 0 !important;
+}
+
+.docs-new-form .vditor-content {
+  min-height: 480px;
+  max-height: calc(100vh - 528px);
+}
+
+.docs-new-form .vditor--fullscreen .vditor-content {
+  max-height: inherit;
+}
+
+.docs-directory {
+  height: 100%;
+}
+
+.docs-directory .m-card__text {
+  min-height: 128px;
+  height: calc(100% - 116px);
+}
+
+.docs-directory .m-card__actions {
+  padding: 0 16px 16px 16px;
+}
+
+.docs-preview__actions {
+  position: fixed;
+  bottom: 48px;
+  right: 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+.docs-preview__actions .m-btn {
+  margin-bottom: 16px;
+}
+
+.docs-preview__actions .m-btn:last-child {
+  margin-bottom: 0;
+}
+
+.docs-preview__commits-nav {
+  width: auto !important;
+}
+
+.docs-preview__commits-nav .diff.show {
+  width: 327px;
+}
+
+.docs-preview__commits-nav .diff {
+  margin-right: 16px;
+  width: 0;
+  overflow-y: auto;
+  height: calc(100vh - 111px);
+  overflow-x: hidden;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-property: width;
+}
+
+.docs-preview__commits-nav .items {
+  overflow-y: auto;
+  width: 327px;
+  height: calc(100vh - 111px);
+}
+
+.vditor-sv .h1 {
+  font-size: 1.75em !important;
+  line-height: 44px !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.vditor-sv .h2 {
+  font-size: 1.55em !important;
+  line-height: 38px !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.vditor-sv .h3 {
+  font-size: 1.38em !important;
+  line-height: 27px !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.vditor-sv .h4 {
+  font-size: 1.25em !important;
+  line-height: 25px !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.vditor-sv .h5 {
+  font-size: 1.13em !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.vditor-sv .h6 {
+  font-size: 1em !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}

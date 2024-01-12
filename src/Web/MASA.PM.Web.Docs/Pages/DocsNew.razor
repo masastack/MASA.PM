@@ -1,0 +1,210 @@
+﻿@page "/docs/new/{path?}"
+@using NGitLab.Models
+@using System.Web
+@inject PMGitLabClient GitLabClient
+@inherits MasaComponentBase
+
+<PageTitle>@Title</PageTitle>
+
+<MForm @ref="_form" Class="docs-new-form">
+    <div class="d-flex align-center" style="width: 800px">
+        <MTextField @bind-Value="_directory"
+                    Dense
+                    Disabled="@UpdateMode"
+                    HideDetails="true"
+                    Placeholder="@T("docs-directory")"
+                    PersistentPlaceholder
+                    Outlined
+                    Required
+                    Readonly="@(Directory != null)"
+                    Style="max-width: 248px">
+        </MTextField>
+        <span class="px-2">/</span>
+        <MTextField @bind-Value="_fileName"
+                    Dense
+                    Disabled="@UpdateMode"
+                    HideDetails="true"
+                    Placeholder="@T("docs-file-name")"
+                    PersistentPlaceholder
+                    Outlined
+                    Required
+                    Suffix=".md">
+        </MTextField>
+    </div>
+
+    <MMarkdown @bind-Value="_markdownValue"
+               Options="markdownOptions">
+    </MMarkdown>
+
+    <MTextarea @bind-Value="_commitMessage"
+               HideDetails="true"
+               Label="@(T("docs-file-commit-msg"))"
+               Placeholder="Add new file"
+               PersistentPlaceholder
+               Outlined
+               Required>
+    </MTextarea>
+
+    <div class="d-flex">
+        <MSpacer />
+        <MButton OnClick="@Commit"
+                 Color="primary"
+                 Class="mr-2"
+                 Disabled="@(!IsValid)"
+                 Loading="_commiting">
+            @T("docs-file-commit")
+        </MButton>
+        <MButton OnClick="@Cancel">@T("Cancel")</MButton>
+    </div>
+</MForm>
+
+@code {
+
+    [CascadingParameter] public SLayout Layout { get; set; } = null!;
+
+    [Parameter] public string? Path { get; set; }
+
+    [SupplyParameterFromQuery] [Parameter] public string? From { get; set; }
+
+    [SupplyParameterFromQuery(Name = "dir")] [Parameter]
+    public string? Directory { get; set; }
+
+    private string? _directory;
+    private string? _fileName;
+    private string? _markdownValue;
+    private string? _commitMessage = "Add new file";
+
+    private bool _commiting;
+
+    private MForm _form = null!;
+
+    private static readonly Dictionary<string, object> markdownOptions = new()
+    {
+        {
+            "toolbar", new[]
+            {
+                "emoji",
+                "headings",
+                "bold",
+                "italic",
+                "strike",
+                "link",
+                "|",
+                "list",
+                "ordered-list",
+                "check",
+                "outdent",
+                "indent",
+                "|",
+                "quote",
+                "line",
+                "code",
+                "inline-code",
+                "insert-before",
+                "insert-after",
+                "table",
+                "|",
+                "undo",
+                "redo",
+                "|",
+                "fullscreen",
+                "edit-mode"
+            }
+        }
+    };
+
+    private string Title => Path is null ? "New file" : "Edit file";
+
+    private bool IsValid => !string.IsNullOrWhiteSpace(_directory)
+                            && !string.IsNullOrWhiteSpace(_fileName)
+                            && !string.IsNullOrWhiteSpace(_markdownValue)
+                            && !string.IsNullOrWhiteSpace(_commitMessage);
+
+    private bool UpdateMode => Path is not null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UpdateMode)
+        {
+            PopupService.ShowProgressLinear();
+            var path = HttpUtility.UrlDecode(Path);
+
+            var split = path!.Split("/");
+            _directory = split[0];
+            _fileName = split[1];
+
+            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var file = await repo.Files.GetAsync($"{path}.md", "main");
+            _markdownValue = file.DecodedContent;
+            _commitMessage = $"Update {_fileName}.md";
+
+            PopupService.HideProgressLinear();
+            
+            Layout.ReplaceLastBreadcrumb(T("docs-file-edit", args: $"{path}.md"));
+        }
+        else
+        {
+            _directory = Directory;
+
+            Layout.ReplaceLastBreadcrumb("New file");
+        }
+    }
+
+    private async Task Commit()
+    {
+        if (_form.Validate())
+        {
+            _commiting = true;
+            StateHasChanged();
+
+            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var pathWithoutExtension = $"{_directory}/{_fileName}";
+            var path = $"{pathWithoutExtension}.md";
+            var fileUpsert = new FileUpsert()
+            {
+                Branch = "main",
+                CommitMessage = _commitMessage,
+                Content = _markdownValue,
+                Encoding = "text",
+                Path = path
+            };
+
+            if (UpdateMode)
+            {
+                repo.Files.Update(fileUpsert);
+            }
+            else
+            {
+                repo.Files.Create(fileUpsert);
+            }
+
+            _commiting = false;
+            _ = PopupService.EnqueueSnackbarAsync($"File {(UpdateMode ? "updated" : "created")} successfully", AlertTypes.Success);
+            NavigationManager.NavigateTo($"/docs/{HttpUtility.UrlEncode(pathWithoutExtension)}");
+        }
+    }
+
+    private async Task Cancel()
+    {
+        var discard = await PopupService.ConfirmAsync(options =>
+        {
+            options.Title = T("docs-file-discard-title");
+            options.Content = T("docs-file-discard-content");
+            options.Type = AlertTypes.Error;
+            options.OkText = T("docs-file-discard");
+        });
+
+        if (discard)
+        {
+            if (Path != null && From == "preview")
+            {
+                NavigationManager.NavigateTo($"/docs/{HttpUtility.UrlEncode(Path)}");
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/docs");
+            }
+        }
+    }
+
+}

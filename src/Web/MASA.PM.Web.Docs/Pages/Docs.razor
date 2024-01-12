@@ -1,0 +1,87 @@
+﻿@page "/docs"
+@using NGitLab.Models
+@using MASA.PM.Web.Docs.Models
+@inject PMGitLabClient GitLabClient
+@inherits MasaComponentBase
+
+<div class="d-flex mb-4">
+    <MSpacer />
+    <MButton Height="40" Color="primary" Class="rounded-lg" Href="/docs/new">
+        <MIcon Left>mdi-plus</MIcon>
+        @T("docs-new-file")
+    </MButton>
+</div>
+
+<div style="height: calc(100vh - 176px); overflow-y: auto">
+    @if (_docFiles is null)
+    {
+        <div class="d-flex">
+            <MSkeletonLoader Type="card" Style="width: 100%" Class=" mr-4"></MSkeletonLoader>
+            <MSkeletonLoader Type="card" Style="width: 100%" Class=" mr-4"></MSkeletonLoader>
+            <MSkeletonLoader Type="card" Style="width: 100%" Class=""></MSkeletonLoader>
+        </div>
+    }
+    else if (_docFiles.Count == 0)
+    {
+        <SEmptyPlaceholder />
+    }
+    else
+    {
+        <MRow>
+            @foreach (var group in _docFiles)
+            {
+                <MCol Cols="12"
+                      Sm="12"
+                      Md="6"
+                      Lg="4">
+                    <MCard Class="docs-directory">
+                        <MCardTitle>@group.Key</MCardTitle>
+                        <MCardText>
+                            <ul>
+                                @foreach (var file in group)
+                                {
+                                    <li>
+                                        <a class="body-1" href="@($"/docs/{file.UrlEncodePathWithoutExtension}")">@file.NameWidthExtension</a>
+                                    </li>
+                                }
+                            </ul>
+                        </MCardText>
+                        <MCardActions>
+                            <MButton Block Color="secondary" Href="@($"/docs/new?dir={group.Key}")">
+                                @T("docs-new-dir-file", args: group.Key)
+                            </MButton>
+                        </MCardActions>
+                    </MCard>
+                </MCol>
+            }
+        </MRow>
+    }
+</div>
+
+@code {
+
+    private List<IGrouping<string, DocFile>>? _docFiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        PopupService.ShowProgressLinear();
+
+        try
+        {
+            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var tree = repo.GetTree(new RepositoryGetTreeOptions()
+            {
+                Recursive = true
+            });
+            _docFiles = tree.Where(u => u.Path.Contains("/") && u.Path.EndsWith(".md")).Select(u => new DocFile(u)).GroupBy(u => u.Direcotry).ToList();
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            await PopupService.EnqueueSnackbarAsync(e);
+        }
+
+        PopupService.HideProgressLinear();
+    }
+
+}

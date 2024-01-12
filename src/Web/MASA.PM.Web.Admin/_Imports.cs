@@ -29,3 +29,4 @@ global using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 global using Microsoft.IdentityModel.Logging;
 global using FluentValidation;
 global using FluentValidation.Resources;
+global using MASA.PM.Web.Docs;
