@@ -1,0 +1,209 @@
+﻿@page "/docs/{path}"
+@using NGitLab.Models
+@using System.Web
+@using NGitLab
+@inject PMGitLabClient GitLabClient
+@inherits MasaComponentBase
+
+<MContainer Fluid Class="white rounded-xl pa-6">
+    @if (_file is null)
+    {
+        <MSkeletonLoader Type="paragraph"></MSkeletonLoader>
+    }
+    else
+    {
+        <MMarkdownIt Class="vditor-reset" Source="@_file.DecodedContent"></MMarkdownIt>
+    }
+</MContainer>
+
+<PDrawer @bind-Value="_commitsNav"
+         Class="docs-preview__commits-nav"
+         OnCancel="@HandleOnDrawerCancel"
+         Title="@T("docs-commits")">
+    @if (_commits is not null)
+    {
+        <div class="d-flex">
+            <div class="diff @(_commitId != default ? "show" : "")">
+                @if (_diffs != null)
+                {
+                    foreach (var diff in _diffs)
+                    {
+                        <MSyntaxHighlight Code="@diff.Difference"
+                                          Class="diff-highlight ma-0 rounded-lg"
+                                          Language="diff">
+                        </MSyntaxHighlight>
+                    }
+                }
+            </div>
+            <div class="items">
+                @foreach (var commit in _commits)
+                {
+                    <MSheet Outlined Class="mb-4 pa-4 rounded-lg">
+                        <div class="body-1 mb-2">@commit.Title</div>
+
+                        @if (!string.IsNullOrWhiteSpace(commit.Message) && commit.Message != commit.Title)
+                        {
+                            <div class="caption">
+                                <MIcon Small Class="mr-1">mdi-information-box-outline</MIcon>@commit.Message
+                            </div>
+                        }
+                        <div class="caption">
+                            <MIcon Small Class="mr-1">mdi-account-outline</MIcon>@commit.CommitterName
+                        </div>
+                        <div class="caption">
+                            <MIcon Small Class="mr-1">mdi-clock-outline</MIcon>@commit.CommittedDate
+                        </div>
+
+                        <MButton Block
+                                 Small
+                                 Class="mt-2"
+                                 Color="secondary"
+                                 OnClick="@(() => ToggleDiff(commit.Id))">
+                            @if (_commitId == commit.Id)
+                            {
+                                @T("docs-commits-diff-hide")
+                            }
+                            else
+                            {
+                                @T("docs-commits-diff-show")
+                            }
+                        </MButton>
+                    </MSheet>
+                }
+            </div>
+        </div>
+    }
+</PDrawer>
+
+<div class="docs-preview__actions">
+    <MButton Color="primary" Fab Dark
+             Href="@($"/docs/new/{HttpUtility.UrlEncode(Path)}?from=preview")">
+        <MIcon>mdi-pencil-outline</MIcon>
+    </MButton>
+
+    <MButton Color="purple" Fab Dark
+             Loading="_fetchCommits"
+             OnClick="@ShowCommits">
+        <MIcon>mdi-timeline-text-outline</MIcon>
+    </MButton>
+
+    <MButton Color="error" Fab Dark
+             OnClick="@Delete">
+        <MIcon>mdi-delete-outline</MIcon>
+    </MButton>
+
+    <MButton Color="secondary" Fab Dark
+             Href="/docs">
+        <MIcon>mdi-page-previous-outline</MIcon>
+    </MButton>
+</div>
+
+@code {
+
+    [CascadingParameter] public SLayout Layout { get; set; } = null!;
+
+    [Parameter] public string Path { get; set; } = null!;
+
+    private const string Branch = "main";
+
+    private FileData? _file;
+    private string? _fullPath;
+    private IEnumerable<Commit>? _commits;
+    private bool _fetchCommits;
+    private bool _commitsNav;
+    private Sha1 _commitId;
+    private IEnumerable<Diff>? _diffs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _fullPath =  $"{HttpUtility.UrlDecode(Path)}.md";
+
+        try
+        {
+            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            _file = await repo.Files.GetAsync(_fullPath, Branch);
+        }
+        catch (Exception e)
+        {
+            _ = PopupService.EnqueueSnackbarAsync(e);
+        }
+
+        Layout.ReplaceLastBreadcrumb(_fullPath);
+    }
+
+    private async Task Delete()
+    {
+        await PopupService.ConfirmAsync(options =>
+        {
+            options.Title = T("docs-file-del-title");
+            options.Content = T("docs-file-del-content", args: _file!.Name);
+            options.OkText = T("docs-file-del");
+            options.Type = AlertTypes.Error;
+            options.OnOk = async e =>
+            {
+                try
+                {
+                    var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+                    repo.Files.Delete(new FileDelete()
+                    {
+                        Branch = Branch,
+                        CommitMessage = "Delete file",
+                        Path = _fullPath
+                    });
+
+                    _ = PopupService.EnqueueSnackbarAsync("File deleted successfully", AlertTypes.Success);
+
+                    NavigationManager.NavigateTo("/docs");
+                }
+                catch (Exception ex)
+                {
+                    _ = PopupService.EnqueueSnackbarAsync(ex);
+                    e.Cancel();
+                }
+            };
+        });
+    }
+
+    private async Task ShowCommits()
+    {
+        _fetchCommits = true;
+        StateHasChanged();
+
+        var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+        _commits = repo.GetCommits(new GetCommitsRequest()
+        {
+            Path = _fullPath,
+            RefName = Branch,
+            MaxResults = 10
+        });
+
+        _fetchCommits = false;
+        _commitsNav = true;
+    }
+
+    private async Task ToggleDiff(Sha1 sha1)
+    {
+        if (_commitId == sha1)
+        {
+            _commitId = default;
+            _diffs = null;
+        }
+        else
+        {
+            _commitId = sha1;
+            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            _diffs = repo.GetCommitDiff(sha1);
+        }
+    }
+
+    private void HandleOnDrawerCancel()
+    {
+        _commitsNav = false;
+        Task.Run(() =>
+        {
+            _commitId = default;
+            _diffs = null;
+        });
+    }
+
+}

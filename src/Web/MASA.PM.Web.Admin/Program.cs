@@ -1,5 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+
+using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -12,6 +15,9 @@ var masaStackConfig = builder.Services.GetMasaStackConfig();
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
+var masaConfiguration = builder.Services.GetMasaConfiguration(); 
+builder.Services.AddDocs(masaConfiguration.ConfigurationApi.GetDefault());
 
 if (!builder.Environment.IsDevelopment())
 {
