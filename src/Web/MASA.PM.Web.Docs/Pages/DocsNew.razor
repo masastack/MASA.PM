@@ -1,7 +1,7 @@
 ﻿@page "/docs/new/{path?}"
 @using NGitLab.Models
 @using System.Web
-@inject PMGitLabClient GitLabClient
+@inject GitLabClientWrapper GitLabClientWrapper
 @inherits MasaComponentBase
 
 <PageTitle>@Title</PageTitle>
@@ -133,7 +133,7 @@
             _directory = split[0];
             _fileName = split[1];
 
-            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
             var file = await repo.Files.GetAsync($"{path}.md", "main");
             _markdownValue = file.DecodedContent;
             _commitMessage = $"Update {_fileName}.md";
@@ -157,7 +157,7 @@
             _commiting = true;
             StateHasChanged();
 
-            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
             var pathWithoutExtension = $"{_directory}/{_fileName}";
             var path = $"{pathWithoutExtension}.md";
             var fileUpsert = new FileUpsert()

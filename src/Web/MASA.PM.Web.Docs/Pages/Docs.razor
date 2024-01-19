@@ -1,7 +1,7 @@
 ﻿@page "/docs"
 @using NGitLab.Models
 @using MASA.PM.Web.Docs.Models
-@inject PMGitLabClient GitLabClient
+@inject GitLabClientWrapper GitLabClientWrapper
 @inherits MasaComponentBase
 
 <div class="d-flex mb-4">
@@ -68,7 +68,7 @@
 
         try
         {
-            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
             var tree = repo.GetTree(new RepositoryGetTreeOptions()
             {
                 Recursive = true
