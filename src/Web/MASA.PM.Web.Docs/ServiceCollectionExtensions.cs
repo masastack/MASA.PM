@@ -24,7 +24,6 @@ public static class ServiceCollectionExtensions
             wrapper = new GitLabClientWrapper(hostUrl, apiToken, fullPath);
         }
 
-
         services.AddSingleton<GitLabClientWrapper>(_ => wrapper);
     }
 }
