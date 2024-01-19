@@ -2,7 +2,7 @@
 @using NGitLab.Models
 @using System.Web
 @using NGitLab
-@inject PMGitLabClient GitLabClient
+@inject GitLabClientWrapper GitLabClientWrapper
 @inherits MasaComponentBase
 
 <MContainer Fluid Class="white rounded-xl pa-6">
@@ -120,7 +120,7 @@
 
         try
         {
-            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
             _file = await repo.Files.GetAsync(_fullPath, Branch);
         }
         catch (Exception e)
@@ -143,7 +143,7 @@
             {
                 try
                 {
-                    var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+                    var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
                     repo.Files.Delete(new FileDelete()
                     {
                         Branch = Branch,
@@ -169,7 +169,7 @@
         _fetchCommits = true;
         StateHasChanged();
 
-        var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+        var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
         _commits = repo.GetCommits(new GetCommitsRequest()
         {
             Path = _fullPath,
@@ -191,7 +191,7 @@
         else
         {
             _commitId = sha1;
-            var repo = await GitLabClient.GetCurrentRepositoryClientAsync();
+            var repo = await GitLabClientWrapper.GetCurrentRepositoryClientAsync();
             _diffs = repo.GetCommitDiff(sha1);
         }
     }
