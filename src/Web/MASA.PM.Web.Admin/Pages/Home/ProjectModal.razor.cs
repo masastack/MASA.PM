@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Newtonsoft.Json;
+
 namespace MASA.PM.Web.Admin.Pages.Home
 {
     public partial class ProjectModal
@@ -131,6 +133,9 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task SubmitProjectAsync(FormContext context)
         {
+            await Console.Out.WriteLineAsync($"Data：{JsonConvert.SerializeObject(_projectFormModel)}");
+            await Console.Out.WriteLineAsync($"Validate：{context.Validate()}");
+
             if (context.Validate())
             {
                 if (!_projectFormModel.HasValue)
