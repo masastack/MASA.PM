@@ -4,8 +4,6 @@
 global using System.Reflection;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text.RegularExpressions;
-global using BlazorComponent;
-global using BlazorComponent.I18n;
 global using Force.DeepCloner;
 global using Masa.Blazor;
 global using Masa.BuildingBlocks.StackSdks.Auth;
