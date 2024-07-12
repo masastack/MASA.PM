@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Masa.Stack.Components" Version="0.0.445" />
+    <PackageReference Include="Masa.Stack.Components" Version="0.0.466" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="NGitLab" Version="6.45.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.24" />
