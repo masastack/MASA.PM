@@ -30,8 +30,8 @@ builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 builder.Services.AddMasaIdentity(options =>
 {
-    options.UserName = "name";
-    options.UserId = "sub";
+    options.UserName = IdentityClaimConsts.USER_NAME;
+    options.UserId = IdentityClaimConsts.USER_ID;
     options.Role = IdentityClaimConsts.ROLES;
     options.Environment = IdentityClaimConsts.ENVIRONMENT;
     options.Mapping(nameof(MasaUser.CurrentTeamId), IdentityClaimConsts.CURRENT_TEAM);

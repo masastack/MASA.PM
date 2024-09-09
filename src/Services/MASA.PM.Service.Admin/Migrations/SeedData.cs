@@ -11,9 +11,9 @@ namespace MASA.PM.Service.Admin.Migrations
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<PmDbContext>();
 
-            if (context.Database.GetPendingMigrations().Any())
+            if ((await context.Database.GetPendingMigrationsAsync()).Any())
             {
-                context.Database.Migrate();
+                await context.Database.MigrateAsync();
             }
         }
 
@@ -30,13 +30,12 @@ namespace MASA.PM.Service.Admin.Migrations
 
             if (!context.Set<Infrastructure.Entities.Environment>().Any())
             {
-
                 var initDto = new InitDto
                 {
                     ClusterName = masaStackConfig.Cluster,
                     Environments = new List<AddEnvironmentDto>
                     {
-                        new AddEnvironmentDto
+                        new ()
                         {
                             Name = masaStackConfig.Environment,
                             Description = masaStackConfig.Environment,
@@ -45,7 +44,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     }
                 };
 
-                if (!initDto.Environments.Any(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
+                if (!initDto.Environments.Exists(env => env.Name.ToLower().Equals(onLineEnvironmentName.ToLower())))
                 {
                     initDto.Environments.Add(new AddEnvironmentDto
                     {
@@ -85,13 +84,13 @@ namespace MASA.PM.Service.Admin.Migrations
                 var projectEntity = project.Adapt<Project>();
                 projectEntity.SetCreatorAndModifier(defaultUserId);
                 var newProject = await projectRepository.AddAsync(projectEntity);
-
                 var environmentProjectTeam = new EnvironmentProjectTeam
                 {
                     TeamId = defaultTeamId,
                     ProjectId = newProject.Id,
                     EnvironmentName = masaStackConfig.Environment,
                 };
+                await projectRepository.AddEnvironemtProjectTeamAsync(environmentProjectTeam);
 
                 projectIds.Add(newProject.Id);
                 foreach (var app in project.Apps)
@@ -175,7 +174,7 @@ namespace MASA.PM.Service.Admin.Migrations
             });
             foreach (var envCluster in envClusters)
             {
-                var newEnvCluster = await environmentRepository.AddEnvironmentClusterAsync(envCluster);
+                _ = await environmentRepository.AddEnvironmentClusterAsync(envCluster);
             }
         }
 
@@ -203,7 +202,7 @@ namespace MASA.PM.Service.Admin.Migrations
                     Name = name ?? "",
                     Identity = id,
                     LabelCode = GetLabel(id),
-                    TeamId = masaStackConfig.GetDefaultTeamId(),
+                    TeamIds = new() { masaStackConfig.GetDefaultTeamId() },
                     Description = ""
                 };
 
@@ -256,7 +255,7 @@ namespace MASA.PM.Service.Admin.Migrations
 
             return app;
 
-            string ToTitle(string value)
+            static string ToTitle(string value)
             {
                 if (value.Length > 3 || value.Equals(MasaStackApp.WEB.Name))
                 {

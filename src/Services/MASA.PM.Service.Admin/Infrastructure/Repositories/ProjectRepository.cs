@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.PM.Service.Admin.Infrastructure.Entities;
+
 namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 {
     public class ProjectRepository : IProjectRepository
@@ -204,12 +206,28 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task AddEnvironemtProjectTeamsAsync(IEnumerable<EnvironmentProjectTeam> environmentProjectTeams)
+        {
+            await _dbContext.EnvironmentProjectTeams.AddRangeAsync(environmentProjectTeams);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task RemoveEnvironemtProjectTeamAsync(int projectId, string environemntName)
         {
-            var envProjectTeam = await _dbContext.EnvironmentProjectTeams.FirstOrDefaultAsync(c => c.ProjectId == projectId && c.EnvironmentName == environemntName);
-            if (envProjectTeam != null)
+            var envProjectTeams = await _dbContext.EnvironmentProjectTeams.Where(c => c.ProjectId == projectId && c.EnvironmentName == environemntName).ToListAsync();
+            if (envProjectTeams != null && envProjectTeams.Any())
             {
-                _dbContext.EnvironmentProjectTeams.Remove(envProjectTeam);
+                _dbContext.EnvironmentProjectTeams.RemoveRange(envProjectTeams);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveProjectEnvironemtTeamsAsync(int projectId)
+        {
+            var envProjectTeams = await _dbContext.EnvironmentProjectTeams.Where(c => c.ProjectId == projectId).ToListAsync();
+            if (envProjectTeams != null && envProjectTeams.Any())
+            {
+                _dbContext.EnvironmentProjectTeams.RemoveRange(envProjectTeams);
                 await _dbContext.SaveChangesAsync();
             }
         }
@@ -231,5 +249,6 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
 
             return projectTeams;
         }
+
     }
 }
