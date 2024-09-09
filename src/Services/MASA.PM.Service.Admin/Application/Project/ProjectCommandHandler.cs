@@ -33,13 +33,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             });
 
             await _projectRepository.AddEnvironmentClusterProjectsAsync(environmentClusterProjects);
-
-            await _projectRepository.AddEnvironemtProjectTeamAsync(new EnvironmentProjectTeam
-            {
-                EnvironmentName = command.ProjectModel.EnvironmentName,
-                TeamId = command.ProjectModel.TeamId,
-                ProjectId = newProject.Id
-            });
+            await AddProjectTeams(newProject.Id, command.ProjectModel);
         }
 
         [EventHandler]
@@ -80,12 +74,7 @@ namespace MASA.PM.Service.Admin.Application.Project
             }
 
             await _projectRepository.RemoveEnvironemtProjectTeamAsync(command.ProjectModel.ProjectId, command.ProjectModel.EnvironmentName);
-            await _projectRepository.AddEnvironemtProjectTeamAsync(new EnvironmentProjectTeam
-            {
-                ProjectId = command.ProjectModel.ProjectId,
-                TeamId = command.ProjectModel.TeamId,
-                EnvironmentName = command.ProjectModel.EnvironmentName
-            });
+            await AddProjectTeams(project.Id, command.ProjectModel);
         }
 
         [EventHandler]
@@ -95,6 +84,19 @@ namespace MASA.PM.Service.Admin.Application.Project
 
             var environmentClusterProjects = await _projectRepository.GetEnvironmentClusterProjectsByProjectIdAsync(command.ProjectId);
             await _projectRepository.RemoveEnvironmentClusterProjects(environmentClusterProjects);
+
+            await _projectRepository.RemoveProjectEnvironemtTeamsAsync(command.ProjectId);
+        }
+
+        private async Task AddProjectTeams(int projectId,AddProjectDto projectModel)
+        {
+            await _projectRepository.AddEnvironemtProjectTeamsAsync(
+                projectModel.TeamIds.Select(teamId => new EnvironmentProjectTeam
+                {
+                    EnvironmentName = projectModel.EnvironmentName,
+                    TeamId = teamId,
+                    ProjectId = projectId
+                }));
         }
     }
 }

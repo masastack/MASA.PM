@@ -39,7 +39,11 @@ namespace MASA.PM.Service.Admin.Infrastructure.IRepositories
 
         Task AddEnvironemtProjectTeamAsync(EnvironmentProjectTeam environmentProjectTeam);
 
+        Task AddEnvironemtProjectTeamsAsync(IEnumerable<EnvironmentProjectTeam> environmentProjectTeams);
+
         Task RemoveEnvironemtProjectTeamAsync(int projectId, string environemntName);
+
+        Task RemoveProjectEnvironemtTeamsAsync(int projectId);
 
         Task<List<EnvironmentProjectTeam>> GetProjectTeamByProjectId(int projectId);
 

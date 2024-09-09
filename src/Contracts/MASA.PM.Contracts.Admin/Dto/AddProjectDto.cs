@@ -27,8 +27,8 @@ namespace MASA.PM.Contracts.Admin.Dto
         [MinCount(1, ErrorMessage = "EnvironmentClusterIds is required")]
         public List<int> EnvironmentClusterIds { get; set; } = new List<int>();
 
-        [Required(ErrorMessage = "TeamId is required")]
-        public Guid TeamId { get; set; }
+        [Required(ErrorMessage = "TeamIds is required")]
+        public List<Guid> TeamIds { get; set; } = default!;
 
         [StringLength(255, ErrorMessage = "Project description length must be less than 255")]
         public string Description { get; set; } = "";

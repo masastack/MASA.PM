@@ -59,7 +59,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 else
                     _projectFormModel.Data.EnvironmentClusterIds = _allEnvClusters.Select(envCluster => envCluster.Id).ToList();
 
-                _projectFormModel.Data.TeamId = TeamId;
+                _projectFormModel.Data.TeamIds = new() { TeamId };
 
                 if (_projectTypes.Any())
                     _projectFormModel.Data.LabelCode = _projectTypes[0].Code;
@@ -75,14 +75,14 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 _projectDetail = projectDetailDto.DeepClone();
 
-                var teamId = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment && c.ProjectId == _projectDetail.Id)?.TeamId ?? Guid.Empty;
+                var teamIds = _projectDetail.EnvironmentProjectTeams.Where(c => c.EnvironmentName == Environment && c.ProjectId == _projectDetail.Id).Select(c => c.TeamId).ToList();
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,
                     LabelCode = _projectDetail.LabelCode,
                     ProjectId = _projectDetail.Id,
                     Name = _projectDetail.Name,
-                    TeamId = teamId,
+                    TeamIds = teamIds,
                     Description = _projectDetail.Description,
                     EnvironmentClusterIds = _projectDetail.EnvironmentClusterIds,
                     EnvironmentName = Environment
