@@ -40,6 +40,18 @@ docker-dev:
     - docker rmi $NEW_IMAGE_PM_DEV   
     - docker rmi $NEW_IMAGE_PM_UI_DEV
 
+deploy-dev:
+  stage: deploy-dev
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
+  only:
+    - main
+  script:
+    - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
+    - echo $CI_PIPELINE_ID
+    - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_DEV
+  retry: 2
+
 deploy-sec:
   stage: deploy-dev
   image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
