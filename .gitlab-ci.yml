@@ -1,6 +1,7 @@
 stages:
   - docker-dev
   - deploy-dev
+  - deploy-new-prd
   - deploy-test
   #- deploy-staging
   - docker-prd
@@ -20,6 +21,7 @@ variables:
   NAMESPACE_TEST: masastack-test
   NAMESPACE_STAGING: masastack-staging
   NAMESPACE_PRD: masastack
+  NAMESPACE_SEC: masa-to-sec
   
 docker-dev:
   stage: docker-dev
@@ -49,6 +51,31 @@ deploy-dev:
     - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_DEV
   retry: 2
+
+deploy-sec:
+  stage: deploy-dev
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
+  only:
+    - main
+  script:
+    - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
+    - echo $CI_PIPELINE_ID
+    - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_SEC
+    - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_SEC
+  retry: 2
+
+deploy-new-prd:
+  stage: deploy-new-prd
+  image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
+  only:
+    - main
+  script:
+    - echo $KUBE_CONFIG_LSD_PRD_YDY | base64 -d > ./config
+    - echo $CI_COMMIT_ID
+    - kubectl --kubeconfig ./config set image deployment/pm pm=$NEW_IMAGE_PM_UI_DEV -n $NAMESPACE_PRD
+    - kubectl --kubeconfig ./config set image deployment/pm-service pm-service=$NEW_IMAGE_PM_DEV -n $NAMESPACE_PRD
+  retry: 2
+  when: manual
 
 deploy-test:
   stage: deploy-test
