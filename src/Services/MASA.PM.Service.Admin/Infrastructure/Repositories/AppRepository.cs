@@ -165,7 +165,7 @@ namespace MASA.PM.Service.Admin.Infrastructure.Repositories
                                 join env in _dbContext.Environments on envCluster.EnvironmentId equals env.Id
                                 join cluster in _dbContext.Clusters on envCluster.ClusterId equals cluster.Id
                                 join ecpa in _dbContext.EnvironmentClusterProjectApps on ecp.Id equals ecpa.EnvironmentClusterProjectId
-                                join app in _dbContext.Apps.Where(app => app.Name == name || app.Identity.ToLower() == identity && !excludeAppIds.Contains(app.Id)) on ecpa.AppId equals app.Id
+                                join app in _dbContext.Apps.Where(app => (app.Name == name || app.Identity.ToLower() == identity) && !excludeAppIds.Contains(app.Id)) on ecpa.AppId equals app.Id
                                 select new
                                 {
                                     EnvironmentName = env.Name,
