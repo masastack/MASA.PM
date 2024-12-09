@@ -8,6 +8,9 @@ GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 await builder.Services.AddMasaStackConfigAsync(MasaStackProject.PM, MasaStackApp.Service);
 var masaStackConfig = builder.Services.GetMasaStackConfig();
+var connStr = masaStackConfig.GetValue(MasaStackConfigConstant.CONNECTIONSTRING);
+var dbModel = JsonSerializer.Deserialize<DbModel>(connStr)!;
+bool isPgsql = string.Equals(dbModel.DbType, "postgresql", StringComparison.CurrentCultureIgnoreCase);
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -65,13 +68,13 @@ builder.Services.AddAuthentication(options =>
 });
 
 #region regist Repository
-var repositories = Assembly.GetExecutingAssembly();
+var repositories = typeof(IAppRepository).Assembly;
 var assembly = repositories
     .DefinedTypes
     .Where(a => a.Name.EndsWith("Repository") && !a.Name.StartsWith("I"));
 foreach (var item in assembly)
 {
-    builder.Services.AddScoped(item.GetInterfaces().First(), item);
+    builder.Services.AddScoped(item.GetInterfaces()[0], item);
 }
 #endregion
 
@@ -127,15 +130,22 @@ var app = builder.Services
             }
         });
     })
-    .AddIntegrationEventBus(options =>
+    .AddDomainEventBus(options =>
     {
         var connStr = masaStackConfig.GetConnectionString(MasaStackProject.PM.Name);
-        options.UseDapr()
-        .UseEventLog<PmDbContext>()
-        .UseUoW<PmDbContext>(dbOptions => dbOptions.UseSqlServer(connStr).UseFilter())
-        .UseEventBus();
+        if (isPgsql)
+            PmDbContext.RegistAssembly(Assembly.Load("MASA.PM.Infrastructure.EFCore.PostgreSql"));
+        else
+            PmDbContext.RegistAssembly(Assembly.Load("MASA.PM.Infrastructure.EFCore.SqlServer"));
+        options.UseIntegrationEventBus(options =>
+                                                                options.UseDapr()
+                                                                             .UseEventBus())
+                    .UseUoW<PmDbContext>(dbOptions =>
+                                                                                        (isPgsql ? dbOptions.UsePgsql(connStr, options => options.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.PostgreSql")) :
+                                                                                                        dbOptions.UseSqlServer(connStr, options => options.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.SqlServer"))).UseFilter())
+                   .UseRepository<PmDbContext>();
     })
-    .AddServices(builder);
+    .AddServices(builder, new Assembly[] { typeof(AddAppCommand).Assembly, typeof(AppService).Assembly });
 
 await app.MigrateAsync();
 await builder.SeedDataAsync(masaStackConfig);

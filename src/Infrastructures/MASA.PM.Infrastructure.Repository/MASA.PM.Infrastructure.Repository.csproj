@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MASA.PM.Infrastructure.Domain.Shared\MASA.PM.Infrastructure.Domain.Shared.csproj" />
+    <ProjectReference Include="..\MASA.PM.Infrastructure.EFCore\MASA.PM.Infrastructure.EFCore.csproj" />
+  </ItemGroup>
+
+</Project>

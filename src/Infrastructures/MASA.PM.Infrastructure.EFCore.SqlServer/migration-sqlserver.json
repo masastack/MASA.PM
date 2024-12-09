@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=10.175.171.201,32679;Database=pm_dev;User Id=ss;Password=Hzss@123;"
+  }
+}

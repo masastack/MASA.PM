@@ -11,15 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20220119080712_InitialCreate.cs" />
-    <Compile Remove="Migrations\20220119080712_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20220215014556_update_project.cs" />
-    <Compile Remove="Migrations\20220215014556_update_project.Designer.cs" />
-    <Compile Remove="Migrations\20220216015258_add_teamId_to_project.cs" />
-    <Compile Remove="Migrations\20220216015258_add_teamId_to_project.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -36,10 +27,11 @@
     <PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Data.Contracts" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="MASA.Contrib.Dispatcher.Events" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />   
     <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
+    <PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.ReadWriteSplitting.CQRS" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="MASA.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
@@ -50,23 +42,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="MASA.Contrib.Data.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
     <PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="MASA.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />    
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MASA.PM.Infrastructure.Domain\MASA.PM.Infrastructure.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MASA.PM.Infrastructure.EFCore.PostgreSql\MASA.PM.Infrastructure.EFCore.PostgreSql.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\MASA.PM.Infrastructure.EFCore.SqlServer\MASA.PM.Infrastructure.EFCore.SqlServer.csproj" />
   </ItemGroup>
 
   <ProjectExtensions>
