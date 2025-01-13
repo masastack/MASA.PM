@@ -27,7 +27,7 @@ public interface IAppRepository
 
     Task<List<(int ProjectId, App App, EnvironmentClusterProjectApp EnvironmentClusterProjectApp)>> GetAppByEnvNameAndProjectIdsAsync(string envName, IEnumerable<int> projectIds);
 
-    Task UpdateAsync(App app);
+    Task UpdateAsync(App app,List<Guid> users);
 
     Task RemoveAsync(int Id);
 

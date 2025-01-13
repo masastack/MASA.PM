@@ -72,21 +72,8 @@ internal class AppCommandHandler
         }
 
         appEntity.Name = appModel.Name;
-        appEntity.Description = appModel.Description;
-
-        if (appEntity.ResponsibilityUsers != null)
-        {
-            appEntity.ResponsibilityUsers.RemoveAll(r => !appModel.ResponsibilityUsers.Contains(r.UserId));
-            appEntity.ResponsibilityUsers.AddRange(appModel.ResponsibilityUsers
-                .Where(userId => !appEntity.ResponsibilityUsers.Select(r => r.UserId).Contains(userId))
-                .Select(userId => new AppResponsibilityUser { UserId = userId, AppId = appEntity.Id }));
-        }
-        else
-        {
-            appEntity.ResponsibilityUsers = appModel.ResponsibilityUsers.Select(userId => new AppResponsibilityUser { UserId = userId, AppId = appEntity.Id }).ToList();
-        }
-
-        await _appRepository.UpdateAsync(appEntity);
+        appEntity.Description = appModel.Description; 
+        await _appRepository.UpdateAsync(appEntity,appModel.ResponsibilityUsers);
 
         var envClusterProjectApps = await _appRepository.GetEnvironmentClusterProjectAppsByAppId(appModel.Id);
         await _appRepository.RemoveEnvironmentClusterProjectApps(envClusterProjectApps);

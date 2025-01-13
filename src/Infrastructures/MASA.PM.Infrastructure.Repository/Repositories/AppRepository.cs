@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.PM.Contracts.Admin.Model;
+
 namespace MASA.PM.Infrastructure.Repository.Repositories;
 
 internal class AppRepository : IAppRepository
@@ -150,10 +152,29 @@ internal class AppRepository : IAppRepository
         return result;
     }
 
-    public async Task UpdateAsync(App app)
+    public async Task UpdateAsync(App app, List<Guid> userIds)
     {
         _dbContext.Apps.Update(app);
-
+        if (app.ResponsibilityUsers != null)
+        {
+            if (userIds == null || !userIds.Any())
+                app.ResponsibilityUsers.Clear();
+            else
+            {
+                app.ResponsibilityUsers.RemoveAll(r => !userIds.Contains(r.UserId));
+                foreach (var userId in userIds)
+                {
+                    if (!app.ResponsibilityUsers.Any(r => r.UserId == userId))
+                    {
+                        app.ResponsibilityUsers.Add(new AppResponsibilityUser { UserId = userId, AppId = app.Id });
+                    }
+                }
+            }
+        }
+        else if (userIds != null && userIds.Any())
+        {
+            app.ResponsibilityUsers = userIds.Select(userId => new AppResponsibilityUser { UserId = userId, AppId = app.Id }).ToList();
+        }
         await _dbContext.SaveChangesAsync();
     }
 
