@@ -40,6 +40,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _showProcess = false;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+        private Dictionary<int, List<UserModel>> appUsers = new();
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            _users = new();
+        }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -63,11 +70,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     _showProcess = false;
                 }
             }
-        }
-
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            return base.SetParametersAsync(parameters);
         }
 
         public async Task ShowProjectModalAsync(ProjectDetailDto? model = null)
@@ -109,14 +111,26 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
             }
 
-            _projects.ForEach(async project =>
+            var userIds = new List<Guid>();
+            foreach (var project in _projects)
             {
                 project.ModifierName = (await GetUserAsync(project.Modifier)).RealDisplayName;
-            });
+            }
 
             _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
+            foreach (var app in _apps)
+            {
+                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
+                    userIds.AddRange(app.ResponsibilityUserIds);
+            }
+            await LoadUsersAsync(userIds.Distinct().ToArray());
+            appUsers.Clear();
+            foreach (var app in _apps)
+            {
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
         }
 
         private async Task UpdateProjectAsync(int projectId)
@@ -155,6 +169,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
+                ResponsibilityUsers = _appDetail.ResponsibilityUserIds!,
                 EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster =>
                 {
                     return new EnvironmentClusterInfo(envCluster.Id, envCluster.AppURL, envCluster.AppSwaggerURL);
@@ -198,6 +213,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task HandleProjectNameClick(int projectId)
         {
             await OnNameClick.InvokeAsync(projectId);
+        }
+
+        private List<UserModel>? GetAppUsers(List<Guid>? userIds)
+        {
+            if (userIds == null || userIds.Count == 0) return default;
+            if (_users == null || _users.Count == 0) return default;
+            var result = new List<UserModel>();
+            foreach (var userId in userIds)
+            {
+                if (_users.ContainsKey(userId))
+                    result.Add(_users[userId]);
+            }
+            return result;
         }
     }
 }

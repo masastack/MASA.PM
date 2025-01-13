@@ -5,10 +5,24 @@ namespace MASA.PM.Web.Admin;
 
 public abstract class PmComponentBase : Masa.Stack.Components.MasaComponentBase
 {
+    protected Dictionary<Guid, UserModel> _users = null;
+
     public async Task<UserModel> GetUserAsync(Guid userId)
     {
+        if (_users == null) return new();
+        if (_users.ContainsKey(userId))
+            return _users[userId];
         var user = await AuthClient.UserService.GetByIdAsync(userId);
-        return user ?? new();
+        _users[userId] = user ?? new();
+        return _users[userId];
+    }
+
+    protected async Task LoadUsersAsync(params Guid[] userIds)
+    {
+        foreach (var userId in userIds)
+        {
+            await GetUserAsync(userId);
+        }
     }
 }
 

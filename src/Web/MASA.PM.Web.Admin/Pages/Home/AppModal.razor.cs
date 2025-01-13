@@ -33,6 +33,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _appFormModel.Data = new();
             var allEnvClusters = await ClusterCaller.GetEnvironmentClusters();
             var projectDetail = await ProjectCaller.GetAsync(ProjectId);
+
             _projectEnvClusters = allEnvClusters.Where(envCluster => projectDetail.EnvironmentClusterIds.Contains(envCluster.Id)).ToList();
 
             _appFormModel.Data.ProjectId = ProjectId;

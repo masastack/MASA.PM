@@ -23,6 +23,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string SwaggerUrl { get; set; } = "";
 
+        public List<Guid>? ResponsibilityUserIds { get; set; } = new();
+
         public List<EnvironmentClusterDto> EnvironmentClusters { get; set; } = new();
     }
 }

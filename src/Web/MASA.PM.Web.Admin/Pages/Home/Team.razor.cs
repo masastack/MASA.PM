@@ -45,10 +45,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectList? _projectListComponent;
         private Guid _teamId;
         private TeamDetailModel _teamDetail = new();
+        private Dictionary<int, List<UserModel>> appUsers = new();
 
         protected override Task OnInitializedAsync()
         {
             GlobalConfig.OnCurrentTeamChanged += HandleCurrentTeamChanged;
+            _users = new();
             return base.OnInitializedAsync();
         }
 
@@ -177,12 +179,23 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync()
         {
             _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
-            _projectApps.ForEach(async app =>
+            var userIds = new List<Guid>();
+            foreach (var app in _projectApps)
             {
                 app.ModifierName = (await GetUserAsync(app.Modifier)).RealDisplayName;
-            });
+            }
             _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
-
+            foreach (var app in _projectApps)
+            {
+                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
+                    userIds.AddRange(app.ResponsibilityUserIds);
+            }
+            await LoadUsersAsync(userIds.Distinct().ToArray());
+            appUsers.Clear();
+            foreach (var app in _projectApps)
+            {
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
             return _projectApps;
         }
 
@@ -214,6 +227,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
+                ResponsibilityUsers = _appDetail.ResponsibilityUserIds!,
                 EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster => new EnvironmentClusterInfo(envCluster.Id, envCluster.AppURL, envCluster.AppSwaggerURL)).ToList()
             });
         }
@@ -226,6 +240,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await _appModal.InitDataAsync(model);
             }
         }
+        private List<UserModel>? GetAppUsers(List<Guid>? userIds)
+        {
+            if (userIds == null || userIds.Count == 0) return default;
+            if (_users == null || _users.Count == 0) return default;
+            var result = new List<UserModel>();
+            foreach (var userId in userIds)
+            {
+                if (_users.ContainsKey(userId))
+                    result.Add(_users[userId]);
+            }
+            return result;
+        }
+
 
         public void Dispose()
         {

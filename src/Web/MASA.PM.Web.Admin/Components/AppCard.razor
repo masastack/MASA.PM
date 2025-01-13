@@ -1,15 +1,41 @@
 ﻿<MHover Context="hoverContext" Class="d-flex flex-column">
     <MCard Ripple=false OnClick="OnClick" Outlined MinHeight="Height" @attributes="hoverContext.Attrs" Elevation="@(hoverContext.Hover ? 6 : 0)" Style="@Style">
-        <MCardTitle Style="font-size: medium; flex-wrap:nowrap;">
+        <MCardTitle Style="font-size: medium; flex-wrap:nowrap;padding-top:8px !important;">
             <div class="emphasis2--text h7 text-overflow" style="max-width: 290px;">@App.Name</div>
             <MSpacer />
             <div class="emphasis2--text h7 text-overflow">@App.Type</div>
         </MCardTitle>
         <MCardSubtitle>
             <div class="body2 regular3--text text-overflow">@App.Identity</div>
-            <div class="regular--text body text-overflow mt-4" >@App.Description</div>
+            <div class="regular--text body text-overflow">@App.Description</div>
+            <div class="avatar-list-stacked">
+                @{
+                    if (Users != null && Users.Count > 0)
+                    {
+                        var index = 1;
+                        var _showAdminAvatarCount = 3;
+                        foreach (var adminAvatar in Users)
+                        {
+                            if (index - _showAdminAvatarCount > 0)
+                            {
+                                <MAvatar Size="40" Class="fill-disabled primary--text">
+                                    +@(Users.Count - _showAdminAvatarCount)
+                                </MAvatar>
+                                break;
+                            }
+                            else
+                            {
+                                <MAvatar Size="40">
+                                    <MImage Width="40" Height="40" Src="@adminAvatar.Avatar" title="@adminAvatar.DisplayName"></MImage>
+                                </MAvatar>
+                            }
+                            index++;
+                        }
+                    }
+                }
+            </div>
         </MCardSubtitle>
-        <MCardActions Style="position:absolute;bottom:0;left:0;right:0; padding-bottom:16px !important;">
+        <MCardActions Style="position:absolute;bottom:0;left:0;right:0; padding-bottom:8px !important;">
             <div class="d-flex flex-column" style="overflow:hidden; width:100%;">
                 <div class="mx-2 d-flex justify-space-between" style="white-space: nowrap;overflow: hidden;">
                     <div class="mr-3" style="overflow:hidden">
@@ -49,6 +75,9 @@
 
     [Parameter]
     public string EditInfo { get; set; } = "";
+
+    [Parameter]
+    public List<UserModel>? Users { get; set; }
 
     [Parameter]
     public string Style { get; set; } = "border: 1px solid #E2E7F4;border-radius: 12px !important;";

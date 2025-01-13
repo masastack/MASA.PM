@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.PM.Contracts.Admin.Model;
+
 namespace MASA.PM.Infrastructure.Repository.Repositories;
 
 internal class AppRepository : IAppRepository
@@ -15,7 +17,7 @@ internal class AppRepository : IAppRepository
 
     public async Task<App> AddAsync(App app)
     {
-        if (_dbContext.Apps.Any(e => e.Name == app.Name))
+        if (await _dbContext.Apps.AnyAsync(e => e.Name == app.Name))
         {
             throw new UserFriendlyException(_i18N.T("Application name already exists!"));
         }
@@ -34,7 +36,7 @@ internal class AppRepository : IAppRepository
 
     public async Task RemoveAsync(int Id)
     {
-        var app = _dbContext.Apps.FirstOrDefault(app => app.Id == Id);
+        var app = await GetAsync(Id);
         if (app != null)
         {
             _dbContext.Apps.Remove(app);
@@ -64,28 +66,28 @@ internal class AppRepository : IAppRepository
 
     public async Task<App> GetAsync(int Id)
     {
-        var app = await _dbContext.Apps.FindAsync(Id);
+        var app = await _dbContext.Apps.Include(b => b.ResponsibilityUsers).Where(x => x.Id == Id).FirstAsync();
 
         return app ?? throw new UserFriendlyException(_i18N.T("Application information does not exist!"));
     }
 
     public async Task<App> GetByIdenityAsync(string identity)
     {
-        var app = await _dbContext.Apps.FirstOrDefaultAsync(app => app.Identity == identity);
+        var app = await _dbContext.Apps.Include(b => b.ResponsibilityUsers).Where(app => app.Identity == identity).FirstOrDefaultAsync();
 
         return app ?? throw new UserFriendlyException(_i18N.T("Application information does not exist!"));
     }
 
     public async Task<List<App>> GetByAppTypesAsync(List<AppTypes> appTypes)
     {
-        var app = await _dbContext.Apps.Where(app => appTypes.Contains(app.Type)).ToListAsync();
+        var app = await _dbContext.Apps.Include(b => b.ResponsibilityUsers).Where(app => appTypes.Contains(app.Type)).ToListAsync();
 
         return app;
     }
 
     public async Task<List<App>> GetListAsync()
     {
-        var apps = await _dbContext.Apps.ToListAsync();
+        var apps = await _dbContext.Apps.Include(b => b.ResponsibilityUsers).ToListAsync();
 
         return apps;
     }
@@ -94,7 +96,7 @@ internal class AppRepository : IAppRepository
     {
         var result = await (from environmentClusterProject in _dbContext.EnvironmentClusterProjects.Where(project => projectIds.Contains(project.ProjectId))
                             join environmentClusterProjectApp in _dbContext.EnvironmentClusterProjectApps on environmentClusterProject.Id equals environmentClusterProjectApp.EnvironmentClusterProjectId
-                            join app in _dbContext.Apps on environmentClusterProjectApp.AppId equals app.Id
+                            join app in _dbContext.Apps.Include(x => x.ResponsibilityUsers) on environmentClusterProjectApp.AppId equals app.Id
                             select app)
                             .Distinct()
                             .ToListAsync();
@@ -142,7 +144,7 @@ internal class AppRepository : IAppRepository
                             join environmentClusterProject in _dbContext.EnvironmentClusterProjects.Where(project => projectIds.Contains(project.ProjectId)) on environmentClusterProjectApp.EnvironmentClusterProjectId equals environmentClusterProject.Id
                             join environmentCluster in _dbContext.EnvironmentClusters on environmentClusterProject.EnvironmentClusterId equals environmentCluster.Id
                             join environment in _dbContext.Environments.Where(env => env.Name == envName) on environmentCluster.EnvironmentId equals environment.Id
-                            join app in _dbContext.Apps on environmentClusterProjectApp.AppId equals app.Id
+                            join app in _dbContext.Apps.Include(x => x.ResponsibilityUsers) on environmentClusterProjectApp.AppId equals app.Id
                             select new ValueTuple<int, App, EnvironmentClusterProjectApp>
                             (environmentClusterProject.ProjectId, app, environmentClusterProjectApp))
                             .ToListAsync();
@@ -150,10 +152,29 @@ internal class AppRepository : IAppRepository
         return result;
     }
 
-    public async Task UpdateAsync(App app)
+    public async Task UpdateAsync(App app, List<Guid> userIds)
     {
         _dbContext.Apps.Update(app);
-
+        if (app.ResponsibilityUsers != null)
+        {
+            if (userIds == null || !userIds.Any())
+                app.ResponsibilityUsers.Clear();
+            else
+            {
+                app.ResponsibilityUsers.RemoveAll(r => !userIds.Contains(r.UserId));
+                foreach (var userId in userIds)
+                {
+                    if (!app.ResponsibilityUsers.Any(r => r.UserId == userId))
+                    {
+                        app.ResponsibilityUsers.Add(new AppResponsibilityUser { UserId = userId, AppId = app.Id });
+                    }
+                }
+            }
+        }
+        else if (userIds != null && userIds.Any())
+        {
+            app.ResponsibilityUsers = userIds.Select(userId => new AppResponsibilityUser { UserId = userId, AppId = app.Id }).ToList();
+        }
         await _dbContext.SaveChangesAsync();
     }
 
