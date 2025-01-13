@@ -28,6 +28,7 @@ internal class AppQueryHandler
             CreationTime = app.CreationTime,
             ModificationTime = app.ModificationTime,
             Modifier = app.Modifier,
+            ResponsibilityUserIds = app.ResponsibilityUsers?.Select(m => m.UserId).ToList()
         };
 
         if (query.IsHaveEnvironmentClusterInfo)
@@ -66,6 +67,7 @@ internal class AppQueryHandler
             CreationTime = app.CreationTime,
             ModificationTime = app.ModificationTime,
             Modifier = app.Modifier,
+            ResponsibilityUserIds = app.ResponsibilityUsers?.Select(m => m.UserId).ToList()
         };
     }
 
@@ -119,6 +121,7 @@ internal class AppQueryHandler
                 CreationTime = appEnvironmentCluster.app.CreationTime,
                 ModificationTime = appEnvironmentCluster.app.ModificationTime,
                 Modifier = appEnvironmentCluster.app.Modifier,
+                ResponsibilityUserIds = appEnvironmentCluster.app.ResponsibilityUsers?.Select(r => r.UserId).ToList(),
                 EnvironmentClusters = appEnvironmentCluster.environmentClusters.Select(envCluster => new EnvironmentClusterDto
                 {
                     Id = envCluster.EnvironmentCluster.Id,
@@ -134,20 +137,21 @@ internal class AppQueryHandler
         else
         {
             List<Shared.Entities.App> apps = await _appRepository.GetListAsync();
-            query.Result = apps.Select(app => new AppDto
-            {
-                Name = app.Name,
-                Description = app.Description,
-                Id = app.Id,
-                Identity = app.Identity,
-                Type = app.Type,
-                ServiceType = app.ServiceType,
-                Creator = app.Creator,
-                CreationTime = app.CreationTime,
-                ModificationTime = app.ModificationTime,
-                Modifier = app.Modifier
-            }).OrderByDescending(app => app.ModificationTime)
-            .ToList();
+            //query.Result = apps.Select(app => new AppDto
+            //{
+            //    Name = app.Name,
+            //    Description = app.Description,
+            //    Id = app.Id,
+            //    Identity = app.Identity,
+            //    Type = app.Type,
+            //    ServiceType = app.ServiceType,
+            //    Creator = app.Creator,
+            //    CreationTime = app.CreationTime,
+            //    ModificationTime = app.ModificationTime,
+            //    Modifier = app.Modifier,
+            //    ResponsibilityUserIds = app.ResponsibilityUsers?.Select(x => x.UserId).ToList()
+            //}).OrderByDescending(app => app.ModificationTime)
+            //.ToList();
 
             List<(EnvironmentClusterProjectApp EnvironmentClusterProjectApp,
                   int ProjectId,
@@ -193,6 +197,7 @@ internal class AppQueryHandler
                 CreationTime = appEnvironmentCluster.app.CreationTime,
                 ModificationTime = appEnvironmentCluster.app.ModificationTime,
                 Modifier = appEnvironmentCluster.app.Modifier,
+                ResponsibilityUserIds = appEnvironmentCluster.app.ResponsibilityUsers?.Select(x => x.UserId).ToList(),
                 EnvironmentClusters = appEnvironmentCluster.environmentClusters.Select(envCluster => new EnvironmentClusterDto
                 {
                     Id = envCluster.EnvironmentCluster.Id,
@@ -223,6 +228,7 @@ internal class AppQueryHandler
             CreationTime = app.CreationTime,
             ModificationTime = app.ModificationTime,
             Modifier = app.Modifier,
+            ResponsibilityUserIds = app.ResponsibilityUsers?.Select(m => m.UserId).ToList()
         }).ToList();
     }
 }

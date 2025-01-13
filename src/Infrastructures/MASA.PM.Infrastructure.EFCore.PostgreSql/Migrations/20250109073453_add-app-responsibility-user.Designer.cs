@@ -3,6 +3,7 @@ using System;
 using MASA.PM.Infrastructure.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MASA.PM.Infrastructure.EFCore.PostgreSql.Migrations
 {
     [DbContext(typeof(PmDbContext))]
-    partial class PmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250109073453_add-app-responsibility-user")]
+    partial class addappresponsibilityuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -25,7 +25,6 @@
                 {
                     <SSelect Class="mt-9"
                              @bind-Value="_appFormModel.Data.ServiceType"
-                             Disabled="@(_appFormModel.HasValue)"
                              HideDetails="true"
                              Items="EnumUtil.GetEnumList<ServiceTypes>()"
                              ItemText="r=>r.Name"
@@ -95,6 +94,7 @@
                         }
                     }
                 }
+                <StaffSelect Class="mt-9" Label="@T("ResponsibilityUsers")" @bind-Value="_appFormModel.Data.ResponsibilityUsers"></StaffSelect>
                 <MTextarea NoResize Class="mt-9" Height="121" Outlined Label="@T("Description")" @bind-Value="_appFormModel.Data.Description"></MTextarea>
                 @if (_appFormModel.HasValue)
                 {
@@ -117,9 +117,9 @@
             <div class="d-flex align-end mt-9" style="width:100%;">
                 @if (_appFormModel.HasValue)
                 {
-                   <SButton Icon Color="#FF5252" Depressed Class="delete-btn" OnClick="RemoveAppAsync">
-                       <SIcon Color="red">mdi-delete</SIcon>
-                   </SButton>
+                    <SButton Icon Color="#FF5252" Depressed Class="delete-btn" OnClick="RemoveAppAsync">
+                        <SIcon Color="red">mdi-delete</SIcon>
+                    </SButton>
                 }
                 <MSpacer></MSpacer>
                 <SButton Height="56" Class="rounded-pill" Color="primary" Width="140" OnClick="()=>SubmitAppAsync(formContext)">@(_appFormModel.HasValue ? T("Save") : T("Submit"))</SButton>

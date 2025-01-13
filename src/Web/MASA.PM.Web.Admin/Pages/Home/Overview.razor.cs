@@ -36,6 +36,12 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private MForm? _envForm;
         private MForm? _clusterForm;
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            _users = new();
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

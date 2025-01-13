@@ -9,7 +9,7 @@ ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 builder.Services.AddHttpContextAccessor();
-await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.PM);
+await builder.Services.AddMasaStackComponentsAsync(MasaStackProject.PM,authHost: "https://auth-service-sec-staging.masastack.com", mcHost: "https://mc-service-sec-staging.masastack.com", pmHost: "http://localhost:19401");
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);

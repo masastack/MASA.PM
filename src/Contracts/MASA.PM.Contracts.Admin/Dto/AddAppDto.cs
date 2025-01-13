@@ -32,6 +32,8 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         [StringLength(255, ErrorMessage = "App description length must be less than 255")]
         public string Description { get; set; } = "";
+
+        public List<Guid> ResponsibilityUsers { get; set; } = new();
     }
 
     public record EnvironmentClusterInfo

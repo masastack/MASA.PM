@@ -25,14 +25,20 @@ internal class AppCommandHandler
         await _appRepository.IsExistedApp(
             appModel.Name, appModel.Identity, envClusterProjects.Select(e => e.Id).ToList());
 
-        var app = await _appRepository.AddAsync(new Shared.Entities.App
+        var app = new Shared.Entities.App
         {
             Name = appModel.Name,
             Type = appModel.Type,
             ServiceType = appModel.ServiceType,
             Identity = appModel.Identity,
             Description = appModel.Description
-        });
+        };
+        app.ResponsibilityUsers = appModel.ResponsibilityUsers.Select(u => new AppResponsibilityUser
+        {
+            AppId = app.Id,
+            UserId = u
+        }).ToList();
+        app = await _appRepository.AddAsync(app);
 
         List<EnvironmentClusterProjectApp> environmentClusterProjectApps = new();
         foreach (var envClusterProject in envClusterProjects)
@@ -67,6 +73,18 @@ internal class AppCommandHandler
 
         appEntity.Name = appModel.Name;
         appEntity.Description = appModel.Description;
+
+        if (appEntity.ResponsibilityUsers != null)
+        {
+            appEntity.ResponsibilityUsers.RemoveAll(r => !appModel.ResponsibilityUsers.Contains(r.UserId));
+            appEntity.ResponsibilityUsers.AddRange(appModel.ResponsibilityUsers
+                .Where(userId => !appEntity.ResponsibilityUsers.Select(r => r.UserId).Contains(userId))
+                .Select(userId => new AppResponsibilityUser { UserId = userId, AppId = appEntity.Id }));
+        }
+        else
+        {
+            appEntity.ResponsibilityUsers = appModel.ResponsibilityUsers.Select(userId => new AppResponsibilityUser { UserId = userId, AppId = appEntity.Id }).ToList();
+        }
 
         await _appRepository.UpdateAsync(appEntity);
 

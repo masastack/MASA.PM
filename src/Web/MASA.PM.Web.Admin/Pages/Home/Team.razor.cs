@@ -49,6 +49,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         protected override Task OnInitializedAsync()
         {
             GlobalConfig.OnCurrentTeamChanged += HandleCurrentTeamChanged;
+            _users = new();
             return base.OnInitializedAsync();
         }
 
@@ -214,6 +215,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 Identity = _appDetail.Identity,
                 Name = _appDetail.Name,
                 Description = _appDetail.Description,
+                ResponsibilityUsers = _appDetail.ResponsibilityUserIds!,
                 EnvironmentClusterInfos = _appDetail.EnvironmentClusters.Select(envCluster => new EnvironmentClusterInfo(envCluster.Id, envCluster.AppURL, envCluster.AppSwaggerURL)).ToList()
             });
         }
@@ -226,6 +228,19 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await _appModal.InitDataAsync(model);
             }
         }
+        private List<UserModel>? GetAppUsers(List<Guid>? userIds)
+        {
+            if (userIds == null || userIds.Count == 0) return default;
+            if (_users == null || _users.Count == 0) return default;
+            var result = new List<UserModel>();
+            foreach (var userId in userIds)
+            {
+                if (_users.ContainsKey(userId))
+                    result.Add(_users[userId]);
+            }
+            return result;
+        }
+
 
         public void Dispose()
         {

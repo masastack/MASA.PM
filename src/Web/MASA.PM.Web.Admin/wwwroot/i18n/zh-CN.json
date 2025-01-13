@@ -88,6 +88,7 @@
   "Simulation environment": "模拟环境",
   "Production environment": "生产环境",
   "Initialization completed!": "初始化完成!",
+  "ResponsibilityUsers": "维护者",
   "docs-new-file": "新建文档",
   "docs-new-dir-file": "新建文档到{0}",
   "docs-file-edit": "编辑 \"{0}\"",
