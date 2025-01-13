@@ -126,6 +126,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     userIds.AddRange(app.ResponsibilityUserIds);
             }
             await LoadUsersAsync(userIds.Distinct().ToArray());
+            appUsers.Clear();
             foreach (var app in _apps)
             {
                 appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
