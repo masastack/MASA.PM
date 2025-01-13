@@ -16,16 +16,18 @@
                         var _showAdminAvatarCount = 3;
                         foreach (var adminAvatar in Users)
                         {
-                            <MAvatar Size="40">
-                                <MImage Width="40" Height="40" Src="@adminAvatar.Avatar" title="@adminAvatar.DisplayName"></MImage>
-                            </MAvatar>
-
                             if (index - _showAdminAvatarCount > 0)
                             {
                                 <MAvatar Size="40" Class="fill-disabled primary--text">
                                     +@(Users.Count - _showAdminAvatarCount)
                                 </MAvatar>
                                 break;
+                            }
+                            else
+                            {
+                                <MAvatar Size="40">
+                                    <MImage Width="40" Height="40" Src="@adminAvatar.Avatar" title="@adminAvatar.DisplayName"></MImage>
+                                </MAvatar>
                             }
                             index++;
                         }

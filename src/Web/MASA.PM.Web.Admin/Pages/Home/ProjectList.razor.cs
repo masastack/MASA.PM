@@ -40,6 +40,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _showProcess = false;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
+        private Dictionary<int, List<UserModel>> appUsers = new();
 
         protected override void OnInitialized()
         {
@@ -125,6 +126,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
                     userIds.AddRange(app.ResponsibilityUserIds);
             }
             await LoadUsersAsync(userIds.Distinct().ToArray());
+            foreach (var app in _apps)
+            {
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
         }
 
         private async Task UpdateProjectAsync(int projectId)

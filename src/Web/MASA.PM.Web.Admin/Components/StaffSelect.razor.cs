@@ -81,17 +81,7 @@ public partial class StaffSelect
             }
         }
         Staffs = data;
-        StateHasChanged();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender)
-        {
-
-        }
-    }
+    }   
 
     protected override void OnParametersSet()
     {

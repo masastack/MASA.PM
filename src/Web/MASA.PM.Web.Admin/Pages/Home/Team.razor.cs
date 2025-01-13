@@ -45,6 +45,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private ProjectList? _projectListComponent;
         private Guid _teamId;
         private TeamDetailModel _teamDetail = new();
+        private Dictionary<int, List<UserModel>> appUsers = new();
 
         protected override Task OnInitializedAsync()
         {
@@ -178,12 +179,22 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync()
         {
             _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
-            _projectApps.ForEach(async app =>
+            var userIds = new List<Guid>();
+            foreach (var app in _projectApps)
             {
                 app.ModifierName = (await GetUserAsync(app.Modifier)).RealDisplayName;
-            });
+            }
             _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
-
+            foreach (var app in _projectApps)
+            {
+                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
+                    userIds.AddRange(app.ResponsibilityUserIds);
+            }
+            await LoadUsersAsync(userIds.Distinct().ToArray());
+            foreach (var app in _projectApps)
+            {
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
             return _projectApps;
         }
 
