@@ -6,7 +6,7 @@ global using System.Security.Cryptography.X509Certificates;
 global using System.Text.RegularExpressions;
 global using FluentValidation;
 global using FluentValidation.Resources;
-global using Force.DeepCloner;
+global using DeepCloner.Core;
 global using Masa.Blazor;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;

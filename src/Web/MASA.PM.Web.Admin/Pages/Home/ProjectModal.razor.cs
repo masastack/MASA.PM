@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace MASA.PM.Web.Admin.Pages.Home
 {
@@ -133,7 +133,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
         private async Task SubmitProjectAsync(FormContext context)
         {
-            await Console.Out.WriteLineAsync($"Data：{JsonConvert.SerializeObject(_projectFormModel)}");
+            await Console.Out.WriteLineAsync($"Data：{JsonSerializer.Serialize(_projectFormModel)}");
             await Console.Out.WriteLineAsync($"Validate：{context.Validate()}");
 
             if (context.Validate())
