@@ -15,7 +15,7 @@ public class EnvironmentClusterProjectApp : Entity<int>
     [Range(1, int.MaxValue, ErrorMessage = "App is required")]
     public int AppId { get; set; }
 
-    [Comment("App URL")]   
+    [Comment("App URL")]
     [StringLength(255, MinimumLength = 0, ErrorMessage = "URL length range is [0-255]")]
     public string AppURL { get; set; } = "";
 

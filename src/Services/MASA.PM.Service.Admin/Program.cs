@@ -102,6 +102,7 @@ builder.Services
     .AddDccClient(redisOptions);
 
 var app = builder.Services
+#if DEBUG
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(options =>
@@ -130,6 +131,7 @@ var app = builder.Services
             }
         });
     })
+#endif
     .AddDomainEventBus(options =>
     {
         var connStr = masaStackConfig.GetConnectionString(MasaStackProject.PM.Name);
@@ -153,9 +155,10 @@ await builder.SeedDataAsync(masaStackConfig);
 app.UseMasaExceptionHandler();
 
 // Configure the HTTP request pipeline.
-
+#if DEBUG
 app.UseSwagger();
 app.UseSwaggerUI();
+#endif
 
 app.UseRouting();
 app.UseAuthentication();
