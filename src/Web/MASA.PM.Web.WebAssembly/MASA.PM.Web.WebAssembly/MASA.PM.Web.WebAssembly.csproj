@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\MASA.PM.Web.Rcl\MASA.PM.Web.Rcl.csproj" />
+  </ItemGroup>
+
 </Project>

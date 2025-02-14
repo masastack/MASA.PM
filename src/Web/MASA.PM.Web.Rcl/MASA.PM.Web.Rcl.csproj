@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>   
     <Nullable>enable</Nullable>
@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiGateways\Caller\MASA.PM.Caller\MASA.PM.Caller.csproj" />
-    <ProjectReference Include="..\..\Contracts\MASA.PM.Contracts.Admin\MASA.PM.Contracts.Admin.csproj" />
     <ProjectReference Include="..\MASA.PM.Web.Docs\MASA.PM.Web.Docs.csproj" />
   </ItemGroup>
 

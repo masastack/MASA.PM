@@ -7,7 +7,7 @@
 
 	<ItemGroup>
     <PackageReference Include="Masa.Contrib.Service.Caller.HttpClient" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageReference Include="Masa.Contrib.StackSdks.Caller.Wasm" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Configuration.Json" Version="$(MasaFrameworkPackageVersion)" />
 	</ItemGroup>
 

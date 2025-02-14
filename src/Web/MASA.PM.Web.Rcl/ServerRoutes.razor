@@ -1,4 +1,4 @@
-﻿@using MASA.PM.Web.Docs.Pages
+﻿@* @using MASA.PM.Web.Docs.Pages
 @inject TokenProvider TokenProvider
 
 <CascadingAuthenticationState>
@@ -27,4 +27,4 @@
         TokenProvider.IdToken = InitialState.IdToken;
         return base.OnInitializedAsync();
     }
-}
+} *@

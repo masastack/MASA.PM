@@ -1,0 +1,22 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(WasmRoutes).Assembly"
+            AdditionalAssemblies='new []{ Assembly.Load("Masa.Stack.Components")}' OnNavigateAsync="OnNavigateAsync">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <MApp>
+                <NotFound />
+            </MApp>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    private async Task OnNavigateAsync(NavigationContext args)
+    {
+        //ApmComponentBase.CurrentUrl = args.Path;
+        await Task.CompletedTask;
+    }
+}

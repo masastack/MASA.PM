@@ -22,6 +22,6 @@ global using MASA.PM.Web.Rcl.Data.Base;
 global using MASA.PM.Web.Rcl.Model;
 global using MASA.PM.Web.Docs;
 global using Microsoft.AspNetCore.Components;
-global using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-global using Microsoft.IdentityModel.Logging;
+//global using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+//global using Microsoft.IdentityModel.Logging;
 global using Masa.Stack.Components;
