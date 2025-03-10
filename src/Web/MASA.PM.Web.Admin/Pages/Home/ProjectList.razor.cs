@@ -129,6 +129,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
             appUsers.Clear();
             foreach (var app in _apps)
             {
+                if (appUsers.ContainsKey(app.Id)) continue;
                 appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
             }
         }
