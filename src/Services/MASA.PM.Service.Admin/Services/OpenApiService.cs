@@ -3,6 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Services;
 
+[Authorize]
 internal class OpenApiService : ServiceBase
 {
     public OpenApiService()

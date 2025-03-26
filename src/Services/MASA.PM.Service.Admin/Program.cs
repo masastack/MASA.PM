@@ -3,6 +3,8 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+var constr = builder.Configuration.GetConnectionString("DefaultConnection");
+
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 

@@ -3,6 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Services;
 
+[Authorize]
 internal class EnvironmentService : ServiceBase
 {
     public EnvironmentService()
@@ -30,6 +31,7 @@ internal class EnvironmentService : ServiceBase
         return command.Result;
     }
 
+    [AllowAnonymous]
     public async Task<List<EnvironmentDto>> GetList(IEventBus eventBus)
     {
         var query = new EnvironmentsQuery();

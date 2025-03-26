@@ -3,6 +3,7 @@
 
 namespace MASA.PM.Service.Admin.Services;
 
+[Authorize]
 public class ProjectService : ServiceBase
 {
     public ProjectService()
