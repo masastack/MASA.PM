@@ -3,19 +3,18 @@
 
 namespace MASA.PM.Service.Admin.Services;
 
-[Authorize]
 internal class AppService : ServiceBase
 {
     public AppService()
     {
         RouteOptions.DisableAutoMapRoute = true;
-        App.MapPost("/api/v1/app", AddAsync);
-        App.MapGet("/api/v1/app", GetListAsync);
-        App.MapPost("/api/v1/projects/app", GetListByProjectIdsAsync);
-        App.MapGet("/api/v1/app/{Id}", GetAsync);
-        App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync);
-        App.MapPut("/api/v1/app", UpdateAsync);
-        App.MapDelete("/api/v1/app/{id}", RemoveAsync);
+        App.MapPost("/api/v1/app", AddAsync).RequireAuthorization();
+        App.MapGet("/api/v1/app", GetListAsync).RequireAuthorization();
+        App.MapPost("/api/v1/projects/app", GetListByProjectIdsAsync).RequireAuthorization();
+        App.MapGet("/api/v1/app/{Id}", GetAsync).RequireAuthorization();
+        App.MapGet("/api/v1/appWhitEnvCluster/{Id}", GetWithEnvironmentClusterAsync).RequireAuthorization();
+        App.MapPut("/api/v1/app", UpdateAsync).RequireAuthorization();
+        App.MapDelete("/api/v1/app/{id}", RemoveAsync).RequireAuthorization();
     }
 
     public async Task AddAsync(IEventBus eventBus, AddAppDto model)
