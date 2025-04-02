@@ -8,12 +8,12 @@ internal class EnvironmentService : ServiceBase
     public EnvironmentService()
     {
         RouteOptions.DisableAutoMapRoute = true;
-        App.MapPost("/api/v1/env/init", InitAsync);
-        App.MapPost("/api/v1/env", AddAsync);
-        App.MapGet("api/v1/env", GetList);
-        App.MapGet("api/v1/env/{Id}", GetAsync);
-        App.MapPut("/api/v1/env", UpdateAsync);
-        App.MapDelete("/api/v1/env", RemoveAsync);
+        App.MapPost("/api/v1/env/init", InitAsync).RequireAuthorization();
+        App.MapPost("/api/v1/env", AddAsync).RequireAuthorization();
+        App.MapGet("api/v1/env", GetList).RequireAuthorization();
+        App.MapGet("api/v1/env/{Id}", GetAsync).RequireAuthorization();
+        App.MapPut("/api/v1/env", UpdateAsync).RequireAuthorization();
+        App.MapDelete("/api/v1/env", RemoveAsync).RequireAuthorization();
     }
 
     public async Task InitAsync(IEventBus eventBus, InitDto model)

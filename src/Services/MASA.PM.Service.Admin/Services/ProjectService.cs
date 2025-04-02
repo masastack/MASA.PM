@@ -3,20 +3,21 @@
 
 namespace MASA.PM.Service.Admin.Services;
 
+[Authorize]
 public class ProjectService : ServiceBase
 {
     public ProjectService()
     {
         RouteOptions.DisableAutoMapRoute = true;
-        App.MapPost("/api/v1/project", AddAsync);
-        App.MapGet("/api/v1/projects", GetListAsync);
-        App.MapPost("/api/v1/project/teamProjects", GetListByTeamIds);
-        App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId);
-        App.MapGet("/api/v1/project/{Id}", GetAsync);
-        App.MapGet("/api/v1/project/projectType", GetProjectTypes);
-        App.MapGet("/api/v1/project/isExistProjectInCluster/{ClusterId}", IsExistProjectInCluster);
-        App.MapPut("/api/v1/project", UpdateAsync);
-        App.MapDelete("/api/v1/project", RemoveAsync);
+        App.MapPost("/api/v1/project", AddAsync).RequireAuthorization();
+        App.MapGet("/api/v1/projects", GetListAsync).RequireAuthorization();
+        App.MapPost("/api/v1/project/teamProjects", GetListByTeamIds).RequireAuthorization();
+        App.MapGet("/api/v1/{environmentClusterId}/project", GetListByEnvironmentClusterId).RequireAuthorization();
+        App.MapGet("/api/v1/project/{Id}", GetAsync).RequireAuthorization();
+        App.MapGet("/api/v1/project/projectType", GetProjectTypes).RequireAuthorization();
+        App.MapGet("/api/v1/project/isExistProjectInCluster/{ClusterId}", IsExistProjectInCluster).RequireAuthorization();
+        App.MapPut("/api/v1/project", UpdateAsync).RequireAuthorization();
+        App.MapDelete("/api/v1/project", RemoveAsync).RequireAuthorization();
     }
 
     public async Task AddAsync(IEventBus eventBus, AddProjectDto model)

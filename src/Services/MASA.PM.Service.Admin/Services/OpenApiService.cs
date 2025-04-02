@@ -8,11 +8,11 @@ internal class OpenApiService : ServiceBase
     public OpenApiService()
     {
         RouteOptions.DisableAutoMapRoute = true;
-        App.MapGet("/open-api/project/{identity}", GetProjectByIdentityAsync);
-        App.MapGet("/open-api/app/{identity}", GetAppByIdentityAsync);
-        App.MapPost("/open-api/app/by-types", GetListByTypesAsync);
-        App.MapGet("/open-api/projectwithapps/{envName}", GetListByEnvName);
-        App.MapPost("/open-api/project/teamProjects/{environment}", GetListByTeamIds);
+        App.MapGet("/open-api/project/{identity}", GetProjectByIdentityAsync).RequireAuthorization();
+        App.MapGet("/open-api/app/{identity}", GetAppByIdentityAsync).RequireAuthorization();
+        App.MapPost("/open-api/app/by-types", GetListByTypesAsync).RequireAuthorization();
+        App.MapGet("/open-api/projectwithapps/{envName}", GetListByEnvName).RequireAuthorization();
+        App.MapPost("/open-api/project/teamProjects/{environment}", GetListByTeamIds).RequireAuthorization();
     }
 
     public async Task<ProjectDetailDto> GetProjectByIdentityAsync(IEventBus eventBus, string identity)
