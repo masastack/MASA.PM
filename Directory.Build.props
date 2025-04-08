@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <MasaFrameworkPackageVersion>1.2.0-preview.5</MasaFrameworkPackageVersion>
-    <MasaStackSdksPackageVersion>1.2.1-preview.15</MasaStackSdksPackageVersion>
+    <MasaFrameworkPackageVersion>1.2.0-preview.6</MasaFrameworkPackageVersion>
+    <MasaStackSdksPackageVersion>1.2.1-preview.25</MasaStackSdksPackageVersion>
     <TargetFramework>net8.0</TargetFramework>
     <DotnetVersion>8.0</DotnetVersion>
   </PropertyGroup>
