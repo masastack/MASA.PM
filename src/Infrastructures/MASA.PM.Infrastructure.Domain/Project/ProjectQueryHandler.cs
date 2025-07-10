@@ -171,14 +171,14 @@ public class ProjectQueryHandler
         var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
         var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
         projectTeams = projectTeams.Where(c => c.EnvironmentName.ToLower() == query.EnvName.ToLower()).ToList();
-
+        var projectTeamGroups = projectTeams?.GroupBy(p => p.ProjectId).ToList();
         var projectModels = projects.Select(
             project => new ProjectModel(
                 project.Id,
                 project.Identity,
                 project.Name,
                 project.LabelCode,
-                projectTeams?.Select(team => team.TeamId).ToList())
+                projectTeamGroups?.FirstOrDefault(p => project.Id == p.Key)?.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList() ?? [])
             ).ToList();
 
         projectModels.ForEach(project =>
