@@ -5,10 +5,12 @@ namespace MASA.PM.Contracts.Admin.Dto
 {
     public class EnvironmentProjectTeamDto
     {
-        public int ProjectId { get; set; }
+        //public int ProjectId { get; set; }
 
         public string EnvironmentName { get; set; } = "";
 
-        public Guid TeamId { get; set; }
+        public Guid TeamId { get { return TeamIds != null && TeamIds.Count > 0 ? TeamIds[0] : Guid.Empty; } }
+
+        public List<Guid>? TeamIds { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public string Description { get; set; } = "";
 
-        public List<Guid> TeamIds { get; set; } = default!;
+        //public List<Guid> TeamIds { get; set; } = default!;
 
         public List<EnvironmentProjectTeamDto> EnvironmentProjectTeams { get; set; } = new();
 

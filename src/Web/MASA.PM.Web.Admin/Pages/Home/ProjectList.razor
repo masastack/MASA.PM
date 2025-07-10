@@ -19,7 +19,7 @@
                                     @if (OnNameClick.HasDelegate)
                                     {
                                         <MHover Context="hoverContext">
-                                            <span @onclick:stopPropagation @onclick="()=>HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@(hoverContext.Hover ? "primary--text":"")">
+                                            <span @onclick:stopPropagation @onclick="() => HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@(hoverContext.Hover ? "primary--text" : "")">
                                                 @project.Name
                                             </span>
                                         </MHover>
@@ -58,7 +58,7 @@
                                 </div>
                                 <MSpacer />
                                 <div style="display:flex;align-items:center;">
-                                    <SButton Icon OnClickStopPropagation Class="mr-1" OnClick="()=>UpdateProjectAsync(project.Id)"><SIcon Size="20" Color="#485585">mdi-pencil</SIcon></SButton>
+                                    <SButton Icon OnClickStopPropagation Class="mr-1" OnClick="() => UpdateProjectAsync(project.Id)"><SIcon Size="20" Color="#485585">mdi-pencil</SIcon></SButton>
                                     <MDivider Vertical Style="height: 20px;margin: 7px 8px 0 8px;" />
                                 </div>
                             </span>
@@ -77,13 +77,13 @@
                                     foreach (var app in apps)
                                     {
                                         <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
-                                            <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="appUsers[app.Id]"></AppCard>
+                                            <AppCard OnClick="() => UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="appUsers[app.Id]"></AppCard>
                                         </MCol>
                                     }
                                     <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
                                         <MRow NoGutters>
                                             <MCol>
-                                                <SButton Color="" BorderRadiusClass="rounded-3" Height="162" OnClick="()=>ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px dashed #E9EDF7;">
+                                                <SButton Color="" BorderRadiusClass="rounded-3" Height="162" OnClick="() => ShowAppModalAsync(project.Id)" Tile Text Style="width: 100%; display: flex; justify-content: center; align-items: center; border: 2px dashed #E9EDF7;">
                                                     <SIcon Left IsDefaultToolTip="false">mdi-plus</SIcon><span class="emphasis--text">@T("Add App")</span>
                                                 </SButton>
                                             </MCol>
@@ -95,7 +95,7 @@
                                     foreach (var app in apps.Take(3))
                                     {
                                         <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
-                                            <AppCard OnClick="()=> UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="appUsers[app.Id]"></AppCard>
+                                            <AppCard OnClick="() => UpdateAppAsync(app)" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="appUsers[app.Id]"></AppCard>
                                         </MCol>
                                     }
                                 }
@@ -104,20 +104,27 @@
                         <div class="d-flex justify-space-between mt-3">
                             <div>
                                 @{
-                                    var teamId = project.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment && c.ProjectId == project.Id)?.TeamId;
-                                    var team = _allTeams.FirstOrDefault(team => team.Id == teamId);
-                                    if (team != null)
+                                    var teamIds = project.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment)?.TeamIds ?? new List<Guid>();
+                                    if (teamIds.Count > 0)
                                     {
-                                        <MTooltip Right>
-                                            <ActivatorContent>
-                                                <MAvatar Size="24" @attributes="@context.Attrs">
-                                                    <MImage Src="@team.Avatar"></MImage>
-                                                </MAvatar>
-                                            </ActivatorContent>
-                                            <ChildContent>
-                                                <span>@team.Name</span>
-                                            </ChildContent>
-                                        </MTooltip>
+                                        foreach (var teamId in teamIds)
+                                        {
+                                            if (teamId == Guid.Empty)
+                                                continue;
+                                            var team = _allTeams.FirstOrDefault(team => team.Id == teamId);
+                                            if (team == null) continue;
+
+                                            <MTooltip Right>
+                                                <ActivatorContent>
+                                                    <MAvatar Size="24" @attributes="@context.Attrs">
+                                                        <MImage Src="@team.Avatar"></MImage>
+                                                    </MAvatar>
+                                                </ActivatorContent>
+                                                <ChildContent>
+                                                    <span>@team.Name</span>
+                                                </ChildContent>
+                                            </MTooltip>
+                                        }
                                     }
                                 }
                             </div>
@@ -130,7 +137,7 @@
                                 <MHover Context="hoverContext">
                                     @{
                                         var mClass = $"{(hoverContext.Hover ? "primary--text" : "regular2--text")}";
-                                        <div @onclick="()=>HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@($"hover-pointer btn {mClass}")">
+                                        <div @onclick="() => HandleProjectNameClick(project.Id)" @attributes="hoverContext.Attrs" class="@($"hover-pointer btn {mClass}")">
                                             @T("More")
                                             <SIcon Class="@($"ml-1 {mClass}")" Size="18">mdi-chevron-right</SIcon>
                                         </div>

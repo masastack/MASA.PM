@@ -44,7 +44,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private AppModal? _appModal;
         private ProjectList? _projectListComponent;
         private Guid _teamId;
-        private TeamDetailModel _teamDetail = new();
+        private List<TeamDetailModel> _teams = new();
         private Dictionary<int, List<UserModel>> appUsers = new();
 
         protected override Task OnInitializedAsync()
@@ -126,10 +126,18 @@ namespace MASA.PM.Web.Admin.Pages.Home
             _userInfo = await GetUserAsync(_projectDetail.Creator);
             _projectDetail.CreatorName = _userInfo.RealDisplayName;
             _projectDetail.ModifierName = (await GetUserAsync(_projectDetail.Modifier)).RealDisplayName;
-
-            var teamId = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == MultiEnvironmentUserContext.Environment && c.ProjectId == _projectDetail.Id)?.TeamId ?? Guid.Empty;
-            _teamDetail = await AuthClient.TeamService.GetDetailAsync(teamId) ?? new();
-
+            await LoadResponsibilityUsersAsync();
+            var teamIds = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == MultiEnvironmentUserContext.Environment)?.TeamIds ?? [];
+            if (teamIds.Count > 0)
+            {
+                foreach (var teamId in teamIds)
+                {
+                    if (teamId == Guid.Empty) continue;
+                    var team = await AuthClient.TeamService.GetDetailAsync(teamId);
+                    if (team == null) continue;
+                    _teams.Add(team);
+                }
+            }
             return _projectDetail;
         }
 
@@ -179,24 +187,13 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync()
         {
             _projectApps = await AppCaller.GetListByProjectIdAsync(new List<int> { _selectProjectId });
-            var userIds = new List<Guid>();
+
             foreach (var app in _projectApps)
             {
                 app.ModifierName = (await GetUserAsync(app.Modifier)).RealDisplayName;
             }
             _backupProjectApps = new List<AppDto>(_projectApps.ToArray());
-            foreach (var app in _projectApps)
-            {
-                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
-                    userIds.AddRange(app.ResponsibilityUserIds);
-            }
-            await LoadUsersAsync(userIds.Distinct().ToArray());
-            appUsers.Clear();
-            foreach (var app in _projectApps)
-            {
-                if (appUsers.ContainsKey(app.Id)) continue;
-                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
-            }
+            await LoadResponsibilityUsersAsync();
             return _projectApps;
         }
 
@@ -241,6 +238,27 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 await _appModal.InitDataAsync(model);
             }
         }
+
+        private async Task LoadResponsibilityUsersAsync()
+        {
+            if (_projectApps == null || _projectApps.Count == 0)
+                return;
+            var userIds = new List<Guid>();
+            foreach (var app in _projectApps)
+            {
+                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
+                    userIds.AddRange(app.ResponsibilityUserIds);
+            }
+            await LoadUsersAsync(userIds.Distinct().ToArray());
+            appUsers.Clear();
+            foreach (var app in _projectApps)
+            {
+                if (appUsers.ContainsKey(app.Id))
+                    continue;
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
+        }
+
         private List<UserModel>? GetAppUsers(List<Guid>? userIds)
         {
             if (userIds == null || userIds.Count == 0) return default;

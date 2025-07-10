@@ -111,27 +111,11 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
             }
 
-            var userIds = new List<Guid>();
-            foreach (var project in _projects)
-            {
-                project.ModifierName = (await GetUserAsync(project.Modifier)).RealDisplayName;
-            }
-
             _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
-            foreach (var app in _apps)
-            {
-                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
-                    userIds.AddRange(app.ResponsibilityUserIds);
-            }
-            await LoadUsersAsync(userIds.Distinct().ToArray());
-            appUsers.Clear();
-            foreach (var app in _apps)
-            {
-                if (appUsers.ContainsKey(app.Id)) continue;
-                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
-            }
+
+            await LoadResponsibilityUsersAsync();
         }
 
         private async Task UpdateProjectAsync(int projectId)
@@ -190,7 +174,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int> projectIds)
         {
             _apps = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
-
+            await LoadResponsibilityUsersAsync();
             return _apps;
         }
 
@@ -214,6 +198,28 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task HandleProjectNameClick(int projectId)
         {
             await OnNameClick.InvokeAsync(projectId);
+        }
+
+        private async Task LoadResponsibilityUsersAsync()
+        {
+            var userIds = new List<Guid>();
+            if (_apps == null || _apps.Count == 0)
+                return;
+
+            foreach (var app in _apps)
+            {
+                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
+                    userIds.AddRange(app.ResponsibilityUserIds);
+            }
+
+            await LoadUsersAsync(userIds.Distinct().ToArray());
+            appUsers.Clear();
+            foreach (var app in _apps)
+            {
+                if (appUsers.ContainsKey(app.Id))
+                    continue;
+                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
+            }
         }
 
         private List<UserModel>? GetAppUsers(List<Guid>? userIds)
