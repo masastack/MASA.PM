@@ -34,7 +34,7 @@ public class ProjectQueryHandler
             EnvironmentProjectTeams = projectTeams.GroupBy(c => new { c.EnvironmentName, c.ProjectId }).Select(c => new EnvironmentProjectTeamDto
             {
                 EnvironmentName = c.Key.EnvironmentName,
-                TeamIds = c.Select(p => p.TeamId).ToList()
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList()
             }).ToList(),
             EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
             CreationTime = projectEntity.CreationTime,
@@ -60,7 +60,7 @@ public class ProjectQueryHandler
             EnvironmentProjectTeams = projectTeams.GroupBy(p => new { p.EnvironmentName, p.ProjectId }).Select(c => new EnvironmentProjectTeamDto
             {
                 EnvironmentName = c.Key.EnvironmentName,
-                TeamIds = c.Select(p => p.TeamId).ToList(),
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
             }).ToList(),
             EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
             CreationTime = projectEntity.CreationTime,
@@ -86,7 +86,7 @@ public class ProjectQueryHandler
                 EnvironmentProjectTeams = projectTeams?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
                 {
                     EnvironmentName = c.Key.EnvironmentName,
-                    TeamIds = c.Select(p => p.TeamId).ToList(),
+                    TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
                 }).ToList() ?? new(),
                 LabelCode = project.LabelCode,
                 LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
@@ -109,7 +109,7 @@ public class ProjectQueryHandler
                 EnvironmentProjectTeams = projectTeamGroups?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
                 {
                     EnvironmentName = c.Key.EnvironmentName,
-                    TeamIds = c.Select(p => p.TeamId).ToList(),
+                    TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
                 }).ToList() ?? new(),
                 LabelCode = project.LabelCode,
                 LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
@@ -141,7 +141,7 @@ public class ProjectQueryHandler
             EnvironmentProjectTeams = projectTeamGroups?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
             {
                 EnvironmentName = c.Key.EnvironmentName,
-                TeamIds = c.Select(p => p.TeamId).ToList(),
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
             }).ToList() ?? new(),
             LabelCode = project.LabelCode,
             LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",

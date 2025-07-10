@@ -21,7 +21,7 @@ namespace MASA.PM.Contracts.Admin.Dto
 
         public Guid Modifier { get; set; }
 
-        public string? ModifierName { get; set; }
+        public string? ModifierName { get; set; } = "";
 
         public DateTime ModificationTime { get; set; }
     }
