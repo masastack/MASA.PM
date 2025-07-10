@@ -40,7 +40,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private bool _showProcess = false;
         private ProjectModal? _projectModal;
         private AppModal? _appModal;
-        private Dictionary<int, List<UserModel>> appUsers = new();
+        private Dictionary<int, List<UserModel>> _appUsers = new();
 
         protected override void OnInitialized()
         {
@@ -111,27 +111,10 @@ namespace MASA.PM.Web.Admin.Pages.Home
                 _projects = await ProjectCaller.GetListByTeamIdsAsync(new List<Guid> { TeamId });
             }
 
-            var userIds = new List<Guid>();
-            foreach (var project in _projects)
-            {
-                project.ModifierName = (await GetUserAsync(project.Modifier)).RealDisplayName;
-            }
-
             _allTeams = await AuthClient.TeamService.GetAllAsync(Environment);
             _backupProjects = new List<ProjectDto>(_projects.ToArray());
             _apps = await AppCaller.GetListByProjectIdAsync(_projects.Select(p => p.Id).ToList());
-            foreach (var app in _apps)
-            {
-                if (app.ResponsibilityUserIds != null && app.ResponsibilityUserIds.Count > 0)
-                    userIds.AddRange(app.ResponsibilityUserIds);
-            }
-            await LoadUsersAsync(userIds.Distinct().ToArray());
-            appUsers.Clear();
-            foreach (var app in _apps)
-            {
-                if (appUsers.ContainsKey(app.Id)) continue;
-                appUsers.Add(app.Id, GetAppUsers(app.ResponsibilityUserIds)!);
-            }
+            _appUsers = await LoadResponsibilityUsersAsync(_apps);
         }
 
         private async Task UpdateProjectAsync(int projectId)
@@ -190,7 +173,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task<List<AppDto>> GetAppByProjectIdsAsync(IEnumerable<int> projectIds)
         {
             _apps = await AppCaller.GetListByProjectIdAsync(projectIds.ToList());
-
+            _appUsers = await LoadResponsibilityUsersAsync(_apps);
             return _apps;
         }
 
@@ -214,19 +197,6 @@ namespace MASA.PM.Web.Admin.Pages.Home
         private async Task HandleProjectNameClick(int projectId)
         {
             await OnNameClick.InvokeAsync(projectId);
-        }
-
-        private List<UserModel>? GetAppUsers(List<Guid>? userIds)
-        {
-            if (userIds == null || userIds.Count == 0) return default;
-            if (_users == null || _users.Count == 0) return default;
-            var result = new List<UserModel>();
-            foreach (var userId in userIds)
-            {
-                if (_users.ContainsKey(userId))
-                    result.Add(_users[userId]);
-            }
-            return result;
         }
     }
 }

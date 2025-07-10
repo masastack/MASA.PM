@@ -31,12 +31,10 @@ public class ProjectQueryHandler
             LabelCode = projectEntity.LabelCode,
             Name = projectEntity.Name,
             Description = projectEntity.Description,
-            TeamIds = projectTeams.Where(t => t.EnvironmentName == _environment).Select(t => t.TeamId).ToList(),
-            EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+            EnvironmentProjectTeams = projectTeams.GroupBy(c => new { c.EnvironmentName, c.ProjectId }).Select(c => new EnvironmentProjectTeamDto
             {
-                EnvironmentName = c.EnvironmentName,
-                TeamId = c.TeamId,
-                ProjectId = c.ProjectId
+                EnvironmentName = c.Key.EnvironmentName,
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList()
             }).ToList(),
             EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
             CreationTime = projectEntity.CreationTime,
@@ -59,11 +57,10 @@ public class ProjectQueryHandler
             LabelCode = projectEntity.LabelCode,
             Name = projectEntity.Name,
             Description = projectEntity.Description,
-            EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+            EnvironmentProjectTeams = projectTeams.GroupBy(p => new { p.EnvironmentName, p.ProjectId }).Select(c => new EnvironmentProjectTeamDto
             {
-                EnvironmentName = c.EnvironmentName,
-                TeamId = c.TeamId,
-                ProjectId = c.ProjectId
+                EnvironmentName = c.Key.EnvironmentName,
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
             }).ToList(),
             EnvironmentClusterIds = environmentCluster.Select(envCluster => envCluster.EnvironmentClusterId).ToList(),
             CreationTime = projectEntity.CreationTime,
@@ -80,18 +77,17 @@ public class ProjectQueryHandler
         if (query.EnvironmentClusterId.HasValue)
         {
             var projects = await _projectRepository.GetListByEnvironmentClusterIdAsync(query.EnvironmentClusterId.Value);
-            var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
+            var projectTeams = (await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id)))?.GroupBy(p => new { p.ProjectId, p.EnvironmentName }).ToList();
             query.Result = projects.Select(project => new ProjectDto
             {
                 Id = project.Id,
                 Identity = project.Identity,
                 Name = project.Name,
-                EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                EnvironmentProjectTeams = projectTeams?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
                 {
-                    EnvironmentName = c.EnvironmentName,
-                    TeamId = c.TeamId,
-                    ProjectId = c.ProjectId
-                }).ToList(),
+                    EnvironmentName = c.Key.EnvironmentName,
+                    TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
+                }).ToList() ?? new(),
                 LabelCode = project.LabelCode,
                 LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                 Description = project.Description,
@@ -104,17 +100,17 @@ public class ProjectQueryHandler
         else if (query.TeamIds != null && query.TeamIds.Any())
         {
             (List<Shared.Entities.Project> projects, List<EnvironmentProjectTeam> projectTeams) = await _projectRepository.GetListByTeamIdsAsync(query.TeamIds, query.Environment ?? _environment);
+            var projectTeamGroups = projectTeams?.GroupBy(p => new { p.ProjectId, p.EnvironmentName }).ToList();
             query.Result = projects.Select(project => new ProjectDto
             {
                 Id = project.Id,
                 Identity = project.Identity,
                 Name = project.Name,
-                EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+                EnvironmentProjectTeams = projectTeamGroups?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
                 {
-                    EnvironmentName = c.EnvironmentName,
-                    TeamId = c.TeamId,
-                    ProjectId = c.ProjectId
-                }).ToList(),
+                    EnvironmentName = c.Key.EnvironmentName,
+                    TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
+                }).ToList() ?? new(),
                 LabelCode = project.LabelCode,
                 LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
                 Description = project.Description,
@@ -136,18 +132,17 @@ public class ProjectQueryHandler
         var projectTypes = await _dccClient.LabelService.GetListByTypeCodeAsync("ProjectType");
         var projects = await _projectRepository.GetListAsync();
         var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
-
+        var projectTeamGroups = projectTeams?.GroupBy(p => new { p.ProjectId, p.EnvironmentName }).ToList();
         query.Result = projects.Select(project => new ProjectDto
         {
             Id = project.Id,
             Identity = project.Identity,
             Name = project.Name,
-            EnvironmentProjectTeams = projectTeams.Select(c => new EnvironmentProjectTeamDto
+            EnvironmentProjectTeams = projectTeamGroups?.Where(p => p.Key.ProjectId == project.Id).Select(c => new EnvironmentProjectTeamDto
             {
-                EnvironmentName = c.EnvironmentName,
-                TeamId = c.TeamId,
-                ProjectId = c.ProjectId
-            }).ToList(),
+                EnvironmentName = c.Key.EnvironmentName,
+                TeamIds = c.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList(),
+            }).ToList() ?? new(),
             LabelCode = project.LabelCode,
             LabelName = projectTypes.FirstOrDefault(label => label.Code == project.LabelCode)?.Name ?? "",
             Description = project.Description,
@@ -176,14 +171,14 @@ public class ProjectQueryHandler
         var apps = await _appRepository.GetAppByEnvNameAndProjectIdsAsync(query.EnvName, projects.Select(project => project.Id));
         var projectTeams = await _projectRepository.GetProjectTeamByProjectIds(projects.Select(c => c.Id));
         projectTeams = projectTeams.Where(c => c.EnvironmentName.ToLower() == query.EnvName.ToLower()).ToList();
-
-        List<ProjectModel> projectModels = projects.Select(
+        var projectTeamGroups = projectTeams?.GroupBy(p => p.ProjectId).ToList();
+        var projectModels = projects.Select(
             project => new ProjectModel(
                 project.Id,
                 project.Identity,
                 project.Name,
                 project.LabelCode,
-                projectTeams.FirstOrDefault(c => c.ProjectId == project.Id)?.TeamId ?? Guid.Empty)
+                projectTeamGroups?.FirstOrDefault(p => project.Id == p.Key)?.Where(p => p.TeamId != Guid.Empty).Select(p => p.TeamId).ToList() ?? [])
             ).ToList();
 
         projectModels.ForEach(project =>

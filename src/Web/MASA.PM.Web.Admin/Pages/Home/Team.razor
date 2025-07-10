@@ -3,7 +3,7 @@
 
 <PageTitle>@T("Team")</PageTitle>
 
-<MTabs Value="_curTab" ValueChanged="value=>TabItemChangedAsync(value)" SliderColor="transparent" class="pro-nav remover-ripple">
+<MTabs Value="_curTab" ValueChanged="value => TabItemChangedAsync(value)" SliderColor="transparent" class="pro-nav remover-ripple">
     <MTab class="text-capitalize pa-0">
         <ChildContent>
             <span class="mtab-tab-line mtab-tab-linear-primary"></span>
@@ -13,8 +13,8 @@
     </MTab>
     <MTab class="text-capitalize pa-0" Disabled="_teamDetailDisabled">
         <ChildContent>
-            <span class="mtab-tab-line @(_curTab.ToInt32()>0?"mtab-tab-linear-primary":"mtab-tab-linear-neutral")"></span>
-            <span class="rounded-circle mtab-tab-indicator @(_curTab.ToInt32()>0?"mtab-tab-indicator-primary":"mtab-tab-indicator-neutral")"></span>
+            <span class="mtab-tab-line @(_curTab.ToInt32() > 0 ? "mtab-tab-linear-primary" : "mtab-tab-linear-neutral")"></span>
+            <span class="rounded-circle mtab-tab-indicator @(_curTab.ToInt32() > 0 ? "mtab-tab-indicator-primary" : "mtab-tab-indicator-neutral")"></span>
             <span class="mtab-tab-title">@T("App")</span>
         </ChildContent>
     </MTab>
@@ -27,7 +27,7 @@
                 <div class="full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-3">
                         <SSearch @bind-Value="_projectName" BackgroundColor="white" Class="mr-6" MaxWidth="0" Height="40" Dense OnEnter="SearchProject" Placeholder="@T("Please enter the project name and press enter to query")" />
-                        <SButton BorderRadiusClass="rounded-lg" Class="m-btn-add-project" Ripple="false" Height="40" OnClick="()=>ShowProjectModalAsync()"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add Project")</SButton>
+                        <SButton BorderRadiusClass="rounded-lg" Class="m-btn-add-project" Ripple="false" Height="40" OnClick="() => ShowProjectModalAsync()"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add Project")</SButton>
                     </div>
                     <div style="overflow:hidden; height: calc(100vh - 244px); position: relative;">
                         <ProjectList @ref="_projectListComponent"
@@ -86,7 +86,7 @@
                     <div style="width:100%; overflow-x: hidden;" class="text-body2">
                         <MRow NoGutters Align="AlignTypes.Center" Justify="JustifyTypes.SpaceBetween">
                             <div class="emphasis--text h6 text-overflow" style="width: 85%;">@_projectDetail.Name</div>
-                            <SButton Icon OnClick="()=>UpdateProjectAsync(_selectProjectId,true)"><SIcon Color="#485585" Size="20">mdi-pencil</SIcon></SButton>
+                            <SButton Icon OnClick="() => UpdateProjectAsync(_selectProjectId, true)"><SIcon Color="#485585" Size="20">mdi-pencil</SIcon></SButton>
                         </MRow>
                         <MRow NoGutters Class="mt-4 regular--text body2">
                             @T("AppCount"): @_appCount
@@ -107,16 +107,19 @@
                             </MRow>
                             <MRow NoGutters Class="regular3--text btn mt-6">@T("Participate team")</MRow>
                             <MRow NoGutters Class="mt-4">
-                                <MTooltip Bottom>
-                                    <ActivatorContent>
-                                        <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
-                                            <MImage Height="24" Width="24" Src="@_teamDetail.Avatar"></MImage>
-                                        </MAvatar>
-                                    </ActivatorContent>
-                                    <ChildContent>
-                                        <span>@_teamDetail.Name</span>
-                                    </ChildContent>
-                                </MTooltip>
+                                @foreach (var team in _teams)
+                                {
+                                    <MTooltip Bottom>
+                                        <ActivatorContent>
+                                            <MAvatar @attributes="@context.Attrs" MinHeight="24" MinWidth="24" Height="24" Width="24" Class="mr-3">
+                                                <MImage Height="24" Width="24" Src="@team.Avatar"></MImage>
+                                            </MAvatar>
+                                        </ActivatorContent>
+                                        <ChildContent>
+                                            <span>@team.Name</span>
+                                        </ChildContent>
+                                    </MTooltip>
+                                }
                             </MRow>
                             <MRow NoGutters Class="regular3--text btn mt-6">@T("Environment/Cluster")</MRow>
                             <div style="display:flex; flex-direction:column;align-items:start">
@@ -140,23 +143,23 @@
                 <div class="pt-0 full-height" style="overflow: hidden;">
                     <div class="d-flex align-center mb-6">
                         <SSearch @bind-Value="_appName" BackgroundColor="white" Class="mx-6" MaxWidth="0" Height="40" Dense OnEnter="SearchApp" Placeholder="@T("Please enter the app name and press enter to query")" />
-                        <SButton Height="40" BorderRadiusClass="rounded-lg" OnClick="()=>ShowAppModalAsync(_projectDetail.Id)"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add App")</SButton>
+                        <SButton Height="40" BorderRadiusClass="rounded-lg" OnClick="() => ShowAppModalAsync(_projectDetail.Id)"><SIcon Class="mr-1" Small IsDefaultToolTip="false">mdi-plus </SIcon>@T("Add App")</SButton>
                     </div>
                     <div style="overflow:auto; height: calc(100vh - 256px);">
-                        @if(_projectApps.Any())
+                        @if (_projectApps.Any())
                         {
                             <MRow Class="mx-3">
                                 @foreach (var app in _projectApps)
                                 {
                                     <MCol Lg="4" Md="6" Sm="12" Class="m-card-wrap">
-                                        <AppCard Style="border:none;" OnClick="()=>UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.ModificationTime.Humanize(culture:I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="appUsers[app.Id]"></AppCard>
+                                        <AppCard Style="border:none;" OnClick="() => UpdateAppAsync(app)" ShowEditInfo EditInfo="@($"{app.ModifierName}  {T("Edit in")} {app.ModificationTime.Humanize(culture: I18n.Culture)}")" App="app" EnvironmentClusters="app.EnvironmentClusters" Users="_appUsers[app.Id]"></AppCard>
                                     </MCol>
                                 }
                             </MRow>
                         }
                         else
                         {
-                            <SEmptyPlaceholder Class="ml-5" Style="width: calc(100% - 20px);" />                                
+                            <SEmptyPlaceholder Class="ml-5" Style="width: calc(100% - 20px);" />
                         }
                     </div>
                 </div>

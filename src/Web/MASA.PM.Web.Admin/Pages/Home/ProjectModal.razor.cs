@@ -75,7 +75,7 @@ namespace MASA.PM.Web.Admin.Pages.Home
 
                 _projectDetail = projectDetailDto.DeepClone();
 
-                var teamIds = _projectDetail.EnvironmentProjectTeams.Where(c => c.EnvironmentName == Environment && c.ProjectId == _projectDetail.Id).Select(c => c.TeamId).ToList();
+                var teamIds = _projectDetail.EnvironmentProjectTeams.FirstOrDefault(c => c.EnvironmentName == Environment)?.TeamIds ?? new List<Guid>();
                 _projectFormModel.Show(new UpdateProjectDto
                 {
                     Identity = _projectDetail.Identity,

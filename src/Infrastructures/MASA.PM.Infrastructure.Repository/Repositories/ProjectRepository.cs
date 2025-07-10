@@ -50,12 +50,14 @@ internal class ProjectRepository : IProjectRepository
     public async Task<(List<Project>, List<EnvironmentProjectTeam>)> GetListByTeamIdsAsync(List<Guid> teamIds, string environment)
     {
         var projectTeams = (await _dbContext.EnvironmentProjectTeams
-            .Where(c => teamIds.Contains(c.TeamId) && environment.Equals(c.EnvironmentName))
+            .Where(c => environment.Equals(c.EnvironmentName))
             .ToListAsync())
             .DistinctBy(c => new { c.ProjectId, c.TeamId })
             .ToList();
 
-        var projects = await _dbContext.Projects.Where(project => projectTeams.Select(c => c.ProjectId).Contains(project.Id)).ToListAsync();
+        var projectIds = projectTeams.Where(p => teamIds.Contains(p.TeamId)).GroupBy(p => p.ProjectId).Select(p => p.Key).ToList();
+
+        var projects = await _dbContext.Projects.Where(project => projectIds.Contains(project.Id)).ToListAsync();
 
         return new ValueTuple<List<Project>, List<EnvironmentProjectTeam>>(projects, projectTeams);
     }

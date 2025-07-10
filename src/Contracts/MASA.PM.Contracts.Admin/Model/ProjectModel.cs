@@ -13,17 +13,25 @@ namespace MASA.PM.Contracts.Admin.Model
 
         public string LabelCode { get; set; }
 
-        public Guid TeamId { get; set; }
+        public Guid TeamId
+        {
+            get
+            {
+                return TeamIds != null && TeamIds.Count > 0 ? TeamIds[0] : Guid.Empty;
+            }
+        }
 
-        public List<AppModel> Apps { get; set; } = new();
+        public List<Guid>? TeamIds { get; set; }
 
-        public ProjectModel(int id, string identity, string name, string labelCode, Guid teamId)
+        public List<AppModel> Apps { get; set; } = [];
+
+        public ProjectModel(int id, string identity, string name, string labelCode, List<Guid>? teamIds)
         {
             Id = id;
             Identity = identity;
             Name = name;
             LabelCode = labelCode;
-            TeamId = teamId;
+            TeamIds = teamIds;
         }
     }
 }
