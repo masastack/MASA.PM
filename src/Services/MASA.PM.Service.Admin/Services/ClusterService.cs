@@ -9,7 +9,7 @@ internal class ClusterService : ServiceBase
     {
         RouteOptions.DisableAutoMapRoute = true;
         App.MapPost("/api/v1/cluster", AddAsync).RequireAuthorization();
-        App.MapGet("/api/v1/cluster", GetList).RequireAuthorization();
+        App.MapGet("/api/v1/cluster", GetList);
         App.MapGet("/api/v1/{envId}/cluster", GetListByEnvId).RequireAuthorization();
         App.MapGet("/api/v1/cluster/{Id}", GetAsync).RequireAuthorization();
         App.MapGet("/api/v1/envClusters", GetEnvironmentClusters).RequireAuthorization();
