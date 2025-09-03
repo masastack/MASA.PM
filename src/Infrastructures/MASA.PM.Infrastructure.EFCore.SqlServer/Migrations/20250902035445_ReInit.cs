@@ -1,15 +1,14 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
-// Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MASA.PM.Service.Admin.Migrations
+namespace MASA.PM.Infrastructure.EFCore.SqlServer.Migrations
 {
-    public partial class init : Migration
+    /// <inheritdoc />
+    public partial class ReInit : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -19,17 +18,15 @@ namespace MASA.PM.Service.Admin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name"),
-                    Identity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Identity"),
+                    Identity = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false, comment: "Identity"),
                     Type = table.Column<byte>(type: "tinyint", nullable: false, comment: "Type"),
                     ServiceType = table.Column<byte>(type: "tinyint", nullable: false, comment: "ServiceType"),
-                    Url = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Url"),
-                    SwaggerUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "SwaggerUrl"),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Description"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,11 +41,11 @@ namespace MASA.PM.Service.Admin.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name"),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Name"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +59,9 @@ namespace MASA.PM.Service.Admin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EnvironmentClusterProjectId = table.Column<int>(type: "int", nullable: false, comment: "Environment cluster project Id"),
-                    AppId = table.Column<int>(type: "int", nullable: false, comment: "App Id")
+                    AppId = table.Column<int>(type: "int", nullable: false, comment: "App Id"),
+                    AppURL = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, comment: "App URL"),
+                    AppSwaggerURL = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, comment: "Swagger URL")
                 },
                 constraints: table =>
                 {
@@ -98,6 +97,19 @@ namespace MASA.PM.Service.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EnvironmentProjectTeam",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    EnvironmentName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnvironmentProjectTeam", x => new { x.ProjectId, x.TeamId, x.EnvironmentName });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Environments",
                 columns: table => new
                 {
@@ -105,57 +117,16 @@ namespace MASA.PM.Service.Admin.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name"),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Description"),
-                    Color = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Color"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Color"),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Environments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IntegrationEventLog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    TimesSent = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RowVersion = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IntegrationEventLog", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Labels",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name"),
-                    TypeCode = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "TypeCode"),
-                    TypeName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "TypeName"),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Description"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Labels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,23 +136,48 @@ namespace MASA.PM.Service.Admin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Identity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Identity"),
-                    LabelId = table.Column<int>(type: "int", nullable: false, comment: "LabelId"),
+                    LabelCode = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "LabelCode"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Name"),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "TeamId"),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, comment: "Description"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Creator = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ModificationTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()"),
-                    Modifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AppResponsibilityUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSDATETIME()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppResponsibilityUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppResponsibilityUsers_Apps_AppId",
+                        column: x => x.AppId,
+                        principalTable: "Apps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_EnvironmentClusterId1",
+                name: "IX_AppResponsibilityUsers_AppId",
+                table: "AppResponsibilityUsers",
+                column: "AppId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnvironmentClusterId",
                 table: "EnvironmentClusterProjectApps",
                 column: "EnvironmentClusterProjectId");
 
@@ -199,37 +195,13 @@ namespace MASA.PM.Service.Admin.Migrations
                 name: "IX_EnvironmentId",
                 table: "EnvironmentClusters",
                 column: "EnvironmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "index_eventid_version",
-                table: "IntegrationEventLog",
-                columns: new[] { "EventId", "RowVersion" });
-
-            migrationBuilder.CreateIndex(
-                name: "index_state_modificationtime",
-                table: "IntegrationEventLog",
-                columns: new[] { "State", "ModificationTime" });
-
-            migrationBuilder.CreateIndex(
-                name: "index_state_timessent_modificationtime",
-                table: "IntegrationEventLog",
-                columns: new[] { "State", "TimesSent", "ModificationTime" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Name",
-                table: "Labels",
-                columns: new[] { "Name", "IsDeleted" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TypeCode",
-                table: "Labels",
-                columns: new[] { "TypeCode", "IsDeleted" });
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Apps");
+                name: "AppResponsibilityUsers");
 
             migrationBuilder.DropTable(
                 name: "Clusters");
@@ -244,16 +216,16 @@ namespace MASA.PM.Service.Admin.Migrations
                 name: "EnvironmentClusters");
 
             migrationBuilder.DropTable(
+                name: "EnvironmentProjectTeam");
+
+            migrationBuilder.DropTable(
                 name: "Environments");
 
             migrationBuilder.DropTable(
-                name: "IntegrationEventLog");
-
-            migrationBuilder.DropTable(
-                name: "Labels");
-
-            migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Apps");
         }
     }
 }
