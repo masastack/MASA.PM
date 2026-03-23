@@ -10,7 +10,9 @@ internal static class SeedData
         await using var scope = host.Services.CreateAsyncScope();
         var services = scope.ServiceProvider;
         var context = services.GetRequiredService<PmDbContext>();
-        await context.Database.MigrateAsync();
+        var pendings = await context.Database.GetPendingMigrationsAsync();
+        if (pendings != null && pendings.Any())
+            await context.Database.MigrateAsync();
     }
 
     public static async Task SeedDataAsync(this WebApplicationBuilder builder, IMasaStackConfig masaStackConfig)

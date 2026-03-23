@@ -12,7 +12,7 @@ internal class ClusterService : ServiceBase
         App.MapGet("/api/v1/cluster", GetList);
         App.MapGet("/api/v1/{envId}/cluster", GetListByEnvId);
         App.MapGet("/api/v1/cluster/{Id}", GetAsync).RequireAuthorization();
-        App.MapGet("/api/v1/envClusters", GetEnvironmentClusters).RequireAuthorization();
+        App.MapGet("/api/v1/envClusters", GetEnvironmentClusters).AllowAnonymous();
         App.MapPut("/api/v1/cluster", UpdateAsync).RequireAuthorization();
         App.MapDelete("/api/v1/cluster/{id}", RemoveAsync).RequireAuthorization();
     }
