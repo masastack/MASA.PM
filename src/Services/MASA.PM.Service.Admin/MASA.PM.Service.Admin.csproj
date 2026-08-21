@@ -3,6 +3,7 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>lonsid-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,7 +37,6 @@
 
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
-    <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
   </ItemGroup>
 
