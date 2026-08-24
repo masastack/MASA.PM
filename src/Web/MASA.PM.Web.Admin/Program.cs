@@ -19,18 +19,6 @@ builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.De
 var masaConfiguration = builder.Services.GetMasaConfiguration(); 
 builder.Services.AddDocs(masaConfiguration.ConfigurationApi.GetDefault());
 
-if (!builder.Environment.IsDevelopment())
-{
-    builder.WebHost.UseKestrel(option =>
-    {
-        option.ConfigureHttpsDefaults(options =>
-        {
-            options.ServerCertificate = X509Certificate2.CreateFromPemFile("./ssl/tls.crt", "./ssl/tls.key");
-            options.CheckCertificateRevocation = false;
-        });
-    });
-}
-
 MasaOpenIdConnectOptions masaOpenIdConnectOptions = new MasaOpenIdConnectOptions
 {
     Authority = masaStackConfig.GetSsoDomain(),

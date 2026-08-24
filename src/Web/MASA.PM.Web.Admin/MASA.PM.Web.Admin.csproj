@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <UserSecretsId>lonsid-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

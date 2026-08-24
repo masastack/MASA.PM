@@ -5,15 +5,18 @@ namespace MASA.PM.Infrastructure.EFCore.SqlServer;
 
 internal class PmDbContextFactory : IDesignTimeDbContextFactory<PmDbContext>
 {
+    const string ConnectionStringKey = "MasaPmMssqlStaging";
+
     public PmDbContext CreateDbContext(string[] args)
     {
         PmDbContext.RegistAssembly(typeof(PmDbContextFactory).Assembly);
+        var configuration = new ConfigurationBuilder()
+             .AddUserSecrets(typeof(PmDbContextFactory).Assembly, optional: true)
+             .Build();
+
+        var connectionString = configuration[ConnectionStringKey];
         var optionsBuilder = new MasaDbContextOptionsBuilder<PmDbContext>();
-        var configurationBuilder = new ConfigurationBuilder();
-        var configuration = configurationBuilder
-            .AddJsonFile("migration-sqlserver.json")
-            .Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),m=>m.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.SqlServer"));
+        optionsBuilder.UseSqlServer(connectionString, m => m.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.SqlServer"));
         return new PmDbContext(optionsBuilder.MasaOptions);
     }
 }

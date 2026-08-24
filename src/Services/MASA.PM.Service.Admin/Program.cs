@@ -2,8 +2,18 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 var builder = WebApplication.CreateBuilder(args);
-
-var constr = builder.Configuration.GetConnectionString("DefaultConnection");
+var redisKey = "REDIS";
+if (string.IsNullOrEmpty(builder.Configuration.GetValue<string>(redisKey)))
+{
+    var redis = builder.Configuration["MasaDccRedisStaging"];
+    if (!string.IsNullOrEmpty(redis))
+    {
+        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            [redisKey] = redis
+        });
+    }
+}
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");

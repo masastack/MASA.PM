@@ -5,15 +5,18 @@ namespace MASA.PM.Infrastructure.EFCore.PostgreSql;
 
 internal class PmDbContextFactory : IDesignTimeDbContextFactory<PmDbContext>
 {
+    const string ConnectionStringKey = "MasaPmPgsqlStaging";
+
     public PmDbContext CreateDbContext(string[] args)
     {
         PmDbContext.RegistAssembly(typeof(PmDbContextFactory).Assembly);
+        var configuration = new ConfigurationBuilder()
+             .AddUserSecrets(typeof(PmDbContextFactory).Assembly, optional: true)
+             .Build();
+
+        var connectionString = configuration[ConnectionStringKey];
         var optionsBuilder = new MasaDbContextOptionsBuilder<PmDbContext>();
-        var configurationBuilder = new ConfigurationBuilder();
-        var configuration = configurationBuilder
-            .AddJsonFile("migration-pgsql.json")
-            .Build();
-        optionsBuilder.DbContextOptionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.PostgreSql"));
+        optionsBuilder.DbContextOptionsBuilder.UseNpgsql(connectionString, m => m.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.PostgreSql"));
         return new PmDbContext(optionsBuilder.MasaOptions);
     }
 }
