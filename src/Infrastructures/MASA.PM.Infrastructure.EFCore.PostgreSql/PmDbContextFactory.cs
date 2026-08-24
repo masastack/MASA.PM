@@ -14,7 +14,7 @@ internal class PmDbContextFactory : IDesignTimeDbContextFactory<PmDbContext>
              .AddUserSecrets(typeof(PmDbContextFactory).Assembly, optional: true)
              .Build();
 
-        var connectionString = configuration[ConnectionStringKey]!;
+        var connectionString = configuration[ConnectionStringKey];
         var optionsBuilder = new MasaDbContextOptionsBuilder<PmDbContext>();
         optionsBuilder.DbContextOptionsBuilder.UseNpgsql(connectionString, m => m.MigrationsAssembly("MASA.PM.Infrastructure.EFCore.PostgreSql"));
         return new PmDbContext(optionsBuilder.MasaOptions);
